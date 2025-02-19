@@ -1,0 +1,363 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}PMS{% endblock %}</title>
+    <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+    <!-- Social icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}">
+
+    <!-- Feather CSS -->
+    <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}">
+
+    <!-- Daterangepicker CSS -->
+    <link rel="stylesheet" href="{% static 'assets/plugins/daterangepicker/daterangepicker.css' %}">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+
+    {% block extra_css %}{% endblock %} 
+</head>
+<body>
+    <div class="main-wrapper">
+        <!-- Header -->
+        <header class="header header-fixed header-one">
+            <div class="container">
+                <nav class="navbar navbar-expand-lg header-nav">
+                    <div class="navbar-header">
+                        <a id="mobile_btn" href="javascript:void(0);">
+                            <span class="bar-icon">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                        </a>
+                        <a href="{% url 'index' %}" class="navbar-brand logo">
+                            <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+                        </a>
+                    </div>
+                    <div class="main-menu-wrapper">
+                        <div class="menu-header">
+                            <a href="{% url 'index' %}" class="menu-logo">
+                                <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+                            </a>
+                            <a id="menu_close" class="menu-close" href="javascript:void(0);">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </div>
+                        <ul class="main-nav">
+                            <li><a href="{% url 'index' %}">Home</a></li>
+                            <li><a href="{% url 'patient_dashboard' %}">Patients</a></li>
+                            <li><a href="{% url 'doctor_dashboard' %}">Doctors</a></li>
+                            <li><a href="{% url 'admin_dashboard' %}">Admin</a></li>
+                            <li class="active"><a href="{% url 'about_us' %}">About Us</a></li>
+                            <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+                        </ul>
+                        <ul class="nav header-navbar-rht" style="padding-top: 20px;">
+                            <li class="nav-item dropdown has-arrow logged-item">
+                                <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="user-img">
+                                        <img class="rounded-circle" src="{% static 'assets/img/' %}{{ profile }}" width="31" alt="profile">
+                                    </span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <div class="user-header">
+                                        <div class="avatar avatar-sm">
+                                            <img src="{% static 'assets/img/' %}{{ profile }}" alt="User Image" class="avatar-img rounded-circle">
+                                        </div>
+                                        <div class="user-text">
+                                            <h6>{{ name }}</h6>
+                                            <p class="text-muted mb-0">{{ user }}</p>
+                                        </div>
+                                    </div>
+                                    <a class="dropdown-item" href="{{ dashboard }}">Dashboard</a>
+                                    <a class="dropdown-item" href="{{ url }}">Profile Settings</a>
+                                    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+<section class="about-section">
+    <div class="container" style="padding-top:50px">
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-md-12">
+                <div class="about-img-info">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="about-inner-img">
+                                <div class="about-img">
+                                    <img src="{% static 'assets/img/about-img1.jpg' %}" class="img-fluid" alt="">
+                                </div>
+                                <div class="about-img">
+                                    <img src="{% static 'assets/img/about-img2.jpg' %}" class="img-fluid" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="about-inner-img">
+                                <div class="about-box">
+                                    <h4>Founder &amp; CEO Nikhil Yadav</h4>
+                                </div>
+                                <div class="about-img">
+                                    <img src="{% static 'assets/img/about-img3.jpg' %}" class="img-fluid" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <div class="section-inner-header about-inner-header">
+                    <h6>About Our Company</h6>
+                    <h2>We Are Always Ensure Best Medical Treatment For Your Health</h2>
+                </div>
+                <div class="about-content">
+                    <div class="about-content-details">
+                        <p>Pranik Medical Services (PMS) is a leading healthcare company dedicated to delivering top-quality medical services and solutions. With a team of skilled professionals, PMS offers diagnostic testing, consultations, home healthcare, and specialized treatments. </p>
+                        <p>Patient care is our priority, with personalized treatment plans and a focus on medical excellence. PMS utilizes advanced technologies for patient comfort and convenience. We collaborate with healthcare providers to offer comprehensive solutions and improve outcomes. </p>
+                    </div>
+                    <div class="about-contact">
+                        <div class="about-contact-icon">
+                            <span><img src="{% static 'assets/img/icons/phone-icon.svg' %}" alt=""></span>
+                        </div>
+                        <div class="about-contact-text">
+                            <p>Need Emergency?</p>
+                            <h4>+91 902-270-0200</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="why-choose-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-inner-header text-center">
+                    <h2>Why Choose Us</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 d-flex">
+                <div class="card why-choose-card w-100">
+                    <div class="card-body">
+                        <div class="why-choose-icon">
+                            <span><img src="{% static 'assets/img/icons/choose-01.svg' %}" alt=""></span>
+                        </div>
+                        <div class="why-choose-content">
+                            <h4>Expertise</h4>
+                            <p>Our team of professionals possesses extensive knowledge and expertise in their respective fields, ensuring top-notch services and exceptional results. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 d-flex">
+                <div class="card why-choose-card w-100">
+                    <div class="card-body">
+                        <div class="why-choose-icon">
+                            <span><img src="{% static 'assets/img/icons/choose-02.svg' %}" alt=""></span>
+                        </div>
+                        <div class="why-choose-content">
+                            <h4>24/7 Availability</h4>
+                            <p>We are available round the clock to provide medical assistance and support, ensuring that our patients receive timely care and attention. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 d-flex">
+                <div class="card why-choose-card w-100">
+                    <div class="card-body">
+                        <div class="why-choose-icon">
+                            <span><img src="{% static 'assets/img/icons/choose-03.svg' %}" alt=""></span>
+                        </div>
+                        <div class="why-choose-content">
+                            <h4>Advanced Technology</h4>
+                            <p> Our AI chatbot utilizes cutting-edge technology to analyze data, learn from user interactions, and provide intelligent recommendations, ensuring accurate and up-to-date guidance. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 d-flex">
+                <div class="card why-choose-card w-100">
+                    <div class="card-body">
+                        <div class="why-choose-icon">
+                            <span><img src="{% static 'assets/img/icons/choose-04.svg' %}" alt=""></span>
+                        </div>
+                        <div class="why-choose-content">
+                            <h4>Patient Satisfaction</h4>
+                            <p>Our commitment to providing excellent patient care and ensuring utmost satisfaction has earned us a reputation for being a trusted and reliable healthcare provider. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="way-section">
+    <div class="container">
+        <div class="way-bg">
+            <div class="way-shapes-img">
+                <div class="way-shapes-left">
+                    <img src="{% static 'assets/img/shape-06.png' %}" alt="">
+                </div>
+                <div class="way-shapes-right">
+                    <img src="{% static 'assets/img/shape-07.png' %}" alt="">
+                </div>
+            </div>
+            <div class="row align-items-end">
+                <div class="col-lg-7 col-md-12">
+                    <div class="section-inner-header way-inner-header mb-0">
+                        <h2>Connect with PMS for Seamless Healthcare Services</h2>
+                        <p>Experience hassle-free access to comprehensive healthcare services through our platform.</p>
+                        <a href="{% url 'contact_us' %}" class="btn btn-primary">Contact With Us</a>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-12">
+                    <div class="way-img">
+                        <img src="{% static 'assets/img/way-img.png' %}" class="img-fluid" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+        <!-- Footer -->
+        <footer class="footer footer-one">
+            <div class="footer-top">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4">
+                            <div class="footer-widget footer-about">
+                                <a href="/">
+                                    <div class="footer-logo">
+                                        <img src="{% static 'assets/img/logo.png' %}" alt="logo">
+                                    </div>
+                                </a>
+                                <div class="footer-about-content">
+                                    <p>Experience hassle-free healthcare access and connect with trusted healthcare professionals effortlessly.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-4">
+                            <div class="footer-widget footer-menu">
+                                <h2 class="footer-title">For Patients</h2>
+                                <ul>
+                                    <li><a href="/">Search for Doctors</a></li>
+                                    <li><a href="{% url 'login' %}">Login</a></li>
+                                    <li><a href="{% url 'register' %}">Register</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-4">
+                            <div class="footer-widget footer-menu">
+                                <h2 class="footer-title">For Doctors</h2>
+                                <ul>
+                                    <li><a href="{% url 'login' %}">Appointments</a></li>
+                                    <li><a href="{% url 'coming-soon' %}">Chat</a></li>
+                                    <li><a href="{% url 'login' %}">Login</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-5">
+                            <div class="footer-widget footer-contact">
+                                <h2 class="footer-title">Contact Us</h2>
+                                <div class="footer-contact-info">
+                                    <div class="footer-address">
+                                        <p><i class="feather-map-pin"></i> Najafgarh, Delhi</p>
+                                    </div>
+                                    <div class="footer-address">
+                                        <p><i class="feather-phone-call"></i> +91 902-780-0200</p>
+                                    </div>
+                                    <div class="footer-address mb-0">
+                                        <p><i class="feather-mail"></i> pms@gmail.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-7">
+                            <div class="footer-widget">
+                                <h2 class="footer-title">Join Our Newsletter</h2>
+                                <div class="subscribe-form">
+                                    <form action="{% url 'subscribe' %}" method="POST">
+                                        {% csrf_token %}
+                                        <input type="email" name="email" class="form-control" placeholder="Enter Email">
+                                        <button type="submit" class="btn">Submit</button>
+                                    </form>
+                                </div>
+                                <div class="social-icon">
+                                    <ul>
+                                        <li><a href="https://www.facebook.com/yadavnikhilrao" target="_blank"><i class="fab fa-facebook"></i></a></li>
+                                        <li><a href="https://instagram.com/yadavnikhilrao" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                                        <li><a href="https://twitter.com/yadavnikhilrao" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                                        <li><a href="https://linkedin.com/in/yadavnikhilrao" target="_blank"><i class="fab fa-linkedin-in"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="container">
+                    <div class="copyright">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6">
+                                <div class="copyright-text">
+                                    <p class="mb-0"> Copyright © 2023 <a href="https://pranik.pythonanywhere.com/" target="_blank">Pranik Medical Services.</a> All Rights Reserved</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <div class="copyright-menu">
+                                    <ul class="policy-menu">
+                                        <li><a href="{% url 'terms-condition' %}">Terms and Conditions</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- jQuery -->
+    <script src="{% static 'assets/js/jquery-3.6.4.min.js' %}"></script>
+
+    <!-- Slick JS -->
+    <script src="{% static 'assets/js/slick.js' %}"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Moment JS -->
+    <script src="{% static 'assets/js/moment.min.js' %}"></script>
+
+    <!-- Daterangepicker JS -->
+    <script src="{% static 'assets/plugins/daterangepicker/daterangepicker.js' %}"></script>
+
+    <!-- Custom JS -->
+    <script src="{% static 'assets/js/script.js' %}"></script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

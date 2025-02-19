@@ -1,0 +1,208 @@
+{% load static %}
+<html lang="en" class="fontawesome-i2svg-active fontawesome-i2svg-complete">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=0"
+    />
+    <title>{% block title %} webDocter {% endblock %}</title>
+    <link
+      rel="shortcut icon"
+      href="{% static 'assets/img/favicon.png' %}"
+      type="image/x-icon"
+    />
+
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}"
+    />
+
+    <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/css/bootstrap-datetimepicker.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/css/owl.carousel.min.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'assets/css/aos.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
+
+    <style type="text/css">
+      @font-face {
+        font-family: Roboto;
+        src: url("{% static 'assets/fonts/Roboto-Regular.ttf' %}")
+          format("truetype");
+      }
+    </style>
+  </head>
+  <body data-aos-easing="ease" data-aos-duration="1200" data-aos-delay="0">
+    {% block content %}
+    <footer class="footer footer-one">
+      <div class="footer-top">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-3 col-md-4">
+              <div class="footer-widget footer-about">
+                <a href="/">
+                  <div class="footer-logo">
+                    <img
+                      src="{% static 'assets/img/logo.png' %}"
+                      alt="logo"
+                    />
+                  </div>
+                </a>
+                <div class="footer-about-content">
+                  <p>
+                    Experience hassle-free healthcare access and connect with
+                    trusted healthcare professionals effortlessly.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-2 col-md-4">
+              <div class="footer-widget footer-menu">
+                <h2 class="footer-title">For Patients</h2>
+                <ul>
+                  <li><a href="/">Search for Doctors</a></li>
+                  <li><a href="/login">Login</a></li>
+                  <li><a href="/register">Register</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-lg-2 col-md-4">
+              <div class="footer-widget footer-menu">
+                <h2 class="footer-title">For Doctors</h2>
+                <ul>
+                  <li><a href="/login">Appointments</a></li>
+                  <li><a href="/coming-soon">Chat</a></li>
+                  <li><a href="/login">Login</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-lg-2 col-md-5">
+              <div class="footer-widget footer-contact">
+                <h2 class="footer-title">Contact Us</h2>
+                <div class="footer-contact-info">
+                  <div class="footer-address">
+                    <p><i class="feather-map-pin"></i> Najafgarh, Delhi</p>
+                  </div>
+                  <div class="footer-address">
+                    <p><i class="feather-phone-call"></i> +91 902-780-0200</p>
+                  </div>
+                  <div class="footer-address mb-0">
+                    <p><i class="feather-mail"></i> pms.write@gmail.com</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-7">
+              <div class="footer-widget">
+                <h2 class="footer-title">Join Our Newsletter</h2>
+                <div class="subscribe-form">
+                  <form action="/subscribe" method="POST">
+                    <input
+                      type="email"
+                      name="email"
+                      class="form-control"
+                      placeholder="Enter Email"
+                    />
+                    <button
+                      type="submit"
+                      id="myButton"
+                      onclick="showLoading()"
+                      class="btn"
+                    >
+                      Submit
+                    </button>
+                  </form>
+                </div>
+                <div class="social-icon">
+                  <ul>
+                    {% for link in social_links %}
+                    <li>
+                      <a href="{{ link.url }}" target="_blank">
+                        <i class="fab fa-{{ link.icon }}"></i>
+                      </a>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="container">
+          <div class="copyright">
+            <div class="row">
+              <div class="col-md-6 col-lg-6">
+                <div class="copyright-text">
+                  <p class="mb-0">
+                    Copyright &copy; 2023
+                    <a
+                      href="https://pranik.pythonanywhere.com/"
+                      target="_blank"
+                      >Pranik Medical Services.</a
+                    >
+                    All Rights Reserved
+                  </p>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-6">
+                <div class="copyright-menu">
+                  <ul class="policy-menu">
+                    <li>
+                      <a href="/terms-condition">Terms and Conditions</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <div
+    class="mouse-cursor cursor-outer"
+    style="visibility: visible; transform: translate(801px, 436px)"
+  ></div>
+  <div
+    class="mouse-cursor cursor-inner"
+    style="visibility: visible; transform: translate(801px, 436px)"
+  ></div>
+</div>
+
+<!-- Scripts -->
+<script src="{% static 'assets/js/jquery-3.6.4.min.js' %}"></script>
+<script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/js/feather.min.js' %}"></script>
+<script src="{% static 'assets/js/moment.min.js' %}"></script>
+<script src="{% static 'assets/js/bootstrap-datetimepicker.min.js' %}"></script>
+<script src="{% static 'assets/js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'assets/js/slick.js' %}"></script>
+<script src="{% static 'assets/js/aos.js' %}"></script>
+<script src="{% static 'assets/js/counter.js' %}"></script>
+<script src="{% static 'assets/js/backToTop.js' %}"></script>
+<script src="{% static 'assets/js/script.js' %}"></script>
+
+<div class="sidebar-overlay"></div>
+<div id="intellisense-root"></div>
+    {% endblock %}
+  </body>
+</html>

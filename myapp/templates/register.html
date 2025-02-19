@@ -1,0 +1,101 @@
+{% load static %}  <!-- Load static files in Django -->
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <title>PMS</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon">
+
+    <!-- -------------------- Social Icons ----------------------- -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+
+    <!-- FontAwesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}">
+
+    <!-- Feather Icons -->
+    <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+</head>
+
+<body class="login-body">
+<div class="main-wrapper">
+
+    <!-- Header Section -->
+    {% include "header.html" %}
+
+    <!--  -->
+
+<div class="login-content-info" style="padding-bottom:140px; padding-top:180px">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6">
+                <div class="account-content">
+                    <div class="login-shapes">
+                        <div class="shape-img-left">
+                            <img src="{% static 'assets/img/shape-01.png' %}" alt="">
+                        </div>
+                        <div class="shape-img-right">
+                            <img src="{% static 'assets/img/shape-02.png' %}" alt="">
+                        </div>
+                    </div>
+                    <div class="account-info">
+                        <div class="login-back">
+                            <a href="{% url 'login' %}">
+                                <i class="fa-solid fa-arrow-left-long"></i> Back to Login
+                            </a>
+                        </div>
+                        <div class="login-title">
+                            <h3>Signup</h3>
+                        </div>
+                        <div class="signup-option-btns">
+                            <a href="{% url 'doctor_register' %}" class="signup-btn-info">
+                                <div class="signup-info">
+                                    <div class="signup-icon">
+                                        <img src="{% static 'assets/img/icons/doctor-icon.svg' %}" alt="">
+                                    </div>
+                                    <div class="signup-content">
+                                        <h4>Doctor</h4>
+                                        <p>Efficientize Enrollment</p>
+                                    </div>
+                                </div>
+                                <div class="signup-arrow">
+                                    <i class="fas fa-arrow-right"></i>
+                                </div>
+                            </a>
+                            <a href="{% url 'patient_register' %}" class="signup-btn-info">
+                                <div class="signup-info">
+                                    <div class="signup-icon">
+                                        <img src="{% static 'assets/img/icons/patient-icon.svg' %}" alt="">
+                                    </div>
+                                    <div class="signup-content">
+                                        <h4>Patient</h4>
+                                        <p>Optimize Appointment</p>
+                                    </div>
+                                </div>
+                                <div class="signup-arrow">
+                                    <i class="fas fa-arrow-right"></i>
+                                </div>
+                            </a>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "footer.html" %}
+
+</body>
+</html>
