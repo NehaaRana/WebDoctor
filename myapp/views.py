@@ -38,6 +38,8 @@ def home(request):
 
 def about_us(request):
     return render(request, 'about-us.html')
+def about(request):
+    return render(request, 'about.html')
 
 def contact(request):
          return render(request, 'contact.html')
@@ -84,3 +86,25 @@ def subscribe(request):
         return JsonResponse({'message': 'Subscribed successfully!'})  # Or redirect somewhere
 
     return render(request, 'subscribe.html')
+
+def patient_profile(request):
+    return render(request, 'patient-profile.html')
+
+def doctor_profile(request):
+    return render(request, 'doctor-profile.html')
+
+def book_appointment(request):
+    return render(request, 'booking.html')
+
+def doctor_change_password(request):
+    return render(request, 'doctor-change-password.html')
+
+def patient_change_password(request):
+    return render(request, 'patient-change-password.html')
+
+def password_change_successful(request):
+    return render(request, 'password-change-successful.html')
+
+def verify(request):
+    return render(request, 'verify.html')
+      
