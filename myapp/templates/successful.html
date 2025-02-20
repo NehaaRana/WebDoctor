@@ -1,97 +1,145 @@
-<html lang="en" style="transform: none;" class="fontawesome-i2svg-active fontawesome-i2svg-complete"><head>
-  <meta charset="utf-8">
-  <title>PMS</title>
-  <link rel="shortcut icon" href="../../static/assets/img/favicon.png" type="image/x-icon">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-  <link rel="stylesheet" href="../../static/assets/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../../static/assets/plugins/fontawesome/css/fontawesome.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+{% load static %}
+<html lang="en" class="fontawesome-i2svg-active fontawesome-i2svg-complete">
+  <head>
+    <meta charset="utf-8" />
+    <title>PMS</title>
+    <link
+      rel="shortcut icon"
+      href="{% static 'assets/img/favicon.png' %}"
+      type="image/x-icon"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=0"
+    />
 
-  <link rel="stylesheet" href="../../static/assets/plugins/fontawesome/css/all.min.css">
-  <link rel="stylesheet" href="../../static/assets/css/feather.css">
-  <link rel="stylesheet" href="../../static/assets/css/custom.css">
-  <style id="theia-sticky-sidebar-stylesheet-TSS">.theiaStickySidebar:after {content: ""; display: table; clear: both;}</style>
-</head>
-<body style="transform: none;">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 
-<div class="main-wrapper" style="transform: none;">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
 
-<header class="header header-fixed header-one header-space">
-<div class="container">
-<nav class="navbar navbar-expand-lg header-nav">
-<div class="navbar-header">
-<a id="mobile_btn" href="javascript:void(0);">
-<span class="bar-icon">
-<span></span>
-<span></span>
-<span></span>
-</span>
-</a>
-<a href="/index" class="navbar-brand logo">
-<img src="../../static/assets/img/logo.png" class="img-fluid" alt="Logo">
-</a>
-</div>
-<div class="main-menu-wrapper">
-<div class="menu-header">
-<a href="/index" class="menu-logo">
-<img src="../../static/assets/img/logo.png" class="img-fluid" alt="Logo">
-</a>
-<a id="menu_close" class="menu-close" href="javascript:void(0);">
-<svg class="svg-inline--fa fa-times fa-w-11" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" data-fa-i2svg=""><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg><!-- <i class="fas fa-times"></i> Font Awesome fontawesome.com -->
-</a>
-</div>
-<ul class="main-nav">
-<li class="has-submenu ">
-<a href="/index">Home </a>
-</li>
-
-<li class="has-submenu active">
-<a href="/patient-dashboard">Patients </a>
-</li>
-
-<li class="has-submenu ">
-<a href="/doctor-dashboard">Doctors </a>
-</li><li class="has-submenu">
-<a href="/admin-dashboard">Admin </a>
-</li>
-
-<li class="has-submenu">
-<a href="/contact-us">Contact Us </a>
-</li>
-
-<ul class="nav header-navbar-rht" style="padding-top: 20px;">
-
-<li class="nav-item dropdown has-arrow logged-item">
-<a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
-<span class="user-img">
-<img class="rounded-circle" src="../../static/assets/img/{{profile}}" width="31" alt="profile">
-</span>
-</a>
-<div class="dropdown-menu dropdown-menu-end">
-<div class="user-header">
-<div class="avatar avatar-sm">
-<img src="../../static/assets/img/{{profile}}" alt="User Image" class="avatar-img rounded-circle">
-</div>
-<div class="user-text">
-<h6>{{name}}</h6>
-<p class="text-muted mb-0">{{user}}</p>
-</div>
-</div>
-<a class="dropdown-item" href="{{dashboard}}">Dashboard</a>
-<a class="dropdown-item" href="{{url}}">Profile Settings</a>
-<a class="dropdown-item" href="/logout">Logout</a>
-</div>
-</li>
-</ul>
-</ul>
-</div>
-</nav>
-</div>
-</header>
-
-
+    <style>
+      .theiaStickySidebar:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+    </style>
+  </head>
+  <body>
+    {% block content %}
+    <div class="main-wrapper">
+      <header class="header header-fixed header-one header-space">
+        <div class="container">
+          <nav class="navbar navbar-expand-lg header-nav">
+            <div class="navbar-header">
+              <a id="mobile_btn" href="javascript:void(0);">
+                <span class="bar-icon">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </span>
+              </a>
+              <a href="/index" class="navbar-brand logo">
+                <img
+                  src="{% static 'assets/img/logo.png' %}"
+                  class="img-fluid"
+                  alt="Logo"
+                />
+              </a>
+            </div>
+            <div class="main-menu-wrapper">
+              <div class="menu-header">
+                <a href="/index" class="menu-logo">
+                  <img
+                    src="{% static 'assets/img/logo.png' %}"
+                    class="img-fluid"
+                    alt="Logo"
+                  />
+                </a>
+                <a
+                  id="menu_close"
+                  class="menu-close"
+                  href="javascript:void(0);"
+                >
+                  <i class="fas fa-times"></i>
+                </a>
+              </div>
+              <ul class="main-nav">
+                <li class="has-submenu">
+                  <a href="/index">Home</a>
+                </li>
+                <li class="has-submenu active">
+                  <a href="/patient-dashboard">Patients</a>
+                </li>
+                <li class="has-submenu">
+                  <a href="/doctor-dashboard">Doctors</a>
+                </li>
+                <li class="has-submenu">
+                  <a href="/admin-dashboard">Admin</a>
+                </li>
+                <li class="has-submenu">
+                  <a href="/contact-us">Contact Us</a>
+                </li>
+                <ul class="nav header-navbar-rht" style="padding-top: 20px">
+                  <li class="nav-item dropdown has-arrow logged-item">
+                    <a
+                      href="#"
+                      class="dropdown-toggle nav-link"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <span class="user-img">
+                        <img
+                          class="rounded-circle"
+                          src="{% static 'assets/img/' %}{{ profile }}"
+                          width="31"
+                          alt="profile"
+                        />
+                      </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                      <div class="user-header">
+                        <div class="avatar avatar-sm">
+                          <img
+                            src="{% static 'assets/img/' %}{{ profile }}"
+                            alt="User Image"
+                            class="avatar-img rounded-circle"
+                          />
+                        </div>
+                        <div class="user-text">
+                          <h6>{{ name }}</h6>
+                          <p class="text-muted mb-0">{{ user }}</p>
+                        </div>
+                      </div>
+                      <a class="dropdown-item" href="{{ dashboard }}"
+                        >Dashboard</a
+                      >
+                      <a class="dropdown-item" href="{{ url }}"
+                        >Profile Settings</a
+                      >
+                      <a class="dropdown-item" href="/logout">Logout</a>
+                    </div>
+                  </li>
+                </ul>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </header>
 
 <div class="doctor-content">
 <div class="container appointment-done">
@@ -154,3 +202,77 @@ Back to Home <i class="feather-arrow-right-circle"></i>
 </div>
 
 </body></html>
+      <div class="doctor-content">
+        <div class="container appointment-done">
+          <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+              <div class="success-content">
+                <div class="success-icon">
+                  <img
+                    src="{% static 'assets/img/success-green.png' %}"
+                    width="30"
+                    height="30"
+                  />
+                </div>
+                <h4>Your Appointment Booked Successfully</h4>
+              </div>
+              <div class="card booking-card">
+                <div class="card-body booking-card-body booking-list-body">
+                  <div class="booking-doctor-left booking-success-info">
+                    <div class="booking-doctor-img">
+                      <a href="javascript:void(0);">
+                        <img
+                          src="{% static 'assets/img/doctors/' %}{{ doctor.Profile_URL }}"
+                          alt=""
+                          class="img-fluid"
+                        />
+                      </a>
+                    </div>
+                    <div class="booking-doctor-info">
+                      <h4>
+                        <a href="javascript:void(0);">Dr. {{ doctor.Name }}</a>
+                      </h4>
+                      <p>
+                        {{ doctor.Qualification }}, {{ doctor.Specialization }}
+                      </p>
+                      <div class="booking-doctor-location">
+                        <p>
+                          <i class="feather-map-pin"></i> {{
+                          doctor.Clinic_Address }}, {{ doctor.State }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="booking-list">
+                    <div class="booking-date-list consultation-date-list">
+                      <ul>
+                        <li>
+                          Appointment Date: <span>{{ appointment_date }}</span>
+                        </li>
+                        <li>
+                          Appointment Time: <span>{{ appointment_time }}</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="success-dashboard-link appointment-done">
+                <a href="/index">
+                  <button
+                    type="submit"
+                    class="btn btn-primary prime-btn justify-content-center align-items-center"
+                  >
+                    Back to Home <i class="feather-arrow-right-circle"></i>
+                  </button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% include "footer.html" %}  {% endblock %}
+    </div>
+  </body>
+</html>
