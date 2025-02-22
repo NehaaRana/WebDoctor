@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render,redirect
 from django.contrib.auth import logout
-from .forms import patientForm,doctorForm
+from .forms import patientForm
 from .models import patientRegister
 # Create your views here.
 # from django.shortcuts import render
@@ -68,19 +68,8 @@ def doctor_dashboard(request):
 
 def admin_dashboard(request):
          return render(request, 'admin-dashboard.html')
-# def doctor_register(request):
-#          return render(request, 'doctor-register.html')
-
 def doctor_register(request):
-    if request.method == "POST":
-        form = doctorForm(request.POST, request.FILES)  # Handle file uploads
-        if form.is_valid():
-            form.save()
-            return redirect('login')  # Redirect instead of rendering login page directly
-    else:
-        form = doctorForm()  # Create an empty form for GET request
-
-    return render(request, 'doctor-register.html', {'form': form})  # Pass form to template
+         return render(request, 'doctor-register.html')
 
 def patient_register(request):
     if request.method == "POST":

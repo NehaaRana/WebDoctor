@@ -26,28 +26,3 @@ class patientRegister(models.Model):
         return f"{self.name} | {self.email} | {self.phno}"
       
 
-class doctorRegister(models.Model):
-    GENDER_CHOICES = [
-        ('M', 'Male'),
-        ('F', 'Female'),
-        ('O', 'Other'),
-    ]
-    
-    name = models.CharField(max_length=100)
-    gender = models.CharField(max_length=5, choices=GENDER_CHOICES)
-    clinic_name = models.CharField(max_length=255)
-    clinic_address = models.TextField()
-    email = models.EmailField(unique=True)
-    phno = models.BigIntegerField(unique=True)
-    password = models.CharField(max_length=100)
-    profile_img = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
-    qualification = models.CharField(max_length=100)
-    specialization = models.CharField(max_length=100)
-    experience = models.IntegerField()
-    address = models.TextField(null=True, blank=True)  # Temporarily allow null values
-    city = models.CharField(max_length=50)
-    state = models.CharField(max_length=50)
-    mci_no = models.CharField(max_length=10)
-
-    def __str__(self):
-            return f"{self.name} | {self.gender}| {self.clinic_name} |{self.clinic_address} |{self.email} | {self.phno}| {self.password} | "      
