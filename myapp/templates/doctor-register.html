@@ -97,7 +97,7 @@
                                           {% endif %}
                                       </div>
   
-                                      <form action="{% url 'doctor_register' %}" method="POST">
+                                      <form action="{% url 'doctor_register' %}" method="POST" enctype="multipart/form-data">
                                         {% csrf_token %}  {# Django CSRF token. Remove for Flask or use Flask-WTF #}
                                           
                                           <div class="form-group">
@@ -109,8 +109,9 @@
                                               <label>Gender</label>
                                               <select class="form-select form-control" name="gender">
                                                   <option value="">Select</option>
-                                                  <option value="male">Male</option>
-                                                  <option value="female">Female</option>
+                                                  <option value="M">Male</option>
+                                                  <option value="F">Female</option>
+                                                  <option value="O">Other</option>
                                               </select>
                                           </div>
   
@@ -131,7 +132,7 @@
   
                                           <div class="form-group">
                                               <label>Phone Number</label>
-                                              <input class="form-control form-control-lg group_formcontrol form-control-phone" id="phone" name="phone" type="text" required autocomplete="off">
+                                              <input class="form-control form-control-lg group_formcontrol form-control-phone" id="phone" name="phno" type="text" required autocomplete="off">
                                           </div>
   
                                           <div class="form-group">
