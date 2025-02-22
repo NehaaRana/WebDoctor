@@ -1,11 +1,14 @@
 from django.http import JsonResponse
 from django.shortcuts import render,redirect
 from django.contrib.auth import logout
+from .forms import patientForm
+from .models import patientRegister
 # Create your views here.
 # from django.shortcuts import render
 
 # Create your views here.
 def home(request):
+    # all_patient=patientRegister.objects.all
     articles = [
         {
             "image": "assets/img/blog/blog-11.jpg",
@@ -33,7 +36,7 @@ def home(request):
             "description": "Explore doctor profiles for comprehensive information on qualifications, specialties, and patient feedback to make informed decisions for personalized healthcare."
         }
      ]
-
+     
     return render(request, "home.html", {"articles": articles, "work_steps": work_steps})
 
 def about_us(request):
@@ -66,8 +69,18 @@ def admin_dashboard(request):
          return render(request, 'admin-dashboard.html')
 def doctor_register(request):
          return render(request, 'doctor-register.html')
+
 def patient_register(request):
-         return render(request, 'patient-register.html')
+    if request.method == "POST":
+        form = patientForm(request.POST, request.FILES)  # Handle file uploads
+        if form.is_valid():
+            form.save()
+            return redirect('login')  # Redirect instead of rendering login page directly
+    else:
+        form = patientForm()  # Create an empty form for GET request
+
+    return render(request, 'patient-register.html', {'form': form})  # Pass form to template
+
 def terms_condition(request):
          return render(request, 'terms_condition.html')
 def index(request):
