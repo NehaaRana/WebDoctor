@@ -2,6 +2,8 @@ from django.http import JsonResponse
 from django.shortcuts import render,redirect
 from django.contrib.auth import logout
 from .forms import patientForm
+from .forms import doctorForm 
+# from .forms import doctorForm
 from .models import patientRegister
 # Create your views here.
 # from django.shortcuts import render
@@ -30,6 +32,7 @@ def home(request):
             "title": "Search Doctor",
             "description": "Easily find and connect with the right doctor for you with a simple click. Discover a wide range of qualified healthcare professionals at your fingertips."
         },
+
         {
             "icon": "assets/img/icons/work-02.svg",
             "title": "Check Doctor Profile",
@@ -68,15 +71,33 @@ def doctor_dashboard(request):
 
 def admin_dashboard(request):
          return render(request, 'admin-dashboard.html')
+
+
 def doctor_register(request):
-         return render(request, 'doctor-register.html')
+    if request.method == "POST":
+        form = doctorForm(request.POST, request.FILES)  # Handle file uploads
+        if form.is_valid():
+            print("Form is valid, saving the data.")  # Debug print
+            form.save()
+            return redirect('login')  # Redirect instead of rendering login page directly
+        else:
+            print("Form errors:", form.errors)  # Debug print
+    else:
+        form = doctorForm()  # Create an empty form for GET request
+
+    return render(request, 'doctor-register.html', {'form': form})  # Pass form to template
+
 
 def patient_register(request):
+
     if request.method == "POST":
         form = patientForm(request.POST, request.FILES)  # Handle file uploads
         if form.is_valid():
             form.save()
             return redirect('login')  # Redirect instead of rendering login page directly
+        else:
+            print("Form errors:", form.errors)  # Debug print
+            
     else:
         form = patientForm()  # Create an empty form for GET request
 

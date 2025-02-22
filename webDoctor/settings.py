@@ -120,7 +120,10 @@ USE_TZ = True
 # STATICFILES_DIRS = [
 #     BASE_DIR / "static",
 # ]
+<<<<<<< HEAD
 
+=======
+>>>>>>> fbb6e2bc4f491e837f2e0608b55af16a44ae5706
 import os
 
 STATIC_URL = '/static/'
