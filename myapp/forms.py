@@ -20,3 +20,6 @@ class doctorForm(forms.ModelForm):
         fields = ['name', 'gender', 'clinic_name', 'clinic_address', 'email', 'phno', 'password']
 
 
+ 
+
+

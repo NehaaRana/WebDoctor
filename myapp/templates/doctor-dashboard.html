@@ -181,9 +181,9 @@
 
 </a>
 <div class="profile-det-info">
-<h3>Dr. {{ doctor_data['Name'] }}</h3>
+<h3>Dr. {{ doctor_data.name }}</h3>
 <div class="patient-details">
-<h5 class="mb-0">{{ doctor_data['Qualification'] }} &amp; {{ doctor_data['Specialization'] }}</h5>
+<h5 class="mb-0">{{ doctor_data.qualification }} &amp; {{ doctor_data.specialization }}</h5>
 </div>
 </div>
 </div>
@@ -333,7 +333,7 @@
 </h2>
 </td>
 <td>{{appointment.Appointment_Date}} <span class="d-block text-info">{{appointment.Appointment_Time}}</span></td>
-<td>{{appointment.Symptoms.split(' ')[0]}}</td>
+{% comment %} <td>{{appointment.Symptoms.split(' ')[0]}}</td> {% endcomment %}
 <td>{{appointment.Insurance }}</td>
 <td class="text-center">{{amount_paid}}</td>
 <td class="text-center">
@@ -379,7 +379,9 @@
 </h2>
 </td>
 <td>{{appointment.Appointment_Date}} <span class="d-block text-info">{{appointment.Appointment_Time}}</span></td>
-<td>{{appointment.Symptoms.split(' ')[0]}}</td>
+{% comment %} <td>{{appointment.Symptoms.split(' ')[0]}}</td> {% endcomment %}
+<td>{{ symptoms_first_word }}</td>
+
 <td>{{appointment.Insurance }}</td>
 <td class="text-center">{{amount_paid}}</td>
 <td class="text-center">

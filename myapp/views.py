@@ -4,7 +4,7 @@ from django.contrib.auth import logout
 from .forms import patientForm
 from .forms import doctorForm 
 # from .forms import doctorForm
-from .models import patientRegister
+from .models import patientRegister,doctorRegister
 # Create your views here.
 # from django.shortcuts import render
 
@@ -56,8 +56,86 @@ def contact_us(request):
 def register(request):
          return render(request, 'register.html')
 
+# def login(request):
+#         # email = None
+#         # password = None
+#         # user_type = None
+#         # user = None
+#         if request.method == "POST":
+#             email = request.POST.get("email")
+#             password = request.POST.get("password")
+#             user_type = request.POST.get("user_type")
+
+#             user = None
+
+#             if user_type == "patient":
+#                 try:
+#                     user = patientRegister.objects.get(email=email)
+#                 except patientRegister.DoesNotExist:
+#                         return render(request, "login.html", {"error": "Patient does not exist"})
+
+#             elif user_type == "doctor":
+#                 try:
+#                     user = doctorRegister.objects.get(email=email)
+#                 except doctorRegister.DoesNotExist:
+#                     return render(request, "login.html", {"error": "Doctor does not exist"})
+
+#             else:
+#                 return render(request, "login.html", {"error": "Invalid user type"})
+
+#         # ✅ **Manually check the password**
+#         if password == user.password:  
+          
+#             # Redirect based on user type
+#             if user_type == "patient":
+#                     return redirect("patient_dashboard")  # Update with actual patient dashboard URL
+#             elif user_type == "doctor":
+#                     return redirect("doctor_dashboard")  # Update with actual doctor dashboard URL
+            
+#             return render(request, "login.html", {"error": "Invalid email or password"})
+
+#         return render(request, "login.html")
+
 def login(request):
-         return render(request, 'login.html')
+    email = None
+    password = None
+    user_type = None
+    user = None
+
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        user_type = request.POST.get("user_type")
+
+        user = None
+
+        if user_type == "patient":
+            try:
+                user = patientRegister.objects.get(email=email)
+            except patientRegister.DoesNotExist:
+                return render(request, "login.html", {"error": "Patient does not exist"})
+
+        elif user_type == "doctor":
+            try:
+                user = doctorRegister.objects.get(email=email)
+            except doctorRegister.DoesNotExist:
+                return render(request, "login.html", {"error": "Doctor does not exist"})
+
+        else:
+            return render(request, "login.html", {"error": "Invalid user type"})
+
+        # ✅ **Manually check the password**
+        if password == user.password:
+            # Redirect based on user type
+            if user_type == "patient":
+                return redirect("patient_dashboard")  # Update with actual patient dashboard URL
+            elif user_type == "doctor":
+                return redirect("doctor_dashboard")  # Update with actual doctor dashboard URL
+
+        return render(request, "login.html", {"error": "Invalid email or password"})
+
+    return render(request, "login.html")
+
 
 def search_doctors(request):
          return render(request, 'search.html')
@@ -66,8 +144,13 @@ def patient_dashboard(request):
          return render(request, 'patient-dashboard.html')
 
 def doctor_dashboard(request):
-         return render(request, 'doctor-dashboard.html')
+        # appointment = get_appointment_somehow() # type: ignore
 
+    # Split symptoms and get the first part
+        # symptoms_first_word = appointment.Symptoms.split(' ')[0]
+
+        # return render(request, 'doctor_dashboard.html', {'appointment': appointment, 'symptoms_first_word': symptoms_first_word})
+        return render(request,'doctor-dashboard.html')
 def admin_dashboard(request):
          return render(request, 'admin-dashboard.html')
 
@@ -110,6 +193,8 @@ def index(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+
 
 def coming_soon(request):
     return render(request, 'coming-soon.html')

@@ -18,10 +18,9 @@ class patientRegister(models.Model):
       address = models.TextField()  # Full address
       city = models.CharField(max_length=50)
       state = models.CharField(max_length=50)
-      pincode = models.IntegerField(), 
-      country = models.CharField(max_length=50),
       blood_group = models.CharField(max_length=3, choices=BLOOD_GROUP_CHOICES)  # Dropdown selection
-  
+      # pincode = models.IntegerField(null=True) 
+      # country = models.CharField(max_length=50,null=True)
       # def __str__(self):
       #     return f"{self.name} | {self.email} | {self.phno} | {self.password} | {self.profile_img.url if self.profile_img else 'No Image'} | {self.address} | {self.city} | {self.state} | {self.pincode} | {self.country} | {self.blood_group}"
       def __str__(self):
