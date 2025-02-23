@@ -2,17 +2,12 @@ from django import forms
 from . models import patientRegister,doctorRegister,appointment,payment
 from django.core.exceptions import ValidationError
 from datetime import datetime, time, timedelta
+from .models import adminLogin
 
 class patientForm(forms.ModelForm):
   class Meta:
     model = patientRegister
     fields =[ 'name' ,'email','phno','password' ]
-
-
-# class doctorForm(forms.ModelForm):
-#   class Meta:
-#      model = doctorRegister
-#      fields =[ 'name' ,'gender','clinic_name','clinic_address','email','phno','password' ]
 
 
 class doctorForm(forms.ModelForm):
@@ -83,4 +78,8 @@ class PaymentForm(forms.ModelForm):
 
 
 
+class adminForm(forms.ModelForm):
+    class Meta:
+       model = adminLogin
+       fields = ['username','email','password']
 

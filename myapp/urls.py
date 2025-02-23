@@ -33,6 +33,13 @@ urlpatterns = [
   path('verify/', views.verify, name='verify'),
   path('patient_profile_settings/', views.patient_profile_settings, name='patient_profile_settings'),
   path('search/', views.search, name='search'),
+  path('admin_login/',views.admin_login, name='admin_login'),
+  path('admin_profile_settings/', views.admin_profile_settings, name='admin_profile_settings'),
+  path('admin_change_password/', views.admin_change_password, name='admin_change_password'),
+  path('admin_manage_docters/',views.admin_manage_docters,name='admin_manage_doctors'),
+  path('admin_manage_patients/',views.admin_manage_patients,name='admin_manage_patients'),
+  path('admin_manage_appointments/',views.admin_manage_appointments,name='admin_manage_appointments'),
+
 
   ########################
    path('update-doctor/', views.update_doctor, name='update_doctor'),

@@ -1,0 +1,129 @@
+{% load static %}
+<html lang="en" style="transform: none;" class="fontawesome-i2svg-active fontawesome-i2svg-complete">
+<head>
+    <meta charset="utf-8">
+    <title>webDoctor</title>
+    <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function() {
+                var output = document.getElementById('preview-img');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+    <style id="theia-sticky-sidebar-stylesheet-TSS">.theiaStickySidebar:after {content: ""; display: table; clear: both;}</style>
+    <style type="text/css">@font-face { font-family: Roboto; src: url("chrome-extension://mcgbeeipkmelnpldkobichboakdfaeon/css/Roboto-Regular.ttf"); }</style>
+</head>
+<body style="transform: none;">
+    <div class="main-wrapper" style="transform: none;">
+        <div class="content" style="transform: none; min-height: 355.906px;">
+            <div class="container" style="transform: none; padding-top:50px">
+                <div class="row" style="transform: none;">
+                    <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+                        <div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 1px; position: static; transform: none;">
+                            <div class="profile-sidebar">
+                                <div class="widget-profile pro-widget-content">
+                                    <div class="profile-info-widget">
+                                        <a href="#" class="booking-doc-img">
+                                            <img src="{% static 'assets/img/' %}{{ profile }}" alt="User Image">
+                                        </a>
+                                        <div class="profile-det-info">
+                                            <h3>{{ admin.Name }}</h3>
+                                            <div class="patient-details">
+                                                <h5 class="mb-0">{{ admin.Qualification }} &amp; {{ admin.Job_Profile }}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="dashboard-widget">
+                                    <nav class="dashboard-menu">
+                                        <ul>
+                                            <li><a href="{% url 'admin_dashboard' %}"><i class="fas fa-columns"></i> <span>Dashboard</span></a></li>
+                                            <li ><a href="{% url 'admin_profile_settings' %}"><i class="fas fa-user-cog"></i> <span>Profile Settings</span></a></li>
+                                            <li><a href="{% url 'admin_manage_doctors' %}"><i class="fas fa-user-md"></i> <span>Manage Doctors</span></a></li>
+                                            <li class="active"><a href="{% url 'admin_manage_patients' %}"><i class="fas fa-users"></i> <span>Manage Patients</span></a></li>
+                                            <li><a href="{% url 'admin_manage_appointments' %}"><i class="fas fa-calendar-check"></i> <span>Manage Appointments</span></a></li>
+                                            <li><a href="{% url 'admin_change_password' %}"><i class="fas fa-lock"></i> <span>Change Password</span></a></li>
+                                            <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="col-md-9 d-flex">
+                        <div class="card card-table flex-fill">
+                            <div class="card-header">
+                                <h4 class="card-title">Patients List</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-center mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Patient Name</th>
+                                                <th>Email</th>
+                                                <th>Password</th>
+                                                <th>Phone</th>
+                                                <th>Address</th>
+                                                <th>City</th>
+                                                <th>state</th>
+                                                <th>Blood Group</th>
+                                                <th>Age</th>
+                                                <th>Height</th>
+                                                <th>Weight</th>
+                                                <th>Date Of Birth</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for patient in all %}
+                                            <tr>
+                                                <td>
+                                                    <h2 class="table-avatar">
+                                                        <a class="avatar avatar-sm me-2">
+                                                            {% if patient.profile_img %}
+                                                                <img class=" avatar-img  rounded-circle" src="{{ patient.profile_img.url }}" alt="profile" />
+                                                                             {% else %}
+                                                                 <img class="avatar-img rounded-circle" src="/static/assets/default_profile.png"  alt="default profile" />
+                                                                        {% endif %}
+                                                        </a>
+                                                        <a >{{ patient.name }} <span>#{{ patient.id }}</span></a>
+                                                    </h2>
+                                                </td>
+                                                
+                                                <td>{{ patient.email }}</td>
+                                                <th>{{ patient.password}}</th>
+                                                <td>{{ patient.phno }}</td>
+                                                <td>{{ patient.address }}</td>
+                                                <th>{{ patient.city}}</th>
+                                                <th>{{ patient.state}}</th>
+                                                <th>{{ patient.blood_group}}</th>
+                                                <th>{{ patient.age}}</th>
+                                                <th>{{ patient.height}}</th>
+                                                <th>{{ patient.weight}}</th>
+                                                <th>{{ patient.dob}}</th>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
