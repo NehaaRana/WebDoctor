@@ -42,8 +42,11 @@
             <div class="doctor-widget">
               <div class="doc-info-left">
                 <div class="doctor-img">
-                  <img src="{% static 'assets/img/doctors/' %}{{ doctor.Profile_URL }}" class="img-fluid"
-                    alt="User Image">
+                  % if doctor.profile_img %}
+                  <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
+                  {% else %}
+                    <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
+                  {% endif %}
                 </div>
                 <div class="doc-info-cont">
                   <h4 class="doc-name">Dr. {{ doctor.Name }}</h4>
@@ -154,7 +157,7 @@
 
                     <div class="col-md-2">
                       <div class="consult-price">
-                        ₹{{ doctor_fee }}
+                        ₹{{ doctor.fee }}
                       </div>
                     </div>
                   </div>

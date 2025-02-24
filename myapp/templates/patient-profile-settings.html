@@ -4,7 +4,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>PMS</title>
+  <title>{% block title %} webDocter {% endblock %}</title>
   <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
@@ -38,8 +38,96 @@
   <div class="main-wrapper" style="transform: none;">
 
     <!-- Header Section -->
-    {% include "header.html" %}
+   
+    <header class="header header-fixed header-one header-space">
+        <div class="container">
+        <nav class="navbar navbar-expand-lg header-nav">
+        <div class="navbar-header">
+        <a id="mobile_btn" href="javascript:void(0);">
+        <span class="bar-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+        </span>
+        </a>
+        <a href="{% url 'index' %}" class="navbar-brand logo">
+          <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+        </a>
+        </a>
+        </div>
+        <div class="main-menu-wrapper">
+        <div class="menu-header">
+          <a href="{% url 'index' %}" class="menu-logo">
+            <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+          </a>
+        <a id="menu_close" class="menu-close" href="javascript:void(0);">
+        <svg class="svg-inline--fa fa-times fa-w-11" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" data-fa-i2svg=""><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg><!-- <i class="fas fa-times"></i> Font Awesome fontawesome.com -->
+        </a>
+        </div>
+        <ul class="main-nav">
+          <li>
+            <a href="{% url 'index' %}">Home</a>
+          </li>
+          
+          <li>
+            <a href="{% url 'patient_dashboard' %}">Patients</a>
+          </li>
+          
+          <li>
+            <a href="{% url 'doctor_dashboard' %}">Doctors</a>
+          </li>
+          
+          <li>
+            <a href="{% url 'admin_dashboard' %}">Admin</a>
+          </li>
+          
+          <li>
+            <a href="{% url 'contact_us' %}">Contact Us</a>
+          </li>
+        
+        
+        <ul class="nav header-navbar-rht" style="padding-top: 20px;">
+        
+        <li class="nav-item dropdown has-arrow logged-item">
+        <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="user-img">
+         
+          {% if doctor.profile_img %}
+          <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
+          {% else %}
+            <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
+          {% endif %}
+          
+    </span>
+        </span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end">
+        <div class="user-header">
+        <div class="avatar avatar-sm">
+   
+          {% if doctor.profile_img %}
+          <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
+          {% else %}
+            <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
+          {% endif %}
 
+        </div>
+        <div class="user-text">
+        <h6>{{patient.name}}</h6>
+        <p class="text-muted mb-0">{{patient.user}}</p>
+        </div>
+        </div>
+        <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
+        <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
+        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>         
+       </div>
+        </li>
+        </ul>
+        </ul>
+        </div>
+        </nav>
+        </div>
+        </header>
 
 
 
@@ -54,7 +142,11 @@
                 <div class="widget-profile pro-widget-content">
                   <div class="profile-info-widget">
                     <a href="#" class="booking-doc-img">
-                      <img src="{% static 'assets/img/' %}{{ profile }}" alt="User Image">
+                      {% if patient.profile_img %}
+    <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
+    {% else %}
+      <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
+    {% endif %}
                     </a>
                     <div class="profile-det-info">
                       <h3>{{ patient_data.Name }}</h3>
@@ -87,7 +179,7 @@
                         </a>
                       </li>
                       <li>
-                        <a href="{% url 'patient-change-password' %}">
+                        <a href="{% url 'patient_change_password' %}">
                           <i class="fas fa-user-cog"></i>
                           <span>change password</span>
                         </a>
@@ -107,15 +199,18 @@
           <div class="col-md-7 col-lg-8 col-xl-9">
             <div class="card">
               <div class="card-body">
-                <form method="POST" action="{% url 'patient-profile-settings' %}" enctype="multipart/form-data">
+                <form method="POST" action="{% url 'patient_profile_settings' %}" enctype="multipart/form-data">
                   {% csrf_token %}
                   <div class="row form-row">
                     <div class="col-md-12">
                       <div class="form-group">
                         <div class="change-avatar">
                           <div class="profile-img">
-                            <img id="preview-img" alt="Profile Update"
-                              src="{% static 'assets/img/' %}{{ patient_data.profile }}">
+                            {% if doctor.profile_img %}
+                            <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
+                            {% else %}
+                              <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
+                            {% endif %}
                           </div>
                           <div class="upload-img">
                             <div class="change-photo-btn">
@@ -165,7 +260,7 @@
                         <select id="blood_group" name="blood_group" class="form-select form-control">
                           <option value="{{ patient_data.Blood_Group }}" selected>{{ patient_data.Blood_Group }}
                           </option>
-                          {% for group in ["A-", "A+", "B-", "B+", "AB-", "AB+", "O-", "O+"] %}
+                          {% for group in BLOOD_GROUP_CHOICES %}
                           <option value="{{ group }}">{{ group }}</option>
                           {% endfor %}
                         </select>

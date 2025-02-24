@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>webDoctor</title>
+    <title>{% block title %} webDocter {% endblock %}</title>
     <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
 </head>
 <body>
+    {% block content %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
     <div class="main-wrapper">
       <header class="header header-fixed header-one header-space">
@@ -70,7 +71,7 @@
         <li class="nav-item dropdown has-arrow logged-item">
         <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
         <span class="user-img">
-        <img class="rounded-circle" src="../static/assets/img/{{profile}}" width="31" alt="profile">
+        <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile">
         </span>
         </a>
         <div class="dropdown-menu dropdown-menu-end">
@@ -78,19 +79,19 @@
         <div class="avatar avatar-sm">
           <img
           class="rounded-circle"
-         src="{% static 'assets/img/' %}{{ profile }}"
+         src="{{ patient.profile_img.url }}"
          width="31"
          alt="profile"
          />
         </div>
         <div class="user-text">
-        <h6>{{name}}</h6>
-        <p class="text-muted mb-0">{{user}}</p>
+        <h6>{{patient.name}}</h6>
+        <p class="text-muted mb-0">{{patient.user}}</p>
         </div>
         </div>
-        <a class="dropdown-item" href="{{dashboard}}">Dashboard</a>
-        <a class="dropdown-item" href="{{url}}">Profile Settings</a>
-        <a class="dropdown-item" href="/logout">Logout</a>
+        <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
+        <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
+        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>    
         </div>
         </li>
         </ul>
@@ -183,5 +184,6 @@
         {% include "footer.html" %}  <!-- Assuming you have a separate footer template -->
     </div>
     <div class="sidebar-overlay"></div>
+    {% endblock %}
 </body>
 </html>

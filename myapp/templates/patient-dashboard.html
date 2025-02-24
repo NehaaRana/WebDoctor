@@ -106,9 +106,12 @@
         <li class="nav-item dropdown has-arrow logged-item">
         <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
         <span class="user-img">
-          {% load static %}
-          <img class="rounded-circle" src="{% static 'assets/' %}{{ patient.profile_img }}" width="31" alt="profile">
-          
+       
+          {% if doctor.profile_img %}
+    <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
+    {% else %}
+      <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
+    {% endif %}
     </span>
         </span>
         </a>
@@ -116,7 +119,11 @@
         <div class="user-header">
         <div class="avatar avatar-sm">
    
-<img class="rounded-circle" src="{% static 'assets/' %}{{ patient.profile_img }}" width="31" alt="profile">
+          {% if doctor.profile_img %}
+          <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
+          {% else %}
+            <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
+          {% endif %}
 
         </div>
         <div class="user-text">
@@ -124,7 +131,7 @@
         <p class="text-muted mb-0">{{patient.user}}</p>
         </div>
         </div>
-        <a class="dropdown-item" href="{{dashboard}}">Dashboard</a>
+        <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
         <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
         <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>       
        </div>
@@ -160,10 +167,11 @@
                   <div class="widget-profile pro-widget-content">
                     <div class="profile-info-widget">
                       <a href="#" class="booking-doc-img">
-                        <img
-                          src="{% static 'assets/' %}{{ patient.profile_img }}"
-                          alt="User Image"
-                        />
+                        {% if doctor.profile_img %}
+                        <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
+                        {% else %}
+                          <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
+                        {% endif %}
                       </a>
                       <div class="profile-det-info">
                         <h3>{{ patient.name }}</h3>
@@ -407,16 +415,16 @@
                                   <td>
                                     <h2 class="table-avatar">
                                       <a
-                                        href="{% url 'doctor_profile' doctor_id=appointment.Doctor_ID %}"
+                                        href="{% url 'doctor_profile' doctor_id=appointment.doctor_id %}"
                                         class="avatar avatar-sm me-2"
                                       >
                                         <img
                                           class="avatar-img rounded-circle"
-                                          src="{% static 'assets/img/doctors/' %}{{ appointment.Profile_URL }}"
+                                          src="{% static 'assets/img/doctors/' %}{{ appointment.profile_url }}"
                                           alt="User Image"
                                         />
                                       </a>
-                                      <a href="{% url 'doctor_profile' doctor_id=appointment.Doctor_ID %}">
+                                      <a href="{% url 'doctor_profile' doctor_id=appointment.doctor_id %}">
                                         Dr. {{ appointment.Doctor_Name }}
                                         <span>{{ appointment.Specialization }}</span>
                                       </a>

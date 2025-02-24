@@ -11,7 +11,7 @@ class patientRegister(models.Model):
       email = models.EmailField(unique=True)
       phno = models.BigIntegerField(unique=True) 
       password = models.CharField(max_length=255)
-      profile_img = models.ImageField(upload_to='myapp/static/assets/profile_pics/', null=True, blank=True)
+      profile_img = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
       dob=models.DateField(null=True)
       age = models.PositiveIntegerField(null=True)  # Age field
       weight = models.DecimalField(null=True,max_digits=5,decimal_places=2)#Weight field
@@ -38,7 +38,7 @@ class doctorRegister(models.Model):
     email = models.EmailField(unique=True)
     phno = models.BigIntegerField(unique=True)
     password = models.CharField(max_length=100)
-    profile_img = models.ImageField(upload_to='static/assets/profile_pics/', null=True, blank=True)
+    profile_img = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     qualification = models.CharField(max_length=100,blank=True, null=True)
     specialization = models.CharField(max_length=100,blank=True, null=True)
     experience = models.IntegerField(blank=True, null=True)
@@ -49,6 +49,8 @@ class doctorRegister(models.Model):
     clinic_address = models.TextField()
     gender = models.CharField(max_length=5, choices=GENDER_CHOICES)
     mci_no = models.CharField(max_length=10,blank=True, null=True)
+    fee = models.BigIntegerField(null=True)
+
 
     # class Meta:
     #     db_table = 'myapp_doctorregister'  # Explicitly link to the existing table
