@@ -56,46 +56,6 @@ def contact_us(request):
 def register(request):
          return render(request, 'register.html')
 
-# def login(request):
-#         # email = None
-#         # password = None
-#         # user_type = None
-#         # user = None
-#         if request.method == "POST":
-#             email = request.POST.get("email")
-#             password = request.POST.get("password")
-#             user_type = request.POST.get("user_type")
-
-#             user = None
-
-#             if user_type == "patient":
-#                 try:
-#                     user = patientRegister.objects.get(email=email)
-#                 except patientRegister.DoesNotExist:
-#                         return render(request, "login.html", {"error": "Patient does not exist"})
-
-#             elif user_type == "doctor":
-#                 try:
-#                     user = doctorRegister.objects.get(email=email)
-#                 except doctorRegister.DoesNotExist:
-#                     return render(request, "login.html", {"error": "Doctor does not exist"})
-
-#             else:
-#                 return render(request, "login.html", {"error": "Invalid user type"})
-
-#         # ✅ **Manually check the password**
-#         if password == user.password:  
-          
-#             # Redirect based on user type
-#             if user_type == "patient":
-#                     return redirect("patient_dashboard")  # Update with actual patient dashboard URL
-#             elif user_type == "doctor":
-#                     return redirect("doctor_dashboard")  # Update with actual doctor dashboard URL
-            
-#             return render(request, "login.html", {"error": "Invalid email or password"})
-
-#         return render(request, "login.html")
-
 def login(request):
     email = None
     password = None
