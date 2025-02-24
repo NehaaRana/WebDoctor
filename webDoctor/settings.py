@@ -127,7 +127,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
       os.path.join(BASE_DIR, 'myapp', 'static'),  # Ensure correct path
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # For production use
+
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # For production use
 
 APPEND_SLASH = False
 

@@ -106,12 +106,14 @@ def login(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
         user_type = request.POST.get("user_type")
+        patient=patientRegister.objects.get(email=email,password=password)
 
         user = None
 
         if user_type == "patient":
             try:
                 user = patientRegister.objects.get(email=email)
+                request.session['patient_id']=patient.id
             except patientRegister.DoesNotExist:
                 return render(request, "login.html", {"error": "Patient does not exist"})
 
@@ -141,7 +143,17 @@ def search_doctors(request):
          return render(request, 'search.html')
 
 def patient_dashboard(request):
-         return render(request, 'patient-dashboard.html')
+    patient_id = request.session.get('patient_id')  # Get user ID from session
+    
+    if not patient_id:
+        return redirect("login")  # Redirect to login if session is empty
+    
+    try:
+        patient = patientRegister.objects.get(id=patient_id)  # Fetch patient data
+        print("Patient Found:", patient.name)  # Debugging
+    except patientRegister.DoesNotExist:
+        return redirect("login")
+    return render(request, "patient-dashboard.html",{"patient": patient})
 
 def doctor_dashboard(request):
         # appointment = get_appointment_somehow() # type: ignore
@@ -219,11 +231,35 @@ def doctor_change_password(request):
     return render(request, 'doctor-change-password.html')
 
 def patient_change_password(request):
-    return render(request, 'patient-change-password.html')
+    patient_id = request.session.get('patient_id')  # Get user ID from session
+    
+    if not patient_id:
+        return redirect("login")  # Redirect to login if session is empty
+    
+    try:
+        patient = patientRegister.objects.get(id=patient_id)  # Fetch patient data
+        print("Patient Found:", patient.name)  # Debugging
+    except patientRegister.DoesNotExist:
+        return redirect("login")
+    return render(request, 'patient-change-password.html',{"patient": patient})
 
 def password_change_successful(request):
     return render(request, 'password-change-successful.html')
 
 def verify(request):
     return render(request, 'verify.html')
+
+def patient_profile_settings(request):
+    
+    patient_id = request.session.get('patient_id')  # Get user ID from session
+    
+    if not patient_id:
+        return redirect("login")  # Redirect to login if session is empty
+    
+    try:
+        patient = patientRegister.objects.get(id=patient_id)  # Fetch patient data
+        print("Patient Found:", patient.name)  # Debugging
+    except patientRegister.DoesNotExist:
+        return redirect("login")
+    return render(request, 'patient-profile-settings.html', {"patient": patient})
       

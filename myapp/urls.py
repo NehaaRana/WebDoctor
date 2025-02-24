@@ -27,6 +27,7 @@ urlpatterns = [
    path('book_appointment/', views.book_appointment, name='book_appointment'),
   path('doctor_change_password/', views.doctor_change_password, name='doctor_change_password'),
   path('patient_change_password/', views.patient_change_password, name='patient_change_password'),
-   path('password_change_successful/', views.password_change_successful, name='password_change_successful'),
-  path('verify/', views.verify, name='verify')
+  path('password_change_successful/', views.password_change_successful, name='password_change_successful'),
+  path('verify/', views.verify, name='verify'),
+  path('patient_profile_settings/', views.patient_profile_settings, name='patient_profile_settings')
 ]
