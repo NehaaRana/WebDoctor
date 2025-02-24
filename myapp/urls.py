@@ -24,6 +24,7 @@ urlpatterns = [
   path('terms_condition/', views.terms_condition, name='terms_condition'),
   path('patient_profile/', views.patient_profile, name='patient_profile'),
   path('doctor_profile/', views.doctor_profile, name='doctor_profile'),
+  path('doctor_profile_settings/', views.doctor_profile_settings, name='doctor_profile_settings'),
    path('book_appointment/', views.book_appointment, name='book_appointment'),
   path('doctor_change_password/', views.doctor_change_password, name='doctor_change_password'),
   path('patient_change_password/', views.patient_change_password, name='patient_change_password'),

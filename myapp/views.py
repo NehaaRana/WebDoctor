@@ -56,46 +56,6 @@ def contact_us(request):
 def register(request):
          return render(request, 'register.html')
 
-# def login(request):
-#         # email = None
-#         # password = None
-#         # user_type = None
-#         # user = None
-#         if request.method == "POST":
-#             email = request.POST.get("email")
-#             password = request.POST.get("password")
-#             user_type = request.POST.get("user_type")
-
-#             user = None
-
-#             if user_type == "patient":
-#                 try:
-#                     user = patientRegister.objects.get(email=email)
-#                 except patientRegister.DoesNotExist:
-#                         return render(request, "login.html", {"error": "Patient does not exist"})
-
-#             elif user_type == "doctor":
-#                 try:
-#                     user = doctorRegister.objects.get(email=email)
-#                 except doctorRegister.DoesNotExist:
-#                     return render(request, "login.html", {"error": "Doctor does not exist"})
-
-#             else:
-#                 return render(request, "login.html", {"error": "Invalid user type"})
-
-#         # ✅ **Manually check the password**
-#         if password == user.password:  
-          
-#             # Redirect based on user type
-#             if user_type == "patient":
-#                     return redirect("patient_dashboard")  # Update with actual patient dashboard URL
-#             elif user_type == "doctor":
-#                     return redirect("doctor_dashboard")  # Update with actual doctor dashboard URL
-            
-#             return render(request, "login.html", {"error": "Invalid email or password"})
-
-#         return render(request, "login.html")
-
 def login(request):
     email = None
     password = None
@@ -106,7 +66,7 @@ def login(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
         user_type = request.POST.get("user_type")
-
+        doctor = doctorRegister.objects.get(email=email, password=password)  
         user = None
 
         if user_type == "patient":
@@ -118,6 +78,7 @@ def login(request):
         elif user_type == "doctor":
             try:
                 user = doctorRegister.objects.get(email=email)
+                request.session['doctor_id'] = doctor.id  # Store doctor ID in session
             except doctorRegister.DoesNotExist:
                 return render(request, "login.html", {"error": "Doctor does not exist"})
 
@@ -141,17 +102,20 @@ def search_doctors(request):
          return render(request, 'search.html')
 
 def patient_dashboard(request):
-         all_patient=patientRegister.objects.all
-         return render(request, 'patient-dashboard.html',{'all':all_patient})
+         return render(request, 'patient-dashboard.html')
 
 def doctor_dashboard(request):
-        # appointment = get_appointment_somehow() # type: ignore
+    doctor_id = request.session.get('doctor_id')  # Get logged-in doctor ID
 
-    # Split symptoms and get the first part
-        # symptoms_first_word = appointment.Symptoms.split(' ')[0]
+    if not doctor_id:
+        return redirect("login")  # Redirect to login if not logged in
+    try:
+        doctor = doctorRegister.objects.get(id=doctor_id)  # Fetch the doctor
+    except doctorRegister.DoesNotExist:
+        return redirect("login")  # Redirect if doctor not found
 
-        # return render(request, 'doctor_dashboard.html', {'appointment': appointment, 'symptoms_first_word': symptoms_first_word})
-        return render(request,'doctor-dashboard.html')
+    return render(request, "doctor-dashboard.html", {"doctor": doctor})
+
 def admin_dashboard(request):
          return render(request, 'admin-dashboard.html')
 
@@ -213,11 +177,36 @@ def patient_profile(request):
 def doctor_profile(request):
     return render(request, 'doctor-profile.html')
 
+def doctor_profile_settings(request):
+    doctor_id = request.session.get('doctor_id')  # Get logged-in doctor ID
+
+    if not doctor_id:
+        return redirect("login")  # Redirect to login if not logged in
+    try:
+        doctor = doctorRegister.objects.get(id=doctor_id)  # Fetch the doctor
+    except doctorRegister.DoesNotExist:
+        return redirect("login")  # Redirect if doctor not found
+
+    return render(request, "doctor-profile-settings.html", {"doctor": doctor})
+
+    # return render(request, 'doctor-profile-settings.html')
+
 def book_appointment(request):
     return render(request, 'booking.html')
 
 def doctor_change_password(request):
-    return render(request, 'doctor-change-password.html')
+    doctor_id = request.session.get('doctor_id')  # Get logged-in doctor ID
+
+    if not doctor_id:
+        return redirect("login")  # Redirect to login if not logged in
+    try:
+        doctor = doctorRegister.objects.get(id=doctor_id)  # Fetch the doctor
+    except doctorRegister.DoesNotExist:
+        return redirect("login")  # Redirect if doctor not found
+
+    return render(request, "doctor-change-password.html", {"doctor": doctor})
+
+    # return render(request, 'doctor-change-password.html')
 
 def patient_change_password(request):
     return render(request, 'patient-change-password.html')

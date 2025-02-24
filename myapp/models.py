@@ -12,15 +12,10 @@ class patientRegister(models.Model):
       phno = models.BigIntegerField(unique=True) 
       password = models.CharField(max_length=255)
       profile_img = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
-<<<<<<< HEAD
-
-      address = models.TextField(null=True, blank=True)  # Temporarily allow null values
-=======
       age = models.PositiveIntegerField(null=True)  # Age field
       weight = models.DecimalField(null=True,max_digits=5,decimal_places=2)#Weight field
       height = models.DecimalField(null=True,max_digits=5, decimal_places=2) 
       address = models.TextField()  # Full address
->>>>>>> fbb6e2bc4f491e837f2e0608b55af16a44ae5706
       city = models.CharField(max_length=50)
       state = models.CharField(max_length=50)
       blood_group = models.CharField(max_length=3, choices=BLOOD_GROUP_CHOICES)  # Dropdown selection
@@ -31,9 +26,6 @@ class patientRegister(models.Model):
       def __str__(self):
         return f"{self.name} | {self.email} | {self.phno}"
       
-<<<<<<< HEAD
-
-=======
 class doctorRegister(models.Model):
     GENDER_CHOICES = [
         ('M', 'Male'),
@@ -62,4 +54,3 @@ class doctorRegister(models.Model):
     #     managed = True  # 🚨 Change this to True so Django can manage the table
     def __str__(self):
             return f"{self.name} | {self.gender} |{self.email} | {self.password} | {self.clinic_name} |{self.clinic_address} | {self.phno} | "
->>>>>>> fbb6e2bc4f491e837f2e0608b55af16a44ae5706

@@ -120,10 +120,6 @@ USE_TZ = True
 # STATICFILES_DIRS = [
 #     BASE_DIR / "static",
 # ]
-<<<<<<< HEAD
-
-=======
->>>>>>> fbb6e2bc4f491e837f2e0608b55af16a44ae5706
 import os
 
 STATIC_URL = '/static/'
@@ -131,8 +127,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
       os.path.join(BASE_DIR, 'myapp', 'static'),  # Ensure correct path
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # For production use
-
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # For production use
+MEDIA_URL = '/media/'  
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  
 APPEND_SLASH = False
 
 # Default primary key field type
