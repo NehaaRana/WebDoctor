@@ -39,20 +39,23 @@
                       <div class="card">
                           <div class="card-body">
                               <div class="booking-doc-info">
-                                <!-- <a href="{% url 'doctor_profile' doctor_data.Doctor_ID %}" class="booking-doc-img"> -->
-                                  {% if doctor_data.Doctor_ID %}
-                                  <a href="{% url 'doctor_profile' doctor_data.Doctor_ID|add:0 %}" class="booking-doc-img">
+                                  {% if doctor.id %}
+                                  <a href="{% url 'doctor_profile' doctor.id|add:0 %}" class="booking-doc-img">
                                     {% else %}
     <p>Doctor profile not available</p>
 {% endif %}
 
 
-                                      <img src="{% static 'assets/img/doctors/' %}{{ doctor_data.Profile_URL }}" alt="User Image">
+{% if doctor.profile_img %}
+<img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
+{% else %}
+  <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
+{% endif %}
                                   </a>
                                   <div class="booking-info">
                                       <h4>
-                                          <a href="{% url 'doctor_profile' doctor_data.Doctor_ID %}">
-                                              Dr. {{ doctor_data.Name }}
+                                          <a href="{% url 'doctor_profile' doctor.id %}">
+                                              Dr. {{ doctor.name }}
                                           </a>
                                       </h4>
                                       <p class="text-muted mb-0">
@@ -65,7 +68,7 @@
                                                     d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z">
                                               </path>
                                           </svg>
-                                          {{ doctor_data.Clinic_Address }}, {{ doctor_data.State }}
+                                          {{ doctor.clinic_address }}, {{ doctor.state }}
                                       </p>
                                   </div>
                               </div>
@@ -78,7 +81,7 @@
   </section>
   
 
-  <form action="{% url 'book_appointment' doctor_data.Doctor_ID %}" method="POST">
+  <form action="{% url 'book_appointment' doctor.id %}" method="POST">
     {% csrf_token %}
     
     <div class="row">
@@ -119,7 +122,7 @@
         </div>
     </div>
 
-    <input type="hidden" name="appointment_time" id="appointment_time" value="">
+    <input type="hidden" name="appointment_time" class="form-control timepicker" id="appointment_time" value="">
 
     <script>
         function selectTimeSlot(element) {
@@ -129,7 +132,7 @@
         }
     </script>
 
-    <div class="form-group">
+    {% comment %} <div class="form-group">
         <label class="form-group-title">Do you have insurance?</label>
         <label class="custom_radio me-4">
             <input type="radio" name="insurance" value="Yes"> <span class="checkmark"></span> Yes
@@ -137,7 +140,7 @@
         <label class="custom_radio">
             <input type="radio" name="insurance" value="No" checked> <span class="checkmark"></span> No
         </label>
-    </div>
+    </div> {% endcomment %}
 
     <div class="form-group">
         <label class="form-group-title">Reason</label>
@@ -145,10 +148,10 @@
         <p class="characters-text" style="text-align: right;">400 Characters</p>
     </div>
 
-    <div class="form-group">
+     <div class="form-group">
         <label class="form-group-title">Symptoms <span>(Optional)</span></label>
         <input type="text" class="form-control" name="symptoms" placeholder="Skin Allergy">
-    </div>
+    </div> 
 
     <div class="submit-section proceed-btn text-end">
         <button type="submit" class="btn btn-primary prime-btn justify-content-center align-items-center">
@@ -197,6 +200,41 @@
         });
       });
     </script>
+
+    <!-- Add jQuery and jQuery UI (For DatePicker) -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<!-- Add Timepicker -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+
+<script>
+    $(document).ready(function() {
+        // Datepicker (DD/MM/YYYY)
+        $("#appointment_date").datepicker({
+            dateFormat: "dd/mm/yy",
+            changeMonth: true,
+            changeYear: true,
+            minDate: 0  // Prevent past dates
+        });
+
+        // Timepicker (12-hour format with AM/PM)
+        $("#appointment_time").timepicker({
+            timeFormat: "h:mm p",
+            interval: 30, // 30-minute intervals
+            minTime: "9:00 AM",
+            maxTime: "5:00 PM",
+            defaultTime: "12:00 PM",
+            startTime: "9:00 AM",
+            dynamic: false,
+            dropdown: true,
+            scrollbar: true
+        });
+    });
+</script>
+
 
 {% include "footer.html" %}
 {% endblock %}

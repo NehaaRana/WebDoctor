@@ -1,12 +1,21 @@
+# import datetime
+from datetime import time, timedelta
+import datetime  # Correct way to use strptime
+from django.urls import reverse
+from datetime import datetime, timedelta, time, date
 from django.http import JsonResponse
 from django.shortcuts import render,redirect
 from django.contrib.auth import logout
-from .forms import patientForm
-from .forms import doctorForm 
+from .forms import patientForm,doctorForm ,appointmentForm
+
 # from .forms import doctorForm
-from .models import patientRegister,doctorRegister
+from .models import patientRegister,doctorRegister,appointment
+
 # Create your views here.
 # from django.shortcuts import render
+
+from django.shortcuts import get_object_or_404
+
 
 # Create your views here.
 def home(request):
@@ -204,8 +213,121 @@ def doctor_profile_settings(request):
 
     # return render(request, 'doctor-profile-settings.html')
 
-def book_appointment(request):
-    return render(request, 'booking.html')
+
+
+def book_appointment(request, doctor_id):
+    patient_id = request.session.get('patient_id')  # Get patient ID from session
+    if not patient_id:
+        return redirect('/login/')  # Redirect to login if not logged in
+
+    patient = get_object_or_404(patientRegister, id=patient_id)  
+    doctor = get_object_or_404(doctorRegister, id=doctor_id)
+
+    # Generate available time slots (9 AM to 5 PM, every 30 minutes)
+    start_time = time(9, 0)
+    end_time = time(17, 0)
+    time_slots = []
+    
+    current_time = datetime.combine(date.today(), start_time)
+    while current_time.time() < end_time:
+        time_slots.append(current_time.strftime("%I:%M %p"))  # Format in 12-hour format with AM/PM
+        current_time += timedelta(minutes=30)
+
+    if request.method == "POST":
+        print("Form submitted:", request.POST)  # Debugging: Print submitted data
+        form = appointmentForm(request.POST)
+        
+        if form.is_valid():
+            appointment_obj = form.save(commit=False)
+            appointment_obj.patient_id = patient
+            appointment_obj.doctor_id = doctor
+
+            # Convert appointment_date from DD/MM/YYYY to YYYY-MM-DD
+            try:
+                appointment_obj.appointment_date = datetime.strptime(request.POST.get("appointment_date"), "%d/%m/%Y").date()
+            except ValueError:
+                print("Invalid date format:", request.POST.get("appointment_date"))
+                form.add_error("appointment_date", "Invalid date format. Use DD/MM/YYYY.")
+
+            # Convert appointment_time from "12:30 p.m." to "12:30:00"
+            try:
+                appointment_time_str = request.POST.get("appointment_time").strip().upper()  # Ensure formatting
+                appointment_obj.appointment_time = datetime.strptime(appointment_time_str, "%I:%M %p").time()
+            except ValueError:
+                print("Invalid time format:", appointment_time_str)
+                form.add_error("appointment_time", "Invalid time format. Use HH:MM AM/PM.")
+
+            if not form.errors:
+                appointment_obj.save()
+                print("Appointment saved:", appointment_obj)  # Debugging: Print saved appointment
+                return redirect("payment", appointment_id=appointment_obj.id)  # Redirect to payment page
+        
+        print("Form errors:", form.errors)  # Debugging: Print form errors
+
+    else:
+        form = appointmentForm()
+    
+    return render(request, 'booking.html', {
+        "doctor": doctor, 
+        "patient": patient,
+        "form": form,
+        "time_slots": time_slots
+    })
+
+# def book_appointment(request, doctor_id):
+#     patient_id = request.session.get('patient_id')  # Get patient ID from session
+#     if not patient_id:
+#         return redirect('/login/')  # Redirect to login if not logged in
+
+#     patient = get_object_or_404(patientRegister, id=patient_id)  
+#     doctor = get_object_or_404(doctorRegister, id=doctor_id)
+
+#     if request.method == "POST":
+#         form = appointmentForm(request.POST)
+        
+#         if form.is_valid():
+#             # Get the raw data from the form
+#             appointment_obj = form.save(commit=False)
+#             appointment_obj.patient_id = patient
+#             appointment_obj.doctor_id = doctor
+#             appointment_date_str = request.POST.get("appointment_date")  # '26/02/2025'
+#             appointment_time_str = request.POST.get("appointment_time")  # '12:30 p.m.'
+
+#             # Convert date (DD/MM/YYYY → YYYY-MM-DD)
+#             try:
+#                 appointment_date = datetime.strptime(appointment_date_str, "%d/%m/%Y").date()
+#             except ValueError:
+#                 form.add_error("appointment_date", "Invalid date format")
+#                 return render(request, "booking.html", {"form": form})
+
+#             # Convert time (12-hour format → 24-hour format)
+#             try:
+#                 appointment_time = datetime.strptime(appointment_time_str, "%I:%M %p").time()
+#             except ValueError:
+#                 form.add_error("appointment_time", "Invalid time format")
+#                 return render(request, "booking.html", {"form": form})
+
+#             # Save the appointment
+#             appointment = form.save(commit=False)
+#             appointment.appointment_date = appointment_date
+#             appointment.appointment_time = appointment_time
+#             appointment.doctor_id = doctor_id  # Assuming doctor_id is needed
+#             appointment.save()
+
+#             return redirect("success_page")  # Redirect after successful booking
+
+#         else:
+#             print(form.errors)  # Debugging errors
+
+#     else:
+#         form = appointmentForm()
+
+#     return render(request, "booking.html", {"form": form})
+
+
+def payment(request, appointment_id):
+    appointment = get_object_or_404(appointment, id=appointment_id)
+    return render(request, 'payment.html', {"appointment": appointment})
 
 def doctor_change_password(request):
     doctor_id = request.session.get('doctor_id')  # Get logged-in doctor ID

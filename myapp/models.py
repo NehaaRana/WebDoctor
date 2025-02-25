@@ -20,10 +20,7 @@ class patientRegister(models.Model):
       city = models.CharField(max_length=50)
       state = models.CharField(max_length=50)
       blood_group = models.CharField(max_length=3, choices=BLOOD_GROUP_CHOICES)  # Dropdown selection
-      # pincode = models.IntegerField(null=True) 
-      # country = models.CharField(max_length=50,null=True)
-      # def __str__(self):
-      #     return f"{self.name} | {self.email} | {self.phno} | {self.password} | {self.profile_img.url if self.profile_img else 'No Image'} | {self.address} | {self.city} | {self.state} | {self.pincode} | {self.country} | {self.blood_group}"
+     
       def __str__(self):
         return f"{self.name} | {self.email} | {self.phno}"
       
@@ -59,12 +56,14 @@ class doctorRegister(models.Model):
             return f"{self.name} | {self.gender} |{self.email} | {self.password} | {self.clinic_name} |{self.clinic_address} | {self.phno} | "
     
 class appointment(models.Model):
-     STATUS_CHOICE=[('Scheduled', 'Scheduled'), ('Completed', 'Completed'), ('Cancelled', 'Cancelled')]
+    #  STATUS_CHOICE=[('Scheduled', 'Scheduled'), ('Completed', 'Completed'), ('Cancelled', 'Cancelled')]
      doctor_id=models.ForeignKey(doctorRegister,on_delete=models.CASCADE)
      patient_id=models.ForeignKey(patientRegister,on_delete=models.CASCADE)
      appointment_date = models.DateField() 
      appointment_time = models.TimeField()
-     status= models.CharField(max_length=20,choices=STATUS_CHOICE,default='Scheduled')
+    #  status= models.CharField(max_length=20,choices=STATUS_CHOICE,default='Scheduled')
+     reason = models.TextField(null=True)
+     symptoms = models.CharField(max_length=255, blank=True, null=True)
 
      def __str__(self):
-          return f"{self.doctor_id} | {self.patient_id} |{self.appointment_date} | {self.appointment_time} | {self.status} | "
+          return f"{self.appointment_date} | {self.appointment_time} | {self.reason} | {self.symptoms} |"
