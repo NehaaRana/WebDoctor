@@ -33,6 +33,13 @@ urlpatterns = [
   path('verify/', views.verify, name='verify'),
   path('patient_profile_settings/', views.patient_profile_settings, name='patient_profile_settings'),
   path('search/', views.search, name='search'),
+
+  ########################
+   path('update-doctor/', views.update_doctor, name='update_doctor'),
+    path('get-doctor/<int:doctor_id>/',views.get_doctor, name='get_doctor'),
+       path('update-patient/', views.update_patient, name='update_patient'),
+    path('get-patient/<int:patient_id>/',views.get_patient, name='get_patient'),
+
   path('payment/<int:appointment_id>/<int:doctor_id>/', views.payment, name='payment'),
   path('payment_details/<int:appointment_id>/<int:doctor_id>/', views.payment_details, name='payment_details')
 

@@ -107,8 +107,8 @@
         <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
         <span class="user-img">
        
-          {% if doctor.profile_img %}
-    <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
+          {% if patient.profile_img %}
+    <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
     {% else %}
       <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
     {% endif %}
@@ -119,8 +119,8 @@
         <div class="user-header">
         <div class="avatar avatar-sm">
    
-          {% if doctor.profile_img %}
-          <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
+          {% if patient.profile_img %}
+          <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
           {% else %}
             <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
           {% endif %}
@@ -167,8 +167,8 @@
                   <div class="widget-profile pro-widget-content">
                     <div class="profile-info-widget">
                       <a href="#" class="booking-doc-img">
-                        {% if doctor.profile_img %}
-                        <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
+                        {% if patient.profile_img %}
+                        <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
                         {% else %}
                           <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
                         {% endif %}
@@ -196,7 +196,7 @@
                             </svg>
 
                             <!-- <i class="fas fa-birthday-cake"></i> Font Awesome fontawesome.com -->
-                            {{ patient.Date_of_Birth }}
+                            {{ patient.dob }}
                           </h5>
                           <h5 class="mb-0">
                             <svg

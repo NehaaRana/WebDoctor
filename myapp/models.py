@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.hashers import make_password, check_password
+
 from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 class patientRegister(models.Model):
@@ -20,6 +22,18 @@ class patientRegister(models.Model):
       city = models.CharField(max_length=50)
       state = models.CharField(max_length=50)
       blood_group = models.CharField(max_length=3, choices=BLOOD_GROUP_CHOICES)  # Dropdown selection
+
+      def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+        self.save()
+
+      def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
+      
+      # pincode = models.IntegerField(null=True) 
+      # country = models.CharField(max_length=50,null=True)
+      # def __str__(self):
+      #     return f"{self.name} | {self.email} | {self.phno} | {self.password} | {self.profile_img.url if self.profile_img else 'No Image'} | {self.address} | {self.city} | {self.state} | {self.pincode} | {self.country} | {self.blood_group}"
      
       def __str__(self):
         return f"{self.name} | {self.email} | {self.phno}"
@@ -48,6 +62,12 @@ class doctorRegister(models.Model):
     mci_no = models.CharField(max_length=10,blank=True, null=True)
     fee = models.BigIntegerField(null=True)
 
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+        self.save()
+
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
 
     # class Meta:
     #     db_table = 'myapp_doctorregister'  # Explicitly link to the existing table
