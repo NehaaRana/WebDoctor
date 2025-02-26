@@ -157,7 +157,7 @@
 </div>
 <div class="payments-form">
   <form action="{% url 'payment' Appointment.id doctor.id %}" method="POST">
-
+    {% csrf_token %}
 
 <div class="payment-form-group"><div class="form-group">
 <label class="custom_radio">

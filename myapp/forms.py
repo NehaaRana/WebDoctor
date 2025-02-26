@@ -1,5 +1,5 @@
 from django import forms
-from . models import patientRegister,doctorRegister,appointment
+from . models import patientRegister,doctorRegister,appointment,payment
 from django.core.exceptions import ValidationError
 from datetime import datetime, time, timedelta
 
@@ -52,6 +52,11 @@ class appointmentForm(forms.ModelForm):
     #     if status not in valid_statuses:
     #         raise ValidationError(f"Status must be one of the following: {', '.join(valid_statuses)}.")
     #     return status
+
+class PaymentForm(forms.ModelForm):
+    class Meta:
+        model = payment
+        fields = ['amount', 'payment_status', 'payment_method']
 
 
 

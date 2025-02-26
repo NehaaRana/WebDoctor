@@ -11,13 +11,13 @@ from .forms import patientForm,doctorForm ,appointmentForm
 
 # from .forms import doctorForm
 from .models import patientRegister,doctorRegister
-from .models import appointment
+from .models import appointment,payment
 
 # Create your views here.
 # from django.shortcuts import render
 
 from django.shortcuts import get_object_or_404
-
+from django.utils.timezone import now
 
 # Create your views here.
 def home(request):
@@ -268,13 +268,48 @@ def payment(request, appointment_id , doctor_id):
     
     Appointment = get_object_or_404(appointment,id=appointment_id)
     doctor=get_object_or_404(doctorRegister,id=doctor_id)
-    doctor_fee = doctor.fee 
+    try:
+        doctor_fee = float(doctor.fee)  # Convert to float
+    except ValueError:
+        doctor_fee = 0.0  # Default to 0 if conversion fails
+
     GST = 0.18
     tax_amount = doctor_fee * GST
     total_amount = doctor_fee + tax_amount
+
+    payment_obj,created  = payment.objects.get_or_create(
+    appointment=Appointment,
+    doctor=doctor,
+    patient=appointment.patient_id,
+    defaults={
+        'amount': total_amount,
+        'payment_status': 'PENDING',
+        'payment_method': '',  
+        'payment_date': now()
+        }
+    )[0]  # Extract only the payment object
+
+    if request.method == "POST":
+        payment_method = request.POST.get("payment_method", "")
+
+        if payment_method:
+            payment_obj.payment_method = payment_method
+            payment_obj.payment_status = "COMPLETED"  # Mark as completed
+            payment_obj.save()
+
+            return redirect("payment_details",appointment_id,doctor_id)  
+
     return render(request, "payment.html", {"Appointment": Appointment,"doctor":doctor,"doctor_fee": doctor_fee,
         "tax_amount": tax_amount,
-        "total_amount": total_amount})
+        "total_amount": total_amount,
+        "payment_obj": payment_obj})
+
+def payment_details(request,appointment_id , doctor_id):
+    appointment = get_object_or_404(appointment, id=appointment_id)
+    doctor = get_object_or_404(doctorRegister, id=doctor_id)
+    return render(request, "payment_details.html", {
+        "appointment": appointment,
+        "doctor": doctor,})
 
 
 def doctor_change_password(request):

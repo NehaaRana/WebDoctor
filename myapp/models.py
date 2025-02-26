@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 class patientRegister(models.Model):
       BLOOD_GROUP_CHOICES = [
@@ -67,3 +67,39 @@ class appointment(models.Model):
 
      def __str__(self):
           return f"{self.appointment_date} | {self.appointment_time} | {self.reason} | {self.symptoms} |"
+
+class review(models.Model):
+      patient_id=models.ForeignKey(patientRegister,on_delete=models.CASCADE)
+      doctor_id=models.ForeignKey(doctorRegister,on_delete=models.CASCADE)
+      appointment_id=models.ForeignKey(appointment,on_delete=models.CASCADE)
+      rating=models.IntegerField(blank=True, null=True, validators=[MinValueValidator(1), MaxValueValidator(5)])
+      review_text=models.TextField(blank=True, null=True)
+      review_date=models.DateField()
+
+      def __str__(self):
+          return f"{self.rating} | {self.review_text} | {self.review_date} |"
+
+
+class payment(models.Model):
+
+      STATUS_CHOICES = [
+        ('PENDING', 'Pending'),
+        ('COMPLETED', 'Completed'),
+        ('FAILED', 'Failed'),
+    ]
+
+      METHOD_CHOICES = [
+        ('CARD', 'Debit/Credit Card'),
+        ('BANK', 'Bank Transfer'),
+        ('UPI', 'UPI'),
+      ]
+      patient_id=models.ForeignKey(patientRegister,on_delete=models.CASCADE)
+      doctor_id=models.ForeignKey(doctorRegister,on_delete=models.CASCADE)
+      appointment_id=models.ForeignKey(appointment,on_delete=models.CASCADE)
+      amount = models.DecimalField(max_digits=10, decimal_places=2)
+      payment_status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
+      payment_method = models.CharField(max_length=10, choices=METHOD_CHOICES, default='CARD')
+      payment_date = models.DateTimeField() 
+
+      def __str__(self):
+          return f"{self.amount} | {self.payment_status} | {self.payment_method} | {self.payment_date} |"
