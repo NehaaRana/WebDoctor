@@ -1,7 +1,7 @@
 from django import forms
 from . models import patientRegister,doctorRegister,appointment
 from django.core.exceptions import ValidationError
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta
 
 class patientForm(forms.ModelForm):
   class Meta:
@@ -25,42 +25,26 @@ class doctorForm(forms.ModelForm):
 class appointmentForm(forms.ModelForm):
     class Meta:
        model=appointment
-       fields = ['appointment_date', 'appointment_time', 'reason'] 
+       fields = ['appointment_date', 'appointment_time', 'reason','symptoms'] 
        
     def clean_appointment_date(self):
-        date = self.cleaned_data.get('appointment_date')
-        if date < datetime.today().date():
+        appointment_date  = self.cleaned_data.get('appointment_date')
+        today = datetime.now().date()
+        if appointment_date < today:
             raise ValidationError("Appointment date cannot be in the past.")
-        return date
+        return appointment_date
+
 
     def clean_appointment_time(self):
-        time = self.cleaned_data.get('appointment_time')
-        start_time = datetime.strptime("09:00", "%H:%M").time()
-        end_time = datetime.strptime("17:00", "%H:%M").time()
-        if not (start_time <= time <= end_time):
+        appointment_time = self.cleaned_data.get('appointment_time')
+        start_time = time(9, 0)  # 9:00 AM
+        end_time = time(17, 0)   # 5:00 PM
+
+        if not (start_time <= appointment_time <= end_time):
             raise ValidationError("Appointment time must be between 09:00 AM and 05:00 PM.")
-        return time
+        return appointment_time
     
-    widgets = {
-            "appointment_date": forms.DateInput(
-                attrs={
-                    "class": "form-control datetimepicker",
-                    "placeholder": "DD/MM/YYYY",
-                    "required": True,
-                    "type": "text"  # Set as text so JavaScript can control the format
-                }
-            ),
-            "appointment_time": forms.TextInput(  # Use TextInput for custom formatting
-                attrs={
-                    "class": "form-control timepicker",
-                    "placeholder": "HH:MM AM/PM",
-                    "required": True,
-                    "type": "text"
-                }
-            ),
-            "reason": forms.Textarea(attrs={"class": "form-control", "placeholder": "Enter Your Reason", "rows": 3}),
-            "symptoms": forms.TextInput(attrs={"class": "form-control", "placeholder": "Symptoms (Optional)"}),
-        }
+   
 
     # def clean_status(self):
     #     status = self.cleaned_data.get('status')

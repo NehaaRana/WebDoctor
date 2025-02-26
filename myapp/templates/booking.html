@@ -88,7 +88,7 @@
         <div class="search-input search-calendar-line">
             <i class="feather-calendar"></i>
             <div class="form-group mb-0">
-                <input type="text" class="form-control datetimepicker" name="appointment_date" placeholder="Date" required>
+                <input type="date" class="form-control" name="appointment_date"  id="appointment_date" placeholder="Date" required>
             </div>
         </div>
         
@@ -122,13 +122,23 @@
         </div>
     </div>
 
-    <input type="hidden" name="appointment_time" class="form-control timepicker" id="appointment_time" value="">
+    <input type="hidden" name="appointment_time" id="appointment_time" value="">
 
     <script>
         function selectTimeSlot(element) {
             document.querySelectorAll('.timing').forEach(slot => slot.classList.remove('selected'));
             element.classList.add('selected');
-            document.getElementById('appointment_time').value = element.innerText.trim();
+            // Get selected time (12-hour format)
+            let selectedTime = element.querySelector("span").innerText.trim();
+            // Convert to 24-hour format (HH:MM:SS)
+            let timeObject = new Date("2000-01-01 " + selectedTime);
+            let formattedTime = timeObject.toTimeString().split(" ")[0]; // Extract HH:MM:SS
+
+            // Set the converted time in the hidden input field
+            document.getElementById('appointment_time').value = formattedTime;
+
+            console.log("Selected Time:", formattedTime);  // Debugging
+            console.log("Selected Time:", selectedTime);  // Debugging
         }
     </script>
 
@@ -166,7 +176,7 @@
       </div>
     </section>
 
-    <script>
+    {% comment %} <script>
       // Get the current date and day
       const currentDate = new Date();
       const currentDay = currentDate.toLocaleDateString('en-US', { weekday: 'long' });
@@ -199,7 +209,7 @@
           // Add your code to handle the selected time here
         });
       });
-    </script>
+    </script> {% endcomment %}
 
     <!-- Add jQuery and jQuery UI (For DatePicker) -->
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -210,7 +220,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 
-<script>
+{% comment %} <script>
     $(document).ready(function() {
         // Datepicker (DD/MM/YYYY)
         $("#appointment_date").datepicker({
@@ -233,7 +243,7 @@
             scrollbar: true
         });
     });
-</script>
+</script> {% endcomment %}
 
 
 {% include "footer.html" %}
