@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.hashers import make_password, check_password
 
 # Create your models here.
 class patientRegister(models.Model):
@@ -20,6 +21,14 @@ class patientRegister(models.Model):
       city = models.CharField(max_length=50)
       state = models.CharField(max_length=50)
       blood_group = models.CharField(max_length=3, choices=BLOOD_GROUP_CHOICES)  # Dropdown selection
+
+      def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+        self.save()
+
+      def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
+      
       # pincode = models.IntegerField(null=True) 
       # country = models.CharField(max_length=50,null=True)
       # def __str__(self):
@@ -51,6 +60,12 @@ class doctorRegister(models.Model):
     mci_no = models.CharField(max_length=10,blank=True, null=True)
     fee = models.BigIntegerField(null=True)
 
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+        self.save()
+
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
 
     # class Meta:
     #     db_table = 'myapp_doctorregister'  # Explicitly link to the existing table
