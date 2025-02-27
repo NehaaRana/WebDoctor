@@ -28,6 +28,9 @@ from .models import appointment,Payment
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import now
 
+from django.shortcuts import get_object_or_404
+from django.utils.timezone import now
+
 # Create your views here.
 def home(request):
     # all_patient=patientRegister.objects.all
@@ -121,6 +124,51 @@ def register(request):
 #     return render(request, "login.html")
 
 
+# def login(request):
+#     email = None
+#     password = None
+#     user_type = None
+#     user = None
+
+#     if request.method == "POST":
+#         email = request.POST.get("email")
+#         password = request.POST.get("password")
+#         user_type = request.POST.get("user_type")
+#         # patient=patientRegister.objects.get(email=email,password=password)
+
+#         # doctor = doctorRegister.objects.get(email=email, password=password)  
+#         user = None
+
+#         if user_type == "patient":
+#             try:
+#                 user = patientRegister.objects.get(email=email)
+#                 request.session['patient_id'] = user.id
+#             except patientRegister.DoesNotExist:
+#                 return render(request, "login.html", {"error": "Patient does not exist"})
+
+#         elif user_type == "doctor":
+#             try:
+#                 user = doctorRegister.objects.get(email=email)
+#                 request.session['doctor_id'] = user.id  # Store doctor ID in session
+#             except doctorRegister.DoesNotExist:
+#                 return render(request, "login.html", {"error": "Doctor does not exist"})
+
+#         else:
+#             return render(request, "login.html", {"error": "Invalid user type"})
+
+#         # ✅ **Manually check the password**
+#         if check_password(password, user.password):  # Securely verify password
+#             # Redirect based on user type
+#             if user_type == "patient":
+#                 return redirect("patient_dashboard")  # Update with actual patient dashboard URL
+#             elif user_type == "doctor":
+#                 return redirect("doctor_dashboard")  # Update with actual doctor dashboard URL
+
+#         return render(request, "login.html", {"error": "Invalid email or password"})
+
+#     return render(request, "login.html")
+
+
 def login(request):
     if request.method == "POST":
         email = request.POST.get("email")
@@ -130,12 +178,17 @@ def login(request):
 
         print(f"Login attempt: Email={email}, UserType={user_type}")
 
+        print(f"Login attempt: Email={email}, UserType={user_type}")
+
         if user_type == "patient":
             try:
                 user = patientRegister.objects.get(email=email)
                 request.session['patient_id'] = user.id  # Store in session
                 print(f"Patient found: {user.email}")
+                request.session['patient_id'] = user.id  # Store in session
+                print(f"Patient found: {user.email}")
             except patientRegister.DoesNotExist:
+                print("Patient does not exist")
                 print("Patient does not exist")
                 return render(request, "login.html", {"error": "Patient does not exist"})
 
@@ -144,11 +197,15 @@ def login(request):
                 user = doctorRegister.objects.get(email=email)
                 request.session['doctor_id'] = user.id  # Store in session
                 print(f"Doctor found: {user.email}")
+                request.session['doctor_id'] = user.id  # Store in session
+                print(f"Doctor found: {user.email}")
             except doctorRegister.DoesNotExist:
+                print("Doctor does not exist")
                 print("Doctor does not exist")
                 return render(request, "login.html", {"error": "Doctor does not exist"})
 
         else:
+            print("Invalid user type")
             print("Invalid user type")
             return render(request, "login.html", {"error": "Invalid user type"})
 
@@ -158,9 +215,20 @@ def login(request):
 
         if check_password(password, user.password):  # Securely verify password
             print("Password matched! Redirecting...")
+        # ✅ **Compare hashed password using check_password()**
+        print(f"Entered Password: {password}")
+        print(f"Stored Hashed Password: {user.password}")
+
+        if check_password(password, user.password):  # Securely verify password
+            print("Password matched! Redirecting...")
             if user_type == "patient":
                 return redirect("patient_dashboard")  
+                return redirect("patient_dashboard")  
             elif user_type == "doctor":
+                return redirect("doctor_dashboard")  
+            else:
+                print("Password did NOT match!")
+                return render(request, "login.html", {"error": "Invalid email or password"})
                 return redirect("doctor_dashboard")  
         else:
             print("Password did NOT match!")
@@ -171,6 +239,8 @@ def login(request):
 
 def search_doctors(request):
          return render(request, 'search.html')
+
+
 
 def patient_dashboard(request):
     patient_id = request.session.get('patient_id')  # Get user ID from session
@@ -183,7 +253,9 @@ def patient_dashboard(request):
         print("Patient Found:", patient.name)  # Debugging
     except patientRegister.DoesNotExist:
         return redirect("login")
-    return render(request, "patient-dashboard.html",{"patient": patient})
+    
+    appointment_data_list = appointment.objects.filter(patient_id=patient).select_related('doctor_id')
+    return render(request, "patient-dashboard.html",{"patient": patient,"appointment_data_list":appointment_data_list})
 
 def doctor_dashboard(request):
     doctor_id = request.session.get('doctor_id')  # Get logged-in doctor ID
@@ -194,8 +266,9 @@ def doctor_dashboard(request):
         doctor = doctorRegister.objects.get(id=doctor_id)  # Fetch the doctor
     except doctorRegister.DoesNotExist:
         return redirect("login")  # Redirect if doctor not found
-
-    return render(request, "doctor-dashboard.html", {"doctor": doctor})
+    
+    upcoming_patients = appointment.objects.filter(doctor_id=doctor).select_related('patient_id')
+    return render(request, "doctor-dashboard.html", {"doctor": doctor,"upcoming_patients":upcoming_patients})
 
 def admin_dashboard(request):
          return render(request, 'admin-dashboard.html')
@@ -235,10 +308,49 @@ def admin_dashboard(request):
 
 #     return render(request, 'patient-register.html', {'form': form})  # Pass form to template
 
+# def doctor_register(request):
+#     if request.method == "POST":
+#         form = doctorForm(request.POST, request.FILES)  # Handle file uploads
+#         if form.is_valid():
+#             print("Form is valid, saving the data.")  # Debug print
+#             doctor = form.save(commit=False)  # Don't save yet
+#             doctor.password = make_password(form.cleaned_data["password"])  # Hash password
+#             doctor.save()         
+#             return redirect('login')  # Redirect instead of rendering login page directly
+#         else:
+#             print("Form errors:", form.errors)  # Debug print
+#     else:
+#         form = doctorForm()  # Create an empty form for GET request
+
+#     return render(request, 'doctor-register.html', {'form': form})  # Pass form to template
+
+
+# def patient_register(request):
+
+#     if request.method == "POST":
+#         form = patientForm(request.POST, request.FILES)  # Handle file uploads
+#         if form.is_valid():
+#             patient = form.save(commit=False)  # Don't save yet
+#             patient.password = make_password(form.cleaned_data["password"])  # Hash password
+#             patient.save()
+#             return redirect('login')  # Redirect instead of rendering login page directly
+#         else:
+#             print("Form errors:", form.errors)  # Debug print
+            
+#     else:
+#         form = patientForm()  # Create an empty form for GET request
+
+#     return render(request, 'patient-register.html', {'form': form})  # Pass form to template
+
 def doctor_register(request):
     if request.method == "POST":
         form = doctorForm(request.POST, request.FILES)
+        form = doctorForm(request.POST, request.FILES)
         if form.is_valid():
+            doctor = form.save(commit=False)
+            doctor.password = make_password(doctor.password)  # 🔒 Hash the password before saving
+            doctor.save()
+            return redirect('login')
             doctor = form.save(commit=False)
             doctor.password = make_password(doctor.password)  # 🔒 Hash the password before saving
             doctor.save()
@@ -246,11 +358,18 @@ def doctor_register(request):
     else:
         form = doctorForm()
     return render(request, 'doctor-register.html', {'form': form})
+    #     form = doctorForm()
+    # return render(request, 'doctor-register.html', {'form': form})
 
 def patient_register(request):
     if request.method == "POST":
         form = patientForm(request.POST, request.FILES)
+        form = patientForm(request.POST, request.FILES)
         if form.is_valid():
+            patient = form.save(commit=False)
+            patient.password = make_password(patient.password)  # 🔒 Hash the password before saving
+            patient.save()
+            return redirect('login')
             patient = form.save(commit=False)
             patient.password = make_password(patient.password)  # 🔒 Hash the password before saving
             patient.save()
@@ -258,6 +377,9 @@ def patient_register(request):
     else:
         form = patientForm()
     return render(request, 'patient-register.html', {'form': form})
+
+    #     form = patientForm()
+    # return render(request, 'patient-register.html', {'form': form})
 
 
 
@@ -310,7 +432,7 @@ def book_appointment(request, doctor_id):
 
     patient = get_object_or_404(patientRegister, id=patient_id)  
     doctor = get_object_or_404(doctorRegister, id=doctor_id)
-
+    appointments=appointment.objects.filter(patient_id=patient,doctor_id=doctor_id)
     # Generate available time slots (9 AM to 5 PM, every 30 minutes)
     start_time = time(9, 0)
     end_time = time(17, 0)
@@ -344,7 +466,8 @@ def book_appointment(request, doctor_id):
         "doctor": doctor, 
         "patient": patient,
         "form": form,
-        "time_slots": time_slots
+        "time_slots": time_slots,
+        "appointment_data_list":appointments
     })
 
 
@@ -441,7 +564,9 @@ def doctor_change_password(request):
     if not doctor_id:
         return redirect("login")  # Redirect to login if not logged in
     
+    
     try:
+        doctor = doctorRegister.objects.get(id=doctor_id)
         doctor = doctorRegister.objects.get(id=doctor_id)
     except doctorRegister.DoesNotExist:
         return redirect("login")  # Redirect if doctor not found
@@ -467,10 +592,13 @@ def doctor_change_password(request):
 
 def patient_change_password(request):
     patient_id = request.session.get('patient_id')  # Get logged-in patient ID
+    patient_id = request.session.get('patient_id')  # Get logged-in patient ID
     if not patient_id:
+        return redirect("login")  # Redirect if not logged in
         return redirect("login")  # Redirect if not logged in
     
     try:
+        patient = patientRegister.objects.get(id=patient_id)
         patient = patientRegister.objects.get(id=patient_id)
     except patientRegister.DoesNotExist:
         return redirect("login")  # Redirect if patient not found
@@ -490,6 +618,24 @@ def patient_change_password(request):
         form = passwordChangeForm(user=patient)
 
     return render(request, "patient-change-password.html",{"patient":patient,"form":form})
+
+    # return redirect("login")  # Redirect if patient not found
+
+    # if request.method == 'POST':
+    #     form = passwordChangeForm(request.POST, user=patient)
+    #     if form.is_valid():
+    #         new_password = form.cleaned_data['new_password']
+    #         patient.password = make_password(new_password)  # Hash new password
+    #         patient.save()
+            
+    #         messages.success(request, "Password changed successfully.")
+    #         return redirect("patient_dashboard")  # Redirect after successful change
+    #     else:
+    #         messages.error(request, "Error updating password. Please try again.")
+    # else:
+    #     form = passwordChangeForm(user=patient)
+
+    # return render(request, "patient-change-password.html",{"patient":patient,"form":form})
 
 
 def password_change_successful(request):
@@ -696,3 +842,55 @@ def admin_manage_patients(request):
 def admin_manage_appointments(request):
     all_appointments=appointment.objects.all
     return render(request ,'admin_manage_appointments.html',{'all':all_appointments})
+
+def admin_logout(request):
+    request.session.flush()  # Clears all session data (logs out admin)
+    return redirect('/') 
+ # Redirects to home page after logout ✅
+
+def admin_change_password(request):
+    admin_id = request.session.get('admin_id')  # Get logged-in admin ID
+    if not admin_id:
+        return redirect("admin_login")  # Redirect to admin login if not logged in
+    
+    try:
+        admin = adminLogin.objects.get(id=admin_id)
+    except adminLogin.DoesNotExist:
+        return redirect("admin_login")  # Redirect if admin not found
+
+    if request.method == 'POST':
+        form = passwordChangeForm(request.POST, user=admin)
+        if form.is_valid():
+            admin.password = make_password(form.cleaned_data["new_password"])  # Hash new password
+            admin.save()
+            print("Admin ID:", admin_id)
+            print("New Password:", form.cleaned_data.get("new_password"))
+    
+            return redirect("admin_dashboard")  # Redirect to admin dashboard
+            
+            # messages.error(request, "Error updating password. Please try again.")
+    else:
+        form = passwordChangeForm(user=admin)
+
+    return render(request, "admin-change-password.html", {"admin": admin, "form": form})
+
+def admin_login(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        try:
+            admin = adminLogin.objects.get(email=email, username=username)
+
+            # Check if the entered password matches the stored hashed password
+            if check_password(password, admin.password):
+                request.session['admin_id'] = admin.id  # Store admin session
+                return redirect('admin_dashboard')  # Ensure this matches your routes
+            else:
+                messages.error(request, "Invalid password.")
+        
+        except adminLogin.DoesNotExist:
+            messages.error(request, "Invalid email or username.")  
+
+    return render(request, 'admin_login.html')  # Return the login page with error messages if any

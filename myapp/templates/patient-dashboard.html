@@ -406,7 +406,7 @@
                                   <th>Amount</th>
 
                                   <th>Status</th>
-                                  <th></th>
+                                  <th>Name</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -415,29 +415,35 @@
                                   <td>
                                     <h2 class="table-avatar">
                                       <a
-                                        href="{% url 'doctor_profile' doctor_id=appointment.doctor_id %}"
+                                        href="{% url 'doctor_profile' doctor_id=appointment.doctor_id.id %}"
                                         class="avatar avatar-sm me-2"
                                       >
-                                        <img
+                                        {% comment %} <img
                                           class="avatar-img rounded-circle"
-                                          src="{% static 'assets/img/doctors/' %}{{ appointment.profile_url }}"
+                                          src="{{ appointment.doctor_id.profile_img.url }}"
                                           alt="User Image"
-                                        />
+                                        /> {% endcomment %}
+
+                                        {% if doctor.profile_img %}
+                                          <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
+                                          {% else %}
+                                            <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
+                                          {% endif %}
                                       </a>
-                                      <a href="{% url 'doctor_profile' doctor_id=appointment.doctor_id %}">
-                                        Dr. {{ appointment.Doctor_Name }}
-                                        <span>{{ appointment.Specialization }}</span>
+                                      <a href="{% url 'doctor_profile' doctor_id=appointment.doctor_id.id %}">
+                                        Dr. {{ appointment.doctor_id.name }}
+                                        <span>{{ appointment.doctor_id.specialization }}</span>
                                       </a>
                                     </h2>
                                   </td>
                                   <td>
-                                    {{appointment.Appointment_Date}}<span
+                                    {{appointment.appointment_date}}<span
                                       class="d-block text-info"
-                                      >{{appointment.Appointment_Time}}</span
+                                      >{{appointment.appointment_time}}</span
                                     >
                                   </td>
                                   <td>{{appointment.Created_at}}</td>
-                                  <td>{{amount_paid}}</td>
+                                  <td>{{appointment.doctor_id.fee}}</td>
 
                                   <td>
                                     <span

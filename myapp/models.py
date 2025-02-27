@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.hashers import make_password, check_password
 
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 class patientRegister(models.Model):
@@ -30,10 +32,19 @@ class patientRegister(models.Model):
       def check_password(self, raw_password):
         return check_password(raw_password, self.password)
       
+
+      def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+        self.save()
+
+      def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
+      
       # pincode = models.IntegerField(null=True) 
       # country = models.CharField(max_length=50,null=True)
       # def __str__(self):
       #     return f"{self.name} | {self.email} | {self.phno} | {self.password} | {self.profile_img.url if self.profile_img else 'No Image'} | {self.address} | {self.city} | {self.state} | {self.pincode} | {self.country} | {self.blood_group}"
+     
      
       def __str__(self):
         return f"{self.name} | {self.email} | {self.phno}"
@@ -68,6 +79,12 @@ class doctorRegister(models.Model):
 
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+        self.save()
+
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
 
     # class Meta:
     #     db_table = 'myapp_doctorregister'  # Explicitly link to the existing table
@@ -77,10 +94,14 @@ class doctorRegister(models.Model):
     
 class appointment(models.Model):
     #  STATUS_CHOICE=[('Scheduled', 'Scheduled'), ('Completed', 'Completed'), ('Cancelled', 'Cancelled')]
+    #  STATUS_CHOICE=[('Scheduled', 'Scheduled'), ('Completed', 'Completed'), ('Cancelled', 'Cancelled')]
      doctor_id=models.ForeignKey(doctorRegister,on_delete=models.CASCADE)
      patient_id=models.ForeignKey(patientRegister,on_delete=models.CASCADE)
      appointment_date = models.DateField() 
      appointment_time = models.TimeField()
+    #  status= models.CharField(max_length=20,choices=STATUS_CHOICE,default='Scheduled')
+     reason = models.TextField(null=True)
+     symptoms = models.CharField(max_length=255, blank=True, null=True)
     #  status= models.CharField(max_length=20,choices=STATUS_CHOICE,default='Scheduled')
      reason = models.TextField(null=True)
      symptoms = models.CharField(max_length=255, blank=True, null=True)
@@ -129,5 +150,25 @@ class adminLogin(models.Model):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)  # Store hashed password using Django's authentication2
 
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+        self.save()
+
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
+    
     def __str__(self):
         return self.username
+        
+
+class review(models.Model):
+      patient_id=models.ForeignKey(patientRegister,on_delete=models.CASCADE)
+      doctor_id=models.ForeignKey(doctorRegister,on_delete=models.CASCADE)
+      appointment_id=models.ForeignKey(appointment,on_delete=models.CASCADE)
+      rating=models.IntegerField(blank=True, null=True, validators=[MinValueValidator(1), MaxValueValidator(5)])
+      review_text=models.TextField(blank=True, null=True)
+      review_date=models.DateField()
+
+      def __str__(self):
+          return f"{self.rating} | {self.review_text} | {self.review_date} |"
+
