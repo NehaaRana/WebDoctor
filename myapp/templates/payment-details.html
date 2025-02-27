@@ -50,6 +50,14 @@
     font-family: Roboto;
     src: url("chrome-extension://mcgbeeipkmelnpldkobichboakdfaeon/css/Roboto-Regular.ttf");
   }
+
+  .header.header-fixed {
+    position: relative !important ; 
+    display: block;
+    width: 100%;
+    z-index: 9999;
+    box-shadow: inherit;
+}
 </style>
 </head>
 <body style="transform: none;">
@@ -213,8 +221,8 @@
           </div>
       </div>
       <!-- /form card cc payment -->
-  
-  <p class="copyright" style="text-align:center;padding:40px 0;">Developed by <a href="https://uny.ro">UNY WEB DESIGN</a></p>
+    </div>
+
 
     {% include "footer.html" %}  
     {% endblock %}

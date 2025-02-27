@@ -355,7 +355,11 @@ def payment_page(request, appointment_id, doctor_id):
     doctor_obj = get_object_or_404(doctorRegister, id=doctor_id)
 
     # Convert doctor's fee to float, handling None values
-    doctor_fee = float(doctor_obj.fee) if doctor_obj.fee is not None else 0.0
+    # doctor_fee = float(doctor_obj.fee) if doctor_obj.fee is not None else 0.0
+    try:
+        doctor_fee = float(doctor_obj.fee)  # Convert to float
+    except ValueError:
+        doctor_fee = 0.0  # Default to 0 if conversion fails
     GST = 0.18
     tax_amount = doctor_fee * GST
     total_amount = doctor_fee + tax_amount
@@ -376,7 +380,12 @@ def payment_page(request, appointment_id, doctor_id):
     if request.method == "POST":
         payment_method = request.POST.get("payment_method", "")
 
-        if payment_method:
+        # if payment_method:
+        #     payment_obj.payment_method = payment_method
+        #     payment_obj.payment_status = "COMPLETED"
+        #     payment_obj.save()
+        valid_methods = dict(Payment.METHOD_CHOICES).keys()
+        if payment_method in valid_methods:
             payment_obj.payment_method = payment_method
             payment_obj.payment_status = "COMPLETED"
             payment_obj.save()
@@ -396,46 +405,9 @@ def payment_page(request, appointment_id, doctor_id):
         }
     )
 
-# def payment_page(request, appointment_id , doctor_id):
-    # Try to get the appointment, or return a 404 page if not found
+
+
     
-    appointment_obj = get_object_or_404(appointment,id=appointment_id)
-    doctor_obj=get_object_or_404(doctorRegister,id=doctor_id)
-    # try:
-    #     doctor_fee = float(doctor.fee)  # Convert to float
-    # except ValueError:
-    #     doctor_fee = 0.0  # Default to 0 if conversion fails
-    doctor_fee = float(doctor_obj.fee) if doctor_obj.fee is not None else 0.0
-    GST = 0.18
-    tax_amount = doctor_fee * GST
-    total_amount = doctor_fee + tax_amount
-
-    payment_obj,created  = Payment.objects.get_or_create(
-    appointment_id=appointment_obj,
-    doctor_id=doctor_obj,
-    patient_id=appointment_obj.patient_id,
-    defaults={
-        'amount': total_amount,
-        'payment_status': 'PENDING',
-        'payment_method': '',  
-        'payment_date': now()
-        }
-    )[0]  # Extract only the payment object
-
-    if request.method == "POST":
-        payment_method = request.POST.get("payment_method", "")
-
-        if payment_method:
-            payment_obj.payment_method = payment_method
-            payment_obj.payment_status = "COMPLETED"  # Mark as completed
-            payment_obj.save()
-
-            return redirect("payment_details",appointment_id,doctor_id)  
-
-    return render(request, "payment.html", {"Appointment": appointment_obj,"doctor":doctor_obj,"doctor_fee": doctor_fee,
-        "tax_amount": tax_amount,
-        "total_amount": total_amount,
-        "payment_obj": payment_obj})
 
 def payment_details(request,appointment_id , doctor_id):
     appointment_obj = get_object_or_404(appointment, id=appointment_id)
