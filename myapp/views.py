@@ -9,6 +9,8 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import logout
 from .forms import patientForm,doctorForm,passwordChangeForm
 from .forms import patientForm,doctorForm ,appointmentForm
+from .forms import adminForm 
+from .models import adminLogin # Assuming an admin model
 
 # from .forms import doctorForm
 from .models import patientRegister,doctorRegister
@@ -676,3 +678,49 @@ def get_patient(request, patient_id):
         "dob": patient.dob,
         "csrfToken": get_token(request)  # Send CSRF token in response
     })
+
+
+def admin_login(request):
+    email = None
+    username = None
+    password = None
+
+    if request.method == 'POST':
+       
+            email = request.POST.get('email')
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            
+            try:
+                admin = adminLogin.objects.get(email=email, username=username, password=password)
+                request.session['admin_id'] = admin.id  # Store admin session
+                return redirect('admin_dashboard')  # Ensure this URL name matches your routes
+            except adminLogin.DoesNotExist:
+                 messages.error(request, "Invalid email, username, or password.")  # ✅ Fix applied
+                 
+  
+
+            if password == admin.password:
+                 return redirect("admin_dashboard")
+            else:
+                return render(request, "admin_login.html")
+    return render(request, 'admin_login.html')
+
+def admin_profile_settings(request):
+    return render(request, 'admin-profile-settings.html')
+
+
+def admin_change_password(request):
+    return render(request, 'admin-change-password.html')
+
+def admin_manage_docters(request):
+    all_doctor=doctorRegister.objects.all
+    return render(request, 'admin_manage_docters.html',{'all':all_doctor})
+
+def admin_manage_patients(request):
+        all_patient=patientRegister.objects.all
+        return render(request, 'admin_manage_patients.html',{'all':all_patient})
+
+def admin_manage_appointments(request):
+    all_appointments=appointment.objects.all
+    return render(request ,'admin_manage_appointments.html',{'all':all_appointments})

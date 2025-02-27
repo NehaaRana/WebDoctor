@@ -123,3 +123,11 @@ class Payment(models.Model):
 
       def __str__(self):
           return f"{self.amount} | {self.payment_status} | {self.payment_method} | {self.payment_date} |"
+
+class adminLogin(models.Model):
+    username = models.CharField(max_length=150, unique=True,default="null")
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=255)  # Store hashed password using Django's authentication2
+
+    def __str__(self):
+        return self.username
