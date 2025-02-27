@@ -4,7 +4,7 @@ import datetime
 from pyexpat.errors import messages  # Correct way to use strptime
 from django.urls import reverse
 from datetime import datetime, timedelta, time, date
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render,redirect
 from django.contrib.auth import logout
 from .forms import patientForm,doctorForm,passwordChangeForm
@@ -18,7 +18,7 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 import json
-from .models import appointment,payment
+from .models import appointment,Payment
 
 # Create your views here.
 # from django.shortcuts import render
@@ -347,25 +347,71 @@ def book_appointment(request, doctor_id):
 
 
 
+def payment_page(request, appointment_id, doctor_id):
+    # Get appointment and doctor objects or return 404
+    appointment_obj = get_object_or_404(appointment, id=appointment_id)
+    doctor_obj = get_object_or_404(doctorRegister, id=doctor_id)
 
-def payment(request, appointment_id , doctor_id):
-    # Try to get the appointment, or return a 404 page if not found
-    
-    Appointment = get_object_or_404(appointment,id=appointment_id)
-    doctor=get_object_or_404(doctorRegister,id=doctor_id)
-    try:
-        doctor_fee = float(doctor.fee)  # Convert to float
-    except ValueError:
-        doctor_fee = 0.0  # Default to 0 if conversion fails
-
+    # Convert doctor's fee to float, handling None values
+    doctor_fee = float(doctor_obj.fee) if doctor_obj.fee is not None else 0.0
     GST = 0.18
     tax_amount = doctor_fee * GST
     total_amount = doctor_fee + tax_amount
 
-    payment_obj,created  = payment.objects.get_or_create(
-    appointment=Appointment,
-    doctor=doctor,
-    patient=appointment.patient_id,
+    # Get or create a payment object
+    payment_obj, created = Payment.objects.get_or_create(
+        appointment_id=appointment_obj,  # Use the correct model field name
+        doctor_id=doctor_obj,
+        patient_id=appointment_obj.patient_id,  # Assuming a ForeignKey relationship
+        defaults={
+            'amount': total_amount,
+            'payment_status': 'PENDING',
+            'payment_method': '',
+            'payment_date': now()
+        }
+    )
+
+    if request.method == "POST":
+        payment_method = request.POST.get("payment_method", "")
+
+        if payment_method:
+            payment_obj.payment_method = payment_method
+            payment_obj.payment_status = "COMPLETED"
+            payment_obj.save()
+
+            return redirect("payment_details", appointment_id, doctor_id)
+
+    return render(
+        request,
+        "payment.html",
+        {
+            "appointment": appointment_obj,  # Updated variable name
+            "doctor": doctor_obj,
+            "doctor_fee": doctor_fee,
+            "tax_amount": tax_amount,
+            "total_amount": total_amount,
+            "payment_obj": payment_obj
+        }
+    )
+
+# def payment_page(request, appointment_id , doctor_id):
+    # Try to get the appointment, or return a 404 page if not found
+    
+    appointment_obj = get_object_or_404(appointment,id=appointment_id)
+    doctor_obj=get_object_or_404(doctorRegister,id=doctor_id)
+    # try:
+    #     doctor_fee = float(doctor.fee)  # Convert to float
+    # except ValueError:
+    #     doctor_fee = 0.0  # Default to 0 if conversion fails
+    doctor_fee = float(doctor_obj.fee) if doctor_obj.fee is not None else 0.0
+    GST = 0.18
+    tax_amount = doctor_fee * GST
+    total_amount = doctor_fee + tax_amount
+
+    payment_obj,created  = Payment.objects.get_or_create(
+    appointment_id=appointment_obj,
+    doctor_id=doctor_obj,
+    patient_id=appointment_obj.patient_id,
     defaults={
         'amount': total_amount,
         'payment_status': 'PENDING',
@@ -384,17 +430,23 @@ def payment(request, appointment_id , doctor_id):
 
             return redirect("payment_details",appointment_id,doctor_id)  
 
-    return render(request, "payment.html", {"Appointment": Appointment,"doctor":doctor,"doctor_fee": doctor_fee,
+    return render(request, "payment.html", {"Appointment": appointment_obj,"doctor":doctor_obj,"doctor_fee": doctor_fee,
         "tax_amount": tax_amount,
         "total_amount": total_amount,
         "payment_obj": payment_obj})
 
 def payment_details(request,appointment_id , doctor_id):
-    appointment = get_object_or_404(appointment, id=appointment_id)
+    appointment_obj = get_object_or_404(appointment, id=appointment_id)
     doctor = get_object_or_404(doctorRegister, id=doctor_id)
-    return render(request, "payment_details.html", {
-        "appointment": appointment,
-        "doctor": doctor,})
+    payment = Payment.objects.filter(appointment_id=appointment_obj, doctor_id=doctor).first()
+
+    if not payment:
+        return HttpResponse("Payment record not found", status=404)
+
+    return render(request, "payment-details.html", {
+        "appointment": appointment_obj,
+        "doctor": doctor,
+        "payment": payment})
 
 
 # def doctor_change_password(request):
@@ -437,18 +489,7 @@ def doctor_change_password(request):
     return render(request, "doctor-change-password.html", {"doctor": doctor ,"form": form})
 
 
-# def patient_change_password(request):
-#     patient_id = request.session.get('patient_id')  # Get user ID from session
-    
-#     if not patient_id:
-#         return redirect("login")  # Redirect to login if session is empty
-    
-#     try:
-#         patient = patientRegister.objects.get(id=patient_id)  # Fetch patient data
-#         print("Patient Found:", patient.name)  # Debugging
-#     except patientRegister.DoesNotExist:
-#         return redirect("login")
-#     return render(request, 'patient-change-password.html',{"patient": patient})
+
 
 def patient_change_password(request):
     patient_id = request.session.get('patient_id')  # Get logged-in patient ID

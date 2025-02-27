@@ -100,7 +100,7 @@ class review(models.Model):
           return f"{self.rating} | {self.review_text} | {self.review_date} |"
 
 
-class payment(models.Model):
+class Payment(models.Model):
 
       STATUS_CHOICES = [
         ('PENDING', 'Pending'),

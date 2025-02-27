@@ -156,12 +156,12 @@
 <h4 class="booking-title">Payments Methods</h4>
 </div>
 <div class="payments-form">
-  <form action="{% url 'payment' Appointment.id doctor.id %}" method="POST">
+  <form action="{% url 'payment' appointment.id doctor.id %}" method="POST">
     {% csrf_token %}
 
 <div class="payment-form-group"><div class="form-group">
 <label class="custom_radio">
-<input type="radio" name="payment">
+<input type="radio" name="payment_method">
 <span class="checkmark"></span> Debit or Credit Card
 </label>
 </div>
@@ -175,13 +175,13 @@
 </div> {% endcomment %}
 <div class="form-group">
 <label class="custom_radio">
-<input type="radio" name="payment">
+<input type="radio" name="payment_method">
 <span class="checkmark"></span> Bank Transfer
 </label>
 </div>
 <div class="form-group">
 <label class="custom_radio">
-<input type="radio" name="payment">
+<input type="radio" name="payment_method">
 <span class="checkmark"></span> UPI
 </label>
 </div>

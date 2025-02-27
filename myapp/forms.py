@@ -1,5 +1,5 @@
 from django import forms
-from . models import patientRegister,doctorRegister,appointment,payment
+from . models import patientRegister,doctorRegister,appointment,Payment
 from django.core.exceptions import ValidationError
 from datetime import datetime, time, timedelta
 
@@ -78,7 +78,7 @@ class appointmentForm(forms.ModelForm):
 
 class PaymentForm(forms.ModelForm):
     class Meta:
-        model = payment
+        model = Payment
         fields = ['amount', 'payment_status', 'payment_method']
 
 

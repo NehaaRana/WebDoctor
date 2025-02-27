@@ -40,7 +40,7 @@ urlpatterns = [
        path('update-patient/', views.update_patient, name='update_patient'),
     path('get-patient/<int:patient_id>/',views.get_patient, name='get_patient'),
 
-  path('payment/<int:appointment_id>/<int:doctor_id>/', views.payment, name='payment'),
+  path('payment/<int:appointment_id>/<int:doctor_id>/', views.payment_page, name='payment'),
   path('payment_details/<int:appointment_id>/<int:doctor_id>/', views.payment_details, name='payment_details')
 
 ]
