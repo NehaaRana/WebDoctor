@@ -321,7 +321,7 @@
                                   <th>Appt Date</th>
                                   <th>Reason</th>
                                   <th>Symptoms</th>
-                                  <th class="text-center">Paid Amount</th>
+                                  <th class="text-center">Doctor Fee</th>
                                   <th></th>
                                 </tr>
                               </thead>
@@ -336,10 +336,10 @@
                                           class="avatar-img rounded-circle"
                                           src="{{ appointment.patient_id.profile_img.url }}"
                                           alt="User Image"> {% endcomment %}
-                                          {% if doctor.profile_img %}
-                                          <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
+                                          {% if appointment.patient_id.profile_img %}
+                                          <img class="rounded-circle" src="{{ appointment.patient_id.profile_img.url }}" width="31" alt="profile" />
                                           {% else %}
-                                            <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
+                                            <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
                                           {% endif %}
                                         </a>
                                       <a href="/coming-soon">{{appointment.patient_id.name}}
@@ -351,7 +351,7 @@
                                   {% comment %} <td>{{appointment.Symptoms.split(' ')[0]}}</td> {% endcomment %}
                                   <td>{{appointment.reason }}</td>
                                   <td class="text-center">{{appointment.symptoms}}</td>
-                                  <td>{{appointment.patient_id.fee}}</td>
+                                  <td>{{appointment.doctor_id.fee}}</td>
                                   <td class="text-center">
                                     <a href="javascript:void(0);" class="btn btn-sm bg-info-light">
                                       <svg class="svg-inline--fa fa-eye fa-w-18" aria-hidden="true" focusable="false"
@@ -397,21 +397,23 @@
                                 <tr>
                                   <td>
                                     <h2 class="table-avatar">
-                                      <a href="/coming-soon" class="avatar avatar-sm me-2"><img
-                                          class="avatar-img rounded-circle"
-                                          src="../static/assets/img/patients/{{appointment.Profile_URL}}"
-                                          alt="User Image"></a>
-                                      <a href="/coming-soon">{{appointment.Patient_Name}}
-                                        <span>#{{appointment.Patient_ID}}</span></a>
+                                      <a href="/coming-soon" class="avatar avatar-sm me-2">{% if appointment.patient_id.profile_img %}
+                                        <img class="rounded-circle" src="{{ appointment.patient_id.profile_img.url }}" width="31" alt="profile" />
+                                        {% else %}
+                                          <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
+                                        {% endif %}
+                                      </a>
+                                      <a href="/coming-soon">{{appointment.patient_id.name}}
+                                        <span>#{{appointment.patient_id.id}}</span></a>
                                     </h2>
                                   </td>
-                                  <td>{{appointment.Appointment_Date}} <span
-                                      class="d-block text-info">{{appointment.Appointment_Time}}</span></td>
+                                  <td>{{appointment.appointment_date}} <span
+                                      class="d-block text-info">{{appointment.appointment_time}}</span></td>
                                   {% comment %} <td>{{appointment.Symptoms.split(' ')[0]}}</td> {% endcomment %}
-                                  <td>{{ symptoms_first_word }}</td>
+                                  <td>{{ appointment.reason  }}</td>
 
-                                  <td>{{appointment.Insurance }}</td>
-                                  <td class="text-center">{{amount_paid}}</td>
+                                  <td>{{appointment.symptoms }}</td>
+                                  <td class="text-center">{{appointment.doctor_id.fee }}</td>
                                   <td class="text-center">
                                     <a href="javascript:void(0);" class="btn btn-sm bg-info-light">
                                       <svg class="svg-inline--fa fa-eye fa-w-18" aria-hidden="true" focusable="false"

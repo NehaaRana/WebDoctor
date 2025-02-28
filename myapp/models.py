@@ -1,8 +1,6 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
-from django.contrib.auth.hashers import make_password, check_password
-
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils.timezone import now
 from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 class patientRegister(models.Model):
@@ -39,11 +37,6 @@ class patientRegister(models.Model):
 
       def check_password(self, raw_password):
         return check_password(raw_password, self.password)
-      
-      # pincode = models.IntegerField(null=True) 
-      # country = models.CharField(max_length=50,null=True)
-      # def __str__(self):
-      #     return f"{self.name} | {self.email} | {self.phno} | {self.password} | {self.profile_img.url if self.profile_img else 'No Image'} | {self.address} | {self.city} | {self.state} | {self.pincode} | {self.country} | {self.blood_group}"
      
      
       def __str__(self):
@@ -105,9 +98,11 @@ class appointment(models.Model):
     #  status= models.CharField(max_length=20,choices=STATUS_CHOICE,default='Scheduled')
      reason = models.TextField(null=True)
      symptoms = models.CharField(max_length=255, blank=True, null=True)
+     booking_date = models.DateField(default=now)
+
 
      def __str__(self):
-          return f"{self.appointment_date} | {self.appointment_time} | {self.reason} | {self.symptoms} |"
+          return f"{self.appointment_date} | {self.appointment_time} | {self.reason} | {self.symptoms} | {self.booking_date} | "
 
 class review(models.Model):
       patient_id=models.ForeignKey(patientRegister,on_delete=models.CASCADE)

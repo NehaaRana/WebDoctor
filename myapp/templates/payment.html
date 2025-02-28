@@ -233,13 +233,19 @@ Next <i class="feather-arrow-right-circle"></i>
 <div class="booking-list">
 <div class="booking-date-list">
 <ul>
-<li>Appoinment Date: <span>{{ Appointment.appointment_date}}</span></li>
-<li>Appoinment Time: <span>{{ Appointment.appointment_time}}</span></li>
+<li>Appoinment Date: <span>{{ appointment.appointment_date}}</span></li>
+<li>Appoinment Time: <span>{{ appointment.appointment_time}}</span></li>
 </ul>
 </div>
 <div class="booking-doctor-right">
 <p>
- <a href="{% url 'book_appointment' doctor.id %}">Edit</a>
+  <a href="{% url 'edit_appointment' doctor.id appointment.id %}" class="btn btn-warning">
+    Edit {{ appointment.id }}
+</a>
+
+ {% comment %} <a href="{% url 'edit_appointment' doctor_id=doctor.id appointment_id=appointment.id %}" class="btn btn-warning">
+  Edit {{ appointment.id }} {% endcomment %}
+</a>
 
 </p>
 </div>

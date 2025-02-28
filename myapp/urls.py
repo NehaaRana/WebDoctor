@@ -29,7 +29,7 @@ urlpatterns =[
   # path('book_appointment/<int:doctor_id>/<int:appointment_id>/', views.book_appointment, name='book_appointment'),
   path('doctor_profile_settings/', views.doctor_profile_settings, name='doctor_profile_settings'),
   path('book_appointment/<int:doctor_id>/', views.book_appointment, name='book_appointment'),
-  path('book_appointment/<int:doctor_id>/', views.book_appointment, name='book_appointment'),
+  path("book-appointment/<int:doctor_id>/<int:appointment_id>/", views.book_appointment, name="edit_appointment"),
   path('doctor_change_password/', views.doctor_change_password, name='doctor_change_password'),
   path('patient_change_password/', views.patient_change_password, name='patient_change_password'),
   path('password_change_successful/', views.password_change_successful, name='password_change_successful'),
@@ -60,5 +60,4 @@ urlpatterns =[
 
   path('payment/<int:appointment_id>/<int:doctor_id>/', views.payment_page, name='payment'),
   path('payment_details/<int:appointment_id>/<int:doctor_id>/', views.payment_details, name='payment_details'),
-
 ]

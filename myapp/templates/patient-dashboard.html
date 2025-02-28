@@ -406,7 +406,7 @@
                                   <th>Amount</th>
 
                                   <th>Status</th>
-                                  <th>Name</th>
+                                  {% comment %} <th>Name</th> {% endcomment %}
                                 </tr>
                               </thead>
                               <tbody>
@@ -424,8 +424,8 @@
                                           alt="User Image"
                                         /> {% endcomment %}
 
-                                        {% if doctor.profile_img %}
-                                          <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
+                                        {% if appointment.doctor_id.profile_img %}
+                                          <img class="rounded-circle" src="{{ appointment.doctor_id.profile_img.url }}" width="31" alt="profile" />
                                           {% else %}
                                             <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
                                           {% endif %}
@@ -442,7 +442,7 @@
                                       >{{appointment.appointment_time}}</span
                                     >
                                   </td>
-                                  <td>{{appointment.Created_at}}</td>
+                                  <td>{{appointment.booking_date}}</td>
                                   <td>{{appointment.doctor_id.fee}}</td>
 
                                   <td>

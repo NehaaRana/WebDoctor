@@ -1,6 +1,7 @@
 # import datetime
 from datetime import time, timedelta
 import datetime
+from django.utils import timezone
 from pyexpat.errors import messages  # Correct way to use strptime
 from django.urls import reverse
 from datetime import datetime, timedelta, time, date
@@ -267,80 +268,19 @@ def doctor_dashboard(request):
     except doctorRegister.DoesNotExist:
         return redirect("login")  # Redirect if doctor not found
     
-    upcoming_patients = appointment.objects.filter(doctor_id=doctor).select_related('patient_id')
-    return render(request, "doctor-dashboard.html", {"doctor": doctor,"upcoming_patients":upcoming_patients})
+    today = timezone.now().date()
+    today_patients = appointment.objects.filter(
+        doctor_id=doctor, appointment_date=today
+    ).select_related('patient_id')
+
+    upcoming_patients = appointment.objects.filter(
+        doctor_id=doctor, appointment_date__gt=today
+    ).select_related('patient_id')
+    # upcoming_patients = appointment.objects.filter(doctor_id=doctor).select_related('patient_id')
+    return render(request, "doctor-dashboard.html", {"doctor": doctor,"upcoming_patients":upcoming_patients, "today_patients": today_patients,})
 
 def admin_dashboard(request):
          return render(request, 'admin-dashboard.html')
-
-
-# def doctor_register(request):
-#     if request.method == "POST":
-#         form = doctorForm(request.POST, request.FILES)  # Handle file uploads
-#         if form.is_valid():
-#             print("Form is valid, saving the data.")  # Debug print
-#             doctor = form.save(commit=False)  # Don't save yet
-#             doctor.password = make_password(form.cleaned_data["password"])  # Hash password
-#             doctor.save()         
-#             return redirect('login')  # Redirect instead of rendering login page directly
-#         else:
-#             print("Form errors:", form.errors)  # Debug print
-#     else:
-#         form = doctorForm()  # Create an empty form for GET request
-
-#     return render(request, 'doctor-register.html', {'form': form})  # Pass form to template
-
-
-# def patient_register(request):
-
-#     if request.method == "POST":
-#         form = patientForm(request.POST, request.FILES)  # Handle file uploads
-#         if form.is_valid():
-#             patient = form.save(commit=False)  # Don't save yet
-#             patient.password = make_password(form.cleaned_data["password"])  # Hash password
-#             patient.save()
-#             return redirect('login')  # Redirect instead of rendering login page directly
-#         else:
-#             print("Form errors:", form.errors)  # Debug print
-            
-#     else:
-#         form = patientForm()  # Create an empty form for GET request
-
-#     return render(request, 'patient-register.html', {'form': form})  # Pass form to template
-
-# def doctor_register(request):
-#     if request.method == "POST":
-#         form = doctorForm(request.POST, request.FILES)  # Handle file uploads
-#         if form.is_valid():
-#             print("Form is valid, saving the data.")  # Debug print
-#             doctor = form.save(commit=False)  # Don't save yet
-#             doctor.password = make_password(form.cleaned_data["password"])  # Hash password
-#             doctor.save()         
-#             return redirect('login')  # Redirect instead of rendering login page directly
-#         else:
-#             print("Form errors:", form.errors)  # Debug print
-#     else:
-#         form = doctorForm()  # Create an empty form for GET request
-
-#     return render(request, 'doctor-register.html', {'form': form})  # Pass form to template
-
-
-# def patient_register(request):
-
-#     if request.method == "POST":
-#         form = patientForm(request.POST, request.FILES)  # Handle file uploads
-#         if form.is_valid():
-#             patient = form.save(commit=False)  # Don't save yet
-#             patient.password = make_password(form.cleaned_data["password"])  # Hash password
-#             patient.save()
-#             return redirect('login')  # Redirect instead of rendering login page directly
-#         else:
-#             print("Form errors:", form.errors)  # Debug print
-            
-#     else:
-#         form = patientForm()  # Create an empty form for GET request
-
-#     return render(request, 'patient-register.html', {'form': form})  # Pass form to template
 
 def doctor_register(request):
     if request.method == "POST":
@@ -351,15 +291,14 @@ def doctor_register(request):
             doctor.password = make_password(doctor.password)  # 🔒 Hash the password before saving
             doctor.save()
             return redirect('login')
-            doctor = form.save(commit=False)
-            doctor.password = make_password(doctor.password)  # 🔒 Hash the password before saving
-            doctor.save()
-            return redirect('login')
+            # doctor = form.save(commit=False)
+            # doctor.password = make_password(doctor.password)  #  Hash the password before saving
+            # doctor.save()
+            # return redirect('login')
     else:
         form = doctorForm()
     return render(request, 'doctor-register.html', {'form': form})
-    #     form = doctorForm()
-    # return render(request, 'doctor-register.html', {'form': form})
+   
 
 def patient_register(request):
     if request.method == "POST":
@@ -370,16 +309,11 @@ def patient_register(request):
             patient.password = make_password(patient.password)  # 🔒 Hash the password before saving
             patient.save()
             return redirect('login')
-            patient = form.save(commit=False)
-            patient.password = make_password(patient.password)  # 🔒 Hash the password before saving
-            patient.save()
-            return redirect('login')
     else:
         form = patientForm()
     return render(request, 'patient-register.html', {'form': form})
 
-    #     form = patientForm()
-    # return render(request, 'patient-register.html', {'form': form})
+    
 
 
 
@@ -425,14 +359,105 @@ def doctor_profile_settings(request):
     # return render(request, 'doctor-profile-settings.html')
 
 
-def book_appointment(request, doctor_id):
-    patient_id = request.session.get('patient_id')  # Get patient ID from session
-    if not patient_id:
-        return redirect('/login/')  # Redirect to login if not logged in
+from django.shortcuts import render, get_object_or_404, redirect
+from django.utils.timezone import now
+from datetime import datetime, date, time, timedelta
+from .models import  doctorRegister, patientRegister,appointment
+from .forms import appointmentForm
 
-    patient = get_object_or_404(patientRegister, id=patient_id)  
+# def book_appointment(request, doctor_id, appointment_id=None):
+#     doctor = get_object_or_404(doctorRegister, id=doctor_id)
+#     patient_id = request.session.get('patient_id')
+
+#     if not patient_id:
+#         return redirect('/login/')  
+
+#     patient = get_object_or_404(patientRegister, id=patient_id)
+
+#     # Initialize appointment object
+#     appointment_obj = None
+#     if appointment_id:
+#         print(f"Received appointment_id: {appointment_id}")
+#         appointment_obj = get_object_or_404(appointment, id=appointment_id, patient_id=patient, doctor_id=doctor)
+
+#     if request.method == "POST":
+#         print("Form submitted:", request.POST)  # Debugging
+#         form = appointmentForm(request.POST, instance=appointment_obj)
+
+#         if form.is_valid():
+#             appointment_obj = form.save(commit=False)
+#             appointment_obj.patient_id = patient
+#             appointment_obj.doctor_id = doctor
+#             appointment_obj.booking_date = now().date()
+
+#             # appointment_obj.full_clean()  # ✅ Correct usage on instance
+#             appointment_obj.save()
+
+#             print(f"After saving: appointment_obj ID: {appointment_obj.id}")  
+#             return redirect("payment", appointment_id=appointment_obj.id, doctor_id=doctor.id)
+
+#         print("Form errors:", form.errors)  # Debugging
+
+#     else:
+#         print(f"Prefilling form with: {appointment_obj}")  # Check if an object is actually being used
+
+#         form = appointmentForm(instance=appointment_obj)  # Prefill form if editing
+
+#     # Generate available time slots (9 AM to 5 PM, every 30 minutes)
+#     start_time = time(9, 0)
+#     end_time = time(17, 0)
+#     time_slots = []
+    
+#     current_time = datetime.combine(date.today(), start_time)
+#     while current_time.time() < end_time:
+#         time_slots.append(current_time.strftime("%I:%M %p"))  # Format in 12-hour format with AM/PM
+#         current_time += timedelta(minutes=30)
+
+#     return render(request, 'booking.html', {
+#         "doctor": doctor, 
+#         "patient": patient,
+#         "form": form,
+#         "time_slots": time_slots,
+#         "appointment_data_list": appointment_obj
+#     })
+
+def book_appointment(request, doctor_id, appointment_id=None):
     doctor = get_object_or_404(doctorRegister, id=doctor_id)
-    appointments=appointment.objects.filter(patient_id=patient,doctor_id=doctor_id)
+    patient_id = request.session.get('patient_id')
+
+    if not patient_id:
+        return redirect('/login/')  
+
+    patient = get_object_or_404(patientRegister, id=patient_id)
+    print(f"Received appointment_id: {appointment_id}")
+
+    # Fetch existing appointment if editing
+    appointment_obj = None
+    if appointment_id:
+        appointment_obj = get_object_or_404(appointment, id=appointment_id, patient_id=patient, doctor_id=doctor)
+        print(f"Editing Existing Appointment: {appointment_obj.id}")  # ✅ Debugging
+
+
+    if request.method == "POST":
+        print("Form submitted:", request.POST)  
+        form = appointmentForm(request.POST, instance=appointment_obj)  # ✅ Ensure form updates existing instance
+
+        if form.is_valid():
+            appointment_obj = form.save(commit=False)
+            appointment_obj.patient_id = patient
+            appointment_obj.doctor_id = doctor
+            appointment_obj.booking_date = now().date()  # Update booking date
+            
+            appointment_obj.save()  # ✅ Update appointment instead of creating a new one
+            print(f"Appointment updated: {appointment_obj.id}")
+
+            return redirect("payment", appointment_id=appointment_obj.id, doctor_id=doctor.id)
+        else:
+            print("Form errors:", form.errors)  # Debugging error messages
+
+    else:
+        form = appointmentForm(request.POST,instance=appointment_obj)  # Prefill form if editing
+
     # Generate available time slots (9 AM to 5 PM, every 30 minutes)
     start_time = time(9, 0)
     end_time = time(17, 0)
@@ -443,33 +468,13 @@ def book_appointment(request, doctor_id):
         time_slots.append(current_time.strftime("%I:%M %p"))  # Format in 12-hour format with AM/PM
         current_time += timedelta(minutes=30)
 
-    if request.method == "POST":
-        print("Form submitted:", request.POST)  # Debugging: Print submitted data
-        form = appointmentForm(request.POST)
-        
-        if form.is_valid():
-            appointment_obj = form.save(commit=False)
-            appointment_obj.patient_id = patient
-            appointment_obj.doctor_id = doctor
-            appointment_obj.save() 
-            
-            print("Appointment saved:", appointment_obj)  # Debugging: Print saved appointment
-            return redirect("payment", appointment_id=appointment_obj.id, doctor_id=doctor.id)
-
-        
-        print("Form errors:", form.errors)  # Debugging: Print form errors
-
-    else:
-        form = appointmentForm()
-    
     return render(request, 'booking.html', {
         "doctor": doctor, 
         "patient": patient,
         "form": form,
         "time_slots": time_slots,
-        "appointment_data_list":appointments
+        "appointment_data_list": appointment_obj
     })
-
 
 
 def payment_page(request, appointment_id, doctor_id):
