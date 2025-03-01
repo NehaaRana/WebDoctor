@@ -65,6 +65,7 @@ class doctorRegister(models.Model):
     gender = models.CharField(max_length=5, choices=GENDER_CHOICES)
     mci_no = models.CharField(max_length=10,blank=True, null=True)
     fee = models.BigIntegerField(null=True)
+    is_approved = models.BooleanField(default=False)
 
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
@@ -83,7 +84,7 @@ class doctorRegister(models.Model):
     #     db_table = 'myapp_doctorregister'  # Explicitly link to the existing table
     #     managed = True  # 🚨 Change this to True so Django can manage the table
     def __str__(self):
-            return f"{self.name} | {self.gender} |{self.email} | {self.password} | {self.clinic_name} |{self.clinic_address} | {self.phno} | "
+            return f"{self.name} | {self.gender} |{self.email} | {self.password} | {self.qualification} |{self.specialization} | {self.phno} | "
     
 class appointment(models.Model):
     #  STATUS_CHOICE=[('Scheduled', 'Scheduled'), ('Completed', 'Completed'), ('Cancelled', 'Cancelled')]

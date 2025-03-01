@@ -1,166 +1,285 @@
-{% load static %} <!-- Load static files in Django -->
-
+{% load static %}
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
-  <title>webdoctor</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>web doctor</title>
 
-  <!-- Favicon -->
-  <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon" />
 
-  <!-- -------------------- Social Icons ----------------------- -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
-  <!-- FontAwesome CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}">
-  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
+    <style>
+        .custom-alert {
+            background-color: #0e82fd;
+            color: white;
+            border-radius: 8px;
+            font-size: 18px;
+            padding: 15px;
+            text-align: center;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            z-index: 1000;
+        }
 
-  <!-- Feather Icons -->
-  <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}">
+        .register-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-  <!-- Custom Styles -->
-  <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+        .register-box {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 70rem;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .svg-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            padding: 20px;
+        }
+
+        .form-container {
+            flex: 1;
+            padding: 40px;
+            background: linear-gradient(45deg,
+                    rgb(33, 37, 240) -200%,
+                    rgba(255, 255, 255, 1) 25%,
+                    rgba(255, 255, 255, 1) 75%,
+                    rgb(33, 37, 240) 200%);
+        }
+
+        .btn_register {
+            position: relative;
+            transition: all 0.3s ease-in-out;
+            padding-block: 0.5rem;
+            padding-inline: 1.25rem;
+            background-color: #0e82fd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            outline: none;
+            border-radius: 7px;
+            overflow: hidden;
+            font-size: 15px;
+            width: 100%;
+        }
+
+        .btn_register:hover::before {
+            animation: shine 1.5s ease-out infinite;
+        }
+
+        .btn_register::before {
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 100%;
+            background-image: linear-gradient(120deg,
+                    rgba(255, 255, 255, 0) 30%,
+                    rgba(255, 255, 255, 0.8),
+                    rgba(255, 255, 255, 0) 70%);
+            top: 0;
+            left: -100px;
+            opacity: 0.6;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -100px;
+            }
+
+            60%,
+            100% {
+                left: 100%;
+            }
+        }
+    </style>
 </head>
 
-<body class="login-body">
+<body>
+    <div class="main-wrapper">
+        {% include 'header.html' %}
 
-  <div class="main-wrapper">
-    {% block content %}
-    {% include "header.html" %}
+        <div class="register-container">
+            <div class="register-box">
+                <div class="svg-container">
+                    <img src="{% static 'assets/img/sign-up-animate.svg' %}" alt="Doctor Signup" class="img-fluid" />
+                </div>
 
-    <div class="login-content-info">
-      <div class="container">
-          <div class="row justify-content-center">
-              <div class="col-lg-4 col-md-6">
-                  <div class="account-content">
-                      <div class="login-shapes">
-                          <div class="shape-img-left">
-                              <img src="{% static 'assets/img/shape-01.png' %}" alt="">
-                          </div>
-                          <div class="shape-img-right">
-                              <img src="{% static 'assets/img/shape-02.png' %}" alt="">
-                          </div>
-                      </div>
-                      <div class="widget-set">
-                          <div class="account-info doctor-reg">
-                              <div class="widget-content multistep-form">
-                                  <fieldset id="first">
-                                      <div class="login-back">
-                                        <form action="{% url 'doctor_register' %}" method="POST">
-                                        </div>
-  
-                                      <div class="login-title">
-                                          <h3>Doctor Signup</h3>
-                                          <p class="mb-0">Welcome back! Please enter your details.</p>
-                                      </div>
-  
-                                      <div class="widget-setcount">
-                                          <ul id="progressbar">
-                                              <li class="progress-active">
-                                                  <div class="step-box">
-                                                      <div class="step-icon">
-                                                          <span>
-                                                              <img src="{% static 'assets/img/icons/signup-users.svg' %}" alt="icon">
-                                                          </span>
-                                                      </div>
-                                                      <div class="step-content">
-                                                          <p>Step 1</p>
-                                                          <h4>Create Account</h4>
-                                                      </div>
-                                                  </div>
-                                              </li>
-                                              <li>
-                                                  <div class="step-box">
-                                                      <div class="step-icon">
-                                                          <span>
-                                                              <img src="{% static 'assets/img/icons/signup-unlock.svg' %}" alt="icon">
-                                                          </span>
-                                                      </div>
-                                                      <div class="step-content">
-                                                          <p>Step 2</p>
-                                                          <h4>Verify Account</h4>
-                                                      </div>
-                                                  </div>
-                                              </li>
-                                          </ul>
-  
-                                          {# Display error message if any #}
-                                          {% if error %}
-                                          <div class="error-message" style="padding-top:12px">{{ error }}</div>
-                                          {% endif %}
-                                      </div>
-  
-                                      <form action="{% url 'doctor_register' %}" method="POST" enctype="multipart/form-data">
-                                        {% csrf_token %}  {# Django CSRF token. Remove for Flask or use Flask-WTF #}
-                                          
-                                          <div class="form-group">
-                                              <label>Name</label>
-                                              <input type="text" name="name" class="form-control" placeholder="Enter Your Full Name" required autocomplete="off">
-                                          </div>
-  
-                                          <div class="form-group">
-                                              <label>Gender</label>
-                                              <select class="form-select form-control" name="gender">
-                                                  <option value="">Select</option>
-                                                  <option value="M">Male</option>
-                                                  <option value="F">Female</option>
-                                                  <option value="O">Other</option>
-                                              </select>
-                                          </div>
-  
-                                          <div class="form-group">
-                                              <label>Clinic Name</label>
-                                              <input type="text" name="clinic_name" class="form-control" placeholder="Enter Your Clinic's Name" required autocomplete="off">
-                                          </div>
-  
-                                          <div class="form-group">
-                                              <label>Clinic Address</label>
-                                              <input type="text" name="clinic_address" class="form-control" placeholder="City/Town" required autocomplete="off">
-                                          </div>
-  
-                                          <div class="form-group">
-                                              <label>Email</label>
-                                              <input type="email" name="email" class="form-control" placeholder="Enter Your Email" required autocomplete="off">
-                                          </div>
-  
-                                          <div class="form-group">
-                                              <label>Phone Number</label>
-                                              <input class="form-control form-control-lg group_formcontrol form-control-phone" id="phno" name="phno" type="text" required autocomplete="off">
-                                          </div>
-  
-                                          <div class="form-group">
-                                              <label>Password</label>
-                                              <div class="pass-group">
-                                                  <input type="password" name="password" class="form-control pass-input-sub" placeholder="*************" required autocomplete="off">
-                                                  <span class="feather-eye toggle-password-sub"></span>
-                                              </div>
-                                          </div>
-  
-                                          <div class="widget-btn">
-                                              <button type="submit" class="btn btn-primary btn-block next_btn">Next</button>
-                                          </div>
-                                      </form>
-                                  </fieldset>
-                                  
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
-    <!-- {% include "footer.html" %} -->
-    {% endblock %}
+                <div class="form-container">
+                    <div class="login-back">
+                        <a href="/" class="text-dark"><i class="fa-solid fa-arrow-left-long text-dark"></i> Back</a>
+                    </div>
+                    <h2 class="text-center fw-bolder">Doctor Signup</h2>
+                    <p class="text-center">
+                        Join us and connect with patients seamlessly.
+                    </p>
+                    <form action="{% url 'doctor_register' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %} 
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label>Full Name</label>
+                                <input type="text" name="name" class="form-control" id="name"
+                                    placeholder="Enter Your Full Name" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Gender</label>
+                                <select class="form-select form-control" name="gender" id="gender">
+                                    <option value="">Select</option>
+                                    <option value="M">Male</option>
+                                    <option value="F">Female</option>
+                                    <option value="O">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Qualification</label>
+                                <input type="text" name="qualification" class="form-control" id="qualification"
+                                    placeholder="Enter Qualification" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Specialization</label>
+                                <input type="text" name="specialization" class="form-control" id="specialization"
+                                    placeholder="Specialization" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Email</label>
+                                <input type="email" name="email" class="form-control" id="email"
+                                    placeholder="abc@gmail.com" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Phone Number</label>
+                                <input type="text" name="phno" class="form-control" id="phno"
+                                    placeholder="Enter Phone Number" />
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label>Create Password</label>
+                                <input type="password" name="password" class="form-control" id="password"
+                                    placeholder="*************" />
+                            </div>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="terms" />
+                            <label class="form-check-label" for="terms">I agree to the Terms of Service</label>
+                        </div>
+                        <button type="submit" class="btn_register">
+                            Sign Up &nbsp;&nbsp;<i class="fa-solid fa-user-plus"></i>
+                        </button>
+                        <p class="text-center mt-3">
+                            Already a member?
+                            <a href="{% url 'login' %}" class="fw-bolder text-secondary text-decoration-underline">Sign
+                                in here</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-    <div></div>
+        <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+        <!-- <script>
+        $(document).ready(function () {
+          $("#signup-form").submit(function (e) {
+            e.preventDefault();
+      
+            let name = $("#name").val().trim();
+            let gender = $("#gender").val();
+            let clinic_name = $("#clinic_name").val().trim();
+            let clinic_address = $("#clinic_address").val().trim();
+            let email = $("#email").val().trim();
+            let phno = $("#phno").val().trim();
+            let password = $("#password").val().trim();
+            let terms = $("#terms").is(":checked");
+      
+            let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            let phonePattern = /^[0-9]{10}$/;
+      
+            function showAlert(icon, message) {
+              $.alert({
+                title: `<i class='fa-solid ${icon} fa-2x fa-beat-fade'></i>`,
+                content: `<span style="font-size: 15px;">${message}</span>`,
+                type: "blue",
+                theme: "modern",
+              });
+            }
+
+            if (name === "") {
+              showAlert("fa-user", "Full Name is required");
+              return;
+            }
+            if (gender === "") {
+              showAlert("fa-venus-mars", "Please select your gender");
+              return;
+            }
+            if (clinic_name === "") {
+              showAlert("fa-hospital", "Clinic Name is required");
+              return;
+            }
+            if (clinic_address === "") {
+              showAlert("fa-map-marker-alt", "Clinic Address is required");
+              return;
+            }
+            if (email === "" || !emailPattern.test(email)) {
+              showAlert("fa-envelope", "Enter a valid email address");
+              return;
+            }
+            if (phno === "" || !phonePattern.test(phno)) {
+              showAlert("fa-phone", "Enter a valid 10-digit phone number");
+              return;
+            }
+            if (password.length < 6) {
+              showAlert("fa-lock", "Password must be at least 6 characters long");
+              return;
+            }
+            if (!terms) {
+              showAlert("fa-file-contract", "You must agree to the Terms of Service");
+              return;
+            }
+      
+            // If all validations pass, show success message and submit the form
+            $.alert({
+              title: `<i class="fa-solid fa-circle-check fa-2x fa-beat-fade"></i>`,
+              content: `<span style="font-size: 15px;">Registration Successful! Redirecting...</span>`,
+              type: "green",
+              theme: "modern",
+              animation: "news",
+              onClose: function () {
+                $("#signup-form")[0].submit(); // Submit the form after the success alert
+              },
+            });
+          });
+        });
+      </script> -->
+
+
+        {% include 'footer.html' %}
+    </div>
 </body>
 
 </html>

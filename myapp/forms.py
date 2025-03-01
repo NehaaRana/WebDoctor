@@ -16,7 +16,7 @@ class patientForm(forms.ModelForm):
 class doctorForm(forms.ModelForm):
     class Meta:
         model = doctorRegister
-        fields = ['name', 'gender', 'clinic_name', 'clinic_address', 'email', 'phno', 'password']
+        fields = ['name', 'gender', 'qualification', 'specialization', 'email', 'phno', 'password']
 
 
 class passwordChangeForm(forms.Form):

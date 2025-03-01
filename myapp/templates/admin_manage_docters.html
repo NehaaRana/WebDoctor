@@ -86,6 +86,8 @@
                                                     <th>Clinic Address</th>
                                                     <th>Gender</th>
                                                     <th>Medical Council of India No</th>
+                                                <th>Approve Status</th>
+                                                <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -116,6 +118,23 @@
                                                     <td>{{ doctor.clinic_address }}</td>
                                                     <td>{{ doctor.gender }}</td>
                                                     <td>{{ doctor.mci_no }}</td>
+                                                    <td>
+
+                                                        <td>
+                                                            {% if doctor.is_approved %}
+                                                                <span style="color: green;">Approved</span>
+                                                            {% else %}
+                                                                <span style="color: red;">Pending</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            {% if not doctor.is_approved %}
+                                                                <a href="{% url 'approve_doctor' doctor.id %}" class="btn btn-success">Approve</a>
+                                                                <a href="{% url 'reject_doctor' doctor.id %}" class="btn btn-danger">Reject</a>
+                                                            {% else %}
+                                                                <button class="btn btn-secondary" disabled>Approved</button>
+                                                            {% endif %}
+                                                        </td>
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>

@@ -139,3 +139,17 @@ APPEND_SLASH = False
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# for email message to approve doctor
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+# settings.py
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Use your SMTP provider (Gmail, Outlook, etc.)
+EMAIL_PORT = 587  # Use 465 for SSL or 587 for TLS
+EMAIL_USE_TLS = True  # Use True for TLS, False for SSL
+EMAIL_HOST_USER = 'webdoctors123@gmail.com'
+EMAIL_HOST_PASSWORD = 'dpthlniwwnwqzsat'  # Use an App Password if using Gmail
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

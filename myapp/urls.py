@@ -56,7 +56,8 @@ urlpatterns =[
   path('admin_manage_patients/',views.admin_manage_patients,name='admin_manage_patients'),
   path('admin_manage_appointments/',views.admin_manage_appointments,name='admin_manage_appointments'),
   path('admin_logout/', views.admin_logout, name='admin_logout'),
-
+  path('approve_doctor/<int:doctor_id>/', views.approve_doctor, name='approve_doctor'),
+  path('reject_doctor/<int:doctor_id>/', views.reject_doctor, name='reject_doctor'),
   ########################
    path('update-doctor/', views.update_doctor, name='update_doctor'),
     path('get-doctor/<int:doctor_id>/',views.get_doctor, name='get_doctor'),

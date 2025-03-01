@@ -199,18 +199,23 @@ def login(request):
         elif user_type == "doctor":
             try:
                 user = doctorRegister.objects.get(email=email)
-                request.session['doctor_id'] = user.id  # Store in session
+                # request.session['doctor_id'] = user.id  # Store in session
+                if not user.is_approved:
+                    print("Doctor not approved yet")
+                    return render(request, "login.html", {"error": "Your account is pending approval. Please wait for admin approval."})
+
                 print(f"Doctor found: {user.email}")
-                request.session['doctor_id'] = user.id  # Store in session
-                print(f"Doctor found: {user.email}")
+                request.session['doctor_id'] = user.id  # Store doctor ID in session
+                
+                
             except doctorRegister.DoesNotExist:
                 print("Doctor does not exist")
-                print("Doctor does not exist")
+              
                 return render(request, "login.html", {"error": "Doctor does not exist"})
 
         else:
             print("Invalid user type")
-            print("Invalid user type")
+            
             return render(request, "login.html", {"error": "Invalid user type"})
 
         # **Compare hashed password using check_password()**
@@ -227,13 +232,13 @@ def login(request):
             print("Password matched! Redirecting...")
             if user_type == "patient":
                 return redirect("patient_dashboard")  
-                return redirect("patient_dashboard")  
+                  
             elif user_type == "doctor":
                 return redirect("doctor_dashboard")  
             else:
                 print("Password did NOT match!")
                 return render(request, "login.html", {"error": "Invalid email or password"})
-                return redirect("doctor_dashboard")  
+                 
         else:
             print("Password did NOT match!")
             return render(request, "login.html", {"error": "Invalid email or password"})
@@ -282,8 +287,7 @@ def doctor_dashboard(request):
     # upcoming_patients = appointment.objects.filter(doctor_id=doctor).select_related('patient_id')
     return render(request, "doctor-dashboard.html", {"doctor": doctor,"upcoming_patients":upcoming_patients, "today_patients": today_patients,})
 
-def admin_dashboard(request):
-         return render(request, 'admin-dashboard.html')
+
 
 def doctor_register(request):
     if request.method == "POST":
@@ -1015,6 +1019,9 @@ def get_patient(request, patient_id):
         "csrfToken": get_token(request)  # Send CSRF token in response
     })
 
+
+
+
 def admin_profile_settings(request):
     return render(request, 'admin-profile-settings.html')
 
@@ -1086,3 +1093,58 @@ def admin_login(request):
             messages.error(request,"Invalid email or username.")  
 
     return render(request, 'admin_login.html')  # Return the login page with error messages if any
+
+
+from django.core.mail import send_mail, BadHeaderError
+
+# def is_admin_logged_in(request):
+#     return 'admin_id' in request.session
+
+def admin_dashboard(request):
+        if 'admin_id' not in request.session:
+                return redirect('admin_login')  # Redirect if not logged in
+
+        # Get all unapproved doctors
+        pending_doctors = doctorRegister.objects.filter(is_approved=False)
+        approved_doctors = doctorRegister.objects.filter(is_approved=True)
+        return render(request, 'admin-dashboard.html',{'pending_doctors': pending_doctors, 'approved_doctors': approved_doctors})
+
+def approve_doctor(request, doctor_id):
+    doctor = get_object_or_404(doctorRegister, id=doctor_id)
+    doctor.is_approved = True
+    doctor.save()
+
+    subject = 'Your Account Has Been Approved!'
+    message = f'Hello {doctor.name}, your account has been approved. You can now log in.'
+    recipient_email = doctor.email
+
+
+    try:
+        send_mail(
+            subject,
+            message,
+            'webdoctors123@gmail.com',  # Ensure this matches EMAIL_HOST_USER
+            [recipient_email],
+            fail_silently=False,
+        )
+        print(" Email sent successfully!")  # Debugging log
+    except BadHeaderError:
+        print(" Invalid email header!")
+    except Exception as e:
+        print(f" Email failed: {e}")
+
+    messages.success(request, f"Doctor {doctor.name} has been approved successfully.")
+    return redirect('admin_dashboard')
+
+
+def reject_doctor(request, doctor_id):
+    # if not is_admin_logged_in(request):
+    #     return redirect('admin_login')
+
+    doctor = get_object_or_404(doctorRegister, id=doctor_id)
+    doctor.is_approved = False
+    doctor.save()
+    # doctor.delete()
+
+    messages.error(request, f"Doctor {doctor.name} has been rejected and removed.")
+    return redirect('admin_dashboard')
