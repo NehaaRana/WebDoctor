@@ -344,6 +344,12 @@ def subscribe(request):
 def patient_profile(request):
     return render(request, 'patient-profile.html')
 
+
+def doctor_list(request):
+    doctors = doctorRegister.objects.all()  # Fetch all doctors
+    return render(request, "doctor-list.html",{"doctors": doctors})
+
+
 def doctor_profile(request):
     return render(request, 'doctor-profile.html')
 
