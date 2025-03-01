@@ -41,6 +41,9 @@ urlpatterns =[
    path('update-doctor/', views.update_doctor, name='update_doctor'),
     path('get-doctor/<int:doctor_id>/',views.get_doctor, name='get_doctor'),
        path('update-patient/', views.update_patient, name='update_patient'),
+
+      path('upload-doctor-profile/', views.upload_doctor_profile_image, name='upload_doctor_profile'),
+    path('upload-patient-profile/', views.upload_patient_profile_image, name='upload_patient_profile'),
     path('get-patient/<int:patient_id>/',views.get_patient, name='get_patient'),
   path('payment_details/<int:appointment_id>/<int:doctor_id>/', views.payment_details, name='payment_details'),
 

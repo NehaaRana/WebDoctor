@@ -80,10 +80,10 @@
                       </div>
                       <form action="{% url 'admin_login'  %}" method="POST">
                          {% csrf_token %}
-                         <div class="form-group">
+                         {% comment %} <div class="form-group">
                           <label for="username">Username</label>
                           <input type="text" id="username" class="form-control" name="username" placeholder="username" required />
-                        </div>
+                        </div> {% endcomment %}
                         <div class="form-group">
                           <label for="email">E-mail</label>
                           <input type="text" id="email" class="form-control" name="email" placeholder="example@email.com" required />

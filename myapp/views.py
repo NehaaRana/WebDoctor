@@ -19,10 +19,13 @@ from .models import patientRegister,doctorRegister
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 import json
 from .models import appointment,Payment
-
+import os
 # Create your views here.
 # from django.shortcuts import render
 
@@ -112,7 +115,7 @@ def register(request):
 #         else:
 #             return render(request, "login.html", {"error": "Invalid user type"})
 
-#         # ✅ **Manually check the password**
+#         # **Manually check the password**
 #         if check_password(password, user.password):  # Securely verify password
 #             # Redirect based on user type
 #             if user_type == "patient":
@@ -210,13 +213,13 @@ def login(request):
             print("Invalid user type")
             return render(request, "login.html", {"error": "Invalid user type"})
 
-        # ✅ **Compare hashed password using check_password()**
+        # **Compare hashed password using check_password()**
         print(f"Entered Password: {password}")
         print(f"Stored Hashed Password: {user.password}")
 
         if check_password(password, user.password):  # Securely verify password
             print("Password matched! Redirecting...")
-        # ✅ **Compare hashed password using check_password()**
+        # **Compare hashed password using check_password()**
         print(f"Entered Password: {password}")
         print(f"Stored Hashed Password: {user.password}")
 
@@ -390,7 +393,7 @@ from .forms import appointmentForm
 #             appointment_obj.doctor_id = doctor
 #             appointment_obj.booking_date = now().date()
 
-#             # appointment_obj.full_clean()  # ✅ Correct usage on instance
+#             # appointment_obj.full_clean()  #  Correct usage on instance
 #             appointment_obj.save()
 
 #             print(f"After saving: appointment_obj ID: {appointment_obj.id}")  
@@ -435,12 +438,12 @@ def book_appointment(request, doctor_id, appointment_id=None):
     appointment_obj = None
     if appointment_id:
         appointment_obj = get_object_or_404(appointment, id=appointment_id, patient_id=patient, doctor_id=doctor)
-        print(f"Editing Existing Appointment: {appointment_obj.id}")  # ✅ Debugging
+        print(f"Editing Existing Appointment: {appointment_obj.id}")  #  Debugging
 
 
     if request.method == "POST":
         print("Form submitted:", request.POST)  
-        form = appointmentForm(request.POST, instance=appointment_obj)  # ✅ Ensure form updates existing instance
+        form = appointmentForm(request.POST, instance=appointment_obj)  #  Ensure form updates existing instance
 
         if form.is_valid():
             appointment_obj = form.save(commit=False)
@@ -448,7 +451,7 @@ def book_appointment(request, doctor_id, appointment_id=None):
             appointment_obj.doctor_id = doctor
             appointment_obj.booking_date = now().date()  # Update booking date
             
-            appointment_obj.save()  # ✅ Update appointment instead of creating a new one
+            appointment_obj.save()  #  Update appointment instead of creating a new one
             print(f"Appointment updated: {appointment_obj.id}")
 
             return redirect("payment", appointment_id=appointment_obj.id, doctor_id=doctor.id)
@@ -678,39 +681,104 @@ from .models import doctorRegister,patientRegister
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.middleware.csrf import get_token
-@csrf_exempt
+
+# @csrf_exempt
+# def update_doctor(request):
+#     if request.method == "POST":
+#         try:
+#             data = json.loads(request.body.decode('utf-8'))  # Ensure JSON decoding
+
+#             # Use session ID as a fallback
+#             doctor_id = data.get("doctor_id", request.session.get('doctor_id'))
+#             if not doctor_id:
+#                 return JsonResponse({"status": "error", "message": "Doctor ID is required"})
+
+#             doctor = get_object_or_404(doctorRegister, id=doctor_id)
+
+#             # Update fields
+#             
+#             doctor.name = data.get("name", doctor.name)
+#             doctor.email = data.get("email", doctor.email)
+#             doctor.phno = data.get("phno", doctor.phno)
+#             doctor.qualification = data.get("qualification", doctor.qualification)
+#             doctor.specialization = data.get("specialization", doctor.specialization)
+#             doctor.experience = data.get("experience", doctor.experience)
+#             doctor.address = data.get("address", doctor.address)
+#             doctor.city = data.get("city", doctor.city)
+#             doctor.state = data.get("state", doctor.state)
+#             doctor.clinic_name = data.get("clinic_name", doctor.clinic_name)
+#             doctor.clinic_address = data.get("clinic_address", doctor.clinic_address)
+#             doctor.gender = data.get("gender", doctor.gender)
+#             doctor.mci_no = data.get("mci_no", doctor.mci_no)
+#             doctor.fee = data.get("fee", doctor.fee)
+
+
+#             doctor.save()  # Save changes
+
+#             return JsonResponse({"status": "success", "message": "Doctor details updated successfully!"})
+#         except json.JSONDecodeError:
+#             return JsonResponse({"status": "error", "message": "Invalid JSON format"})
+#         except Exception as e:
+#             return JsonResponse({"status": "error", "message": str(e)})
+
+#     return JsonResponse({"status": "error", "message": "Invalid request method"})
+
 def update_doctor(request):
     if request.method == "POST":
         try:
-            data = json.loads(request.body.decode('utf-8'))  # Ensure JSON decoding
+            if request.FILES.get("photo"):
+                doctor_id = request.POST.get("doctor_id")
+                if not doctor_id:
+                    return JsonResponse({"status": "error", "message": "patient ID is required"})
 
-            # Use session ID as a fallback
-            doctor_id = data.get("doctor_id", request.session.get('doctor_id'))
-            if not doctor_id:
-                return JsonResponse({"status": "error", "message": "Doctor ID is required"})
+                doctor = get_object_or_404(patientRegister, id=doctor_id)
 
-            doctor = get_object_or_404(doctorRegister, id=doctor_id)
+                # Save Image
+                photo = request.FILES["photo"]
+                photo_path = f"profile_pics/{doctor_id}_{photo.name}"
+                doctor.photo = default_storage.save(photo_path, ContentFile(photo.read()))
+
+
+                doctor.save()
+                return JsonResponse({"status": "success", "message": "Image updated successfully!", "photo_url": doctor.photo.url})
+            
+            else:
+                # Process JSON Data
+                data = json.loads(request.body.decode('utf-8'))  
+
+                # data = json.loads(request.body.decode('utf-8'))  # Ensure JSON decoding
+
+            # Use session ID as fallback
+                doctor_id = data.get("doctor_id", request.session.get('doctor_id'))
+                if not doctor_id:
+                    return JsonResponse({"status": "error", "message": "patient ID is required"})
+
+                doctor = get_object_or_404(doctorRegister, id=doctor_id)
+            # patient_id = request.POST.get("patient_id")
+            # if not patient_id:
+            #     return JsonResponse({"status": "error", "message": "patient ID is required"})
+
+            # patient = get_object_or_404(patientRegister, id=patient_id)
 
             # Update fields
-            doctor.name = data.get("name", doctor.name)
-            doctor.email = data.get("email", doctor.email)
-            doctor.phno = data.get("phno", doctor.phno)
-            doctor.qualification = data.get("qualification", doctor.qualification)
-            doctor.specialization = data.get("specialization", doctor.specialization)
-            doctor.experience = data.get("experience", doctor.experience)
-            doctor.address = data.get("address", doctor.address)
-            doctor.city = data.get("city", doctor.city)
-            doctor.state = data.get("state", doctor.state)
-            doctor.clinic_name = data.get("clinic_name", doctor.clinic_name)
-            doctor.clinic_address = data.get("clinic_address", doctor.clinic_address)
-            doctor.gender = data.get("gender", doctor.gender)
-            doctor.mci_no = data.get("mci_no", doctor.mci_no)
-            doctor.fee = data.get("fee", doctor.fee)
+                doctor.name = data.get("name", doctor.name)
+                doctor.email = data.get("email", doctor.email)
+                doctor.phno = data.get("phno", doctor.phno)
+                doctor.qualification = data.get("qualification", doctor.qualification)
+                doctor.specialization = data.get("specialization", doctor.specialization)
+                doctor.experience = data.get("experience", doctor.experience)
+                doctor.address = data.get("address", doctor.address)
+                doctor.city = data.get("city", doctor.city)
+                doctor.state = data.get("state", doctor.state)
+                doctor.clinic_name = data.get("clinic_name", doctor.clinic_name)
+                doctor.clinic_address = data.get("clinic_address", doctor.clinic_address)
+                doctor.gender = data.get("gender", doctor.gender)
+                doctor.mci_no = data.get("mci_no", doctor.mci_no)
+                doctor.fee = data.get("fee", doctor.fee)
 
+                doctor.save()  # Save changes
 
-            doctor.save()  # Save changes
-
-            return JsonResponse({"status": "success", "message": "Doctor details updated successfully!"})
+            return JsonResponse({"status": "success", "message": "patient details updated successfully!"})
         except json.JSONDecodeError:
             return JsonResponse({"status": "error", "message": "Invalid JSON format"})
         except Exception as e:
@@ -718,10 +786,44 @@ def update_doctor(request):
 
     return JsonResponse({"status": "error", "message": "Invalid request method"})
 
+@csrf_exempt  # Only for testing, in production use CSRF token properly
+def upload_doctor_profile_image(request):
+    if request.method == "POST":
+        doctor_id = request.POST.get("doctor_id")
+        image = request.FILES.get("photo")  # Get uploaded file
+
+        if not doctor_id or not image:
+            return JsonResponse({"status": "error", "message": "Missing patient ID or image"})
+
+        try:
+            doctor = doctorRegister.objects.get(id=doctor_id)
+
+            # Define the path where the image will be saved
+            file_path = f"profile_pic/{doctor_id}_{image.name}"  # Save in "media/profile_pic/"
+            
+            # Delete old profile image if it exists
+            if doctor.profile_img and os.path.exists(os.path.join("media", str(doctor.profile_img))):
+                os.remove(os.path.join("media", str(doctor.profile_img)))
+
+            # Save the new image
+            saved_path = default_storage.save(file_path, ContentFile(image.read()))
+
+            # Update the database with the new image path
+            doctor.profile_img = saved_path
+            doctor.save()
+
+            return JsonResponse({"status": "success", "photo_url": doctor.profile_img.url})
+        
+        except doctorRegister.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "Patient not found"})
+
+    return JsonResponse({"status": "error", "message": "Invalid request"})
+
 
 @ensure_csrf_cookie  # Ensures CSRF token is sent as a cookie
 def get_doctor(request, doctor_id):
     doctor = get_object_or_404(doctorRegister, id=doctor_id)
+    photo_url = request.build_absolute_uri(settings.MEDIA_URL + doctor.photo.name) if doctor.photo else None
     return JsonResponse({
         "id": doctor.id,
         "name": doctor.name,
@@ -738,53 +840,157 @@ def get_doctor(request, doctor_id):
         "gender": doctor.gender,
         "mci_no": doctor.mci_no,
         "fee": doctor.fee,
+        "photo": photo_url,  
         "csrfToken": get_token(request)  # Send CSRF token in response
     })
 
 
 ####################################update patient
 @csrf_exempt
+# def update_patient(request):
+#     if request.method == "POST":
+#         try:
+#             if request.FILES.get("photo"):
+#                 patient_id = request.POST.get("patient_id")
+#                 if not patient_id:
+#                     return JsonResponse({"status": "error", "message": "patient ID is required"})
+
+#                 patient = get_object_or_404(patientRegister, id=patient_id)
+
+#                 # Save Image
+#                 photo = request.FILES["photo"]
+#                 photo_path = f"profile_pics/{patient_id}_{photo.name}"
+#                 patient.photo = default_storage.save(photo_path, ContentFile(photo.read()))
+
+
+#                 patient.save()
+#                 return JsonResponse({"status": "success", "message": "Image updated successfully!", "photo_url": patient.photo.url})
+            
+#             else:
+#                 # Process JSON Data
+#                 data = json.loads(request.body.decode('utf-8'))  
+
+#                 # data = json.loads(request.body.decode('utf-8'))  # Ensure JSON decoding
+
+#             # Use session ID as fallback
+#                 patient_id = data.get("patient_id", request.session.get('patient_id'))
+#                 if not patient_id:
+#                     return JsonResponse({"status": "error", "message": "patient ID is required"})
+
+#                 patient = get_object_or_404(patientRegister, id=patient_id)
+#             # patient_id = request.POST.get("patient_id")
+#             # if not patient_id:
+#             #     return JsonResponse({"status": "error", "message": "patient ID is required"})
+
+#             # patient = get_object_or_404(patientRegister, id=patient_id)
+
+#             # Update fields
+#                 patient.name = data.get("name", patient.name)
+#                 patient.email = data.get("email", patient.email)
+#                 patient.phno = data.get("phno", patient.phno)
+#                 patient.password=data.get("password",patient.password)
+#                 patient.address = data.get("address", patient.address)
+#                 patient.city = data.get("city", patient.city)
+#                 patient.state = data.get("state", patient.state)
+#                 patient.blood_group = data.get("blood_group", patient.blood_group)
+#                 patient.age = data.get("age", patient.age)
+#                 patient.height = data.get("height", patient.height)
+#                 patient.weight = data.get("weight", patient.weight)
+#                 patient.dob = data.get("dob", patient.dob)
+#                 patient.save()  # Save changes
+
+#             return JsonResponse({"status": "success", "message": "patient details updated successfully!"})
+#         except json.JSONDecodeError:
+#             return JsonResponse({"status": "error", "message": "Invalid JSON format"})
+#         except Exception as e:
+#             return JsonResponse({"status": "error", "message": str(e)})
+
+#     return JsonResponse({"status": "error", "message": "Invalid request method"})
+
+
+@csrf_exempt
 def update_patient(request):
     if request.method == "POST":
         try:
-            data = json.loads(request.body.decode('utf-8'))  # Ensure JSON decoding
-
-            # Use session ID as a fallback
-            patient_id = data.get("patient_id", request.session.get('patient_id'))
+            patient_id = request.POST.get("patient_id")
             if not patient_id:
-                return JsonResponse({"status": "error", "message": "patient ID is required"})
+                return JsonResponse({"status": "error", "message": "Patient ID is required"})
 
             patient = get_object_or_404(patientRegister, id=patient_id)
 
             # Update fields
-            patient.name = data.get("name", patient.name)
-            patient.email = data.get("email", patient.email)
-            patient.phno = data.get("phno", patient.phno)
-            patient.password=data.get("password",patient.password)
-            patient.address = data.get("address", patient.address)
-            patient.city = data.get("city", patient.city)
-            patient.state = data.get("state", patient.state)
-            patient.blood_group = data.get("blood_group", patient.blood_group)
-            patient.age = data.get("age", patient.age)
-            patient.height = data.get("height", patient.height)
-            patient.weight = data.get("weight", patient.weight)
-            patient.dob = data.get("dob", patient.dob)
+            patient.name = request.POST.get("name", patient.name)
+            patient.email = request.POST.get("email", patient.email)
+            patient.phno = request.POST.get("phno", patient.phno)
+            patient.address = request.POST.get("address", patient.address)
+            patient.city = request.POST.get("city", patient.city)
+            patient.state = request.POST.get("state", patient.state)
+            patient.blood_group = request.POST.get("blood_group", patient.blood_group)
+            patient.age = request.POST.get("age", patient.age)
+            patient.height = request.POST.get("height", patient.height)
+            patient.weight = request.POST.get("weight", patient.weight)
+            patient.dob = request.POST.get("dob", patient.dob)
 
+            # Handle profile image
+            if 'photo' in request.FILES:
+                # Delete old profile image if it exists
+                if patient.photo and os.path.exists(patient.photo.path):
+                    os.remove(patient.photo.path)
+
+                # Save new profile image
+                photo = request.FILES['photo']
+                photo_path = f"profile_pic/{patient_id}_{photo.name}"
+                patient.photo = default_storage.save(photo_path, ContentFile(photo.read()))
 
             patient.save()  # Save changes
 
-            return JsonResponse({"status": "success", "message": "patient details updated successfully!"})
-        except json.JSONDecodeError:
-            return JsonResponse({"status": "error", "message": "Invalid JSON format"})
+            return JsonResponse({"status": "success", "message": "Patient details updated successfully!", "photo_url": patient.photo.url if patient.photo else None})
         except Exception as e:
             return JsonResponse({"status": "error", "message": str(e)})
 
     return JsonResponse({"status": "error", "message": "Invalid request method"})
 
 
-@ensure_csrf_cookie  # Ensures CSRF token is sent as a cookie
+@csrf_exempt  # Only for testing, in production use CSRF token properly
+def upload_patient_profile_image(request):
+    if request.method == "POST":
+        patient_id = request.POST.get("patient_id")
+        image = request.FILES.get("photo")  # Get uploaded file
+
+        if not patient_id or not image:
+            return JsonResponse({"status": "error", "message": "Missing patient ID or image"})
+
+        try:
+            patient = patientRegister.objects.get(id=patient_id)
+
+            # Define the path where the image will be saved
+            file_path = f"profile_pic/{patient_id}_{image.name}"  # Save in "media/profile_pic/"
+            
+            # Delete old profile image if it exists
+            if patient.profile_img and os.path.exists(os.path.join("media", str(patient.profile_img))):
+                os.remove(os.path.join("media", str(patient.profile_img)))
+
+            # Save the new image
+            saved_path = default_storage.save(file_path, ContentFile(image.read()))
+
+            # Update the database with the new image path
+            patient.profile_img = saved_path
+            patient.save()
+
+            return JsonResponse({"status": "success", "photo_url": patient.profile_img.url})
+        
+        except patientRegister.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "Patient not found"})
+
+    return JsonResponse({"status": "error", "message": "Invalid request"})
+
+
+@ensure_csrf_cookie  # Ensures CSRF token is sent as a cookie  
 def get_patient(request, patient_id):
     patient = get_object_or_404(patientRegister, id=patient_id)
+
+    # Construct the full photo URL if the patient has an image
+    photo_url = request.build_absolute_uri(settings.MEDIA_URL + patient.photo.name) if patient.photo else None
     return JsonResponse({
         "id": patient.id,
         "name": patient.name,
@@ -799,35 +1005,9 @@ def get_patient(request, patient_id):
         "height": patient.height,
         "weight": patient.weight,
         "dob": patient.dob,
+        "photo": photo_url,  
         "csrfToken": get_token(request)  # Send CSRF token in response
     })
-
-
-def admin_login(request):
-    email = None
-    username = None
-    password = None
-
-    if request.method == 'POST':
-       
-            email = request.POST.get('email')
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            
-            try:
-                admin = adminLogin.objects.get(email=email, username=username, password=password)
-                request.session['admin_id'] = admin.id  # Store admin session
-                return redirect('admin_dashboard')  # Ensure this URL name matches your routes
-            except adminLogin.DoesNotExist:
-                 messages.error(request, "Invalid email, username, or password.")  # ✅ Fix applied
-                 
-  
-
-            if password == admin.password:
-                 return redirect("admin_dashboard")
-            else:
-                return render(request, "admin_login.html")
-    return render(request, 'admin_login.html')
 
 def admin_profile_settings(request):
     return render(request, 'admin-profile-settings.html')
@@ -851,8 +1031,7 @@ def admin_manage_appointments(request):
 def admin_logout(request):
     request.session.flush()  # Clears all session data (logs out admin)
     return redirect('/') 
- # Redirects to home page after logout ✅
-
+ # Redirects to home page after logout 
 def admin_change_password(request):
     admin_id = request.session.get('admin_id')  # Get logged-in admin ID
     if not admin_id:
@@ -879,14 +1058,16 @@ def admin_change_password(request):
 
     return render(request, "admin-change-password.html", {"admin": admin, "form": form})
 
+
+
+
 def admin_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
-        username = request.POST.get('username')
         password = request.POST.get('password')
 
         try:
-            admin = adminLogin.objects.get(email=email, username=username)
+            admin = adminLogin.objects.get(email=email)
 
             # Check if the entered password matches the stored hashed password
             if check_password(password, admin.password):
@@ -896,6 +1077,6 @@ def admin_login(request):
                 messages.error(request, "Invalid password.")
         
         except adminLogin.DoesNotExist:
-            messages.error(request, "Invalid email or username.")  
+            messages.error(request,"Invalid email or username.")  
 
     return render(request, 'admin_login.html')  # Return the login page with error messages if any

@@ -19,14 +19,26 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 
   <script>
-    function previewImage(event) {
+    //function previewImage(event) {
+      //var reader = new FileReader();
+      //reader.onload = function () {
+       // var previewImg = document.getElementById('preview-img');
+       // previewImg.src = reader.result;
+      //}
+      //reader.readAsDataURL(event.target.files[0]);
+    //}
+
+
+    function handleImageUpload(event) {
+      var file = event.target.files[0]; // Get selected file
+      if (!file) return; // Exit if no file is chosen
+  
       var reader = new FileReader();
       reader.onload = function () {
-        var previewImg = document.getElementById('preview-img');
-        previewImg.src = reader.result;
-      }
-      reader.readAsDataURL(event.target.files[0]);
-    }
+          $(".profile-img img").attr("src", reader.result); // Update profile image src
+      };
+      reader.readAsDataURL(file);
+  }
   </script>
 
 </head>
@@ -273,8 +285,11 @@
                                   </svg><!-- <i class="fa fa-upload"></i> Font Awesome fontawesome.com -->
                                   Upload Photo
                                 </span>
-                                <input type="file" id="photo" name="photo" accept="image/*" class="upload"
-                                  onchange="previewImage(event)">
+                                {% comment %} <input type="file" id="photo" name="photo" accept="image/*" class="upload"
+                                  onchange="previewImage(event)"> {% endcomment %}
+
+                                  <input type="file" id="photo" name="photo" accept="image/*" class="upload"
+                               onchange="handleImageUpload(event)"> 
                               </div>
                               <small class="form-text text-muted">Allowed JPG or PNG. Max size of 2MB</small>
                             </div>
@@ -388,6 +403,8 @@
           <div id="responseMessage"></div>
 
           <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
           <script>
               $(document).ready(function () {
                   let doctorId = $("#doctor_id").val();
@@ -412,9 +429,56 @@
                               $("#gender").val(data.gender);
                               $("#mci_no").val(data.mci_no);
                               $("#fee").val(data.fee);
+
+                               // Display profile image
+                              if (data.photo) {
+                                $(".profile-img img").attr("src", data.photo);
+                            } else {
+                                $(".profile-img img").attr("src", "/static/assets/img/default_profile.png"); // Default image
+                            }
                           }
                       });
                   }
+
+
+
+                  $("#photo").change(function (event) {
+                    var file = event.target.files[0]; // Get selected file
+                    if (!file) return;
+            
+                    var reader = new FileReader();
+                    reader.onload = function () {
+                        $(".profile-img img").attr("src", reader.result); // Preview image
+                    };
+                    reader.readAsDataURL(file);
+            
+                    // Upload Image to Server
+                    var formData = new FormData();
+                    formData.append("photo", file);
+                    formData.append("doctor_id", doctorId);
+      
+                    $.ajax({
+                      type: "POST",
+                      url: "/upload-doctor-profile/",  // Django endpoint to handle image upload
+                      data: formData,
+                      contentType: false,
+                      processData: false,
+                      headers: {
+                          "X-CSRFToken": "{{ csrf_token }}"
+                      },
+                      success: function (response) {
+                          if (response.status === "success") {
+                              alert("Profile image updated successfully!");
+                              loadPatientDetails(); // Reload patient details to update the image
+                          } else {
+                              alert("Error: " + response.message);
+                          }
+                      },
+                      error: function () {
+                          alert("Failed to upload image.");
+                      }
+                  });
+              });
           
                   // Submit Form via AJAX (JSON Request)
                   $("#updateDoctorForm").submit(function (e) {

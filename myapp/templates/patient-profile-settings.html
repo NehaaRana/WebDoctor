@@ -19,15 +19,54 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 
   <script>
-    function previewImage(event) {
+    //function previewImage(event) {
+     // var reader = new FileReader();
+     // reader.onload = function () {
+      //  var previewImg = document.getElementById('preview-img');
+      //  previewImg.src = reader.result;
+      //}
+     // reader.readAsDataURL(event.target.files[0]);
+  //  }
+
+    function handleImageUpload(event) {
+      var file = event.target.files[0]; // Get selected file
+      if (!file) return; // Exit if no file is chosen
+  
       var reader = new FileReader();
       reader.onload = function () {
-        var previewImg = document.getElementById('preview-img');
-        previewImg.src = reader.result;
-      }
-      reader.readAsDataURL(event.target.files[0]);
-    }
-  </script>
+          $(".profile-img img").attr("src", reader.result); // Update profile image src
+      };
+      reader.readAsDataURL(file);
+  }
+  </script> 
+
+  {% comment %} <script>
+  document.getElementById("updatePatientForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+    
+    let formData = new FormData();
+    let fileInput = document.getElementById("photo").files[0];
+
+    formData.append("photo", fileInput);
+    formData.append("patient_id", "PATIENT_ID_HERE"); // Replace with actual patient ID
+    formData.append("name", "Updated Name"); // Replace with actual updated details
+
+    fetch("/update_patient/", {
+        method: "POST",
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            alert("Patient details updated successfully!");
+        } else {
+            alert("Error: " + data.message);
+        }
+    })
+    .catch(error => console.error("Error:", error));
+});
+
+</script> {% endcomment %}
 
 </head>
 
@@ -94,7 +133,7 @@
           {% if patient.profile_img %}
           <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
           {% else %}
-            <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
+            <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
           {% endif %}
           
     </span>
@@ -107,7 +146,7 @@
           {% if patient.profile_img %}
           <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
           {% else %}
-            <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
+            <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
           {% endif %}
 
         </div>
@@ -144,7 +183,7 @@
                       {% if patient.profile_img %}
     <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
     {% else %}
-      <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
+      <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
     {% endif %}
                     </a>
                     <div class="profile-det-info">
@@ -198,17 +237,17 @@
           <div class="col-md-7 col-lg-8 col-xl-9">
             <div class="card">
               <div class="card-body">
-                <form method="POST" action="{% url 'patient_profile_settings' %}" id="updatePatientForm" enctype="multipart/form-data">
+                <form method="POST" id="updatePatientForm" action="{% url 'patient_profile_settings' %}" id="updatePatientForm" enctype="multipart/form-data">
                   {% csrf_token %}
                   <div class="row form-row">
                     <div class="col-md-12">
                       <div class="form-group">
                         <div class="change-avatar">
                           <div class="profile-img">
-                            {% if doctor.profile_img %}
-                            <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
+                            {% if patient.profile_img %}
+                            <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
                             {% else %}
-                              <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
+                              <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
                             {% endif %}
                           </div>
                           <div class="upload-img">
@@ -217,8 +256,10 @@
                                 <i class="fa fa-upload"></i>
                                 Upload Photo
                               </span>
-                              <input type="file" id="photo" name="photo" accept="image/*" class="upload"
-                                onchange="previewImage(event)">
+                
+                               <input type="file" id="photo" name="photo" accept="image/*" class="upload"
+                               onchange="handleImageUpload(event)"> 
+                                
                             </div>
                             <small class="form-text text-muted">Allowed JPG or PNG. Max size of 2MB</small>
                           </div>
@@ -320,7 +361,8 @@
       </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
+
+     <script>
         $(document).ready(function () {
             let patientId = $("#patient_id").val();
     
@@ -341,10 +383,57 @@
                         $("#height").val(data.height);
                         $("#weight").val(data.weight);
                         $("#dob").val(data.dob);
+
+                        // Display profile image
+                     
+                        if (data.photo) {
+                          $(".profile-img img").attr("src", data.photo);
+                      } else {
+                          $(".profile-img img").attr("src", "/static/assets/img/default_profile.png"); // Default image
+                      }
                     }
+
                 });
             }
-    
+            
+            $("#photo").change(function (event) {
+              var file = event.target.files[0]; // Get selected file
+              if (!file) return;
+      
+              var reader = new FileReader();
+              reader.onload = function () {
+                  $(".profile-img img").attr("src", reader.result); // Preview image
+              };
+              reader.readAsDataURL(file);
+      
+              // Upload Image to Server
+              var formData = new FormData();
+              formData.append("photo", file);
+              formData.append("patient_id", patientId);
+
+              $.ajax({
+                type: "POST",
+                url: "/upload-patient-profile/",  // Django endpoint to handle image upload
+                data: formData,
+                contentType: false,
+                processData: false,
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                success: function (response) {
+                    if (response.status === "success") {
+                        alert("Profile image updated successfully!");
+                        loadPatientDetails(); // Reload patient details to update the image
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("Failed to upload image.");
+                }
+            });
+        });
+      
             // Submit Form via AJAX (JSON Request)
             $("#updatePatientForm").submit(function (e) {
                 e.preventDefault();
@@ -369,6 +458,8 @@
                     url: "/update-patient/",  
                     data: JSON.stringify(formData),
                     contentType: "application/json",
+                    //contentType: false,
+                    //processData: false,
                     headers: {
                         "X-CSRFToken": "{{ csrf_token }}"
                     },
@@ -379,7 +470,10 @@
                         } else {
                             $("#responseMessage").html("<p style='color:red;'>Error: " + response.message + "</p>");
                         }
-                    }
+                    },
+                    error: function () {
+                      $("#responseMessage").html("<p style='color:red;'>An error occurred while updating the profile.</p>");
+                  }
                 });
             });
     
@@ -387,6 +481,139 @@
         });
     </script>
 
+
+    {% comment %} <script>
+
+      $(document).ready(function () {
+        let patientId = $("#patient_id").val();
+    
+        // Load Patient Details
+        function loadPatientDetails() {
+            $.ajax({
+                url: `/get-patient/${patientId}/`,
+                type: "GET",
+                success: function (data) {
+                    $("#name").val(data.name);
+                    $("#email").val(data.email);
+                    $("#phno").val(data.phno);
+                    $("#address").val(data.address);
+                    $("#city").val(data.city);
+                    $("#state").val(data.state);
+                    $("#blood_group").val(data.blood_group);
+                    $("#age").val(data.age);
+                    $("#height").val(data.height);
+                    $("#weight").val(data.weight);
+                    $("#dob").val(data.dob);
+    
+                    // Display profile image
+                    if (data.photo) {
+                        $(".profile-img img").attr("src", data.photo);
+                    } else {
+                        $(".profile-img img").attr("src", "/static/assets/img/default_profile.png"); // Default image
+                    }
+                }
+            });
+        }
+    
+        // Submit Form via AJAX (FormData Request)
+        $("#updatePatientForm").submit(function (e) {
+            e.preventDefault();
+    
+            let formData = new FormData(this);
+            formData.append("patient_id", patientId);
+    
+            $.ajax({
+                type: "POST",
+                url: "/update-patient/",
+                data: formData,
+                contentType: false,
+                processData: false,
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                success: function (response) {
+                    if (response.status === "success") {
+                        $("#responseMessage").html("<p style='color:green;'>Updated successfully!</p>");
+                        loadPatientDetails();
+                    } else {
+                        $("#responseMessage").html("<p style='color:red;'>Error: " + response.message + "</p>");
+                    }
+                },
+                error: function () {
+                    $("#responseMessage").html("<p style='color:red;'>An error occurred while updating the profile.</p>");
+                }
+            });
+        });
+    
+        loadPatientDetails(); // Load patient details on page load
+    });
+    
+    </script> {% endcomment %}
+{% comment %} 
+    <script>
+
+      $(document).ready(function () {
+        let patientId = $("#patient_id").val();
+    
+        // Load Patient Details
+        function loadPatientDetails() {
+            $.ajax({
+                url: `/get-patient/${patientId}/`,
+                type: "GET",
+                success: function (data) {
+                    $("#name").val(data.name);
+                    $("#email").val(data.email);
+                    $("#phno").val(data.phno);
+                    $("#address").val(data.address);
+                    $("#city").val(data.city);
+                    $("#state").val(data.state);
+                    $("#blood_group").val(data.blood_group);
+                    $("#age").val(data.age);
+                    $("#height").val(data.height);
+                    $("#weight").val(data.weight);
+                    $("#dob").val(data.dob);
+    
+                    // Display profile picture if available
+                    if (data.photo) {
+                        $("#profilePicPreview").attr("src", data.photo);
+                    }
+                }
+            });
+        }
+    
+        // Submit Form via AJAX (FormData for Image Upload)
+        $("#updatePatientForm").submit(function (e) {
+            e.preventDefault();
+            
+            let formData = new FormData(this); // Create FormData object
+            formData.append("patient_id", patientId);
+    
+            $.ajax({
+                type: "POST",
+                url: "/update-patient/",  
+                data: formData,
+                contentType: false,  // Important for file upload
+                processData: false,  // Prevent jQuery from converting FormData
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                success: function (response) {
+                    if (response.status === "success") {
+                        $("#responseMessage").html("<p style='color:green;'>Updated successfully!</p>");
+                        if (response.photo_url) {
+                            $("#profilePicPreview").attr("src", response.photo_url); // Update profile picture
+                        }
+                    } else {
+                        $("#responseMessage").html("<p style='color:red;'>Error: " + response.message + "</p>");
+                    }
+                }
+            });
+        });
+    
+        loadPatientDetails(); // Load patient details on page load
+    });
+    
+    </script> {% endcomment %}
 
 
     {% include "footer.html" %}
