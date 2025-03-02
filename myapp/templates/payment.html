@@ -241,6 +241,9 @@ Next <i class="feather-arrow-right-circle"></i>
 <p>
   <a href="{% url 'edit_appointment' doctor.id appointment.id %}" class="btn btn-warning">
     Edit {{ appointment.id }}
+</a>&nbsp;&nbsp;&nbsp;
+<a href="{% url 'cancel_appointment' appointment.id %}" class="btn btn-danger text-white">
+  Cancel
 </a>
 
  {% comment %} <a href="{% url 'edit_appointment' doctor_id=doctor.id appointment_id=appointment.id %}" class="btn btn-warning">

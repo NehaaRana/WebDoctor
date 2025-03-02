@@ -155,19 +155,19 @@ href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}"
 <div class="doc-info-left">
 <div class="doctor-img">
   {% if doctor.profile_img %}
-  <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
+  <img  src="{{ doctor.profile_img.url }}"  alt="profile" />
   {% else %}
-    <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
+    <img  src="/static/assets/default_profile.png"  alt="default profile" />
   {% endif %}
 
 </div>
 <div class="doc-info-cont">
-<h4 class="doc-name">Dr. {{ doctor.Name }}</h4>
-<p class="doc-speciality">{{ doctor.Qualification }} &amp; {{ doctor.Specialization }}</p>
+<h4 class="doc-name">Dr. {{ doctor.name }}</h4>
+<p class="doc-speciality">{{ doctor.qualification }} &amp; {{ doctor.specialization }}</p>
 <!-- <p class="doc-department"><img src="assets/img/specialities/specialities-05.png" class="img-fluid" alt="Speciality">Dentist</p> -->
 
 <div class="clinic-details">
-<p class="doc-location"><svg class="svg-inline--fa fa-map-marker-alt fa-w-12 active" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="map-marker-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg="" style="width: 16px; height: 16px;"><path fill="currentColor" d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path></svg><!-- <i class="fas fa-map-marker-alt"></i> Font Awesome fontawesome.com --> {{ doctor.Clinic_Address }}, {{ doctor.State }} - <a href="javascript:void(0); ">Get Directions</a></p>
+<p class="doc-location"><svg class="svg-inline--fa fa-map-marker-alt fa-w-12 active" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="map-marker-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg="" style="width: 16px; height: 16px;"><path fill="currentColor" d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path></svg><!-- <i class="fas fa-map-marker-alt"></i> Font Awesome fontawesome.com --> {{ doctor.clinic_address }}, {{ doctor.state }} - <a href="javascript:void(0); ">Get Directions</a></p>
 
 </div>
 
@@ -177,7 +177,7 @@ href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}"
 
 
 <div class="clinic-booking">
-  <a class="proceed-btn" href="{% url 'book_appointment' doctor_id=doctor.Doctor_ID %}">Book Appointment</a>
+  <a class="proceed-btn" href="{% url 'book_appointment' doctor_id=doctor.id%}">Book Appointment</a>
 
 </div>
 </div>
@@ -213,7 +213,7 @@ href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}"
 
 <div class="widget about-widget">
 <h4 class="widget-title">About Me</h4>
-<p>{{ doctor.About_Clinic }}</p>
+<p>{{ doctor.about_clinic }}</p>
 </div>
 </div>
 </div>
@@ -227,11 +227,12 @@ href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}"
 
 <div class="col-md-6">
 <div class="clinic-content">
-<h4 class="clinic-name"><a href="#">{{ doctor.Clinic_Name }}</a></h4>
-<p class="doc-speciality">+91 {{ doctor.Phone }}, {{ doctor.Email }}</p>
+<h4 class="clinic-name"><a href="#">{{ doctor.clinic_name }}</a></h4>
+<p class="doc-speciality">+91 {{ doctor.phno }} </p>
+<p class="doc-speciality">{{ doctor.email }}</p>
 
 <div class="clinic-details mb-0">
-<h5 class="clinic-direction"> <svg class="svg-inline--fa fa-map-marker-alt fa-w-12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="map-marker-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg="" style="width: 16px; height: 16px;"><path fill="currentColor" d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path></svg><!-- <i class="fas fa-map-marker-alt"></i> Font Awesome fontawesome.com --> {{ doctor.Clinic_Address }}, {{ doctor.Address_Line1 }}, {{ doctor.City }}, {{ doctor.State }} <br></h5>
+<h5 class="clinic-direction"> <svg class="svg-inline--fa fa-map-marker-alt fa-w-12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="map-marker-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg="" style="width: 16px; height: 16px;"><path fill="currentColor" d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path></svg><!-- <i class="fas fa-map-marker-alt"></i> Font Awesome fontawesome.com --> {{ doctor.clinic_address }}, {{ doctor.Address_Line1 }}, {{ doctor.city }}, {{ doctor.state }} <br></h5>
 
 </div>
 </div>
@@ -255,7 +256,7 @@ href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}"
 
 <div class="col-md-2">
 <div class="consult-price">
-₹{{ doctor_fee }}
+₹{{ doctor.fee }}
 </div>
 </div>
 </div>

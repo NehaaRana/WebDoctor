@@ -87,16 +87,14 @@ class doctorRegister(models.Model):
             return f"{self.name} | {self.gender} |{self.email} | {self.password} | {self.qualification} |{self.specialization} | {self.phno} | "
     
 class appointment(models.Model):
-    #  STATUS_CHOICE=[('Scheduled', 'Scheduled'), ('Completed', 'Completed'), ('Cancelled', 'Cancelled')]
-    #  STATUS_CHOICE=[('Scheduled', 'Scheduled'), ('Completed', 'Completed'), ('Cancelled', 'Cancelled')]
+     STATUS_CHOICE=[('Pending', 'Pending'), ('Confirm', 'Confirm'), ('Cancelled', 'Cancelled')]
      doctor_id=models.ForeignKey(doctorRegister,on_delete=models.CASCADE)
      patient_id=models.ForeignKey(patientRegister,on_delete=models.CASCADE)
      appointment_date = models.DateField() 
      appointment_time = models.TimeField()
-    #  status= models.CharField(max_length=20,choices=STATUS_CHOICE,default='Scheduled')
      reason = models.TextField(null=True)
      symptoms = models.CharField(max_length=255, blank=True, null=True)
-    #  status= models.CharField(max_length=20,choices=STATUS_CHOICE,default='Scheduled')
+     status = models.CharField(max_length=20, choices=STATUS_CHOICE, default='Pending') 
      reason = models.TextField(null=True)
      symptoms = models.CharField(max_length=255, blank=True, null=True)
      booking_date = models.DateField(default=now)

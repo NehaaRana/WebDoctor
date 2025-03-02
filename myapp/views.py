@@ -83,95 +83,6 @@ def contact_us(request):
 def register(request):
          return render(request, 'register.html')
 
-# def login(request):
-#     email = None
-#     password = None
-#     user_type = None
-#     user = None
-
-#     if request.method == "POST":
-#         email = request.POST.get("email")
-#         password = request.POST.get("password")
-#         user_type = request.POST.get("user_type")
-#         # patient=patientRegister.objects.get(email=email,password=password)
-
-#         # doctor = doctorRegister.objects.get(email=email, password=password)  
-#         user = None
-
-#         if user_type == "patient":
-#             try:
-#                 user = patientRegister.objects.get(email=email)
-#                 request.session['patient_id'] = user.id
-#             except patientRegister.DoesNotExist:
-#                 return render(request, "login.html", {"error": "Patient does not exist"})
-
-#         elif user_type == "doctor":
-#             try:
-#                 user = doctorRegister.objects.get(email=email)
-#                 request.session['doctor_id'] = user.id  # Store doctor ID in session
-#             except doctorRegister.DoesNotExist:
-#                 return render(request, "login.html", {"error": "Doctor does not exist"})
-
-#         else:
-#             return render(request, "login.html", {"error": "Invalid user type"})
-
-#         # **Manually check the password**
-#         if check_password(password, user.password):  # Securely verify password
-#             # Redirect based on user type
-#             if user_type == "patient":
-#                 return redirect("patient_dashboard")  # Update with actual patient dashboard URL
-#             elif user_type == "doctor":
-#                 return redirect("doctor_dashboard")  # Update with actual doctor dashboard URL
-
-#         return render(request, "login.html", {"error": "Invalid email or password"})
-
-#     return render(request, "login.html")
-
-
-# def login(request):
-#     email = None
-#     password = None
-#     user_type = None
-#     user = None
-
-#     if request.method == "POST":
-#         email = request.POST.get("email")
-#         password = request.POST.get("password")
-#         user_type = request.POST.get("user_type")
-#         # patient=patientRegister.objects.get(email=email,password=password)
-
-#         # doctor = doctorRegister.objects.get(email=email, password=password)  
-#         user = None
-
-#         if user_type == "patient":
-#             try:
-#                 user = patientRegister.objects.get(email=email)
-#                 request.session['patient_id'] = user.id
-#             except patientRegister.DoesNotExist:
-#                 return render(request, "login.html", {"error": "Patient does not exist"})
-
-#         elif user_type == "doctor":
-#             try:
-#                 user = doctorRegister.objects.get(email=email)
-#                 request.session['doctor_id'] = user.id  # Store doctor ID in session
-#             except doctorRegister.DoesNotExist:
-#                 return render(request, "login.html", {"error": "Doctor does not exist"})
-
-#         else:
-#             return render(request, "login.html", {"error": "Invalid user type"})
-
-#         # ✅ **Manually check the password**
-#         if check_password(password, user.password):  # Securely verify password
-#             # Redirect based on user type
-#             if user_type == "patient":
-#                 return redirect("patient_dashboard")  # Update with actual patient dashboard URL
-#             elif user_type == "doctor":
-#                 return redirect("doctor_dashboard")  # Update with actual doctor dashboard URL
-
-#         return render(request, "login.html", {"error": "Invalid email or password"})
-
-#     return render(request, "login.html")
-
 
 def login(request):
     if request.method == "POST":
@@ -295,7 +206,10 @@ def doctor_register(request):
         form = doctorForm(request.POST, request.FILES)
         if form.is_valid():
             doctor = form.save(commit=False)
-            doctor.password = make_password(doctor.password)  # 🔒 Hash the password before saving
+            doctor.password = make_password(doctor.password)  #
+            if doctor.fee is None:  # Ensure fee is not None
+                doctor.fee = 0
+            # Hash the password before saving
             doctor.save()
             return redirect('login')
             # doctor = form.save(commit=False)
@@ -354,8 +268,15 @@ def doctor_list(request):
     return render(request, "doctor-list.html",{"doctors": doctors})
 
 
-def doctor_profile(request):
-    return render(request, 'doctor-profile.html')
+def doctor_profile(request, doctor_id):
+    doctor = get_object_or_404(doctorRegister, id=doctor_id)  # Fetch doctor by ID
+    return render(request, 'doctor-profile.html', {'doctor': doctor})
+
+def doctor_profile_cancel_appointment(request, doctor_id):
+    doctor = get_object_or_404(doctorRegister, id=doctor_id)  # Fetch doctor by ID
+    return render(request, 'doctor-profile-cancel-appointment.html', {'doctor': doctor})
+
+
 
 def doctor_profile_settings(request):
     doctor_id = request.session.get('doctor_id')  # Get logged-in doctor ID
@@ -378,61 +299,6 @@ from datetime import datetime, date, time, timedelta
 from .models import  doctorRegister, patientRegister,appointment
 from .forms import appointmentForm
 
-# def book_appointment(request, doctor_id, appointment_id=None):
-#     doctor = get_object_or_404(doctorRegister, id=doctor_id)
-#     patient_id = request.session.get('patient_id')
-
-#     if not patient_id:
-#         return redirect('/login/')  
-
-#     patient = get_object_or_404(patientRegister, id=patient_id)
-
-#     # Initialize appointment object
-#     appointment_obj = None
-#     if appointment_id:
-#         print(f"Received appointment_id: {appointment_id}")
-#         appointment_obj = get_object_or_404(appointment, id=appointment_id, patient_id=patient, doctor_id=doctor)
-
-#     if request.method == "POST":
-#         print("Form submitted:", request.POST)  # Debugging
-#         form = appointmentForm(request.POST, instance=appointment_obj)
-
-#         if form.is_valid():
-#             appointment_obj = form.save(commit=False)
-#             appointment_obj.patient_id = patient
-#             appointment_obj.doctor_id = doctor
-#             appointment_obj.booking_date = now().date()
-
-#             # appointment_obj.full_clean()  #  Correct usage on instance
-#             appointment_obj.save()
-
-#             print(f"After saving: appointment_obj ID: {appointment_obj.id}")  
-#             return redirect("payment", appointment_id=appointment_obj.id, doctor_id=doctor.id)
-
-#         print("Form errors:", form.errors)  # Debugging
-
-#     else:
-#         print(f"Prefilling form with: {appointment_obj}")  # Check if an object is actually being used
-
-#         form = appointmentForm(instance=appointment_obj)  # Prefill form if editing
-
-#     # Generate available time slots (9 AM to 5 PM, every 30 minutes)
-#     start_time = time(9, 0)
-#     end_time = time(17, 0)
-#     time_slots = []
-    
-#     current_time = datetime.combine(date.today(), start_time)
-#     while current_time.time() < end_time:
-#         time_slots.append(current_time.strftime("%I:%M %p"))  # Format in 12-hour format with AM/PM
-#         current_time += timedelta(minutes=30)
-
-#     return render(request, 'booking.html', {
-#         "doctor": doctor, 
-#         "patient": patient,
-#         "form": form,
-#         "time_slots": time_slots,
-#         "appointment_data_list": appointment_obj
-#     })
 
 def book_appointment(request, doctor_id, appointment_id=None):
     doctor = get_object_or_404(doctorRegister, id=doctor_id)
@@ -489,6 +355,45 @@ def book_appointment(request, doctor_id, appointment_id=None):
         "appointment_data_list": appointment_obj
     })
 
+
+#for cancel appointment
+
+def cancel_appointment(request, appointment_id):
+    appointment_obj = get_object_or_404(appointment, id=appointment_id)
+
+    if appointment_obj.status == "Cancelled":
+        messages.warning(request, "This appointment is already cancelled.")
+    else:
+        appointment_obj.status = "Cancelled"
+        appointment_obj.save()
+        messages.success(request, "Appointment has been successfully cancelled.")
+
+    return redirect('patient_dashboard') # Redirect to doctor dashboard
+
+
+#update appointment status
+def update_appointment_status(request, appointment_id, status):
+    appointment_obj = get_object_or_404(appointment, id=appointment_id)
+
+    if status == "Confirm":
+        appointment_obj.status = "Confirm"
+        messages.success(request, "Appointment marked as Confirm.")
+         # Send Confirmation Email
+        subject = "Appointment Confirmed "
+        message = f"Dear {appointment_obj.patient_id.name},\n\nYour appointment with Dr. {appointment_obj.doctor_id.name} on {appointment_obj.appointment_date} at {appointment_obj.appointment_time} has been confirmed.\n\nThank you!"
+        send_mail(subject, message, settings.EMAIL_HOST_USER, [appointment_obj.patient_id.email])
+
+    elif status == "Cancelled":
+        appointment_obj.status = "Cancelled"
+        messages.warning(request, "Appointment has been Cancelled.")
+
+
+        subject = "Appointment Cancelled ❌"
+        message = f"Dear {appointment_obj.patient_id.name},\n\nWe regret to inform you that your appointment with Dr. {appointment_obj.doctor_id.name} on {appointment_obj.appointment_date} at {appointment_obj.appointment_time} has been cancelled.\n\nPlease contact the clinic for rescheduling."
+        send_mail(subject, message, settings.EMAIL_HOST_USER, [appointment_obj.patient_id.email])
+
+    appointment_obj.save()
+    return redirect('doctor_dashboard')  # Redirect to doctor's dashboard
 
 def payment_page(request, appointment_id, doctor_id):
     # Get appointment and doctor objects or return 404
@@ -692,47 +597,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.middleware.csrf import get_token
 
-# @csrf_exempt
-# def update_doctor(request):
-#     if request.method == "POST":
-#         try:
-#             data = json.loads(request.body.decode('utf-8'))  # Ensure JSON decoding
 
-#             # Use session ID as a fallback
-#             doctor_id = data.get("doctor_id", request.session.get('doctor_id'))
-#             if not doctor_id:
-#                 return JsonResponse({"status": "error", "message": "Doctor ID is required"})
-
-#             doctor = get_object_or_404(doctorRegister, id=doctor_id)
-
-#             # Update fields
-#             
-#             doctor.name = data.get("name", doctor.name)
-#             doctor.email = data.get("email", doctor.email)
-#             doctor.phno = data.get("phno", doctor.phno)
-#             doctor.qualification = data.get("qualification", doctor.qualification)
-#             doctor.specialization = data.get("specialization", doctor.specialization)
-#             doctor.experience = data.get("experience", doctor.experience)
-#             doctor.address = data.get("address", doctor.address)
-#             doctor.city = data.get("city", doctor.city)
-#             doctor.state = data.get("state", doctor.state)
-#             doctor.clinic_name = data.get("clinic_name", doctor.clinic_name)
-#             doctor.clinic_address = data.get("clinic_address", doctor.clinic_address)
-#             doctor.gender = data.get("gender", doctor.gender)
-#             doctor.mci_no = data.get("mci_no", doctor.mci_no)
-#             doctor.fee = data.get("fee", doctor.fee)
-
-
-#             doctor.save()  # Save changes
-
-#             return JsonResponse({"status": "success", "message": "Doctor details updated successfully!"})
-#         except json.JSONDecodeError:
-#             return JsonResponse({"status": "error", "message": "Invalid JSON format"})
-#         except Exception as e:
-#             return JsonResponse({"status": "error", "message": str(e)})
-
-#     return JsonResponse({"status": "error", "message": "Invalid request method"})
-
+@csrf_exempt
 def update_doctor(request):
     if request.method == "POST":
         try:
@@ -856,66 +722,6 @@ def get_doctor(request, doctor_id):
 
 
 ####################################update patient
-@csrf_exempt
-# def update_patient(request):
-#     if request.method == "POST":
-#         try:
-#             if request.FILES.get("photo"):
-#                 patient_id = request.POST.get("patient_id")
-#                 if not patient_id:
-#                     return JsonResponse({"status": "error", "message": "patient ID is required"})
-
-#                 patient = get_object_or_404(patientRegister, id=patient_id)
-
-#                 # Save Image
-#                 photo = request.FILES["photo"]
-#                 photo_path = f"profile_pics/{patient_id}_{photo.name}"
-#                 patient.photo = default_storage.save(photo_path, ContentFile(photo.read()))
-
-
-#                 patient.save()
-#                 return JsonResponse({"status": "success", "message": "Image updated successfully!", "photo_url": patient.photo.url})
-            
-#             else:
-#                 # Process JSON Data
-#                 data = json.loads(request.body.decode('utf-8'))  
-
-#                 # data = json.loads(request.body.decode('utf-8'))  # Ensure JSON decoding
-
-#             # Use session ID as fallback
-#                 patient_id = data.get("patient_id", request.session.get('patient_id'))
-#                 if not patient_id:
-#                     return JsonResponse({"status": "error", "message": "patient ID is required"})
-
-#                 patient = get_object_or_404(patientRegister, id=patient_id)
-#             # patient_id = request.POST.get("patient_id")
-#             # if not patient_id:
-#             #     return JsonResponse({"status": "error", "message": "patient ID is required"})
-
-#             # patient = get_object_or_404(patientRegister, id=patient_id)
-
-#             # Update fields
-#                 patient.name = data.get("name", patient.name)
-#                 patient.email = data.get("email", patient.email)
-#                 patient.phno = data.get("phno", patient.phno)
-#                 patient.password=data.get("password",patient.password)
-#                 patient.address = data.get("address", patient.address)
-#                 patient.city = data.get("city", patient.city)
-#                 patient.state = data.get("state", patient.state)
-#                 patient.blood_group = data.get("blood_group", patient.blood_group)
-#                 patient.age = data.get("age", patient.age)
-#                 patient.height = data.get("height", patient.height)
-#                 patient.weight = data.get("weight", patient.weight)
-#                 patient.dob = data.get("dob", patient.dob)
-#                 patient.save()  # Save changes
-
-#             return JsonResponse({"status": "success", "message": "patient details updated successfully!"})
-#         except json.JSONDecodeError:
-#             return JsonResponse({"status": "error", "message": "Invalid JSON format"})
-#         except Exception as e:
-#             return JsonResponse({"status": "error", "message": str(e)})
-
-#     return JsonResponse({"status": "error", "message": "Invalid request method"})
 
 
 @csrf_exempt
@@ -1137,6 +943,18 @@ def approve_doctor(request, doctor_id):
     return redirect('admin_dashboard')
 
 
+# def reject_doctor(request, doctor_id):
+#     # if not is_admin_logged_in(request):
+#     #     return redirect('admin_login')
+
+#     doctor = get_object_or_404(doctorRegister, id=doctor_id)
+#     doctor.is_approved = False
+#     doctor.save()
+#     # doctor.delete()
+
+#     messages.error(request, f"Doctor {doctor.name} has been rejected and removed.")
+#     return redirect('admin_dashboard')
+
 def reject_doctor(request, doctor_id):
     # if not is_admin_logged_in(request):
     #     return redirect('admin_login')
@@ -1145,6 +963,26 @@ def reject_doctor(request, doctor_id):
     doctor.is_approved = False
     doctor.save()
     # doctor.delete()
+
+    subject = 'Your Account Has Been Rejected!'
+    message = f'Hello {doctor.name}, your account has been Rejected. You can not now log in.'
+    recipient_email = doctor.email
+
+
+    try:
+        send_mail(
+            subject,
+            message,
+            'webdoctors123@gmail.com',  # Ensure this matches EMAIL_HOST_USER
+            [recipient_email],
+            fail_silently=False,
+        )
+        print(" Email sent successfully!")  # Debugging log
+    except BadHeaderError:
+        print(" Invalid email header!")
+    except Exception as e:
+        print(f" Email failed: {e}")
+
 
     messages.error(request, f"Doctor {doctor.name} has been rejected and removed.")
     return redirect('admin_dashboard')

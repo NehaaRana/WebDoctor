@@ -322,7 +322,8 @@
                                   <th>Reason</th>
                                   <th>Symptoms</th>
                                   <th class="text-center">Doctor Fee</th>
-                                  <th></th>
+                                  <th>Appointment Status</th>
+                                  <th>Action</th>
                                 </tr>
                               </thead>
 
@@ -352,7 +353,38 @@
                                   <td>{{appointment.reason }}</td>
                                   <td class="text-center">{{appointment.symptoms}}</td>
                                   <td>{{appointment.doctor_id.fee}}</td>
-                                  <td class="text-center">
+                                  {% comment %} <td>
+                                    
+                                    <a href="" class="btn btn-success">Confirm</a>
+                                    <a href="" class="btn btn-danger">Cancel</a>
+                                
+                            </td> {% endcomment %}
+                                 
+                            <td>
+                              {% if appointment.status == "Confirm" %}
+                                  <span class="text-success">Confirm</span>
+                              {% elif appointment.status == "Cancelled" %}
+                                  <span class="text-danger">Cancelled</span>
+                              {% else %}
+                                  <span class="text-warning">Pending</span>
+                              {% endif %}
+                          </td>
+
+
+                          <td>
+                            {% if appointment.status == "Pending" %}
+                                <a href="{% url 'update_appointment_status' appointment.id 'Confirm' %}" class="btn btn-success">
+                                    Confirm
+                                </a>
+                                <a href="{% url 'update_appointment_status' appointment.id 'Cancelled' %}" class="btn btn-danger">
+                                    Cancel
+                                </a>
+                            {% else %}
+                                <span class="text-muted">No Actions Available</span>
+                            {% endif %}
+                        </td>
+                          
+                            <td class="text-center">
                                     <a href="javascript:void(0);" class="btn btn-sm bg-info-light">
                                       <svg class="svg-inline--fa fa-eye fa-w-18" aria-hidden="true" focusable="false"
                                         data-prefix="far" data-icon="eye" role="img" xmlns="http://www.w3.org/2000/svg"
@@ -363,6 +395,7 @@
                                       </svg><!-- <i class="far fa-eye"></i> Font Awesome fontawesome.com --> View
                                     </a>
                                   </td>
+                                  
 
                                 </tr>
                                 {% endfor %}

@@ -26,10 +26,15 @@ urlpatterns =[
   path('doctor_profile/<int:doctor_id>/', views.doctor_profile, name='doctor_profile'),
   # path('book_appointment/<int:doctor_id>/<int:appointment_id>/', views.book_appointment, name='book_appointment'),
   path('doctor_profile/<int:doctor_id>/', views.doctor_profile, name='doctor_profile'),
+  path('doctor_profile_cancel_appointment/<int:doctor_id>/', views.doctor_profile_cancel_appointment, name='doctor_profile_cancel_appointment'),
+
   # path('book_appointment/<int:doctor_id>/<int:appointment_id>/', views.book_appointment, name='book_appointment'),
   path('doctor_profile_settings/', views.doctor_profile_settings, name='doctor_profile_settings'),
   path('book_appointment/<int:doctor_id>/', views.book_appointment, name='book_appointment'),
   path("book-appointment/<int:doctor_id>/<int:appointment_id>/", views.book_appointment, name="edit_appointment"),
+   path('cancel-appointment/<int:appointment_id>/', views.cancel_appointment, name='cancel_appointment'),
+    path('update-appointment/<int:appointment_id>/<str:status>/', views.update_appointment_status, name='update_appointment_status'),
+
 
   path("doctor_list/",views.doctor_list,name='doctor_list'),
   path('doctor_change_password/', views.doctor_change_password, name='doctor_change_password'),

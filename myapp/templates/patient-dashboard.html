@@ -89,7 +89,7 @@
           </li>
           
           <li>
-            <a href="{% url 'search' %}">Doctors</a>
+            <a href="{% url 'doctor_list' %}">Doctors</a>
           </li>
           
           <li>
@@ -406,6 +406,7 @@
                                   <th>Amount</th>
 
                                   <th>Status</th>
+                                  {% comment %} <th>Cancle Appointment</th> {% endcomment %}
                                   {% comment %} <th>Name</th> {% endcomment %}
                                 </tr>
                               </thead>
@@ -415,14 +416,9 @@
                                   <td>
                                     <h2 class="table-avatar">
                                       <a
-                                        href="{% url 'doctor_profile' doctor_id=appointment.doctor_id.id %}"
+                                        href="{% url 'doctor_profile_cancel_appointment' doctor_id=appointment.doctor_id.id %}"
                                         class="avatar avatar-sm me-2"
                                       >
-                                        {% comment %} <img
-                                          class="avatar-img rounded-circle"
-                                          src="{{ appointment.doctor_id.profile_img.url }}"
-                                          alt="User Image"
-                                        /> {% endcomment %}
 
                                         {% if appointment.doctor_id.profile_img %}
                                           <img class="rounded-circle" src="{{ appointment.doctor_id.profile_img.url }}" width="31" alt="profile" />
@@ -430,7 +426,7 @@
                                             <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
                                           {% endif %}
                                       </a>
-                                      <a href="{% url 'doctor_profile' doctor_id=appointment.doctor_id.id %}">
+                                      <a href="{% url 'doctor_profile_cancel_appointment' doctor_id=appointment.doctor_id.id %}">
                                         Dr. {{ appointment.doctor_id.name }}
                                         <span>{{ appointment.doctor_id.specialization }}</span>
                                       </a>
@@ -448,9 +444,12 @@
                                   <td>
                                     <span
                                       class="badge rounded-pill bg-success-light"
-                                      >Confirm</span
+                                      >{{appointment.status}}</span
                                     >
                                   </td>
+                                  {% comment %} <td>
+                                    <a class="btn btn-danger text-white" href="{% url 'cancel_appointment' appointment.id %}">cancel</a> 
+                                  </td> {% endcomment %}
                                   <td class="text-end">
                                     <div class="table-action">
                                       <a
