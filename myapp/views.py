@@ -388,7 +388,7 @@ def update_appointment_status(request, appointment_id, status):
         messages.warning(request, "Appointment has been Cancelled.")
 
 
-        subject = "Appointment Cancelled ❌"
+        subject = "Appointment Cancelled"
         message = f"Dear {appointment_obj.patient_id.name},\n\nWe regret to inform you that your appointment with Dr. {appointment_obj.doctor_id.name} on {appointment_obj.appointment_date} at {appointment_obj.appointment_time} has been cancelled.\n\nPlease contact the clinic for rescheduling."
         send_mail(subject, message, settings.EMAIL_HOST_USER, [appointment_obj.patient_id.email])
 
@@ -943,6 +943,7 @@ def approve_doctor(request, doctor_id):
     return redirect('admin_dashboard')
 
 
+
 # def reject_doctor(request, doctor_id):
 #     # if not is_admin_logged_in(request):
 #     #     return redirect('admin_login')
@@ -951,6 +952,26 @@ def approve_doctor(request, doctor_id):
 #     doctor.is_approved = False
 #     doctor.save()
 #     # doctor.delete()
+
+#     subject = 'Your Account Has Been Rejected!'
+#     message = f'Hello {doctor.name}, your account has been Rejected. You can not now log in.'
+#     recipient_email = doctor.email
+
+
+#     try:
+#         send_mail(
+#             subject,
+#             message,
+#             'webdoctors123@gmail.com',  # Ensure this matches EMAIL_HOST_USER
+#             [recipient_email],
+#             fail_silently=False,
+#         )
+#         print(" Email sent successfully!")  # Debugging log
+#     except BadHeaderError:
+#         print(" Invalid email header!")
+#     except Exception as e:
+#         print(f" Email failed: {e}")
+
 
 #     messages.error(request, f"Doctor {doctor.name} has been rejected and removed.")
 #     return redirect('admin_dashboard')
@@ -961,6 +982,7 @@ def reject_doctor(request, doctor_id):
 
     doctor = get_object_or_404(doctorRegister, id=doctor_id)
     doctor.is_approved = False
+    doctor.is_rejected = True
     doctor.save()
     # doctor.delete()
 

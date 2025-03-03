@@ -66,6 +66,7 @@ class doctorRegister(models.Model):
     mci_no = models.CharField(max_length=10,blank=True, null=True)
     fee = models.BigIntegerField(null=True)
     is_approved = models.BooleanField(default=False)
+    is_rejected = models.BooleanField(default=False)
 
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
