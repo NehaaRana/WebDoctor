@@ -180,9 +180,46 @@ href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}"
   <a class="proceed-btn" href="{% url 'book_appointment' doctor_id=doctor.id%}">Book Appointment</a>
 
 </div>
+
+
 </div>
 </div>
 </div>
+</div>
+
+<div class="container">
+  <h4 class="widget-title">Patient Reviews</h4>
+
+  {% if reviews %}
+      <div class="row">
+          {% for review in reviews %}
+              <div class="col-md-3 mb-4">
+                  <div class="card">
+                      <div class="card-body">
+                          <strong>{{ review.patient_id.name }}</strong>
+                          <p>Rating: 
+                              {% for star in "12345"|make_list %}
+                                  {% if forloop.counter <= review.rating %}
+                                      ⭐
+                                  {% else %}
+                                      ☆
+                                  {% endif %}
+                              {% endfor %}
+                          </p>
+                          <p>{{ review.review_text }}</p>
+                          <small class="text-muted">{{ review.review_date|date:"F d, Y" }}</small>
+                      </div>
+                  </div>
+              </div>
+
+              {% if forloop.counter|divisibleby:4 %}
+                  </div><div class="row">
+              {% endif %}
+          {% endfor %}
+      </div>
+  {% else %}
+      <p>No reviews yet.</p>
+  {% endif %}
 </div>
 
 

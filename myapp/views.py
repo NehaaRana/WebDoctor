@@ -274,7 +274,10 @@ def doctor_list(request):
 
 def doctor_profile(request, doctor_id):
     doctor = get_object_or_404(doctorRegister, id=doctor_id)  # Fetch doctor by ID
-    return render(request, 'doctor-profile.html', {'doctor': doctor})
+    reviews = review.objects.filter(doctor_id=doctor.id)
+
+
+    return render(request, 'doctor-profile.html', {'doctor': doctor,  'reviews': reviews })
 
 def doctor_profile_cancel_appointment(request, doctor_id):
     doctor = get_object_or_404(doctorRegister, id=doctor_id)  # Fetch doctor by ID
@@ -540,6 +543,12 @@ def payment_success(request):
             razorpay_payment_id = data.get("razorpay_payment_id")
             razorpay_signature = data.get("razorpay_signature")
             appointment_id = data.get("appointment_id")
+            amount_paid = data.get("amount")
+            if amount_paid is None:
+                return JsonResponse({"status": "error", "message": "Amount not provided"}, status=400)
+
+                # Convert amount_paid to a float if needed (and adjust if it is in paise)
+            amount_paid = float(amount_paid)
 
             if not (razorpay_order_id and razorpay_payment_id and razorpay_signature and appointment_id):
                 return JsonResponse({"status": "error", "message": "Missing required parameters"}, status=400)
@@ -566,7 +575,7 @@ def payment_success(request):
                         "razorpay_order_id": razorpay_order_id,
                         "razorpay_payment_id": razorpay_payment_id,
                         "razorpay_signature": razorpay_signature,
-                        "amount": 500.00,  # Replace with actual amount
+                        "amount": amount_paid,  # Replace with actual amount
                         "payment_status": "COMPLETED",
                         "payment_method": "Razorpay",
                         "payment_date": timezone.now(),
@@ -594,9 +603,41 @@ def payment_success(request):
 
     return JsonResponse({"status": "error", "message": "Invalid request method"}, status=400)
 
+# def payment_success_page(request, appointment_id, doctor_id):
+#     doctor = get_object_or_404(doctorRegister, id=doctor_id)
+#     appointment_obj = get_object_or_404(appointment, id=appointment_id)
+
+#     if request.method == "POST":
+#         rating = request.POST.get("rating")
+#         review_text = request.POST.get("review_text")
+
+#         if rating and review_text:
+#             review_obj = review.objects.create(
+#                 patient_id=appointment_obj.patient_id,
+#                 doctor_id=doctor,
+#                 appointment_id=appointment_obj,
+#                 rating=rating,
+#                 review_text=review_text,
+#                 review_date=timezone.now(),
+#             )
+#             return redirect(f"/doctor_profile/{doctor_id}/")  # Redirect after review submission
+
+#     # return render(request, "reviews.html", {"doctor": doctor, "appointment": appointment_obj})
+
+#     return render(request, "payment-success-page.html", {"doctor": doctor, "appointment": appointment_obj})  # Load success page template
+
 def payment_success_page(request, appointment_id, doctor_id):
     doctor = get_object_or_404(doctorRegister, id=doctor_id)
     appointment_obj = get_object_or_404(appointment, id=appointment_id)
+
+    # try:
+    #     payment = Payment.objects.get(appointment=appointment_obj)
+    # except Payment.DoesNotExist:
+    #     payment = None
+
+     # Fetch the payment record
+    payment = Payment.objects.filter(appointment_id=appointment_id).first()
+
 
     if request.method == "POST":
         rating = request.POST.get("rating")
@@ -615,9 +656,7 @@ def payment_success_page(request, appointment_id, doctor_id):
 
     # return render(request, "reviews.html", {"doctor": doctor, "appointment": appointment_obj})
 
-    return render(request, "payment-success-page.html", {"doctor": doctor, "appointment": appointment_obj})  # Load success page template
-
-
+    return render(request, "payment-success-page.html", {"doctor": doctor, "appointment": appointment_obj,"payment": payment })  # Load success page template
     
 
 def payment_details(request,appointment_id , doctor_id):
@@ -924,6 +963,8 @@ def get_doctor(request, doctor_id):
 #             return JsonResponse({"status": "error", "message": str(e)})
 
 #     return JsonResponse({"status": "error", "message": "Invalid request method"})
+
+
 
 
 
@@ -1276,3 +1317,58 @@ def reject_doctor(request, doctor_id):
 
     messages.error(request, f"Doctor {doctor.name} has been rejected and removed.")
     return redirect('admin_dashboard')
+
+from django.http import FileResponse
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter, inch
+
+def payment_pdf(request, payment_id):
+    # Fetch payment details from the database
+    try:
+        payment = Payment.objects.get(id=payment_id)
+    except Payment.DoesNotExist:
+        return HttpResponse("Payment not found", status=404)
+
+    # Create a bytestream buffer
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+
+    # Set the title of the bill
+    c.setFont("Helvetica-Bold", 16)
+    c.drawString(200, 750, "Payment Invoice")
+
+    # Draw a horizontal line
+    c.line(50, 740, 550, 740)
+
+    # Set font for body text
+    c.setFont("Helvetica", 12)
+
+    # Payment Details
+    text_lines = [
+        f"Invoice ID: {payment.id}",
+        f"Customer Name: {payment.patient_id.name}",
+        f"Payment Date: {payment.payment_date.strftime('%Y-%m-%d')}",
+        f"Amount Paid: ${payment.amount:.2f}",
+        f"Payment Method: {payment.payment_method}",
+    ]
+
+    # Starting position for text
+    y_position = 700
+    for line in text_lines:
+        c.drawString(100, y_position, line)
+        y_position -= 20  # Move to next line
+
+    # Footer
+    c.setFont("Helvetica-Oblique", 10)
+    c.drawString(200, 100, "Thank you for your payment!")
+
+    # Finalize the PDF
+    c.showPage()
+    c.save()
+
+    # Move buffer cursor to beginning
+    buf.seek(0)
+
+    # Return response with proper content type
+    return FileResponse(buf, as_attachment=True, filename=f"invoice_{payment.id}.pdf", content_type="application/pdf")

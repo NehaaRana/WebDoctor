@@ -79,7 +79,14 @@
     <p id="review-message" style="color: green; display: none;">Review submitted successfully!</p>
 
     <a href="/" class="home-link">Go to Home</a>
-
+    <button class="btn btn-success">
+        {% if payment.id %}
+        <a href="{% url 'payment_pdf' payment.id %}" class="btn btn-success">Download Invoice</a>
+      {% else %}
+        <p>No payment record found.</p>
+      {% endif %}
+      
+      </button>
 
     <script>
         document.getElementById("review-form").addEventListener("submit", function(event) {

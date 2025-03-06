@@ -262,6 +262,9 @@ Next <i class="feather-arrow-right-circle"></i>
 <li>Booking Fee: <span>₹{{ doctor_fee }}</span></li>
 <li>GST: <span>₹{{ tax_amount }}</span></li>
 <li><span class="total-amount"></span>Total <span>₹{{ total_amount }}</span></li>
+<form id="payment-form" method="POST" action="/payment_success/">
+  <input type="hidden" name="amount" value="{{ total_amount }}">
+  </form>
 </ul>
 <!-- <button class="btn btn-success"  id="rzp-button1">Pay</button><script src="https://checkout.razorpay.com/v1/checkout.js"></script> -->
 
@@ -293,11 +296,12 @@ var options = {
                 "X-CSRFToken": getCookie("csrftoken") // Ensure CSRF token is included
             },
             body: JSON.stringify({
-          razorpay_order_id: response.razorpay_order_id,
-    razorpay_payment_id: response.razorpay_payment_id,
-    razorpay_signature: response.razorpay_signature,
-    appointment_id: "{{ appointment.id }}"  // Ensure this is passed
-})
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              appointment_id: "{{ appointment.id }}", // Ensure this is passed
+              amount: "{{ total_amount }}"  // Use the correct key "amount"
+          })
         })
         .then(res => res.json())
 .then(data => {

@@ -73,4 +73,5 @@ urlpatterns =[
   path('payment_details/<int:appointment_id>/<int:doctor_id>/', views.payment_details, name='payment_details'),
   path('payment_success/', views.payment_success, name='payment_success'),
   path("payment_success_page/<int:appointment_id>/<int:doctor_id>/", views.payment_success_page, name="payment_success_page"),
+  path('payment_pdf/<int:payment_id>/', views.payment_pdf, name='payment_pdf'),
 ]
