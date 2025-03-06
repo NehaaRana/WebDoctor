@@ -157,7 +157,7 @@
                   <a class="close font-weight-normal initialism" data-dismiss="alert" href="#"><samp>×</samp></a> 
                   CVV code is required.
               </div>
-              <form class="form" action="{% url 'payment_details' appointment.id doctor.id %}"  autocomplete="off">
+              <form class="form" action="{% url 'payment_details' %}"  autocomplete="off">
                    {% csrf_token %}
                   <div class="form-group">
                       <label for="cc_name">Card Holder's Name</label>

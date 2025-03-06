@@ -52,7 +52,7 @@ urlpatterns =[
       path('upload-doctor-profile/', views.upload_doctor_profile_image, name='upload_doctor_profile'),
     path('upload-patient-profile/', views.upload_patient_profile_image, name='upload_patient_profile'),
     path('get-patient/<int:patient_id>/',views.get_patient, name='get_patient'),
-  path('payment_details/<int:appointment_id>/<int:doctor_id>/', views.payment_details, name='payment_details'),
+  # path('payment_details/<int:appointment_id>/<int:doctor_id>/', views.payment_details, name='payment_details'),
 
   path('admin_login/',views.admin_login, name='admin_login'),
   path('admin_profile_settings/', views.admin_profile_settings, name='admin_profile_settings'),
@@ -71,4 +71,6 @@ urlpatterns =[
 
   path('payment/<int:appointment_id>/<int:doctor_id>/', views.payment_page, name='payment'),
   path('payment_details/<int:appointment_id>/<int:doctor_id>/', views.payment_details, name='payment_details'),
+  path('payment_success/', views.payment_success, name='payment_success'),
+  path("payment_success_page/<int:appointment_id>/<int:doctor_id>/", views.payment_success_page, name="payment_success_page"),
 ]

@@ -1,6 +1,7 @@
 # import datetime
 from datetime import time, timedelta
 import datetime
+from http import client
 from django.utils import timezone
 from pyexpat.errors import messages  # Correct way to use strptime
 from django.urls import reverse
@@ -12,7 +13,7 @@ from .forms import patientForm,doctorForm,passwordChangeForm
 from .forms import patientForm,doctorForm ,appointmentForm
 from .forms import adminForm 
 from .models import adminLogin # Assuming an admin model
-
+from django.contrib.auth.decorators import login_required
 # from .forms import doctorForm
 from .models import patientRegister,doctorRegister
 # #####################################
@@ -24,8 +25,11 @@ from django.core.files.base import ContentFile
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 import json
-from .models import appointment,Payment
+from .models import appointment,Payment,review
 import os
+
+# import razorpay
+from webDoctor.settings import RAZORPAY_API_KEY,RAZORPAY_API_SECRETE_KEY
 # Create your views here.
 # from django.shortcuts import render
 
@@ -395,62 +399,223 @@ def update_appointment_status(request, appointment_id, status):
     appointment_obj.save()
     return redirect('doctor_dashboard')  # Redirect to doctor's dashboard
 
+# def payment_page(request, appointment_id, doctor_id):
+#     # Get appointment and doctor objects or return 404
+#     appointment_obj = get_object_or_404(appointment, id=appointment_id)
+#     doctor_obj = get_object_or_404(doctorRegister, id=doctor_id)
+
+#     # Convert doctor's fee to float, handling None values
+#     # doctor_fee = float(doctor_obj.fee) if doctor_obj.fee is not None else 0.0
+#     try:
+#         doctor_fee = float(doctor_obj.fee)  # Convert to float
+#     except ValueError:
+#         doctor_fee = 0.0  # Default to 0 if conversion fails
+#     GST = 0.18
+#     tax_amount = doctor_fee * GST
+#     total_amount = doctor_fee + tax_amount
+
+#     # Get or create a payment object
+#     payment_obj, created = Payment.objects.get_or_create(
+#         appointment_id=appointment_obj,  # Use the correct model field name
+#         doctor_id=doctor_obj,
+#         patient_id=appointment_obj.patient_id,  # Assuming a ForeignKey relationship
+#         defaults={
+#             'amount': total_amount,
+#             'payment_status': 'PENDING',
+#             'payment_method': '',
+#             'payment_date': now()
+#         }
+#     )
+
+#     if request.method == "POST":
+#         payment_method = request.POST.get("payment_method", "")
+
+#         # if payment_method:
+#         #     payment_obj.payment_method = payment_method
+#         #     payment_obj.payment_status = "COMPLETED"
+#         #     payment_obj.save()
+#         valid_methods = dict(Payment.METHOD_CHOICES).keys()
+#         if payment_method in valid_methods:
+#             payment_obj.payment_method = payment_method
+#             payment_obj.payment_status = "COMPLETED"
+#             payment_obj.save()
+
+#             return redirect("payment_details", appointment_id, doctor_id)
+
+#     return render(
+#         request,
+#         "payment.html",
+#         {
+#             "appointment": appointment_obj,  # Updated variable name
+#             "doctor": doctor_obj,
+#             "doctor_fee": doctor_fee,
+#             "tax_amount": tax_amount,
+#             "total_amount": total_amount,
+#             "payment_obj": payment_obj
+#         }
+#     )
+
+
+from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from django.conf import settings
+import json
+from .models import appointment,Payment
+import razorpay
+from django.conf import settings
+from django.shortcuts import render
+
+# Initialize Razorpay Client
+client = razorpay.Client(auth=(RAZORPAY_API_KEY, RAZORPAY_API_SECRETE_KEY))
+
+
 def payment_page(request, appointment_id, doctor_id):
     # Get appointment and doctor objects or return 404
     appointment_obj = get_object_or_404(appointment, id=appointment_id)
     doctor_obj = get_object_or_404(doctorRegister, id=doctor_id)
+    patient_obj = appointment_obj.patient_id  # Assuming ForeignKey to User/Patient model
 
-    # Convert doctor's fee to float, handling None values
-    # doctor_fee = float(doctor_obj.fee) if doctor_obj.fee is not None else 0.0
+    # Fetch user details
+    user_name = patient_obj.name
+    user_email = patient_obj.email
+    user_phno = patient_obj.phno
+
     try:
         doctor_fee = float(doctor_obj.fee)  # Convert to float
     except ValueError:
         doctor_fee = 0.0  # Default to 0 if conversion fails
-    GST = 0.18
+    GST = 0.18  
     tax_amount = doctor_fee * GST
     total_amount = doctor_fee + tax_amount
 
-    # Get or create a payment object
-    payment_obj, created = Payment.objects.get_or_create(
-        appointment_id=appointment_obj,  # Use the correct model field name
-        doctor_id=doctor_obj,
-        patient_id=appointment_obj.patient_id,  # Assuming a ForeignKey relationship
-        defaults={
-            'amount': total_amount,
-            'payment_status': 'PENDING',
-            'payment_method': '',
-            'payment_date': now()
+    DATA = {
+        "amount": int(total_amount * 100),  # Convert INR to paise
+        "currency": "INR",
+        "receipt": f"receipt_{appointment_id}",
+        "payment_capture": 0,  # Allow method selection
+        "notes": {
+            "doctor": doctor_obj.name,
+            "appointment_id": appointment_id
         }
-    )
+    }
+
+    # Create order
+    payment_order = client.order.create(DATA)
+    payment_order_id = payment_order['id']
+
+   
+
+    context = {
+        "appointment": appointment_obj,
+        "doctor": doctor_obj,
+        "doctor_fee": doctor_fee,
+        "tax_amount": tax_amount,
+        "total_amount": total_amount,
+        "api_key": RAZORPAY_API_KEY,
+        "order_id": payment_order_id,
+         "user_name": user_name,
+        "user_email": user_email,
+        "user_phno": user_phno
+    }
+
+    return render(request, "payment.html", context)
+
+
+
+from django.http import JsonResponse
+import hmac
+import hashlib
+import json
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def payment_success(request):
+    if request.method == "POST":
+        try:
+            data = request.POST if request.POST else json.loads(request.body)
+
+            razorpay_order_id = data.get("razorpay_order_id")
+            razorpay_payment_id = data.get("razorpay_payment_id")
+            razorpay_signature = data.get("razorpay_signature")
+            appointment_id = data.get("appointment_id")
+
+            if not (razorpay_order_id and razorpay_payment_id and razorpay_signature and appointment_id):
+                return JsonResponse({"status": "error", "message": "Missing required parameters"}, status=400)
+
+            # Convert appointment_id to an actual instance
+            try:
+                appointment_obj = appointment.objects.get(id=appointment_id)
+            except appointment.DoesNotExist:
+                return JsonResponse({"status": "error", "message": "Appointment not found"}, status=404)
+
+            # Verify Razorpay signature
+            key_secret = RAZORPAY_API_SECRETE_KEY.encode()
+            generated_signature = hmac.new(
+                key_secret,
+                f"{razorpay_order_id}|{razorpay_payment_id}".encode(),
+                hashlib.sha256
+            ).hexdigest()
+
+            if generated_signature.lower() == razorpay_signature.lower():
+                # ✅ Store payment details in database
+                payment_obj, created = Payment.objects.get_or_create(
+                    appointment_id=appointment_obj,  # Pass actual instance, not ID
+                    defaults={
+                        "razorpay_order_id": razorpay_order_id,
+                        "razorpay_payment_id": razorpay_payment_id,
+                        "razorpay_signature": razorpay_signature,
+                        "amount": 500.00,  # Replace with actual amount
+                        "payment_status": "COMPLETED",
+                        "payment_method": "Razorpay",
+                        "payment_date": timezone.now(),
+                        "doctor_id": appointment_obj.doctor_id,  # Use instance reference
+                        "patient_id": appointment_obj.patient_id  # Use instance reference
+                    }
+                )
+
+                # If payment already exists, update it
+                if not created:
+                    payment_obj.razorpay_order_id = razorpay_order_id
+                    payment_obj.razorpay_payment_id = razorpay_payment_id
+                    payment_obj.razorpay_signature = razorpay_signature
+                    payment_obj.payment_status = "COMPLETED"
+                    payment_obj.payment_method = "Razorpay"
+                    payment_obj.payment_date = timezone.now()
+                    payment_obj.save()
+
+                return JsonResponse({"status": "success", "appointment_id": appointment_id})
+
+            return JsonResponse({"status": "failure", "message": "Signature mismatch"}, status=400)
+
+        except json.JSONDecodeError:
+            return JsonResponse({"status": "error", "message": "Invalid JSON data"}, status=400)
+
+    return JsonResponse({"status": "error", "message": "Invalid request method"}, status=400)
+
+def payment_success_page(request, appointment_id, doctor_id):
+    doctor = get_object_or_404(doctorRegister, id=doctor_id)
+    appointment_obj = get_object_or_404(appointment, id=appointment_id)
 
     if request.method == "POST":
-        payment_method = request.POST.get("payment_method", "")
+        rating = request.POST.get("rating")
+        review_text = request.POST.get("review_text")
 
-        # if payment_method:
-        #     payment_obj.payment_method = payment_method
-        #     payment_obj.payment_status = "COMPLETED"
-        #     payment_obj.save()
-        valid_methods = dict(Payment.METHOD_CHOICES).keys()
-        if payment_method in valid_methods:
-            payment_obj.payment_method = payment_method
-            payment_obj.payment_status = "COMPLETED"
-            payment_obj.save()
+        if rating and review_text:
+            review_obj = review.objects.create(
+                patient_id=appointment_obj.patient_id,
+                doctor_id=doctor,
+                appointment_id=appointment_obj,
+                rating=rating,
+                review_text=review_text,
+                review_date=timezone.now(),
+            )
+            return redirect(f"/doctor_profile/{doctor_id}/")  # Redirect after review submission
 
-            return redirect("payment_details", appointment_id, doctor_id)
+    # return render(request, "reviews.html", {"doctor": doctor, "appointment": appointment_obj})
 
-    return render(
-        request,
-        "payment.html",
-        {
-            "appointment": appointment_obj,  # Updated variable name
-            "doctor": doctor_obj,
-            "doctor_fee": doctor_fee,
-            "tax_amount": tax_amount,
-            "total_amount": total_amount,
-            "payment_obj": payment_obj
-        }
-    )
-
+    return render(request, "payment-success-page.html", {"doctor": doctor, "appointment": appointment_obj})  # Load success page template
 
 
     
@@ -829,7 +994,15 @@ def get_patient(request, patient_id):
 
 
 def admin_profile_settings(request):
-    return render(request, 'admin-profile-settings.html')
+    admin_id=request.session.get('admin_id')
+    if not admin_id:
+        return redirect("login")
+    try:
+        admin=adminLogin.objects.get(id=admin_id)
+        print("Admin Found",admin.username)
+    except patientRegister.DoesNotExist:
+        return redirect("login")
+    return render(request, 'admin-profile-settings.html',{"admin":admin})
 
 
 def admin_change_password(request):

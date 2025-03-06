@@ -1,0 +1,131 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .success {
+            color: green;
+            font-size: 24px;
+        }
+        .home-link {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+/* Star Rating Styling */
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star {
+    font-size: 2rem;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.star:hover,
+.star-rating input:checked ~ label {
+    color: #f5c518;
+}
+
+    </style>
+</head>
+<body>
+    <h1 class="success">✅ Payment Successful!</h1>
+    <p>Thank you for your payment. Your transaction was completed successfully.</p>
+    <form method="POST">
+        {% csrf_token %}
+        
+        <label for="rating">Your Rating:</label>
+        <div class="star-rating">
+            <input type="radio" id="star5" name="rating" value="5" required>
+            <label for="star5" class="star">&#9733;</label>
+    
+            <input type="radio" id="star4" name="rating" value="4">
+            <label for="star4" class="star">&#9733;</label>
+    
+            <input type="radio" id="star3" name="rating" value="3">
+            <label for="star3" class="star">&#9733;</label>
+    
+            <input type="radio" id="star2" name="rating" value="2">
+            <label for="star2" class="star">&#9733;</label>
+    
+            <input type="radio" id="star1" name="rating" value="1">
+            <label for="star1" class="star">&#9733;</label>
+        </div>
+    
+        <label for="review_text">Your Review:</label>
+        <textarea name="review_text" required></textarea>
+    
+        <button type="submit">Submit Review</button>
+    </form>
+    <p id="review-message" style="color: green; display: none;">Review submitted successfully!</p>
+
+    <a href="/" class="home-link">Go to Home</a>
+
+
+    <script>
+        document.getElementById("review-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let rating = document.getElementById("rating").value;
+            let reviewText = document.getElementById("review-text").value;
+            
+            fetch("/submit_review/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCookie("csrftoken") 
+                },
+                body: JSON.stringify({
+                    doctor_id: "{{ doctor.id }}",
+                    patient_id: "{{ patient.id }}",
+                    appointment_id: "{{ appointment.id }}",
+                    rating: rating,
+                    review_text: reviewText
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    document.getElementById("review-message").style.display = "block";
+                    document.getElementById("review-form").reset();
+                } else {
+                    alert("Failed to submit review.");
+                }
+            });
+        });
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+                let cookies = document.cookie.split(";");
+                for (let i = 0; i < cookies.length; i++) {
+                    let cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>

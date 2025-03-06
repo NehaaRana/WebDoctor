@@ -274,6 +274,7 @@
                                                                          <th>Appointment Time</th>
                                                                          <th>Reason</th>
                                                                          <th>Symptoms</th>
+                                                                         <th>Status</th>
                                                                          <th>Action</th>
                                                                      </tr>
                                                                  </thead>
@@ -281,12 +282,13 @@
                                                                      {% for appointment in all %}
                                                                      <tr>
                                                                          <td>{{ appointment.appointment_id }}</td>
-                                                                         <td>{{ appointment.doctor_id_name }}</td>
-                                                                         <td>{{ appointment.patient_name }}</td>
+                                                                         <td>{{ appointment.doctor_id.name }}</td>
+                                                                         <td>{{ appointment.patient_id.name }}</td>
                                                                          <td>{{ appointment.appointment_date }}</td>
                                                                          <td>{{ appointment.appointment_time }}</td>
                                                                          <td>{{ appointment.reason }}</td>
                                                                          <td>{{ appointment.symptoms }}</td>
+                                                                         <td> {{ appointment.status }} </td>
                                                                          <td>
                                                                              <a class="btn btn-sm btn-primary">
                                                                                  <i class="fas fa-edit"></i> Edit

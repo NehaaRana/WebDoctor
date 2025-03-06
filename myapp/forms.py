@@ -1,5 +1,5 @@
 from django import forms
-from . models import patientRegister,doctorRegister,appointment,Payment
+from . models import patientRegister,doctorRegister,appointment,Payment,review
 from django.core.exceptions import ValidationError
 from datetime import datetime, time, timedelta
 from .models import adminLogin
@@ -80,6 +80,10 @@ class PaymentForm(forms.ModelForm):
         fields = ['amount', 'payment_status', 'payment_method']
 
 
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = review
+        fields = ["rating", "review_text"]
 
 class adminForm(forms.ModelForm):
     class Meta:

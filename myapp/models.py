@@ -116,29 +116,48 @@ class review(models.Model):
           return f"{self.rating} | {self.review_text} | {self.review_date} |"
 
 
+
+import uuid
+from django.db import models
+
 class Payment(models.Model):
 
-      STATUS_CHOICES = [
+    STATUS_CHOICES = [
         ('PENDING', 'Pending'),
         ('COMPLETED', 'Completed'),
         ('FAILED', 'Failed'),
     ]
 
-      METHOD_CHOICES = [
+    METHOD_CHOICES = [
         ('CARD', 'Debit/Credit Card'),
         ('BANK', 'Bank Transfer'),
         ('UPI', 'UPI'),
-      ]
-      patient_id=models.ForeignKey(patientRegister,on_delete=models.CASCADE)
-      doctor_id=models.ForeignKey(doctorRegister,on_delete=models.CASCADE)
-      appointment_id=models.ForeignKey(appointment,on_delete=models.CASCADE)
-      amount = models.DecimalField(max_digits=10, decimal_places=2)
-      payment_status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
-      payment_method = models.CharField(max_length=10, choices=METHOD_CHOICES, default='CARD')
-      payment_date = models.DateTimeField() 
+    ]
 
-      def __str__(self):
-          return f"{self.amount} | {self.payment_status} | {self.payment_method} | {self.payment_date} |"
+    patient_id = models.ForeignKey(patientRegister, on_delete=models.CASCADE)
+    doctor_id = models.ForeignKey(doctorRegister, on_delete=models.CASCADE)
+    appointment_id = models.ForeignKey(appointment, on_delete=models.CASCADE)
+
+    razorpay_order_id = models.CharField(max_length=255, blank=True, null=True, unique=True)
+    razorpay_payment_id = models.CharField(max_length=255, blank=True, null=True)
+    razorpay_signature = models.TextField(blank=True, null=True)
+
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
+    payment_method = models.CharField(max_length=10, choices=METHOD_CHOICES, default='CARD')
+    payment_date = models.DateTimeField(auto_now_add=True)  # Automatically sets the date
+
+    def save(self, *args, **kwargs):
+        if not self.razorpay_order_id:
+            # Ensure the generated ID is unique before assigning
+            unique_order_id = str(uuid.uuid4())
+            while Payment.objects.filter(razorpay_order_id=unique_order_id).exists():
+                unique_order_id = str(uuid.uuid4())  # Generate a new UUID if duplicate exists
+            self.razorpay_order_id = unique_order_id
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.amount} | {self.payment_status} | {self.payment_method} | {self.payment_date}"
 
 class adminLogin(models.Model):
     username = models.CharField(max_length=150, unique=True,default="null")

@@ -153,3 +153,9 @@ EMAIL_USE_TLS = True  # Use True for TLS, False for SSL
 EMAIL_HOST_USER = 'webdoctors123@gmail.com'
 EMAIL_HOST_PASSWORD = 'dpthlniwwnwqzsat'  # Use an App Password if using Gmail
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+
+#rajor pay seetings
+RAZORPAY_API_KEY='rzp_test_txaxh3PQ23SWLk'
+RAZORPAY_API_SECRETE_KEY='JqZ1CoVuvUycOmFl80Wg0gJg'
