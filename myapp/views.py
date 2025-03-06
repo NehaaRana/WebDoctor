@@ -795,12 +795,6 @@ def update_doctor(request):
                     return JsonResponse({"status": "error", "message": "patient ID is required"})
 
                 doctor = get_object_or_404(doctorRegister, id=doctor_id)
-            # patient_id = request.POST.get("patient_id")
-            # if not patient_id:
-            #     return JsonResponse({"status": "error", "message": "patient ID is required"})
-
-            # patient = get_object_or_404(patientRegister, id=patient_id)
-
             # Update fields
                 doctor.name = data.get("name", doctor.name)
                 doctor.email = data.get("email", doctor.email)
@@ -889,43 +883,101 @@ def get_doctor(request, doctor_id):
 ####################################update patient
 
 
+# @csrf_exempt
+# def update_patient(request):
+#     if request.method == "POST":
+#         try:
+#             patient_id = request.POST.get("patient_id")
+#             if not patient_id:
+#                 return JsonResponse({"status": "error", "message": "Patient ID is required"})
+
+#             patient = get_object_or_404(patientRegister, id=patient_id)
+
+#             # Update fields
+#             patient.name = request.POST.get("name", patient.name)
+#             patient.email = request.POST.get("email", patient.email)
+#             patient.phno = request.POST.get("phno", patient.phno)
+#             patient.address = request.POST.get("address", patient.address)
+#             patient.city = request.POST.get("city", patient.city)
+#             patient.state = request.POST.get("state", patient.state)
+#             patient.blood_group = request.POST.get("blood_group", patient.blood_group)
+#             patient.age = request.POST.get("age", patient.age)
+#             patient.height = request.POST.get("height", patient.height)
+#             patient.weight = request.POST.get("weight", patient.weight)
+#             patient.dob = request.POST.get("dob", patient.dob)
+
+#             # Handle profile image
+#             if 'photo' in request.FILES:
+#                 # Delete old profile image if it exists
+#                 if patient.photo and os.path.exists(patient.photo.path):
+#                     os.remove(patient.photo.path)
+
+#                 # Save new profile image
+#                 photo = request.FILES['photo']
+#                 photo_path = f"profile_pic/{patient_id}_{photo.name}"
+#                 patient.photo = default_storage.save(photo_path, ContentFile(photo.read()))
+
+#             patient.save()  # Save changes
+
+#             return JsonResponse({"status": "success", "message": "Patient details updated successfully!", "photo_url": patient.photo.url if patient.photo else None})
+#         except Exception as e:
+#             return JsonResponse({"status": "error", "message": str(e)})
+
+#     return JsonResponse({"status": "error", "message": "Invalid request method"})
+
+
+
 @csrf_exempt
 def update_patient(request):
     if request.method == "POST":
         try:
-            patient_id = request.POST.get("patient_id")
-            if not patient_id:
-                return JsonResponse({"status": "error", "message": "Patient ID is required"})
+            if request.FILES.get("photo"):
+                patient_id = request.POST.get("patient_id")
+                if not patient_id:
+                    return JsonResponse({"status": "error", "message": "Patient ID is required"})
 
-            patient = get_object_or_404(patientRegister, id=patient_id)
+                patient = get_object_or_404(patientRegister, id=patient_id)
 
-            # Update fields
-            patient.name = request.POST.get("name", patient.name)
-            patient.email = request.POST.get("email", patient.email)
-            patient.phno = request.POST.get("phno", patient.phno)
-            patient.address = request.POST.get("address", patient.address)
-            patient.city = request.POST.get("city", patient.city)
-            patient.state = request.POST.get("state", patient.state)
-            patient.blood_group = request.POST.get("blood_group", patient.blood_group)
-            patient.age = request.POST.get("age", patient.age)
-            patient.height = request.POST.get("height", patient.height)
-            patient.weight = request.POST.get("weight", patient.weight)
-            patient.dob = request.POST.get("dob", patient.dob)
-
-            # Handle profile image
-            if 'photo' in request.FILES:
                 # Delete old profile image if it exists
                 if patient.photo and os.path.exists(patient.photo.path):
                     os.remove(patient.photo.path)
 
                 # Save new profile image
-                photo = request.FILES['photo']
-                photo_path = f"profile_pic/{patient_id}_{photo.name}"
+                photo = request.FILES["photo"]
+                photo_path = f"profile_pics/{patient_id}_{photo.name}"
                 patient.photo = default_storage.save(photo_path, ContentFile(photo.read()))
+                
+                patient.save()
+                return JsonResponse({"status": "success", "message": "Image updated successfully!", "photo_url": patient.photo.url})
+            
+            else:
+                # Process JSON Data
+                data = json.loads(request.body.decode('utf-8'))
+                
+                patient_id = data.get("patient_id")
+                if not patient_id:
+                    return JsonResponse({"status": "error", "message": "Patient ID is required"})
 
-            patient.save()  # Save changes
+                patient = get_object_or_404(patientRegister, id=patient_id)
+                
+                # Update fields
+                patient.name = data.get("name", patient.name)
+                patient.email = data.get("email", patient.email)
+                patient.phno = data.get("phno", patient.phno)
+                patient.address = data.get("address", patient.address)
+                patient.city = data.get("city", patient.city)
+                patient.state = data.get("state", patient.state)
+                patient.blood_group = data.get("blood_group", patient.blood_group)
+                patient.age = data.get("age", patient.age)
+                patient.height = data.get("height", patient.height)
+                patient.weight = data.get("weight", patient.weight)
+                patient.dob = data.get("dob", patient.dob)
+                
+                patient.save()
 
-            return JsonResponse({"status": "success", "message": "Patient details updated successfully!", "photo_url": patient.photo.url if patient.photo else None})
+                return JsonResponse({"status": "success", "message": "Patient details updated successfully!"})
+        except json.JSONDecodeError:
+            return JsonResponse({"status": "error", "message": "Invalid JSON format"})
         except Exception as e:
             return JsonResponse({"status": "error", "message": str(e)})
 
@@ -966,29 +1018,72 @@ def upload_patient_profile_image(request):
     return JsonResponse({"status": "error", "message": "Invalid request"})
 
 
+import logging
+
+# Configure logging
+logger = logging.getLogger(__name__)
+
 @ensure_csrf_cookie  # Ensures CSRF token is sent as a cookie  
 def get_patient(request, patient_id):
-    patient = get_object_or_404(patientRegister, id=patient_id)
+    try:
+        # Retrieve the patient object or return 404 if not found
+        patient = get_object_or_404(patientRegister, id=patient_id)
 
-    # Construct the full photo URL if the patient has an image
-    photo_url = request.build_absolute_uri(settings.MEDIA_URL + patient.photo.name) if patient.photo else None
-    return JsonResponse({
-        "id": patient.id,
-        "name": patient.name,
-        "email": patient.email,
-        "phno": patient.phno,
-        "password":patient.password,
-        "address": patient.address,
-        "city": patient.city,
-        "state": patient.state,
-        "blood_group": patient.blood_group,
-        "age": patient.age,
-        "height": patient.height,
-        "weight": patient.weight,
-        "dob": patient.dob,
-        "photo": photo_url,  
-        "csrfToken": get_token(request)  # Send CSRF token in response
-    })
+        # Construct the full photo URL if the patient has an image
+        photo_url = request.build_absolute_uri(settings.MEDIA_URL + patient.profile_img.name) if patient.profile_img else None
+
+        # Prepare response data
+        response_data = {
+            "id": patient.id,
+            "name": patient.name,
+            "email": patient.email,
+            "phno": patient.phno,
+            "password": patient.password,  # Avoid exposing raw passwords
+            "address": patient.address,
+            "city": patient.city,
+            "state": patient.state,
+            "blood_group": patient.blood_group,
+            "age": patient.age,
+            "height": patient.height,
+            "weight": patient.weight,
+            "dob": patient.dob,
+            "photo": photo_url,  
+            "csrfToken": get_token(request)  # Send CSRF token in response
+        }
+
+        return JsonResponse(response_data)
+
+    except AttributeError as e:
+        logger.error(f"Attribute error in get_patient: {e}")
+        return JsonResponse({"error": f"AttributeError: {str(e)}"}, status=500)
+    
+    except Exception as e:
+        logger.error(f"Unexpected error in get_patient: {e}")
+        return JsonResponse({"error": f"Unexpected error: {str(e)}"}, status=500)
+
+
+# def get_patient(request, patient_id):
+#     patient = get_object_or_404(patientRegister, id=patient_id)
+
+#     # Construct the full photo URL if the patient has an image
+#     photo_url = request.build_absolute_uri(settings.MEDIA_URL + patient.photo.name) if patient.photo else None
+#     return JsonResponse({
+#         "id": patient.id,
+#         "name": patient.name,
+#         "email": patient.email,
+#         "phno": patient.phno,
+#         "password":patient.password,
+#         "address": patient.address,
+#         "city": patient.city,
+#         "state": patient.state,
+#         "blood_group": patient.blood_group,
+#         "age": patient.age,
+#         "height": patient.height,
+#         "weight": patient.weight,
+#         "dob": patient.dob,
+#         "photo": photo_url,  
+#         "csrfToken": get_token(request)  # Send CSRF token in response
+#     })
 
 
 
