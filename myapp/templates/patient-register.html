@@ -1,33 +1,31 @@
-{% load static %} <!-- Load static files in Django -->
+{% load static %}
+<!-- Load static files in Django -->
 
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
-  <title>PMS</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title> {% block title %}
+    WebDoctor
+    {% endblock %}</title>
 
   <!-- Favicon -->
-  <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon">
-
-  <!-- -------------------- Social Icons ----------------------- -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+  <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon" />
 
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
 
-  <!-- FontAwesome CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}">
-  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}" />
 
-  <!-- Feather Icons -->
-  <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}">
+  <!-- jQuery Alert CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css" />
 
   <!-- Custom Styles -->
-  <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
-
+  <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
 
    {% comment %} alerts {% endcomment %}
 
@@ -41,113 +39,324 @@
 
 
 
-
   <style>
+    .custom-alert {
+      background-color: #0e82fd;
+      color: white;
+      border-radius: 8px;
+      font-size: 18px;
+    }
+
+    .register-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .register-box {
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 900px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .svg-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f9fa;
+      padding: 10px;
+    }
+
+    .form-container {
+      flex: 1;
+      padding: 30px;
+      width: 100%;
+      background: linear-gradient(45deg,
+          rgb(33, 37, 240) -200%,
+          rgba(255, 255, 255, 1) 25%,
+          rgba(255, 255, 255, 1) 75%,
+          rgb(33, 37, 240) 200%);
+    }
+
+    .btn_register {
+      position: relative;
+      transition: all 0.3s ease-in-out;
+      padding-block: 0.5rem;
+      padding-inline: 1.25rem;
+      background-color: #0e82fd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      outline: none;
+      overflow: hidden;
+      font-size: 15px;
+    }
+
+    .btn_register:hover {
+      border-color: #fff9;
+    }
+
+    .btn_register:hover::before {
+      animation: shine 1.5s ease-out infinite;
+    }
+
+    .btn_register::before {
+      content: "";
+      position: absolute;
+      width: 100px;
+      height: 100%;
+      background-image: linear-gradient(120deg,
+          rgba(255, 255, 255, 0) 30%,
+          rgba(255, 255, 255, 0.8),
+          rgba(255, 255, 255, 0) 70%);
+      top: 0;
+      left: -100px;
+      opacity: 0.6;
+    }
+
+    @keyframes shine {
+      0% {
+        left: -100px;
+      }
+
+      60% {
+        left: 100%;
+      }
+
+      to {
+        left: 100%;
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      .register-box {
+        flex-direction: column;
+      }
+
+      .svg-container {
+        width: 100%;
+        order: 1;
+        padding: 10px;
+      }
+
+      .form-container {
+        width: 100%;
+        order: 2;
+        padding: 20px;
+        margin-top: 20px;
+      }
+    }
+
+    @media screen and (max-width: 1024px) {
+      .register-box {
+        max-width: 700px;
+      }
+
+      .svg-container {
+        padding: 15px;
+      }
+
+      .form-container {
+        padding: 25px;
+      }
+    }
+
+    @media screen and (min-width: 1200px) {
+      .register-box {
+        max-width: 1100px;
+      }
+
+      .svg-container {
+        padding: 30px;
+      }
+
+      .form-container {
+        padding: 40px;
+      }
+    }
+
+    @media screen and (max-height: 700px) {
+      .register-container {
+        min-height: auto;
+        padding-top: 40px;
+      }
+    }
+
+    @media screen and (max-height: 600px) {
+      .register-container {
+        min-height: auto;
+        padding-top: 60px;
+      }
+    }
+
+    @media screen and (max-height: 500px) {
+      .register-container {
+        min-height: auto;
+        padding-top: 80px;
+      }
+    }
+
     .toast-success { background-color:rgba(84, 162, 102, 0.89) !important; color:black !important; border:2px solid green !important}
-      .toast-error { background-color:rgba(210, 93, 105, 0.88) !important; color:black !important; border:2px solid red !important }
-      .toast-warning { background-color:rgb(241, 216, 141)  !important; color:black !important; border:2px solid yellow !important}
-      .toast-info { background-color:black !important; color:  #17a2b8 !important; }
+    .toast-error { background-color:rgba(210, 93, 105, 0.88) !important; color:black !important; border:2px solid red !important }
+    .toast-warning { background-color:rgb(241, 216, 141)  !important; color:black !important; border:2px solid yellow !important}
+    .toast-info { background-color:black !important; color:  #17a2b8 !important; }
   </style>
 </head>
 
-<body class="login-body">
-
+<body>
+  {% block content %}
+  <script>
+    $(document).ready(function () {
+        {% if messages %}
+            {% for message in messages %}
+                toastr.options = {
+                    closeButton: true,
+                    progressBar: true,
+                    timeOut: 5000,  // 5 seconds
+                };
+                toastr["{{ message.tags }}"]("{{ message }}");
+            {% endfor %}
+        {% endif %}
+    });
+  </script>
   <div class="main-wrapper">
-    {% block content %}
-    {% include "header.html" %}
+    {% include 'header.html' %}
 
-    <script>
-        $(document).ready(function () {
-            {% if messages %}
-                {% for message in messages %}
-                    toastr.options = {
-                        closeButton: true,
-                        progressBar: true,
-                        timeOut: 5000,  // 5 seconds
-                    };
-                    toastr["{{ message.tags }}"]("{{ message }}");
-                {% endfor %}
-            {% endif %}
-        });
-      </script>
-      
-
-    <div class="login-content-info">
-
-      <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-4 col-md-6">
-                <div class="account-content">
-                    <div class="login-shapes">
-                        <div class="shape-img-left">
-                            <img src="{% static 'assets/img/shape-01.png' %}" alt="">
-                        </div>
-                        <div class="shape-img-right">
-                            <img src="{% static 'assets/img/shape-02.png' %}" alt="">
-                        </div>
-                    </div>
-                    <div class="account-info patient-reg">
-                        <div class="login-back">
-                            <a href="{% url 'register' %}"><i class="fa-solid fa-arrow-left-long"></i> Back</a>
-                        </div>
-                        <div class="login-title">
-                            <h3>Patient Signup</h3>
-                            <p class="mb-0">Welcome back! Please enter your details.</p>
-    
-                            <!-- Error message -->
-                            {% if error %}
-                            <div class="error-message" style="padding-top:12px">{{ error }}</div>
-                            {% endif %}
-                        </div>
-    
-                        <form method="POST" action="{% url 'patient_register' %}">
-                            {% csrf_token %}
-                            {{ form.non_field_errors }}
-                            <div class="form-group">
-                                <label>Full Name</label>
-                                <input name="name" type="text" class="form-control" placeholder="Enter Your Full Name" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Email</label>
-                                <input name="email" type="email" class="form-control" placeholder="example@email.com" required>
-                            </div>
-    
-                            <div class="form-group">
-                                <label>Phone Number</label>
-                                <input name="phno" class="form-control form-control-lg group_formcontrol form-control-phone" id="phone" type="text" required>
-                            </div>
-    
-                            <div class="form-group">
-                                <label>Create Password</label>
-                                <input name="password" class="form-control form-control-lg group_formcontrol form-control-phone" id="password" type="password" required>
-                            </div>
-    
-                            <div class="form-group form-check-box terms-check-box">
-                                <div class="form-group-flex">
-                                    <label class="custom_check">
-                                        I have read and agree to PMS <a href="{% url 'terms_condition' %}">Terms of Service</a>
-                                        <input type="checkbox" name="Terms" required>
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-    
-                            <div class="form-group">
-                                <button class="btn btn-block" type="submit">Create an Account</button>
-                            </div>
-    
-                            <div class="account-signup">
-                                <p>Already a Member? <a href="{% url 'login' %}">Sign in</a></p>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+    <div class="register-container">
+      <div class="register-box">
+        <!-- Left Side Image -->
+        <div class="svg-container">
+          <img src="{% static 'assets/img/sign-up-animate.svg' %}" alt="Animated SVG" class="img-fluid" />
         </div>
+
+        <!-- Right Side Form -->
+        <div class="form-container">
+          <div class="login-back">
+            <a href="/" class="text-dark"><i class="fa-solid fa-arrow-left-long text-dark"></i> Back</a>
+          </div>
+          <h2 class="text-center fw-bolder">Patient Signup</h2>
+          <p class="text-center">
+            Join us for a better healthcare experience.
+          </p>
+
+          <form id="signup-form" method="POST" action="{% url 'patient_register' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="name" class="form-label">Full Name</label>
+              <input name="name" type="text" class="form-control" id="name" placeholder="Enter Your Full Name" />
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input name="email" type="email" class="form-control" id="email" placeholder="example@email.com" />
+            </div>
+
+            <div class="mb-3">
+              <label for="phno" class="form-label">Phone Number</label>
+              <input name="phno" type="text" class="form-control" id="phno" />
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Create Password</label>
+              <input name="password" type="password" class="form-control" id="password" />
+            </div>
+
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="terms" name="Terms" />
+              <label class="form-check-label" for="terms">I agree to the
+                <a href="{% url 'terms_condition' %}">Terms of Service</a></label>
+            </div>
+
+            <div class="d-grid">
+              <button class="btn_register" type="submit">
+                Sign Up &nbsp;&nbsp;<span><i class="fa-solid fa-user-plus"></i></span>
+              </button>
+            </div>
+            <p class="text-center mt-3">
+              Already a member?
+              <a href="{% url 'login' %}" class="fw-bolder text-secondary text-decoration-underline">Sign in here</a>
+            </p>
+          </form>
+        </div>
+      </div>
     </div>
-{% include "footer.html" %}
-{% endblock %}
-    <div></div>
+
+    {% include 'footer.html' %}
+  </div>
+  {% endblock %}
+
+  <!-- jQuery and Validation Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $("#signup-form").submit(function (e) {
+        e.preventDefault();
+        let name = $("#name").val().trim();
+        let email = $("#email").val().trim();
+        let phno = $("#phno").val().trim();
+        let password = $("#password").val().trim();
+        let terms = $("#terms").is(":checked");
+
+        let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        let phonePattern = /^[0-9]{10}$/;
+
+        function showAlert(icon, message) {
+          $.alert({
+            title: `<i class="fa-solid ${icon} fa-2x animated-icon fa-beat-fade"></i>`,
+            content: `<span style="font-size: 15px;">${message}</span>`,
+            type: "blue",
+            theme: "modern",
+            animation: "news",
+            buttons: {
+                ok: {
+                  text: "OK",
+                  btnClass: "btn-blue",
+                },
+              },
+          });
+        }
+
+        if (name === "") {
+          showAlert("fa-exclamation-circle", "Full Name is required");
+          return;
+        }
+        if (email === "" || !emailPattern.test(email)) {
+          showAlert("fa-envelope", "Enter a valid email address");
+          return;
+        }
+        if (phno === "" || !phonePattern.test(phno)) {
+          showAlert("fa-phone", "Enter a valid 10-digit phone number");
+          return;
+        }
+        if (password.length < 6) {
+          showAlert("fa-key", "Password must be at least 6 characters long");
+          return;
+        }
+        if (!terms) {
+          showAlert(
+            "fa-file-contract",
+            "You must agree to the Terms of Service"
+          );
+          return;
+        }
+
+        this.submit();
+      });
+    });
+  </script>
 </body>
 
 </html>
