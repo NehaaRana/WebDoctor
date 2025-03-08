@@ -77,5 +77,9 @@ urlpatterns =[
   path('verify_otp/<str:email>/', views.verify_otp, name='verify_otp'),
   path('verify_otp_patient/<str:email>/', views.verify_otp_patient, name='verify_otp_patient'),
   # path('clear-messages/', views.clear_messages, name='clear_messages'),
+  path('admin_manage_review/',views.admin_manage_review,name='admin_manage_review'),
+  path('admin_manage_payment/',views.admin_manage_payment,name='admin_manage_payment'),
+  path('delete_review/<int:review_id>/', views.delete_review, name='delete_review'),
+  path('delete_patient/<int:patient_id>/', views.delete_patient, name='delete_patient'),
 
 ]

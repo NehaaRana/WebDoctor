@@ -385,129 +385,6 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-     
-    {% comment %} <script>
-      $(document).ready(function () {
-          let patientId = $("#patient_id").val();
-  
-          // Load Patient Details
-          function loadPatientDetails() {
-              $.ajax({
-                  url: `/get-patient/${patientId}/`,
-                  type: "GET",
-                  success: function (data) {
-                      $("#name").val(data.name);
-                      $("#email").val(data.email);
-                      $("#phno").val(data.phno);
-                      $("#address").val(data.address);
-                      $("#city").val(data.city);
-                      $("#state").val(data.state);
-                      $("#blood_group").val(data.blood_group);
-                      $("#age").val(data.age);
-                      $("#height").val(data.height);
-                      $("#weight").val(data.weight);
-                      $("#dob").val(data.dob);
-  
-                      // Display profile image
-                      if (data.photo) {
-                          $(".profile-img img").attr("src", data.photo);
-                      } else {
-                          $(".profile-img img").attr("src", "/static/assets/img/default_profile.png"); // Default image
-                      }
-                  },
-                  error: function (xhr, status, error) {
-                    console.error("AJAX Error:", error);
-                    console.error("Status:", status);
-                    console.error("Response:", xhr.responseText);
-                    alert("Failed to load patient details: " + xhr.responseText);
-                }
-              });
-          }
-  
-          // Handle Profile Image Upload
-          $("#photo").change(function (event) {
-              var file = event.target.files[0]; // Get selected file
-              if (!file) return;
-  
-              var reader = new FileReader();
-              reader.onload = function () {
-                  $(".profile-img img").attr("src", reader.result); // Preview image
-              };
-              reader.readAsDataURL(file);
-  
-              // Upload Image to Server
-              var formData = new FormData();
-              formData.append("photo", file);
-              formData.append("patient_id", patientId);
-  
-              $.ajax({
-                  type: "POST",
-                  url: "/upload-patient-profile/",  // Django endpoint to handle image upload
-                  data: formData,
-                  contentType: false,
-                  processData: false,
-                  headers: {
-                      "X-CSRFToken": "{{ csrf_token }}"
-                  },
-                  success: function (response) {
-                      if (response.status === "success") {
-                          alert("Profile image updated successfully!");
-                          loadPatientDetails(); // Reload patient details to update the image
-                      } else {
-                          alert("Error: " + response.message);
-                      }
-                  },
-                  error: function () {
-                      alert("Failed to upload image.");
-                  }
-              });
-          });
-  
-          // Submit Form via AJAX (JSON Request)
-          $("#updatePatientForm").submit(function (e) {
-              e.preventDefault();
-  
-              let formData = {
-                  patient_id: patientId,
-                  name: $("#name").val(),
-                  email: $("#email").val(),
-                  phno: $("#phno").val(),
-                  address: $("#address").val(),
-                  city: $("#city").val(),
-                  state: $("#state").val(),
-                  blood_group: $("#blood_group").val(),
-                  age: $("#age").val(),
-                  height: $("#height").val(),
-                  weight: $("#weight").val(),
-                  dob: $("#dob").val(),
-              };
-  
-              $.ajax({
-                  type: "POST",
-                  url: "/update-patient/",
-                  data: JSON.stringify(formData),
-                  contentType: "application/json",
-                  headers: {
-                      "X-CSRFToken": "{{ csrf_token }}"
-                  },
-                  success: function (response) {
-                      if (response.status === "success") {
-                          $("#responseMessage").html("<p style='color:green;'>Updated successfully!</p>");
-                          loadPatientDetails();
-                      } else {
-                          $("#responseMessage").html("<p style='color:red;'>Error: " + response.message + "</p>");
-                      }
-                  },
-                  error: function () {
-                      $("#responseMessage").html("<p style='color:red;'>An error occurred while updating the profile.</p>");
-                  }
-              });
-          });
-  
-          loadPatientDetails(); // Load patient details on page load
-      });
-  </script> {% endcomment %}
-
 <script>
   $(document).ready(function () {
     let patientId = $("#patient_id").val();
@@ -587,12 +464,23 @@
                 "X-CSRFToken": "{{ csrf_token }}"
             },
             success: function (response) {
-                if (response.status === "success") {
-                    showToast("success", "Profile image updated successfully!");
-                    loadPatientDetails();
-                } else {
-                    showToast("error", response.message);
-                }
+              if (response.status === "success") {
+                alert("Profile image updated successfully!");
+
+                // Force reload profile image by appending a timestamp
+                let newImageUrl = response.photo_url + "?t=" + new Date().getTime();
+                $(".profile-img img").attr("src", newImageUrl);
+                $(".booking-doc-img img").attr("src", newImageUrl);
+                $(".user-img img").attr("src", newImageUrl);
+
+                // Also update the input field in the form
+                $("#photo").val("");
+
+                // Reload other details if needed
+                loadPatientDetails();
+              } else {
+                alert("Error: " + response.message);
+              }
             },
             error: function () {
                 showToast("error", "Failed to upload image.");
@@ -628,21 +516,41 @@
                 "X-CSRFToken": "{{ csrf_token }}"
             },
             success: function (response) {
-                if (response.status === "success") {
-                    showToast("success", "Patient details updated successfully!");
-                    loadPatientDetails();
-                } else {
-                    showToast("error", response.message);
-                }
-            },
-            error: function () {
-                showToast("error", "An error occurred while updating the profile.");
-            }
-        });
-    });
+              if (response.status === "success") {
+                alert("Profile image updated successfully!");
 
-    loadPatientDetails();
-});
+                // Get the current image element
+                let imgElement = $(".profile-img img");
+                let imgElement1 = $(".booking-doc-img img");
+                let imgElement2 = $(".user-img img");
+
+                // Create a new Image object to ensure proper cache bypass
+                let newImage = new Image();
+                newImage.onload = function () {
+                  imgElement.attr("src", response.photo_url + "?t=" + new Date().getTime());
+                  imgElement1.attr("src", response.photo_url + "?t=" + new Date().getTime());
+                  imgElement2.attr("src", response.photo_url + "?t=" + new Date().getTime());
+                };
+                newImage.src = response.photo_url + "?t=" + new Date().getTime();
+
+                // Clear file input
+                $("#photo").val("");
+
+                // Reload other details if needed
+                loadPatientDetails();
+              } else {
+                alert("Error: " + response.message);
+              }
+            },
+
+            error: function () {
+              $("#responseMessage").html("<p style='color:red;'>An error occurred while updating the profile.</p>");
+            }
+          });
+        });
+
+        loadPatientDetails(); // Load patient details on page load
+      });
 </script>
 
 

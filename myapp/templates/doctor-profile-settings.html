@@ -661,13 +661,25 @@
                                   "X-CSRFToken": "{{ csrf_token }}"
                               },
                               success: function (response) {
-                                  if (response.status === "success") {
-                                      showToast("success", "Profile image updated successfully!");
-                                      loadDoctorDetails(); // Only reload on success
-                                  } else {
-                                      showToast("error", response.message);
-                                  }
-                              },
+                                if (response.status === "success") {
+                                  alert("Profile image updated successfully!");
+                  
+                                  // Force reload profile image by appending a timestamp
+                                  let newImageUrl = response.photo_url + "?t=" + new Date().getTime();
+                                  $(".profile-img img").attr("src", newImageUrl);
+                                  $(".booking-doc-img img").attr("src", newImageUrl);
+                                  $(".user-img img").attr("src", newImageUrl);
+                  
+                                  // Also update the input field in the form
+                                  $("#photo").val("");
+                  
+                                  // Reload other details if needed
+                                  loadPatientDetails();
+                                } else {
+                                  alert("Error: " + response.message);
+                                }
+                              }, 
+                              
                               error: function () {
                                   showToast("error", "Failed to upload image.");
                               }
@@ -705,21 +717,41 @@
                                   "X-CSRFToken": "{{ csrf_token }}"
                               },
                               success: function (response) {
-                                  if (response.status === "success") {
-                                      showToast("success", "Doctor details updated successfully!");
-                                      loadDoctorDetails(); // Only reload when successful
-                                  } else {
-                                      showToast("error", response.message);
-                                  }
-                              },
-                              error: function () {
-                                  showToast("error", "An error occurred while updating the profile.");
-                              }
-                          });
-                      });
+                                if (response.status === "success") {
+                                  alert("Profile image updated successfully!");
                   
-                      loadDoctorDetails(); // Load doctor details on page load
-                  });
+                                  // Get the current image element
+                                  let imgElement = $(".profile-img img");
+                                  let imgElement1 = $(".booking-doc-img img");
+                                  let imgElement2 = $(".user-img img");
+                  
+                                  // Create a new Image object to ensure proper cache bypass
+                                  let newImage = new Image();
+                                  newImage.onload = function () {
+                                    imgElement.attr("src", response.photo_url + "?t=" + new Date().getTime());
+                                    imgElement1.attr("src", response.photo_url + "?t=" + new Date().getTime());
+                                    imgElement2.attr("src", response.photo_url + "?t=" + new Date().getTime());
+                                  };
+                                  newImage.src = response.photo_url + "?t=" + new Date().getTime();
+                  
+                                  // Clear file input
+                                  $("#photo").val("");
+                  
+                                  // Reload other details if needed
+                                  loadPatientDetails();
+                                } else {
+                                  alert("Error: " + response.message);
+                                }
+                              },
+                  
+                              error: function () {
+                                $("#responseMessage").html("<p style='color:red;'>An error occurred while updating the profile.</p>");
+                              }
+                            });
+                          });
+                  
+                          loadPatientDetails(); // Load patient details on page load
+                        });
                 </script>
                   
           {% include "footer.html" %}

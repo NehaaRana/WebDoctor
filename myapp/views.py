@@ -656,7 +656,7 @@ def payment_success_page(request, appointment_id, doctor_id):
                 review_text=review_text,
                 review_date=timezone.now(),
             )
-            return redirect(f"/doctor_profile/{doctor_id}/")  # Redirect after review submission
+            return redirect(f"/")  # Redirect after review submission
 
     # return render(request, "reviews.html", {"doctor": doctor, "appointment": appointment_obj})
 
@@ -1176,6 +1176,14 @@ def admin_manage_appointments(request):
     all_appointments=appointment.objects.all
     return render(request ,'admin_manage_appointments.html',{'all':all_appointments})
 
+def admin_manage_review(request):
+        all_review=review.objects.all
+        return render(request, 'admin-manage-review.html',{'all':all_review})
+
+def admin_manage_payment(request):
+        all_payment=Payment.objects.all
+        return render(request, 'admin-manage-payment.html',{'all':all_payment})
+
 def admin_logout(request):
     request.session.flush()  # Clears all session data (logs out admin)
     return redirect('/') 
@@ -1366,45 +1374,108 @@ import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, inch
 
+
+
+
+from django.http import FileResponse, HttpResponse
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.platypus import Table, TableStyle
+
 def payment_pdf(request, payment_id):
     # Fetch payment details from the database
     try:
         payment = Payment.objects.get(id=payment_id)
+        appointment = payment.appointment_id  # Assuming Payment has a ForeignKey to Appointment
+        doctor = appointment.doctor_id  # Assuming Appointment has a ForeignKey to Doctor
     except Payment.DoesNotExist:
         return HttpResponse("Payment not found", status=404)
 
     # Create a bytestream buffer
     buf = io.BytesIO()
-    c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+    c = canvas.Canvas(buf, pagesize=letter)
+
+    # Page width & height
+    width, height = letter
 
     # Set the title of the bill
-    c.setFont("Helvetica-Bold", 16)
-    c.drawString(200, 750, "Payment Invoice")
+    c.setFont("Helvetica-Bold", 18)
+    c.drawString(200, height - 50, "Payment Invoice")
 
-    # Draw a horizontal line
-    c.line(50, 740, 550, 740)
+    # Draw a horizontal line below the title
+    c.line(50, height - 60, 550, height - 60)
 
-    # Set font for body text
-    c.setFont("Helvetica", 12)
+    # Table positions
+    table_x = 80
+    table_y = height - 100  # **Start higher to prevent cutting**
 
-    # Payment Details
-    text_lines = [
-        f"Invoice ID: {payment.id}",
-        f"Customer Name: {payment.patient_id.name}",
-        f"Payment Date: {payment.payment_date.strftime('%Y-%m-%d')}",
-        f"Amount Paid: ${payment.amount:.2f}",
-        f"Payment Method: {payment.payment_method}",
+    # **Table Title: Invoice Details**
+    c.setFont("Helvetica-Bold", 14)
+    c.drawString(table_x, table_y, "📌 Invoice Details")
+
+    invoice_details = [
+        ["Invoice ID:", f"{payment.id}"],
+        ["Customer Name:", f"{payment.patient_id.name}"],
+        ["Doctor Name:", f"Dr. {doctor.name}"],
+        ["Payment Date:", f"{payment.payment_date.strftime('%Y-%m-%d')}"],
+        ["Amount Paid:", f"${payment.amount:.2f}"],
+        ["Payment Method:", f"{payment.payment_method}"]
     ]
 
-    # Starting position for text
-    y_position = 700
-    for line in text_lines:
-        c.drawString(100, y_position, line)
-        y_position -= 20  # Move to next line
+    # Adjust spacing for invoice table
+    invoice_table_y = table_y - 30  # **Increased spacing**
+
+    # **Table Title: Appointment Details**
+    appointment_table_y = invoice_table_y - (len(invoice_details) * 20) - 50  
+    c.setFont("Helvetica-Bold", 14)
+    c.drawString(table_x, appointment_table_y, "📌 Appointment Details")
+
+    appointment_details = [
+        ["Appointment ID:", f"{appointment.id}"],
+        ["Appointment Date:", f"{appointment.appointment_date.strftime('%Y-%m-%d')}"],
+        ["Appointment Time:", f"{appointment.appointment_time.strftime('%H:%M %p')}"],
+        ["Appointment Booking Date:", f"{appointment.booking_date.strftime('%Y-%m-%d')}"]
+    ]
+
+    # Adjust spacing for appointment table
+    appointment_table_y -= 30  # **More space to avoid cutoff**
+
+    # Create and style the Invoice Table
+    invoice_table = Table(invoice_details, colWidths=[180, 250])
+    invoice_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
+        ('TEXTCOLOR', (0, 0), (-1, -1), colors.black),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
+        ('FONTSIZE', (0, 0), (-1, -1), 12),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey)
+    ]))
+
+    # Create and style the Appointment Table
+    appointment_table = Table(appointment_details, colWidths=[180, 250])
+    appointment_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
+        ('TEXTCOLOR', (0, 0), (-1, -1), colors.black),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
+        ('FONTSIZE', (0, 0), (-1, -1), 12),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey)
+    ]))
+
+    invoice_table.wrapOn(c, width, height)
+    invoice_table.drawOn(c, table_x, invoice_table_y - (len(invoice_details) * 20))
+
+    # ✅ **Draw Appointment Table Below Invoice Table**
+    appointment_table.wrapOn(c, width, height)
+    appointment_table.drawOn(c, table_x, appointment_table_y - (len(invoice_details) * 20))
 
     # Footer
     c.setFont("Helvetica-Oblique", 10)
-    c.drawString(200, 100, "Thank you for your payment!")
+    c.drawString(200, 80, "Thank you for your payment!")
 
     # Finalize the PDF
     c.showPage()
@@ -1413,10 +1484,33 @@ def payment_pdf(request, payment_id):
     # Move buffer cursor to beginning
     buf.seek(0)
 
-    # Return response with proper content type
-    return FileResponse(buf, as_attachment=True, filename=f"invoice_{payment.id}.pdf", content_type="application/pdf")
+    return FileResponse(buf, as_attachment=True, filename="payment_invoice.pdf")
+
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib import messages
+from .models import review  # Ensure it's imported with the correct lowercase name
+
+def delete_review(request, review_id):
+    # Get the review object or return 404 if not found
+    review_obj = get_object_or_404(review, id=review_id)
+
+    # Delete the review from the database
+    review_obj.delete()
+
+    # Show success message
+    messages.success(request, "Review deleted successfully.")
+
+    # Redirect back to the review management page
+    return redirect('admin_manage_review')  # Ensure this matches your URL pattern
 
 
+
+def delete_patient(request, patient_id):
+    if request.method == 'POST':
+        patient = get_object_or_404(patientRegister, id=patient_id)
+        patient.delete()
+        messages.success(request, 'Patient deleted successfully!')
+    return redirect('admin_manage_patients')  # Redirect to the patient listing page
 
     # OTP sending/
 

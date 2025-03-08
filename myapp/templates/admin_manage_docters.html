@@ -190,31 +190,20 @@
                   <span class="nav-text">Manage Appointments</span>
                 </a>
               </li>
-              <li>
-                <a
-                  href="{% url 'admin_profile_settings' %}"
-                  aria-expanded="false"
-                >
-                  <i class="fas fa-user-cog"></i>
-                  <span class="nav-text">Profile Settings</span>
-                </a>
-              </li>
-              <li>
-                <a href="{% url 'admin_logout' %}" aria-expanded="false">
-                  <i class="fas fa-sign-out-alt"></i>
-                  <span class="nav-text">Logout</span>
+              <li >
+                <a href="{% url 'admin_manage_review' %}"
+                aria-expanded="false"><i class="fas fa-star"></i>
+                        <span>Manage Review</span></a>
+               </li>
+               <li ><a href="{% url 'admin_manage_payment' %}" aria-expanded="false"><i class="fas fa-credit-card"></i><span class="nav-text">Payment Management</span> </a>
+
+              <li><a href="{% url 'admin_logout' %}" aria-expanded="false"><i class="fas fa-sign-out-alt"></i><span class="nav-text">Logout</span>
                 </a>
               </li>
             </ul>
           </div>
         </div>
-        <!--**********************************
-              Sidebar end
-          ***********************************-->
-  
-        <!--**********************************
-              Header start
-          ***********************************-->
+        
         <div class="header">
           <div class="header-content">
             <nav class="navbar navbar-expand">
@@ -393,81 +382,79 @@
           },
         });
 
-
-
-
-    $(document).ready(function () {
-    // Approve Doctor Confirmation
-    $(document).on("click", ".approve-doctor", function (e) {
-        e.preventDefault();
-        var doctorId = $(this).data("doctor-id");
-        $.confirm({
-            title: "Confirm Approval",
-            icon: "fa-solid fa-check-circle fa-beat-fade",
-            content: "Are you sure you want to approve this doctor?",
-            theme: "modern",
-            buttons: {
-                confirm: {
-                    text: "Approve",
-                    btnClass: "btn-success",
-                    action: function () {
-                        window.location.href = "/approve_doctor/" + doctorId + "/";
-                    },
-                },
-                cancel: {
-                    text: "Cancel",
-                    btnClass: "btn-danger",
-                },
-            },
-        });
-    });
-      
-          
-
-         //Rejected Doctor
-         $(document).on("click", ".reject-doctor", function (e) {
-          e.preventDefault();
-          var doctorId = $(this).data("doctor-id");
-          $.confirm({
-              title: "Confirm Rejection",
-              icon: "fa-solid fa-exclamation-triangle fa-beat-fade",
-              content: "Are you sure you want to reject this doctor?",
-              theme: "modern",
-              buttons: {
-                  confirm: {
-                      text: "Reject",
-                      btnClass: "btn-danger",
-                      action: function () {
-                          window.location.href = "/reject_doctor/" + doctorId + "/";
+        // Approve Doctor Confirmation
+        $(document).ready(function () {
+          // Approve Doctor Confirmation
+          $(document).on("click", ".approve-doctor", function (e) {
+              e.preventDefault();
+              var doctorId = $(this).data("doctor-id");
+              $.confirm({
+                  title: "Confirm Approval",
+                  icon: "fa-solid fa-check-circle fa-beat-fade",
+                  content: "Are you sure you want to approve this doctor?",
+                  theme: "modern",
+                  buttons: {
+                      confirm: {
+                          text: "Approve",
+                          btnClass: "btn-success",
+                          action: function () {
+                              window.location.href = "/approve_doctor/" + doctorId + "/";
+                          },
+                      },
+                      cancel: {
+                          text: "Cancel",
+                          btnClass: "btn-danger",
                       },
                   },
-                  cancel: {
-                      text: "Cancel",
-                      btnClass: "btn-secondary",
-                  },
-              },
+              });
           });
-      });
-  });
+            
+                
+      
+               //Rejected Doctor
+               $(document).on("click", ".reject-doctor", function (e) {
+                e.preventDefault();
+                var doctorId = $(this).data("doctor-id");
+                $.confirm({
+                    title: "Confirm Rejection",
+                    icon: "fa-solid fa-exclamation-triangle fa-beat-fade",
+                    content: "Are you sure you want to reject this doctor?",
+                    theme: "modern",
+                    buttons: {
+                        confirm: {
+                            text: "Reject",
+                            btnClass: "btn-danger",
+                            action: function () {
+                                window.location.href = "/reject_doctor/" + doctorId + "/";
+                            },
+                        },
+                        cancel: {
+                            text: "Cancel",
+                            btnClass: "btn-secondary",
+                        },
+                    },
+                });
+            });
         });
-    
-    </script>
-        <!-- Custom JavaScript for Sidebar Toggle -->
-        <script>
-          document
-      .querySelector(".nav-control .hamburger")
-      .addEventListener("click", function () {
-        const sidebar = document.querySelector(".deznav");
-        sidebar.classList.toggle("collapsed");
-    
-        // Adjust the main content margin based on the sidebar state
-        const mainWrapper = document.querySelector(".main-wrapper");
-        if (sidebar.classList.contains("collapsed")) {
-          mainWrapper.style.marginLeft = "70px"; // Collapsed width
-        } else {
-          mainWrapper.style.marginLeft = "250px"; // Expanded width
-        }
-      });
-      </script>
+              });
+          
+          </script>
+              <!-- Custom JavaScript for Sidebar Toggle -->
+              <script>
+                document
+            .querySelector(".nav-control .hamburger")
+            .addEventListener("click", function () {
+              const sidebar = document.querySelector(".deznav");
+              sidebar.classList.toggle("collapsed");
+          
+              // Adjust the main content margin based on the sidebar state
+              const mainWrapper = document.querySelector(".main-wrapper");
+              if (sidebar.classList.contains("collapsed")) {
+                mainWrapper.style.marginLeft = "70px"; // Collapsed width
+              } else {
+                mainWrapper.style.marginLeft = "250px"; // Expanded width
+              }
+            });
+            </script>
   </body>
 </html>

@@ -1,0 +1,348 @@
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>webDoctor</title>
+    <link
+      rel="shortcut icon"
+      href="{% static 'assets/img/favicon.png' %}"
+      type="image/x-icon"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=0"
+    />
+
+    <!-- Font Awesome JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+      <!-- Toastr CSS -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+      <!-- jQuery (Required for Toastr) -->
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+      <!-- Toastr JS -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <!-- Requireed CSS files-->
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/admin_style.css' %}" />
+
+    <style>
+      @import url("{% static 'assets/vendor/datatables/css/jquery.dataTables.min.css' %}");
+      @import url("{% static 'assets/vendor/datatables/css/buttons.dataTables.min.css' %}");
+      @import url("{% static 'assets/vendor/datatables/responsive/responsive.css' %}");
+
+      .theiaStickySidebar:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+
+      /* Expand table width */
+      .table {
+        width: 100% !important;
+      }
+
+      .table-responsive {
+        overflow-x: auto;
+        width: 100%;
+      }
+
+      .container {
+        max-width: 100%;
+        padding-left: 20rem;
+        padding-right: 20px;
+      }
+      #patientTable tbody tr td {
+        padding: 15px 10px;
+      }
+
+      #patientTable tbody tr:hover {
+        background-color: #f5f5f5;
+      }
+      #patientTable {
+        width: 100% !important;
+      }
+      #patientTable th,
+      #patientTable td {
+        border: 0.2px solid #dee2e6;
+      }
+      #patientTable td {
+        font-size: 15px;
+      }
+      .page-header h2 span:before {
+        content: " ";
+        width: 176px;
+        display: block;
+        border-bottom: 1px solid #ccc;
+        border-top: 1px solid #ccc;
+        height: 5px;
+        background-color: #f8f8f8;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      function confirmDelete(event, element) {
+        event.preventDefault(); // Prevents immediate navigation
+    
+        toastr.warning("Are you sure you want to delete this review?", "Warning", {
+          closeButton: true,
+          progressBar: true,
+          positionClass: "toast-top-center",
+          timeOut: 5000,
+          extendedTimeOut: 2000,
+          showMethod: "fadeIn",
+          hideMethod: "fadeOut",
+          tapToDismiss: false,
+          onclick: function() {
+            window.location.href = element.href; // Redirect on click
+          }
+        });
+      }
+    </script>
+    
+    
+     
+    <div class="main-wrapper">
+      <!-- Nav Header -->
+      <div class="nav-header">
+        <a href="/admin_dashboard/" class="brand-logo">
+          <span class="brand-title text-black text-lg-center">webDoctor</span>
+        </a>
+        <div class="nav-control bg-dark">
+          <div class="hamburger">
+            <i class="fas fa-backward mt-4 ps-1 text-light"></i>
+          </div>
+        </div>
+      </div>
+      <!-- End Nav Header -->
+
+      <!-- Header -->
+      <div class="header">
+        <div class="header-content">
+          <nav class="navbar navbar-expand">
+            <div class="collapse navbar-collapse justify-content-between">
+              <div class="header-left">
+                <div class="dashboard_bar">Manage Review</div>
+              </div>
+              <div class="header-right d-flex align-items-center">
+                <ul class="navbar-nav">
+                  <li class="nav-item ps-3">
+                    <div class="dropdown header-profile2">
+                      <a
+                        class="nav-link"
+                        href="javascript:void(0);"
+                        role="button"
+                        id="profileDropdown"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <div class="header-info2 d-flex align-items-center">
+                          <div class="header-media">
+                            <img
+                              src="{% static 'assets/img/user.jpg' %}"
+                              alt="User Image"
+                              class="profile-image"
+                            />
+                          </div>
+                        </div>
+                      </a>
+                      <div
+                        class="dropdown-menu dropdown-menu-end"
+                        aria-labelledby="profileDropdown"
+                      >
+                        <a
+                          href="{% url 'admin_profile_settings' %}"
+                          class="dropdown-item"
+                        >
+                          <i class="fas fa-user-cog"></i>
+                          <span>Profile Settings</span>
+                        </a>
+                        <a
+                          href="{% url 'admin_logout' %}"
+                          class="dropdown-item"
+                        >
+                          <i class="fas fa-sign-out-alt"></i>
+                          <span class="text-danger">Logout</span>
+                        </a>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </div>
+      <!-- End Header -->
+
+      <!-- Sidebar -->
+      <div class="deznav open">
+        <div class="deznav-scroll mm-active">
+          <ul class="metismenu" id="menu">
+            <li>
+              <a href="{% url 'admin_dashboard' %}" aria-expanded="false"
+                ><i class="fas fa-columns"></i
+                ><span class="nav-text">Dashboard</span></a
+              >
+            </li>
+            <li>
+              <a href="{% url 'admin_manage_doctors' %}" aria-expanded="false"
+                ><i class="fas fa-user-md"></i
+                ><span class="nav-text">Manage Doctors</span></a
+              >
+            </li>
+            <li>
+              <a href="{% url 'admin_manage_patients' %}" aria-expanded="false"
+                ><i class="fas fa-users"></i
+                ><span class="nav-text">Manage Patients</span></a
+              >
+            </li>
+            <li>
+              <a
+                href="{% url 'admin_manage_appointments' %}"
+                aria-expanded="false"
+                ><i class="fas fa-calendar-check"></i
+                ><span class="nav-text">Manage Appointments</span></a
+              >
+            </li>
+            <li class="active">
+              <a href="{% url 'admin_manage_review' %}" aria-expanded="false"
+                ><i class="fas fa-star"></i> <span>Manage Review</span></a
+              >
+            </li>
+            <li>
+              <a href="{% url 'admin_manage_payment' %}" aria-expanded="false"
+                ><i class="fas fa-credit-card"></i
+                ><span class="nav-text">Payment Management</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'admin_logout' %}" aria-expanded="false"
+                ><i class="fas fa-sign-out-alt"></i
+                ><span class="nav-text">Logout</span></a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- End Sidebar -->
+
+      <!-- Main Content -->
+      <div class="content">
+        <div class="container" style="padding-top: 50px">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="page-header">
+                <h2 class="card-title mb-5 fw-bold text-uppercase fs-4">
+                  <i class="fas fa-users"></i>&nbsp;&nbsp;Review Listing
+                  <span></span>
+                </h2>
+              </div>
+              <div class="card card-table flex-fill">
+                <div class="card-body">
+                  <div class="table-responsive table-bordered table-hover">
+                    <table
+                      id="patientTable"
+                      class="table table-hover table-center mb-0"
+                    >
+                    
+                      <thead>
+                        <tr>
+                          <th>Review Id</th>
+                          <th>Review Text</th>
+                          <th>Review Rate</th>
+                          <th>Review Date</th>
+                          <th>AppointmentId</th>
+                          <th>Doctor Id</th>
+                          <th>Patient Id</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      
+                      <tbody>
+                        {% for review in all %}
+                        <tr>
+                          <td>{{ review.id }}</td>
+                          <td>{{ review.review_text }}</td>
+                          <td>{{ review.rating }}</td>
+                          <td>{{ review.review_date}}</td>
+                          <td>{{ review.appointment_id_id }}</td>
+                          <td>{{ review.doctor_id_id }}</td>
+                          <td>{{ review.patient_id_id }}</td>
+                          <td>
+                            <a href="{% url 'delete_review' review.id %}" 
+                              class="btn btn-sm btn-danger"
+                              onclick="confirmDelete(event, this)">
+                              <i class="fas fa-trash"></i> Delete
+                            </a>
+                            </a>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End Main Content -->
+    </div>
+
+    <!-- Scripts -->
+    <script src="{% static 'assets/js/deznav-init.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"
+    ></script>
+    <script>
+      $(document).ready(function () {
+        $("#patientTable").DataTable({
+          responsive: true,
+          columnDefs: [
+            { responsivePriority: 1, targets: 0 },
+            { responsivePriority: 2, targets: 1 },
+            { responsivePriority: 3, targets: 2 },
+            { responsivePriority: 4, targets: 3 },
+            { responsivePriority: 5, targets: 4 }, // Actions always visible
+          ],
+          language: {
+            paginate: {
+              previous: "<i class='fas fa-angle-left text-center mt-1'></i>", // Left arrow icon
+              next: "<i class='fas fa-angle-right text-center mt-1'></i>", // Right arrow icon
+            },
+          },
+        });
+      });
+
+      document
+        .querySelector(".nav-control .hamburger")
+        .addEventListener("click", function () {
+          document.querySelector(".deznav").classList.toggle("open");
+        });
+    </script>
+  </body>
+</html>
