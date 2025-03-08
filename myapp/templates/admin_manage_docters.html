@@ -393,59 +393,64 @@
           },
         });
 
-        // Approve Doctor Confirmation
-        $(document).ready(function () {
-          // Approve Doctor Confirmation
-          $(".approve-doctor").on("click", function (e) {
-            e.preventDefault();
-            var doctorId = $(this).data("doctor-id");
-            $.confirm({
-              title: "Confirm Approval",
-              icon: 'fa-solid fa-check-circle fa-beat-fade', // Corrected: Use Font Awesome class directly
-              content: "Are you sure you want to approve this doctor?",
-              theme: "modern",
-              buttons: {
+
+
+
+    $(document).ready(function () {
+    // Approve Doctor Confirmation
+    $(document).on("click", ".approve-doctor", function (e) {
+        e.preventDefault();
+        var doctorId = $(this).data("doctor-id");
+        $.confirm({
+            title: "Confirm Approval",
+            icon: "fa-solid fa-check-circle fa-beat-fade",
+            content: "Are you sure you want to approve this doctor?",
+            theme: "modern",
+            buttons: {
                 confirm: {
-                  text: "Approve",
-                  btnClass: "btn-success",
-                  action: function () {
-                    window.location.href = "/approve_doctor/" + doctorId + "/";
-                  },
+                    text: "Approve",
+                    btnClass: "btn-success",
+                    action: function () {
+                        window.location.href = "/approve_doctor/" + doctorId + "/";
+                    },
                 },
                 cancel: {
-                  text: "Cancel",
-                  btnClass: "btn-danger",
+                    text: "Cancel",
+                    btnClass: "btn-danger",
                 },
-              },
-            });
-          });
+            },
+        });
+    });
       
-          // Reject Doctor Confirmation
-          $(".reject-doctor").on("click", function (e) {
-            e.preventDefault();
-            var doctorId = $(this).data("doctor-id");
-            $.confirm({
+          
+
+         //Rejected Doctor
+         $(document).on("click", ".reject-doctor", function (e) {
+          e.preventDefault();
+          var doctorId = $(this).data("doctor-id");
+          $.confirm({
               title: "Confirm Rejection",
-              icon: 'fa-solid fa-exclamation-triangle fa-beat-fade', // Corrected: Use Font Awesome class directly
+              icon: "fa-solid fa-exclamation-triangle fa-beat-fade",
               content: "Are you sure you want to reject this doctor?",
               theme: "modern",
               buttons: {
-                confirm: {
-                  text: "Reject",
-                  btnClass: "btn-danger",
-                  action: function () {
-                    window.location.href = "/reject_doctor/" + doctorId + "/";
+                  confirm: {
+                      text: "Reject",
+                      btnClass: "btn-danger",
+                      action: function () {
+                          window.location.href = "/reject_doctor/" + doctorId + "/";
+                      },
                   },
-                },
-                cancel: {
-                  text: "Cancel",
-                  btnClass: "btn-secondary",
-                },
+                  cancel: {
+                      text: "Cancel",
+                      btnClass: "btn-secondary",
+                  },
               },
-            });
           });
-        });
       });
+  });
+        });
+    
     </script>
         <!-- Custom JavaScript for Sidebar Toggle -->
         <script>
@@ -463,6 +468,6 @@
           mainWrapper.style.marginLeft = "250px"; // Expanded width
         }
       });
-        </script>
+      </script>
   </body>
 </html>

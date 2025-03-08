@@ -159,3 +159,22 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 #rajor pay seetings
 RAZORPAY_API_KEY='rzp_test_txaxh3PQ23SWLk'
 RAZORPAY_API_SECRETE_KEY='JqZ1CoVuvUycOmFl80Wg0gJg'
+
+
+from django.contrib.messages import constants as messages
+# for alert message
+# MESSAGE_TAGS = {
+#     messages.DEBUG: 'debug',
+#     messages.INFO: 'info',
+#     messages.SUCCESS: 'success',
+#     messages.WARNING: 'warning',
+#     messages.ERROR: 'error',
+# }
+
+# MESSAGE_TAGS = {
+#     messages.DEBUG: 'debug',
+#     messages.INFO: 'info',
+#     messages.SUCCESS: 'success',
+#     messages.WARNING: 'warning',
+#     messages.ERROR: 'error',
+# }

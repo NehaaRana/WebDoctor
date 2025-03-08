@@ -1,120 +1,259 @@
 {% load static %}
-<html lang="en" class="fontawesome-i2svg-active fontawesome-i2svg-complete">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, user-scalable=0"
-    />
-    <title>{% block title %} webDocter {% endblock %}</title>
+<html lang="en">
 
-    <link
-      rel="shortcut icon"
-      href="{% static 'assets/img/favicon.png' %}"
-      type="image/x-icon"
-    />
-
-    <!-- -------------------- social icons ----------------------- -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-
-    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
-
-    <link
-      rel="stylesheet"
-      href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}"
-    />
-    <link
-      rel="stylesheet"
-      href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}"
-    />
-
-    <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
-
-    <style type="text/css">
-      @font-face {
-        font-family: Roboto;
-        src: url("{% static 'assets/fonts/Roboto-Regular.ttf' %}") format("truetype");
-      }
-    </style>
-  </head>
-  <body class="login-body">
-    {% block content %}
-    <div class="main-wrapper">
-        <!-- Your page content goes here -->
-
-    {% include "header.html" %}  
-
-          <div class="login-content-info">
-            <div class="container">
-              <div class="row justify-content-center">
-                <div class="col-lg-4 col-md-6">
-                  <div class="account-content">
-                    <div class="login-shapes">
-                      <div class="shape-img-left">
-                        <img src="{% static 'assets/img/shape-01.png' %}" alt="" />
-                      </div>
-                      <div class="shape-img-right">
-                        <img src="{% static 'assets/img/shape-02.png' %}" alt="" />
-                      </div>
-                    </div>
-                    <div class="account-info sign">
-                      <div class="login-back">
-                        <a href="/"><i class="fa-solid fa-arrow-left-long"></i> back</a>
-                      </div>
-                      <div class="login-title">
-                        <h3>Sign in</h3>
-                        <p>Caring for your health, every step.</p>
-                        {% if error %}
-                        <div class="error-message" style="padding-top: 12px">
-                          {{ error }}
-                        </div>
-                        {% endif %}
-                      </div>
-                      <form action="/login/" method="POST">
-                         {% csrf_token %}
-                        <div class="form-group">
-                          <label for="email">E-mail</label>
-                          <input type="text" id="email" class="form-control" name="email" placeholder="example@email.com" required />
-                        </div>
-                        <div class="form-group">
-                          <label for="user_type">User Type</label>
-                          <select id="user_type" class="form-select form-control" name="user_type" required>
-                            <option value="" selected disabled>Select</option>
-                            <option value="patient">Patient</option>
-                            <option value="doctor">Doctor</option>
-                            {% comment %} <option value="admin">Admin</option> {% endcomment %}
-                          </select>
-                        </div>
-                        <div class="form-group">
-                          <label for="password">Password</label>
-                          <input type="password" id="password" class="form-control" name="password" placeholder="*************" required />
-                        </div>
-                        <div class="form-group">
-                          <button class="btn btn-block" type="submit">Sign in</button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-
-          <!-- Your page content goes here -->
-
-    {% include "footer.html" %}  
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>
+    {% block title %}
+    WebDoctor
     {% endblock %}
-  </body>
+  </title>
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- jquery-confirm CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
+  <style>
+    .login-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .login-box {
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 900px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .svg-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f9fa;
+      padding: 20px;
+    }
+
+    .form-container {
+      flex: 1;
+      padding: 30px;
+      background: linear-gradient(45deg, rgb(33, 37, 240) -200%, rgba(255, 255, 255, 1) 25%, rgba(255, 255, 255, 1) 75%, rgb(33, 37, 240) 200%);
+    }
+
+    .btn_login {
+      position: relative;
+      transition: all 0.3s ease-in-out;
+      padding-block: 0.5rem;
+      padding-inline: 1.25rem;
+      background-color: #0e82fd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      outline: none;
+      overflow: hidden;
+      font-size: 15px;
+    }
+
+    .btn_login:hover {
+      border-color: #fff9;
+    }
+
+    .btn_login:hover .icon {
+      transform: translate(4px);
+    }
+
+    .btn_login:hover::before {
+      animation: shine 1.5s ease-out infinite;
+    }
+
+    .btn_login::before {
+      content: '';
+      position: absolute;
+      width: 100px;
+      height: 100%;
+      background-image: linear-gradient(120deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0) 70%);
+      top: 0;
+      left: -100px;
+      opacity: 0.6;
+    }
+
+    @keyframes shine {
+      0% {
+        left: -100px;
+      }
+
+      60% {
+        left: 100%;
+      }
+
+      to {
+        left: 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .login-box {
+        flex-direction: column;
+      }
+
+      .svg-container {
+        width: 100%;
+        order: 1;
+      }
+
+      .form-container {
+        width: 100%;
+        order: 2;
+        padding: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  {% block content %}
+  <div class="main-wrapper">
+    {% include 'header.html' %}
+    <div class="login-container">
+      <div class="login-box mt-5">
+        <div class="svg-container">
+          <img src="{% static 'assets/img/login-animate_2.svg' %}" alt="Animated SVG" class="img-fluid" />
+        </div>
+        <div class="form-container">
+          <div class="login-back">
+            <a href="/" class="text-secondary">
+              <i class="fa-solid fa-arrow-left-long text-secondary"></i>
+              Back
+            </a>
+          </div>
+          <h2 class="text-center fw-bolder">Sign in</h2>
+          <p class="text-center">Caring for your health, every step.</p>
+          {% if error %}
+          <div class="alert alert-danger" role="alert"><i class="fas fa-exclamation-triangle fa-beat-fade"></i>&nbsp;&nbsp;<span>{{ error }}</span></div>
+          {% endif %}
+          <form action="/login/" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="email" class="form-label">E-mail</label>
+              <input type="email" id="email" class="form-control" name="email" placeholder="example@email.com" />
+            </div>
+            <div class="mb-3">
+              <label for="user_type" class="form-label">User Type</label>
+              <select id="user_type" class="form-select form-control" name="user_type">
+                <option value="" selected disabled>Select</option>
+                <option value="patient">Patient</option>
+                <option value="doctor">Doctor</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" id="password" class="form-control" name="password" placeholder="*******" />
+            </div>
+            <div class="d-grid">
+              <button class="btn_login" type="submit">
+                Sign in &nbsp;&nbsp;<span><i class="fa-solid fa-right-to-bracket"></i></span>
+              </button>
+            </div>
+            <p class="text-center mt-3">
+              Not signed up?
+              <a href="/register/" class="text-secondary text-decoration-underline fw-bolder">Sign up here</a>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% include 'footer.html' %}
+  </div>
+  {% endblock %}
+
+  <!-- jQuery library (required for jquery-confirm) -->
+  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Function to show an alert with an animated icon
+      function showAlert(icon, message) {
+        $.alert({
+          title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+          content: `<span style="font-size: 15px;">${message}</span>`,
+          type: "blue",
+          theme: "modern",
+          buttons: {
+                ok: {
+                  text: "OK",
+                  btnClass: "btn-blue",
+                },
+              },
+        });
+      }
+  
+      // Validate email field
+      function validateEmail() {
+        let email = $('#email').val().trim();
+        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email === "" || !emailRegex.test(email)) {
+          showAlert("fa-envelope", "Please enter a valid email address.");
+          return false;
+        }
+        return true;
+      }
+  
+      // Validate user type field
+      function validateUserType() {
+        let userType = $('#user_type').val();
+        // Check if userType is empty, null, or undefined
+        if (!userType || userType === "") {
+          showAlert("fa-users", "Please select a user type.");
+          return false;
+        }
+        return true;
+      }
+  
+      // Validate password field
+      function validatePassword() {
+        let password = $('#password').val().trim();
+        if (password.length < 6) {
+          showAlert("fa-lock", "Password must be at least 6 characters long.");
+          return false;
+        }
+        return true;
+      }
+  
+      // On form submission, validate each field one at a time
+      $('form').submit(function (e) {
+        e.preventDefault(); // Prevent the default form submission
+  
+        if (!validateEmail()) {
+          return; // Stop if email is invalid
+        }
+        if (!validateUserType()) {
+          return; // Stop if user type is not selected
+        }
+        if (!validatePassword()) {
+          return; // Stop if password is invalid
+        }
+  
+        // If all validations pass, submit the form
+        e.target.submit();
+      });
+    });
+  </script>
+  
+
+</body>
+
 </html>

@@ -22,14 +22,69 @@
 
   <!-- Custom Styles -->
   <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+
+
+  {% comment %} alerts {% endcomment %}
+
+    <!-- jQuery (Required for Toastr) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- Toastr CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
+
+  <style>
+    .toast-success { background-color:rgba(84, 162, 102, 0.89) !important; color:black !important; border:2px solid green !important}
+      .toast-error { background-color:rgba(210, 93, 105, 0.88) !important; color:black !important; border:2px solid red !important }
+      .toast-warning { background-color:rgb(241, 216, 141)  !important; color:black !important; border:2px solid yellow !important}
+      .toast-info { background-color:black !important; color:  #17a2b8 !important; }
+  </style>
+
 </head>
 
 <body class="login-body">
   {% block content %}
   <div class="main-wrapper">
 
+    <script>
+        $(document).ready(function () {
+            {% if messages %}
+                {% for message in messages %}
+                    toastr.options = {
+                        closeButton: true,
+                        progressBar: true,
+                        timeOut: 5000,  // 5 seconds
+                    };
+                    toastr["{{ message.tags }}"]("{{ message }}");
+                {% endfor %}
+            {% endif %}
+        });
+      </script>
+
+
+       {% comment %} <script>
+        $(document).ready(function () {
+            {% if request.session.toastr_message %}
+                toastr.options = {
+                    closeButton: true,
+                    progressBar: true,
+                    timeOut: 5000,  // 5 seconds
+                };
+                toastr["{{ request.session.toastr_tag }}"]("{{ request.session.toastr_message }}");
+    
+                // ✅ Clear the session message after displaying
+                $.ajax({
+                    url: "{% url 'clear_messages' %}",
+                    type: "GET"
+                });
+            {% endif %}
+        });
+    </script> {% endcomment %}
+    
     <!-- Header Section -->
     {% include "header.html" %}
+
 
     <section class="error-section">
       <div class="content" style="min-height: 382.328px;">

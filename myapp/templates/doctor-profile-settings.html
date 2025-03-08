@@ -18,15 +18,19 @@
   <!-- FontAwesome JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 
+
+   {% comment %} alerts {% endcomment %}
+
+    <!-- jQuery (Required for Toastr) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- Toastr CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
+
+
   <script>
-    //function previewImage(event) {
-      //var reader = new FileReader();
-      //reader.onload = function () {
-       // var previewImg = document.getElementById('preview-img');
-       // previewImg.src = reader.result;
-      //}
-      //reader.readAsDataURL(event.target.files[0]);
-    //}
 
 
     function handleImageUpload(event) {
@@ -41,6 +45,12 @@
   }
   </script>
 
+  <style>
+    .toast-success { background-color:rgba(84, 162, 102, 0.89) !important; color:black !important; border:2px solid green !important}
+      .toast-error { background-color:rgba(210, 93, 105, 0.88) !important; color:black !important; border:2px solid red !important }
+      .toast-warning { background-color:rgb(241, 216, 141)  !important; color:black !important; border:2px solid yellow !important}
+      .toast-info { background-color:black !important; color:  #17a2b8 !important; }
+  </style>
 </head>
 
 <body class="login-body">
@@ -48,7 +58,21 @@
 
     <!-- Header Section -->
     {% include "header.html" %}
-
+    {% comment %} <script>
+      $(document).ready(function () {
+          {% if messages %}
+              {% for message in messages %}
+                  toastr.options = {
+                      closeButton: true,
+                      progressBar: true,
+                      timeOut: 5000,  // 5 seconds
+                  };
+                  toastr["{{ message.tags }}"]("{{ message }}");
+              {% endfor %}
+          {% endif %}
+      });
+    </script>
+     {% endcomment %}
 
     <body style="transform: none;">
       {% block content %}
@@ -115,7 +139,7 @@
                           {% if doctor.profile_img %}
                           <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
                           {% else %}
-                          <img class="rounded-circle" src="/static/assets/default_profile.png" width="31"
+                          <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
                             alt="default profile" />
                           {% endif %}
                         </span>
@@ -126,7 +150,7 @@
                             {% if doctor.profile_img %}
                             <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
                             {% else %}
-                            <img class="rounded-circle" src="/static/assets/default_profile.png" width="31"
+                            <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
                               alt="default profile" />
                             {% endif %}
                           </div>
@@ -162,7 +186,7 @@
                           {% if doctor.profile_img %}
                           <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
                           {% else %}
-                          <img class="rounded-circle" src="/static/assets/default_profile.png" width="31"
+                          <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
                             alt="default profile" />
                           {% endif %}
                         </a>
@@ -267,7 +291,7 @@
                               {% if doctor.profile_img %}
                               <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
                               {% else %}
-                              <img class="rounded-circle" src="/static/assets/default_profile.png" width="31"
+                              <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
                                 alt="default profile" />
                               {% endif %}
                             </div>
@@ -339,14 +363,41 @@
                             value="{{ doctor.specialization }}">
                         </div>
                       </div>
+                      
+                      <div class="col-12">
+                        <div class="form-group">
+                          <label>Address</label>
+                          <input type="text" id="address" name="address" class="form-control"
+                            value="{{ doctor.address }}">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>City</label>
+                          <input type="text" id="city" name="city" class="form-control" value="{{ doctor.city }}">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>State</label>
+                          <input type="text" id="state" name="state" class="form-control" value="{{ doctor.state }}">
+                        </div>
+                      </div>
+                      
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>Experience</label>
+                          <input type="text" id="experience" name="experience" class="form-control" value="{{ doctor.experience }}">
+                        </div>
+                      </div>
 
                       <div class="col-md-6">
                         <div class="form-group mb-0">
                             <label for="gender">Gender</label>
                             <select id="gender" name="gender" class="form-control">
-                                <option value="M" {% if doctor.gender == "M" %}selected{% endif %}>M</option>
-                                <option value="F" {% if doctor.gender == "F" %}selected{% endif %}>F</option>
-                                <option value="O" {% if doctor.gender == "O" %}selected{% endif %}>O</option>
+                                <option value="M" {% if doctor.gender == "M" %}selected{% endif %}>Male</option>
+                                <option value="F" {% if doctor.gender == "F" %}selected{% endif %}>Female</option>
+                                <option value="O" {% if doctor.gender == "O" %}selected{% endif %}>Other</option>
                             </select>
                         </div>
                     </div>
@@ -405,7 +456,7 @@
           <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
-          <script>
+          {% comment %} <script>
               $(document).ready(function () {
                   let doctorId = $("#doctor_id").val();
           
@@ -524,8 +575,153 @@
                   loadDoctorDetails(); // Load doctor details on page load
               });
           </script>
-                    
+                     {% endcomment %}
 
+                <script>
+                     $(document).ready(function () {
+                      let doctorId = $("#doctor_id").val();
+                  
+                      // Function to Show Toastr Notifications
+                      function showToast(type, message) {
+                          toastr.options = {
+                              closeButton: true,
+                              progressBar: true,
+                              positionClass: "toast-top-right",
+                              timeOut: "3000"
+                          };
+                  
+                          if (type === "success") {
+                              toastr.success(message);
+                          } else if (type === "error") {
+                              toastr.error(message);
+                          } else if (type === "info") {
+                              toastr.info(message);
+                          } else {
+                              toastr.warning(message);
+                          }
+                      }
+                  
+                      // Load Doctor Details
+                      function loadDoctorDetails() {
+                          $.ajax({
+                              url: `/get-doctor/${doctorId}/`,
+                              type: "GET",
+                              success: function (data) {
+                                  $("#name").val(data.name);
+                                  $("#email").val(data.email);
+                                  $("#phno").val(data.phno);
+                                  $("#qualification").val(data.qualification);
+                                  $("#specialization").val(data.specialization);
+                                  $("#experience").val(data.experience);
+                                  $("#address").val(data.address);
+                                  $("#city").val(data.city);
+                                  $("#state").val(data.state);
+                                  $("#clinic_name").val(data.clinic_name);
+                                  $("#clinic_address").val(data.clinic_address);
+                                  $("#gender").val(data.gender);
+                                  $("#mci_no").val(data.mci_no);
+                                  $("#fee").val(data.fee);
+                  
+                                  // Display profile image
+                                  if (data.photo) {
+                                      $(".profile-img img").attr("src", data.photo);
+                                  } else {
+                                      $(".profile-img img").attr("src", "/static/assets/img/default_profile.png");
+                                  }
+                              },
+                              error: function () {
+                                  showToast("error", "Failed to load doctor details.");
+                              }
+                          });
+                      }
+                  
+                      // Handle Profile Image Upload
+                      $("#photo").change(function (event) {
+                          var file = event.target.files[0];
+                          if (!file) return;
+                  
+                          var reader = new FileReader();
+                          reader.onload = function () {
+                              $(".profile-img img").attr("src", reader.result);
+                          };
+                          reader.readAsDataURL(file);
+                  
+                          // Upload Image to Server
+                          var formData = new FormData();
+                          formData.append("photo", file);
+                          formData.append("doctor_id", doctorId);
+                  
+                          $.ajax({
+                              type: "POST",
+                              url: "/upload-doctor-profile/",
+                              data: formData,
+                              contentType: false,
+                              processData: false,
+                              headers: {
+                                  "X-CSRFToken": "{{ csrf_token }}"
+                              },
+                              success: function (response) {
+                                  if (response.status === "success") {
+                                      showToast("success", "Profile image updated successfully!");
+                                      loadDoctorDetails(); // Only reload on success
+                                  } else {
+                                      showToast("error", response.message);
+                                  }
+                              },
+                              error: function () {
+                                  showToast("error", "Failed to upload image.");
+                              }
+                          });
+                      });
+                  
+                      // Submit Form via AJAX (JSON Request)
+                      $("#updateDoctorForm").submit(function (e) {
+                          e.preventDefault();
+                  
+                          let formData = {
+                              doctor_id: doctorId,
+                              name: $("#name").val(),
+                              email: $("#email").val(),
+                              phno: $("#phno").val(),
+                              qualification: $("#qualification").val(),
+                              specialization: $("#specialization").val(),
+                              experience: $("#experience").val(),
+                              address: $("#address").val(),
+                              city: $("#city").val(),
+                              state: $("#state").val(),
+                              clinic_name: $("#clinic_name").val(),
+                              clinic_address: $("#clinic_address").val(),
+                              gender: $("#gender").val(),
+                              mci_no: $("#mci_no").val(),
+                              fee: $("#fee").val(),
+                          };
+                  
+                          $.ajax({
+                              type: "POST",
+                              url: "/update-doctor/",
+                              data: JSON.stringify(formData),
+                              contentType: "application/json",
+                              headers: {
+                                  "X-CSRFToken": "{{ csrf_token }}"
+                              },
+                              success: function (response) {
+                                  if (response.status === "success") {
+                                      showToast("success", "Doctor details updated successfully!");
+                                      loadDoctorDetails(); // Only reload when successful
+                                  } else {
+                                      showToast("error", response.message);
+                                  }
+                              },
+                              error: function () {
+                                  showToast("error", "An error occurred while updating the profile.");
+                              }
+                          });
+                      });
+                  
+                      loadDoctorDetails(); // Load doctor details on page load
+                  });
+                </script>
+                  
           {% include "footer.html" %}
           {% endblock %}
 

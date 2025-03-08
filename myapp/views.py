@@ -88,6 +88,7 @@ def register(request):
          return render(request, 'register.html')
 
 
+
 def login(request):
     if request.method == "POST":
         email = request.POST.get("email")
@@ -97,66 +98,44 @@ def login(request):
 
         print(f"Login attempt: Email={email}, UserType={user_type}")
 
-        print(f"Login attempt: Email={email}, UserType={user_type}")
-
         if user_type == "patient":
             try:
                 user = patientRegister.objects.get(email=email)
-                request.session['patient_id'] = user.id  # Store in session
-                print(f"Patient found: {user.email}")
-                request.session['patient_id'] = user.id  # Store in session
+                request.session['patient_id'] = user.id
                 print(f"Patient found: {user.email}")
             except patientRegister.DoesNotExist:
-                print("Patient does not exist")
-                print("Patient does not exist")
-                return render(request, "login.html", {"error": "Patient does not exist"})
+                messages.error(request, "Patient does not exist!")
+                return redirect("login")  # Redirect instead of render to persist messages
 
         elif user_type == "doctor":
             try:
                 user = doctorRegister.objects.get(email=email)
-                # request.session['doctor_id'] = user.id  # Store in session
+
                 if not user.is_approved:
-                    print("Doctor not approved yet")
-                    return render(request, "login.html", {"error": "Your account is pending approval. Please wait for admin approval."})
+                    messages.warning(request, "Your account is pending approval. Please wait for admin approval.")
+                    return redirect("login")
 
+                request.session['doctor_id'] = user.id
                 print(f"Doctor found: {user.email}")
-                request.session['doctor_id'] = user.id  # Store doctor ID in session
-                
-                
+
             except doctorRegister.DoesNotExist:
-                print("Doctor does not exist")
-              
-                return render(request, "login.html", {"error": "Doctor does not exist"})
+                messages.error(request, "Doctor does not exist!")
+                return redirect("login")
 
         else:
-            print("Invalid user type")
-            
-            return render(request, "login.html", {"error": "Invalid user type"})
+            messages.error(request, "Invalid user type!")
+            return redirect("login")
 
-        # **Compare hashed password using check_password()**
-        print(f"Entered Password: {password}")
-        print(f"Stored Hashed Password: {user.password}")
-
-        if check_password(password, user.password):  # Securely verify password
-            print("Password matched! Redirecting...")
-        # **Compare hashed password using check_password()**
-        print(f"Entered Password: {password}")
-        print(f"Stored Hashed Password: {user.password}")
-
-        if check_password(password, user.password):  # Securely verify password
-            print("Password matched! Redirecting...")
+        # **Check password securely**
+        if check_password(password, user.password):
+            messages.success(request, "Login successful! Redirecting...")
             if user_type == "patient":
-                return redirect("patient_dashboard")  
-                  
+                return redirect("patient_dashboard")
             elif user_type == "doctor":
-                return redirect("doctor_dashboard")  
-            else:
-                print("Password did NOT match!")
-                return render(request, "login.html", {"error": "Invalid email or password"})
-                 
+                return redirect("doctor_dashboard")
         else:
-            print("Password did NOT match!")
-            return render(request, "login.html", {"error": "Invalid email or password"})
+            messages.error(request, "Invalid email or password!")
+            return redirect("login")
 
     return render(request, "login.html")
 
@@ -203,41 +182,50 @@ def doctor_dashboard(request):
     return render(request, "doctor-dashboard.html", {"doctor": doctor,"upcoming_patients":upcoming_patients, "today_patients": today_patients,})
 
 
+# def doctor_register(request):
+#     if request.method == "POST":
+#         form = doctorForm(request.POST, request.FILES)
+        
+#         if form.is_valid():
+#             doctor = form.save(commit=False)
+#             doctor.password = make_password(doctor.password)  # Hash the password
+            
+#             if doctor.fee is None:  
+#                 doctor.fee = 0  # Ensure fee is not None
+            
+#             doctor.save()
+#             messages.success(request, "Registration successful! Please log in.")  # Success message
+#             return redirect('login')
+#         else:
+#             messages.error(request, "Registration failed! Please correct the errors below.")  # Error message
 
-def doctor_register(request):
-    if request.method == "POST":
-        form = doctorForm(request.POST, request.FILES)
-        form = doctorForm(request.POST, request.FILES)
-        if form.is_valid():
-            doctor = form.save(commit=False)
-            doctor.password = make_password(doctor.password)  #
-            if doctor.fee is None:  # Ensure fee is not None
-                doctor.fee = 0
-            # Hash the password before saving
-            doctor.save()
-            return redirect('login')
-            # doctor = form.save(commit=False)
-            # doctor.password = make_password(doctor.password)  #  Hash the password before saving
-            # doctor.save()
-            # return redirect('login')
-    else:
-        form = doctorForm()
-    return render(request, 'doctor-register.html', {'form': form})
+#     else:
+#         form = doctorForm()
+
+#     return render(request, 'doctor-register.html', {'form': form})
    
 
-def patient_register(request):
-    if request.method == "POST":
-        form = patientForm(request.POST, request.FILES)
-        form = patientForm(request.POST, request.FILES)
-        if form.is_valid():
-            patient = form.save(commit=False)
-            patient.password = make_password(patient.password)  # 🔒 Hash the password before saving
-            patient.save()
-            return redirect('login')
-    else:
-        form = patientForm()
-    return render(request, 'patient-register.html', {'form': form})
 
+
+
+# def patient_register(request):
+#     if request.method == "POST":
+#         form = patientForm(request.POST, request.FILES)
+        
+#         if form.is_valid():
+#             patient = form.save(commit=False)
+#             patient.password = make_password(patient.password)  # Hash password before saving
+#             patient.save()
+            
+#             messages.success(request, "Registration successful! Please log in.")  # Success alert
+#             return redirect('login')
+#         else:
+#             messages.error(request, "Registration failed! Please check your details.")  # Error alert
+
+#     else:
+#         form = patientForm()
+
+#     return render(request, 'patient-register.html', {'form': form})
     
 
 
@@ -312,7 +300,8 @@ def book_appointment(request, doctor_id, appointment_id=None):
     patient_id = request.session.get('patient_id')
 
     if not patient_id:
-        return redirect('/login/')  
+         messages.error(request, "You must be logged in to book an appointment.")
+         return redirect('/login/')  
 
     patient = get_object_or_404(patientRegister, id=patient_id)
     print(f"Received appointment_id: {appointment_id}")
@@ -336,11 +325,12 @@ def book_appointment(request, doctor_id, appointment_id=None):
             
             appointment_obj.save()  #  Update appointment instead of creating a new one
             print(f"Appointment updated: {appointment_obj.id}")
-
+             # **Set success message**
+            messages.success(request, "Appointment booked successfully! Redirecting to payment...")
             return redirect("payment", appointment_id=appointment_obj.id, doctor_id=doctor.id)
         else:
             print("Form errors:", form.errors)  # Debugging error messages
-
+            messages.error(request, "Failed to book appointment. Please check the form and try again.")
     else:
         form = appointmentForm(request.POST,instance=appointment_obj)  # Prefill form if editing
 
@@ -361,6 +351,20 @@ def book_appointment(request, doctor_id, appointment_id=None):
         "time_slots": time_slots,
         "appointment_data_list": appointment_obj
     })
+
+
+# for clear message
+# from django.contrib.messages import get_messages
+# from django.http import JsonResponse
+
+# def clear_messages(request):
+#     request.session.pop('toastr_message', None)
+#     request.session.pop('toastr_tag', None)
+#     return JsonResponse({"status": "success"})
+# def clear_messages(request):
+#     storage = get_messages(request)
+#     list(storage)  # This clears the messages
+#     return JsonResponse({"status": "success"})
 
 
 #for cancel appointment
@@ -673,17 +677,6 @@ def payment_details(request,appointment_id , doctor_id):
         "payment": payment})
 
 
-# def doctor_change_password(request):
-#     doctor_id = request.session.get('doctor_id')  # Get logged-in doctor ID
-
-#     if not doctor_id:
-#         return redirect("login")  # Redirect to login if not logged in
-#     try:
-#         doctor = doctorRegister.objects.get(id=doctor_id)  # Fetch the doctor
-#     except doctorRegister.DoesNotExist:
-#         return redirect("login")  # Redirect if doctor not found
-
-#     return render(request, "doctor-change-password.html", {"doctor": doctor})
 
     # return render(request, 'doctor-change-password.html')
 def doctor_change_password(request):
@@ -717,15 +710,41 @@ def doctor_change_password(request):
 
 
 
+# def patient_change_password(request):
+#     patient_id = request.session.get('patient_id')  # Get logged-in patient ID
+#     patient_id = request.session.get('patient_id')  # Get logged-in patient ID
+#     if not patient_id:
+#         return redirect("login")  # Redirect if not logged in
+       
+    
+#     try:
+#         patient = patientRegister.objects.get(id=patient_id)
+#         patient = patientRegister.objects.get(id=patient_id)
+#     except patientRegister.DoesNotExist:
+#         return redirect("login")  # Redirect if patient not found
+
+#     if request.method == 'POST':
+#         form = passwordChangeForm(request.POST, user=patient)
+#         if form.is_valid():
+#             new_password = form.cleaned_data['new_password']
+#             patient.password = make_password(new_password)  # Hash new password
+#             patient.save()
+            
+#             messages.success(request, "Password changed successfully.")
+#             return redirect("patient_dashboard")  # Redirect after successful change
+#         else:
+#             messages.error(request, "Error updating password. Please try again.")
+#     else:
+#         form = passwordChangeForm(user=patient)
+
+#     return render(request, "patient-change-password.html",{"patient":patient,"form":form})
+
 def patient_change_password(request):
-    patient_id = request.session.get('patient_id')  # Get logged-in patient ID
-    patient_id = request.session.get('patient_id')  # Get logged-in patient ID
+    patient_id = request.session.get('patient_id')  
     if not patient_id:
-        return redirect("login")  # Redirect if not logged in
         return redirect("login")  # Redirect if not logged in
     
     try:
-        patient = patientRegister.objects.get(id=patient_id)
         patient = patientRegister.objects.get(id=patient_id)
     except patientRegister.DoesNotExist:
         return redirect("login")  # Redirect if patient not found
@@ -744,25 +763,9 @@ def patient_change_password(request):
     else:
         form = passwordChangeForm(user=patient)
 
-    return render(request, "patient-change-password.html",{"patient":patient,"form":form})
+    return render(request, "patient-change-password.html", {"patient": patient, "form": form})
 
-    # return redirect("login")  # Redirect if patient not found
 
-    # if request.method == 'POST':
-    #     form = passwordChangeForm(request.POST, user=patient)
-    #     if form.is_valid():
-    #         new_password = form.cleaned_data['new_password']
-    #         patient.password = make_password(new_password)  # Hash new password
-    #         patient.save()
-            
-    #         messages.success(request, "Password changed successfully.")
-    #         return redirect("patient_dashboard")  # Redirect after successful change
-    #     else:
-    #         messages.error(request, "Error updating password. Please try again.")
-    # else:
-    #     form = passwordChangeForm(user=patient)
-
-    # return render(request, "patient-change-password.html",{"patient":patient,"form":form})
 
 
 def password_change_successful(request):
@@ -771,23 +774,112 @@ def password_change_successful(request):
 def verify(request):
     return render(request, 'verify.html')
 
+# def patient_profile_settings(request):
+#     patient_id = request.session.get('patient_id')  # Get patient ID from session
+
+#     if not patient_id:
+#         messages.error(request, "You need to log in first.")  # Alert for unauthenticated users
+#         return redirect("login")  # Redirect to login if not authenticated
+
+#     try:
+#         patient = patientRegister.objects.get(id=patient_id)  # Fetch patient data
+#     except patientRegister.DoesNotExist:
+#         messages.error(request, "Patient not found. Please log in again.")  # Alert for invalid patient
+#         return redirect("login")
+
+#     if request.method == "POST":
+#         data = request.POST
+#         print(" Received Data:", data)  # Debugging
+
+#         # Check if POST data is actually being sent
+#         if not data:
+#             print(" No data received in POST request!")
+
+#         # Update fields only if values are provided
+#         patient.phno = data.get("phone", patient.phno)
+#         patient.address = data.get("address", patient.address)
+#         patient.city = data.get("city", patient.city)
+#         patient.state = data.get("state", patient.state)
+#         patient.blood_group = data.get("blood_group", patient.blood_group)
+#         patient.age = data.get("age", patient.age)
+#         patient.height = data.get("height", patient.height)
+#         patient.weight = data.get("weight", patient.weight)
+#         patient.dob = data.get("dob", patient.dob)
+
+#         print(" Before Saving:", patient.__dict__)  # Debugging
+
+#         patient.save()  # Save data to database
+
+#         print("Data Saved Successfully!")  # Confirmation
+
+#         messages.success(request, "Profile details added successfully!")
+#         return redirect("patient_profile_settings")  # Reload page with updated details
+
+#     return render(request, 'patient-profile-settings.html', {"patient": patient})
+    
+
+
 def patient_profile_settings(request):
-    BLOOD_GROUP_CHOICES = [
-        ('A+', 'A+'), ('A-', 'A-'), ('B+', 'B+'), ('B-', 'B-'),
-        ('O+', 'O+'), ('O-', 'O-'), ('AB+', 'AB+'), ('AB-', 'AB-')
-    ]
-    patient_id = request.session.get('patient_id')  # Get user ID from session
-    
+    patient_id = request.session.get('patient_id')  # Get patient ID from session
+
     if not patient_id:
-        return redirect("login")  # Redirect to login if session is empty
-    
+        messages.error(request, "You need to log in first.")  # Alert for unauthenticated users
+        return redirect("login")
+
     try:
         patient = patientRegister.objects.get(id=patient_id)  # Fetch patient data
-        print("Patient Found:", patient.name)  # Debugging
     except patientRegister.DoesNotExist:
+        messages.error(request, "Patient not found. Please log in again.")  # Alert for invalid patient
         return redirect("login")
+
+    if request.method == "POST":
+        data = request.POST
+        print("Received Data:", data)  # Debugging
+
+        if not data:
+            print("No data received in POST request!")
+
+        # Store old values for comparison
+        old_data = {
+            "phno": patient.phno,
+            "address": patient.address,
+            "city": patient.city,
+            "state": patient.state,
+            "blood_group": patient.blood_group,
+            "age": patient.age,
+            "height": patient.height,
+            "weight": patient.weight,
+            "dob": patient.dob,
+        }
+
+        # Update fields only if values are provided
+        patient.phno = data.get("phone", patient.phno)
+        patient.address = data.get("address", patient.address)
+        patient.city = data.get("city", patient.city)
+        patient.state = data.get("state", patient.state)
+        patient.blood_group = data.get("blood_group", patient.blood_group)
+        patient.age = data.get("age", patient.age)
+        patient.height = data.get("height", patient.height)
+        patient.weight = data.get("weight", patient.weight)
+        patient.dob = data.get("dob", patient.dob)
+
+        # Compare new values with old values
+        updated_fields = [
+            field for field in old_data if getattr(patient, field) != old_data[field]
+        ]
+
+        if updated_fields:
+            patient.save()  # Save data to database
+            messages.success(request, " Profile updated successfully!")  # Success alert
+        else:
+            messages.warning(request, "No changes were made.")  # Warning alert
+
+        return redirect("patient_profile_settings")  # Reload page with updated details
+
     return render(request, 'patient-profile-settings.html', {"patient": patient})
-      
+
+
+
 def search(request):
     all_doctor=doctorRegister.objects.all
     return render(request, 'search.html',{'doctors':all_doctor})
@@ -897,7 +989,7 @@ def upload_doctor_profile_image(request):
 @ensure_csrf_cookie  # Ensures CSRF token is sent as a cookie
 def get_doctor(request, doctor_id):
     doctor = get_object_or_404(doctorRegister, id=doctor_id)
-    photo_url = request.build_absolute_uri(settings.MEDIA_URL + doctor.photo.name) if doctor.photo else None
+    photo_url = request.build_absolute_uri(settings.MEDIA_URL + doctor.profile_img.name) if doctor.profile_img else None
     return JsonResponse({
         "id": doctor.id,
         "name": doctor.name,
@@ -920,53 +1012,6 @@ def get_doctor(request, doctor_id):
 
 
 ####################################update patient
-
-
-# @csrf_exempt
-# def update_patient(request):
-#     if request.method == "POST":
-#         try:
-#             patient_id = request.POST.get("patient_id")
-#             if not patient_id:
-#                 return JsonResponse({"status": "error", "message": "Patient ID is required"})
-
-#             patient = get_object_or_404(patientRegister, id=patient_id)
-
-#             # Update fields
-#             patient.name = request.POST.get("name", patient.name)
-#             patient.email = request.POST.get("email", patient.email)
-#             patient.phno = request.POST.get("phno", patient.phno)
-#             patient.address = request.POST.get("address", patient.address)
-#             patient.city = request.POST.get("city", patient.city)
-#             patient.state = request.POST.get("state", patient.state)
-#             patient.blood_group = request.POST.get("blood_group", patient.blood_group)
-#             patient.age = request.POST.get("age", patient.age)
-#             patient.height = request.POST.get("height", patient.height)
-#             patient.weight = request.POST.get("weight", patient.weight)
-#             patient.dob = request.POST.get("dob", patient.dob)
-
-#             # Handle profile image
-#             if 'photo' in request.FILES:
-#                 # Delete old profile image if it exists
-#                 if patient.photo and os.path.exists(patient.photo.path):
-#                     os.remove(patient.photo.path)
-
-#                 # Save new profile image
-#                 photo = request.FILES['photo']
-#                 photo_path = f"profile_pic/{patient_id}_{photo.name}"
-#                 patient.photo = default_storage.save(photo_path, ContentFile(photo.read()))
-
-#             patient.save()  # Save changes
-
-#             return JsonResponse({"status": "success", "message": "Patient details updated successfully!", "photo_url": patient.photo.url if patient.photo else None})
-#         except Exception as e:
-#             return JsonResponse({"status": "error", "message": str(e)})
-
-#     return JsonResponse({"status": "error", "message": "Invalid request method"})
-
-
-
-
 
 @csrf_exempt
 def update_patient(request):
@@ -1013,7 +1058,9 @@ def update_patient(request):
                 patient.height = data.get("height", patient.height)
                 patient.weight = data.get("weight", patient.weight)
                 patient.dob = data.get("dob", patient.dob)
-                
+
+                # patient.dob = datetime.strptime(patient.dob, "%d-%m-%Y").strftime("%Y-%m-%d")
+
                 patient.save()
 
                 return JsonResponse({"status": "success", "message": "Patient details updated successfully!"})
@@ -1063,7 +1110,6 @@ import logging
 
 # Configure logging
 logger = logging.getLogger(__name__)
-
 @ensure_csrf_cookie  # Ensures CSRF token is sent as a cookie  
 def get_patient(request, patient_id):
     try:
@@ -1101,32 +1147,6 @@ def get_patient(request, patient_id):
     except Exception as e:
         logger.error(f"Unexpected error in get_patient: {e}")
         return JsonResponse({"error": f"Unexpected error: {str(e)}"}, status=500)
-
-
-# def get_patient(request, patient_id):
-#     patient = get_object_or_404(patientRegister, id=patient_id)
-
-#     # Construct the full photo URL if the patient has an image
-#     photo_url = request.build_absolute_uri(settings.MEDIA_URL + patient.photo.name) if patient.photo else None
-#     return JsonResponse({
-#         "id": patient.id,
-#         "name": patient.name,
-#         "email": patient.email,
-#         "phno": patient.phno,
-#         "password":patient.password,
-#         "address": patient.address,
-#         "city": patient.city,
-#         "state": patient.state,
-#         "blood_group": patient.blood_group,
-#         "age": patient.age,
-#         "height": patient.height,
-#         "weight": patient.weight,
-#         "dob": patient.dob,
-#         "photo": photo_url,  
-#         "csrfToken": get_token(request)  # Send CSRF token in response
-#     })
-
-
 
 
 def admin_profile_settings(request):
@@ -1189,6 +1209,26 @@ def admin_change_password(request):
 
 
 
+# def admin_login(request):
+#     if request.method == 'POST':
+#         email = request.POST.get('email')
+#         password = request.POST.get('password')
+
+#         try:
+#             admin = adminLogin.objects.get(email=email)
+
+#             # Check if the entered password matches the stored hashed password
+#             if check_password(password, admin.password):
+#                 request.session['admin_id'] = admin.id  # Store admin session
+#                 return redirect('admin_dashboard')  # Ensure this matches your routes
+#             else:
+#                 messages.error(request, "Invalid password.")
+        
+#         except adminLogin.DoesNotExist:
+#             messages.error(request,"Invalid email or username.")  
+
+#     return render(request, 'admin_login.html')  # Return the login page with error messages if any
+
 def admin_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -1200,14 +1240,16 @@ def admin_login(request):
             # Check if the entered password matches the stored hashed password
             if check_password(password, admin.password):
                 request.session['admin_id'] = admin.id  # Store admin session
+                messages.success(request, "Login successful! Welcome to the Admin Dashboard.")
                 return redirect('admin_dashboard')  # Ensure this matches your routes
             else:
-                messages.error(request, "Invalid password.")
+                messages.error(request, "Invalid password. Please try again.")
         
         except adminLogin.DoesNotExist:
-            messages.error(request,"Invalid email or username.")  
+            messages.error(request, "Invalid email or username. Please check your credentials.")
 
     return render(request, 'admin_login.html')  # Return the login page with error messages if any
+
 
 
 from django.core.mail import send_mail, BadHeaderError
@@ -1215,6 +1257,7 @@ from django.core.mail import send_mail, BadHeaderError
 # def is_admin_logged_in(request):
 #     return 'admin_id' in request.session
 
+# @login_required
 def admin_dashboard(request):
         if 'admin_id' not in request.session:
                 return redirect('admin_login')  # Redirect if not logged in
@@ -1372,3 +1415,220 @@ def payment_pdf(request, payment_id):
 
     # Return response with proper content type
     return FileResponse(buf, as_attachment=True, filename=f"invoice_{payment.id}.pdf", content_type="application/pdf")
+
+
+
+    # OTP sending/
+
+    ###################
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+from .forms import doctorForm  # Import your form
+from .models import doctorRegister  # Import Doctor model
+import random
+from django.core.mail import send_mail
+from django.conf import settings
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+import requests
+from django.conf import settings  # Ensure you add your API key in settings.py
+
+MAILBOXLAYER_API_KEY = "0572de9f84c546ad0ba81a96f9090fc2"  # Replace with your actual API key
+def validate_email_existence(email):
+    """Check if an email exists using MailboxLayer API"""
+    url = f"http://apilayer.net/api/check?access_key={MAILBOXLAYER_API_KEY}&email={email}&smtp=1&format=1"
+    
+    try:
+        response = requests.get(url)
+        data = response.json()
+
+        # If smtp_check is True, the email exists
+        if data.get("smtp_check"):
+            return True
+        else:
+            return False
+    except requests.RequestException:
+        return False    
+    
+def doctor_register(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+
+        try:
+            validate_email(email)  # Check if email format is correct
+        except ValidationError:
+            messages.error(request, "Invalid email address format. Please enter a valid email.")
+            return redirect('doctor_register')
+
+        # 🚨 Check if email already exists
+        if doctorRegister.objects.filter(email=email).exists():
+            messages.error(request, "Email is already registered. Try logging in.")
+            return redirect('doctor_register')
+
+            # ✅ Validate if the email actually exists
+        if not validate_email_existence(email):
+            messages.error(request, "Email address does not exist. Please enter a valid email.")
+            return redirect('doctor_register')
+
+        # ✅ If email is new, proceed with storing data temporarily
+        form = doctorForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            
+            password = form.cleaned_data.get('password')
+            if not password:
+                messages.error(request, "Password is required!")
+                return redirect('doctor_register')
+            # Store form data in session (excluding password)
+            doctor_data = form.cleaned_data
+            doctor_data.pop('password')  # Exclude password for security
+            request.session['doctor_data'] = doctor_data
+            request.session['doctor_password'] = make_password(password)  # Store hashed password
+            doctor_data['fee'] = doctor_data.get('fee', 0)  # If fee is missing, set it to 0
+
+
+            # Generate OTP for email verification
+            otp = random.randint(100000, 999999)
+            print(f"Generated OTP: {otp}")  # ✅ Print OTP in terminal
+
+            request.session['otp'] = otp  # Store OTP in session
+            request.session['email'] = email  # Store email in session
+
+            # Send OTP email
+            subject = "Email Verification OTP"
+            message = f"Your OTP for doctor registration is: {otp}. Do not share this with anyone."
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [email]
+            send_mail(subject, message, email_from, recipient_list)
+
+            messages.success(request, "OTP sent to your email. Please verify.")
+            return redirect('verify_otp', email=email)  # Redirect to OTP verification page
+
+        else:
+            messages.error(request, "Invalid form submission. Please check your details.")
+
+    else:
+        form = doctorForm()
+
+    return render(request, 'doctor-register.html', {'form': form})
+
+def verify_otp(request, email):
+    if request.method == "POST":
+        entered_otp = request.POST.get("otp")
+        stored_otp = request.session.get('otp')
+        if stored_otp and int(entered_otp) == stored_otp:
+            # Retrieve stored doctor data from session
+            doctor_data = request.session.get('doctor_data')
+            doctor_password = request.session.get('doctor_password')
+
+            if doctor_data and doctor_password:
+                # Save doctor to database
+                doctor = doctorRegister(**doctor_data)
+                doctor.password = doctor_password  # Assign hashed password
+                doctor.save()
+
+                # Remove OTP and session data
+                del request.session['otp']
+                del request.session['doctor_data']
+                del request.session['doctor_password']
+
+                messages.success(request, "Registration successful! You can now log in.")
+                return redirect('login')
+            else:
+                messages.error(request, "Session expired. Please register again.")
+                return redirect('doctor_register')
+
+        else:
+            messages.error(request, "Invalid OTP! Please try again.")
+
+    return render(request, 'verify_otp.html', {'email': email})
+
+#####################################
+
+def patient_register(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+
+        try:
+            validate_email(email)  # Check if email format is correct
+        except ValidationError:
+            messages.error(request, "Invalid email address format. Please enter a valid email.")
+            return redirect('patient_register')
+
+        if patientRegister.objects.filter(email=email).exists():
+            messages.error(request, "Email is already registered. Try logging in.")
+            return redirect('patient_register')
+
+                    # ✅ Validate if the email actually exists
+        if not validate_email_existence(email):
+            messages.error(request, "Email address does not exist. Please enter a valid email.")
+            return redirect('patient_register')
+        
+        form = patientForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            password = form.cleaned_data.get('password')
+            if not password:
+                messages.error(request, "Password is required!")
+                return redirect('patient_register')
+            
+            patient_data = form.cleaned_data
+            patient_data.pop('password')  # Exclude password for security
+            request.session['patient_data'] = patient_data
+            request.session['patient_password'] = make_password(password)  # Store hashed 
+
+                        # Generate OTP for email verification
+            otp = random.randint(100000, 999999)
+            print(f"Generated OTP: {otp}")  # ✅ Print OTP in terminal
+
+            request.session['otp'] = otp  # Store OTP in session
+            request.session['email'] = email  # Store email in session
+
+                        # Send OTP email
+            subject = "Email Verification OTP"
+            message = f"Your OTP for doctor registration is: {otp}. Do not share this with anyone."
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [email]
+            send_mail(subject, message, email_from, recipient_list)
+
+            messages.success(request, "OTP sent to your email. Please verify.")
+            return redirect('verify_otp_patient', email=email)  # Redirect to OTP verification page
+        else:
+            messages.error(request, "Invalid form submission. Please check your details.")
+    else:
+        form = patientForm()
+    return render(request, 'patient-register.html', {'form': form})
+
+
+def verify_otp_patient(request, email):
+    if request.method == "POST":
+        entered_otp = request.POST.get("otp")
+        stored_otp = request.session.get('otp')
+
+        if stored_otp and int(entered_otp) == stored_otp:
+            # Retrieve stored doctor data from session
+            patient_data = request.session.get('patient_data')
+            patient_password = request.session.get('patient_password')
+
+            if patient_data and patient_password:
+                # Save doctor to database
+                patient = patientRegister(**patient_data)
+                patient.password = patient_password  # Assign hashed password
+                patient.save()
+
+                # Remove OTP and session data
+                del request.session['otp']
+                del request.session['patient_data']
+                del request.session['patient_password']
+
+                messages.success(request, "Registration successful! You can now log in.")
+                return redirect('login')
+            else:
+                messages.error(request, "Session expired. Please register again.")
+                return redirect('patient_register')
+
+        else:
+            messages.error(request, "Invalid OTP! Please try again.")
+
+    return render(request, 'verify_otp_patient.html', {'email': email})

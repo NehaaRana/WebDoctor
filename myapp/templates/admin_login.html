@@ -1,112 +1,344 @@
 {% load static %}
-<html lang="en" class="fontawesome-i2svg-active fontawesome-i2svg-complete">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, user-scalable=0"
-    />
-    <title>{% block title %} webDocter {% endblock %}</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Login</title>
     <link
       rel="shortcut icon"
       href="{% static 'assets/img/favicon.png' %}"
       type="image/x-icon"
     />
-
-    <!-- -------------------- social icons ----------------------- -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
-
-    <link
-      rel="stylesheet"
-      href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}"
-    />
-    <link
-      rel="stylesheet"
-      href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}"
-    />
-
-    <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}" />
-
     <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+    <!-- jquery-confirm CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css"
+    />
 
-    <style type="text/css">
-      @font-face {
-        font-family: Roboto;
-        src: url("{% static 'assets/fonts/Roboto-Regular.ttf' %}") format("truetype");
+    {% comment %} alerts {% endcomment %}
+
+    <!-- jQuery (Required for Toastr) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- Toastr CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
+
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: #f8f9fa;
       }
+
+      .login-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .login-box {
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 1200px;
+        width: 100%;
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .svg-container {
+        flex: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8f9fa;
+        padding: 40px;
+      }
+
+      .svg-container img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      .form-container {
+        flex: 2;
+        padding: 120px;
+        background: linear-gradient(
+          45deg,
+          rgba(33, 37, 240, 0.1) 0%,
+          rgba(255, 255, 255, 1) 50%,
+          rgba(33, 37, 240, 0.1) 100%
+        );
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .login-logo {
+        max-width: 150px;
+        margin: 0 auto 40px;
+        display: block;
+      }
+
+      h2 {
+        font-size: 24px;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+
+      p {
+        font-size: 14px;
+        color: #666;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+        position: relative; /* Required for absolute positioning of .focus-input100 */
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        position: relative; /* Required for z-index */
+        background: transparent; /* Ensure the background is transparent */
+        z-index: 1; /* Ensure the input is above the focus effect */
+      }
+
+      .btn_admin_log {
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+        padding: 12px 20px;
+        background-color: #0e82fd;
+        border-radius: 10px;
+        color: #fff;
+        font-weight: bold;
+        border: none;
+        outline: none;
+        font-size: 16px;
+        width: 100%;
+        cursor: pointer;
+      }
+
+      .btn_admin_log:hover {
+        background-color: #0a6fd8;
+      }
+
+      .alert {
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+
+      /* Focus Effect */
+      .focus-input100 {
+        position: absolute;
+        display: block;
+        width: calc(100% + 2px);
+        height: calc(100% + 2px);
+        top: -1px;
+        left: -1px;
+        pointer-events: none;
+        border: 1px solid #0e82fd;
+        border-radius: 3px;
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.4s;
+        transform: scaleX(1.1) scaleY(1.3);
+        z-index: 0; /* Ensure it's below the input field */
+      }
+
+      .form-control:focus + .focus-input100 {
+        visibility: visible;
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      /* Hide SVG on tablets and mobile devices */
+      @media (max-width: 768px) {
+        .svg-container {
+          display: none;
+        }
+
+        .form-container {
+          flex: 1 1 100%; /* Take full width */
+          padding: 40px 20px; /* Adjust padding for smaller screens */
+        }
+
+        .login-box {
+          max-width: 100%; /* Allow the form to take full width */
+        }
+      }
+
+      @media (max-width: 480px) {
+        .form-container {
+          padding: 20px;
+        }
+
+        h2 {
+          font-size: 20px;
+        }
+
+        p {
+          font-size: 12px;
+        }
+
+        .btn_admin_log {
+          font-size: 14px;
+          padding: 10px 15px;
+        }
+      }
+      .jconfirm .jconfirm-box.jconfirm-animation-news {
+        transform: rotate(400deg) scale(0);
+      }
+
+      .toast-success { background-color:rgba(84, 162, 102, 0.89) !important; color:black !important; border:2px solid green !important}
+      .toast-error { background-color:rgba(210, 93, 105, 0.88) !important; color:black !important; border:2px solid red !important }
+      .toast-warning { background-color:rgb(241, 216, 141)  !important; color:black !important; border:2px solid yellow !important}
+      .toast-info { background-color:black !important; color:  #17a2b8 !important; }
     </style>
   </head>
-  <body class="login-body">
+
+  <body>
     {% block content %}
+    {% comment %} toastr alerts {% endcomment %}
+    <script>
+      $(document).ready(function () {
+          {% if messages %}
+              {% for message in messages %}
+                  toastr.options = {
+                      closeButton: true,
+                      progressBar: true,
+                      timeOut: 5000,  // 5 seconds
+                  };
+                  toastr["{{ message.tags }}"]("{{ message }}");
+              {% endfor %}
+          {% endif %}
+      });
+    </script>
+    
     <div class="main-wrapper">
-        <!-- Your page content goes here -->
-
-
-          <div class="login-content-info">
-            <div class="container">
-              <div class="row justify-content-center">
-                <div class="col-lg-4 col-md-6">
-                  <div class="account-content">
-                    <div class="login-shapes">
-                      <div class="shape-img-left">
-                        <img src="{% static 'assets/img/shape-01.png' %}" alt="" />
-                      </div>
-                      <div class="shape-img-right">
-                        <img src="{% static 'assets/img/shape-02.png' %}" alt="" />
-                      </div>
-                    </div>
-                    <div class="account-info sign">
-                      <div class="login-title">
-                        <h3>Sign in</h3>
-                        <p>Caring for your health, every step.</p>
-                        {% if messages  %}
-                        {% for message in messages %}
-                        <div class="error-message" style="padding-top: 12px">
-                          {{ message }}
-                        </div>
-                        {% endfor %}
-                        {% endif %}
-                      </div>
-                      <form action="{% url 'admin_login'  %}" method="POST">
-                         {% csrf_token %}
-                         {% comment %} <div class="form-group">
-                          <label for="username">Username</label>
-                          <input type="text" id="username" class="form-control" name="username" placeholder="username" required />
-                        </div> {% endcomment %}
-                        <div class="form-group">
-                          <label for="email">E-mail</label>
-                          <input type="text" id="email" class="form-control" name="email" placeholder="example@email.com" required />
-                        </div>
-                        <div class="form-group">
-                          <label for="password">Password</label>
-                          <input type="password" id="password" class="form-control" name="password" placeholder="*************" required />
-                        </div>
-                        <div class="form-group">
-                          <button class="btn btn-block" type="submit">Sign in</button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+      <div class="login-container">
+        <div class="login-box">
+          <div class="svg-container">
+            <img
+              src="{% static 'assets/img/admin_bg.svg' %}"
+              alt="Animated SVG"
+              class="img-fluid"
+            />
           </div>
-
-
-
-          <!-- Your page content goes here -->
-
+          <div class="form-container">
+            <img
+              src="{% static 'assets/img/logo.png' %}"
+              alt="Logo"
+              class="login-logo"
+            />
+            <h1 class="text-center fw-bolder">Admin Login</h1>
+            <p class="text-center">Enabling doctors to heal, empowering patients to thrive.</p>
+            {% comment %} {% if messages %} {% for message in messages %}
+            <div class="alert bg-danger fw-medium" role="alert"><i class="fas fa-exclamation-triangle fa-beat-fade fs-5 align-middle me-1"></i>{{ message }}</div>
+            {% endfor %} {% endif %} {% endcomment %}
+            <form id="admin_login" action="{% url 'admin_login' %}" method="POST">
+              {% csrf_token %}
+              <div class="form-group">
+                <input
+                  type="email"
+                  id="email"
+                  class="form-control"
+                  name="email"
+                  placeholder="example@email.com"
+                  
+                />
+                <span class="focus-input100"></span>
+              </div>
+              <div class="form-group">
+                <input
+                  type="password"
+                  id="password"
+                  class="form-control"
+                  name="password"
+                  placeholder="Password"
+                  
+                />
+                <span class="focus-input100"></span>
+              </div>
+              <div>
+                <button class="btn_admin_log" type="submit">Sign in</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
     {% endblock %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#admin_login").submit(function (e) {
+          e.preventDefault(); // Prevent default form submission
+
+          let email = $("#email").val().trim();
+          let password = $("#password").val().trim();
+          let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+          function showAlert(icon, message) {
+            $.confirm({
+              title: `<i class="fas ${icon} fa-2x fa-beat-fade"></i>`,
+              content: `<span style="font-size: 15px;">${message}</span>`,
+              type: "blue",
+              theme: "modern",
+              animation: "news",
+              closeAnimation: "news",
+              boxWidth: "400px",
+              buttons: {
+                ok: {
+                  text: "OK",
+                  btnClass: "btn-blue",
+                },
+              },
+            });
+          }
+
+          // Email Validation
+          if (email === "" || !emailPattern.test(email)) {
+            showAlert("fa-envelope", "Enter a valid email address");
+            return false;
+          }
+
+          // Password Validation
+          if (password.length < 6) {
+            showAlert("fa-key", "Password must be at least 6 characters long");
+            return false;
+          }
+          this.submit();
+        });
+      });
+    </script>
   </body>
 </html>

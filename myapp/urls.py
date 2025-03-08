@@ -74,4 +74,8 @@ urlpatterns =[
   path('payment_success/', views.payment_success, name='payment_success'),
   path("payment_success_page/<int:appointment_id>/<int:doctor_id>/", views.payment_success_page, name="payment_success_page"),
   path('payment_pdf/<int:payment_id>/', views.payment_pdf, name='payment_pdf'),
+  path('verify_otp/<str:email>/', views.verify_otp, name='verify_otp'),
+  path('verify_otp_patient/<str:email>/', views.verify_otp_patient, name='verify_otp_patient'),
+  # path('clear-messages/', views.clear_messages, name='clear_messages'),
+
 ]
