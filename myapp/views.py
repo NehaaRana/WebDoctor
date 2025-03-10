@@ -343,13 +343,13 @@ def patient_profile(request):
     return render(request, 'patient-profile.html')
 
 
-# def doctor_list(request):
+# def <a href="{% if user_type == 'patient' or user_type == 'doctor' %}{% url 'index' %}{% else %}{% url 'home' %}{% endif %}">Home</a>t(request):
 #     doctors = doctorRegister.objects.all()  # Fetch all doctors
 #     print(f"User: {request.user}, Authenticated: {request.user.is_authenticated}")
 #     return render(request, "doctor-list.html",{"doctors": doctors})
 
 def doctor_list(request):
-    doctors = doctorRegister.objects.all()  # Fetch all doctors
+    doctors = doctorRegister.objects.filter(is_approved=True) # Fetch only approved doctors
     user_type = None
     profile = None
 
@@ -1639,10 +1639,10 @@ def payment_pdf(request, payment_id):
 
     invoice_details = [
         ["Invoice ID:", f"{payment.id}"],
-        ["Customer Name:", f"{payment.patient_id.name}"],
+        ["Patient Name:", f"{payment.patient_id.name}"],
         ["Doctor Name:", f"Dr. {doctor.name}"],
         ["Payment Date:", f"{payment.payment_date.strftime('%Y-%m-%d')}"],
-        ["Amount Paid:", f"${payment.amount:.2f}"],
+        ["Amount Paid:", f"{payment.amount:.2f}"],
         ["Payment Method:", f"{payment.payment_method}"]
     ]
 
@@ -1652,7 +1652,7 @@ def payment_pdf(request, payment_id):
     # **Table Title: Appointment Details**
     appointment_table_y = invoice_table_y - (len(invoice_details) * 20) - 50  
     c.setFont("Helvetica-Bold", 14)
-    c.drawString(table_x, appointment_table_y, "📌 Appointment Details")
+    c.drawString(table_x, appointment_table_y, " Appointment Details")
 
     appointment_details = [
         ["Appointment ID:", f"{appointment.id}"],

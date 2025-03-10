@@ -667,6 +667,8 @@
                                   $(".profile-img img").attr("src", newImageUrl);
                                   $(".booking-doc-img img").attr("src", newImageUrl);
                                   $(".user-img img").attr("src", newImageUrl);
+                                  $(".avatar-sm img").attr("src", newImageUrl);
+                  
                   
                                   // Also update the input field in the form
                                   $("#photo").val("");
@@ -722,6 +724,7 @@
                                   let imgElement = $(".profile-img img");
                                   let imgElement1 = $(".booking-doc-img img");
                                   let imgElement2 = $(".user-img img");
+                                  let imgElement3 = $(".avatar-sm img");
                   
                                   // Create a new Image object to ensure proper cache bypass
                                   let newImage = new Image();
@@ -729,6 +732,7 @@
                                     imgElement.attr("src", response.photo_url + "?t=" + new Date().getTime());
                                     imgElement1.attr("src", response.photo_url + "?t=" + new Date().getTime());
                                     imgElement2.attr("src", response.photo_url + "?t=" + new Date().getTime());
+                                    imgElement3.attr("src", response.photo_url + "?t=" + new Date().getTime());
                                   };
                                   newImage.src = response.photo_url + "?t=" + new Date().getTime();
                   

@@ -264,6 +264,7 @@ type="image/x-icon"
     </div>
       <!-- Card Start -->
       {% for doctor in doctors %}
+      {% if doctor.is_approved %}
       <div class="col-12 col-sm-6 col-md-4 col-lg-3 aos" data-aos="fade-up">
         <div class="card h-100">
             {% if doctor.profile_img %}
@@ -281,6 +282,7 @@ type="image/x-icon"
           </div>
         </div>
       </div>
+      {% endif %}
       {% endfor %}
       <!-- Card End -->
 

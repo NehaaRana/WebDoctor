@@ -287,12 +287,10 @@
                     <div class="col-12 col-md-6">
                       <div class="form-group">
                         <label>Date of Birth</label>
-                        <div class="cal-icon">
-                          <input type="text" id="dob" name="dob" class="form-control datetimepicker" placeholder="Date"
-                            value="{{ patient.dob }}">
-                            {% comment %} <span class="input-group-text">
-                              <i class="fa fa-calendar"></i> <!-- Calendar icon -->
-                            </span> {% endcomment %}
+                        
+                        <div>
+                        
+                          <input type="date" class="form-control" name="dob"  id="dob" placeholder="Date" required value="{{ patient.dob }}">
                         </div>
                       </div>
                     </div>
@@ -473,6 +471,7 @@
                 $(".profile-img img").attr("src", newImageUrl);
                 $(".booking-doc-img img").attr("src", newImageUrl);
                 $(".user-img img").attr("src", newImageUrl);
+                $(".avatar-sm img").attr("src", newImageUrl);
 
                 // Also update the input field in the form
                 $("#photo").val("");
@@ -524,6 +523,7 @@
                 let imgElement = $(".profile-img img");
                 let imgElement1 = $(".booking-doc-img img");
                 let imgElement2 = $(".user-img img");
+                let imgElement3 = $(".avatar-sm img");
 
                 // Create a new Image object to ensure proper cache bypass
                 let newImage = new Image();
@@ -531,6 +531,7 @@
                   imgElement.attr("src", response.photo_url + "?t=" + new Date().getTime());
                   imgElement1.attr("src", response.photo_url + "?t=" + new Date().getTime());
                   imgElement2.attr("src", response.photo_url + "?t=" + new Date().getTime());
+                  imgElement3.attr("src", response.photo_url + "?t=" + new Date().getTime());
                 };
                 newImage.src = response.photo_url + "?t=" + new Date().getTime();
 
