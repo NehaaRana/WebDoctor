@@ -73,16 +73,79 @@ def home(request):
      
     return render(request, "home.html", {"articles": articles, "work_steps": work_steps})
 
+# def about_us(request):
+#     return render(request, 'about-us.html')
+
 def about_us(request):
-    return render(request, 'about-us.html')
+    print("🚀 about_us view is being executed!")
+
+    profile = None
+    user_type = None
+
+    # Check session data
+    patient_id = request.session.get("patient_id")
+    doctor_id = request.session.get("doctor_id")
+
+    print("🔍 Patient ID from session:", patient_id)
+    print("🔍 Doctor ID from session:", doctor_id)
+
+    try:
+        if patient_id:
+            profile = patientRegister.objects.get(id=patient_id)
+            user_type = "patient"
+        elif doctor_id:
+            profile = doctorRegister.objects.get(id=doctor_id)
+            user_type = "doctor"
+
+        if profile:
+            print("✅ Profile Found:", profile.name)
+    except Exception as e:
+        print("❌ Error fetching user profile:", e)
+
+    return render(request, "about-us.html", {"profile": profile, "user_type": user_type})
+
+
+
+
+
+
 def about(request):
     return render(request, 'about.html')
 
 def contact(request):
          return render(request, 'contact.html')
 
+# def contact_us(request):
+#          return render(request, 'contact-us.html')
+
 def contact_us(request):
-         return render(request, 'contact-us.html')
+    print("🚀 contact_us view is being executed!")
+
+    profile = None
+    user_type = None
+
+    # Retrieve session data
+    patient_id = request.session.get("patient_id")
+    doctor_id = request.session.get("doctor_id")
+
+    print("🔍 Patient ID from session:", patient_id)
+    print("🔍 Doctor ID from session:", doctor_id)
+
+    try:
+        if patient_id:
+            profile = patientRegister.objects.get(id=patient_id)
+            user_type = "patient"
+        elif doctor_id:
+            profile = doctorRegister.objects.get(id=doctor_id)
+            user_type = "doctor"
+
+        if profile:
+            print("✅ Profile Found:", profile.name)
+    except Exception as e:
+        print("❌ Error fetching user profile:", e)
+
+    return render(request, "contact-us.html", {"profile": profile, "user_type": user_type})
+
 
 def register(request):
          return render(request, 'register.html')
@@ -233,7 +296,32 @@ def doctor_dashboard(request):
 def terms_condition(request):
          return render(request, 'terms_condition.html')
 def index(request):
-    return render(request, 'index.html')
+    print("🚀 about_us view is being executed!")
+
+    profile = None
+    user_type = None
+
+    # Check session data
+    patient_id = request.session.get("patient_id")
+    doctor_id = request.session.get("doctor_id")
+
+    print("🔍 Patient ID from session:", patient_id)
+    print("🔍 Doctor ID from session:", doctor_id)
+
+    try:
+        if patient_id:
+            profile = patientRegister.objects.get(id=patient_id)
+            user_type = "patient"
+        elif doctor_id:
+            profile = doctorRegister.objects.get(id=doctor_id)
+            user_type = "doctor"
+
+        if profile:
+            print("✅ Profile Found:", profile.name)
+    except Exception as e:
+        print("❌ Error fetching user profile:", e)
+
+    return render(request, "index.html", {"profile": profile, "user_type": user_type})
 
 def logout_view(request):
     logout(request)
@@ -255,17 +343,89 @@ def patient_profile(request):
     return render(request, 'patient-profile.html')
 
 
+# def doctor_list(request):
+#     doctors = doctorRegister.objects.all()  # Fetch all doctors
+#     print(f"User: {request.user}, Authenticated: {request.user.is_authenticated}")
+#     return render(request, "doctor-list.html",{"doctors": doctors})
+
 def doctor_list(request):
     doctors = doctorRegister.objects.all()  # Fetch all doctors
-    return render(request, "doctor-list.html",{"doctors": doctors})
+    user_type = None
+    profile = None
 
+    # Check if a patient is logged in
+    if request.session.get('patient_id'):
+        try:
+            profile = patientRegister.objects.get(id=request.session['patient_id'])
+            user_type = "patient"
+        except patientRegister.DoesNotExist:
+            request.session.flush()  # Clear session if user not found
+
+    # Check if a doctor is logged in
+    elif request.session.get('doctor_id'):
+        try:
+            profile = doctorRegister.objects.get(id=request.session['doctor_id'])
+            user_type = "doctor"
+        except doctorRegister.DoesNotExist:
+            request.session.flush()  # Clear session if user not found
+
+    return render(request, "doctor-list.html", {
+        "doctors": doctors,
+        "profile": profile,
+        "user_type": user_type  # Pass user type for navbar logic
+    })
+
+
+# def doctor_profile(request, doctor_id):
+#     doctor = get_object_or_404(doctorRegister, id=doctor_id)  # Fetch doctor by ID
+#     reviews = review.objects.filter(doctor_id=doctor.id)
+
+#     # Check if the logged-in user is a doctor or patient
+#      # Determine if the logged-in user is a doctor or patient
+#     user_data = None
+#     user_role = None
+
+#     if request.user.is_authenticated:
+#         # Check if the user is a doctor
+#         if doctorRegister.objects.filter(user=request.user).exists():
+#             user_data = doctorRegister.objects.get(user=request.user)
+#             user_role = "doctor"
+#         # Check if the user is a patient
+#         elif patientRegister.objects.filter(user=request.user).exists():
+#             user_data = patientRegister.objects.get(user=request.user)
+#             user_role = "patient"
+#     return render(request, 'doctor-profile.html', {'doctor': doctor,  'reviews': reviews, 'user_data': user_data,   'user_role': user_role, })
 
 def doctor_profile(request, doctor_id):
     doctor = get_object_or_404(doctorRegister, id=doctor_id)  # Fetch doctor by ID
     reviews = review.objects.filter(doctor_id=doctor.id)
 
+    # Initialize variables
+    profile = None
+    user_type = None
 
-    return render(request, 'doctor-profile.html', {'doctor': doctor,  'reviews': reviews })
+    # Check if a patient is logged in
+    if request.session.get('patient_id'):
+        try:
+            profile = patientRegister.objects.get(id=request.session['patient_id'])
+            user_type = "patient"
+        except patientRegister.DoesNotExist:
+            request.session.flush()  # Clear session if user not found
+
+    # Check if a doctor is logged in
+    elif request.session.get('doctor_id'):
+        try:
+            profile = doctorRegister.objects.get(id=request.session['doctor_id'])
+            user_type = "doctor"
+        except doctorRegister.DoesNotExist:
+            request.session.flush()  # Clear session if user not found
+
+    return render(request, 'doctor-profile.html', {
+        'doctor': doctor,
+        'reviews': reviews,
+        'profile': profile,
+        'user_type': user_type
+    })
 
 def doctor_profile_cancel_appointment(request, doctor_id):
     doctor = get_object_or_404(doctorRegister, id=doctor_id)  # Fetch doctor by ID
@@ -294,7 +454,7 @@ from datetime import datetime, date, time, timedelta
 from .models import  doctorRegister, patientRegister,appointment
 from .forms import appointmentForm
 
-
+# @login_required(login_url='/login/')  # Redirects to login page if user is not logged in
 def book_appointment(request, doctor_id, appointment_id=None):
     doctor = get_object_or_404(doctorRegister, id=doctor_id)
     patient_id = request.session.get('patient_id')
@@ -477,11 +637,63 @@ from django.shortcuts import render
 client = razorpay.Client(auth=(RAZORPAY_API_KEY, RAZORPAY_API_SECRETE_KEY))
 
 
+# def payment_page(request, appointment_id, doctor_id):
+#     # Get appointment and doctor objects or return 404
+#     appointment_obj = get_object_or_404(appointment, id=appointment_id)
+#     doctor_obj = get_object_or_404(doctorRegister, id=doctor_id)
+#     patient_obj = appointment_obj.patient_id  # Assuming ForeignKey to User/Patient model
+
+#     # Fetch user details
+#     user_name = patient_obj.name
+#     user_email = patient_obj.email
+#     user_phno = patient_obj.phno
+
+#     try:
+#         doctor_fee = float(doctor_obj.fee)  # Convert to float
+#     except ValueError:
+#         doctor_fee = 0.0  # Default to 0 if conversion fails
+#     GST = 0.18  
+#     tax_amount = doctor_fee * GST
+#     total_amount = doctor_fee + tax_amount
+
+#     DATA = {
+#         "amount": int(total_amount * 100),  # Convert INR to paise
+#         "currency": "INR",
+#         "receipt": f"receipt_{appointment_id}",
+#         "payment_capture": 0,  # Allow method selection
+#         "notes": {
+#             "doctor": doctor_obj.name,
+#             "appointment_id": appointment_id
+#         }
+#     }
+
+#     # Create order
+#     payment_order = client.order.create(DATA)
+#     payment_order_id = payment_order['id']
+
+   
+
+#     context = {
+#         "appointment": appointment_obj,
+#         "doctor": doctor_obj,
+#         "doctor_fee": doctor_fee,
+#         "tax_amount": tax_amount,
+#         "total_amount": total_amount,
+#         "api_key": RAZORPAY_API_KEY,
+#         "order_id": payment_order_id,
+#          "user_name": user_name,
+#         "user_email": user_email,
+#         "user_phno": user_phno
+#     }
+
+#     return render(request, "payment.html", context)
+
+
 def payment_page(request, appointment_id, doctor_id):
     # Get appointment and doctor objects or return 404
     appointment_obj = get_object_or_404(appointment, id=appointment_id)
     doctor_obj = get_object_or_404(doctorRegister, id=doctor_id)
-    patient_obj = appointment_obj.patient_id  # Assuming ForeignKey to User/Patient model
+    patient_obj = appointment_obj.patient_id  # Assuming ForeignKey to Patient model
 
     # Fetch user details
     user_name = patient_obj.name
@@ -492,6 +704,7 @@ def payment_page(request, appointment_id, doctor_id):
         doctor_fee = float(doctor_obj.fee)  # Convert to float
     except ValueError:
         doctor_fee = 0.0  # Default to 0 if conversion fails
+
     GST = 0.18  
     tax_amount = doctor_fee * GST
     total_amount = doctor_fee + tax_amount
@@ -507,27 +720,34 @@ def payment_page(request, appointment_id, doctor_id):
         }
     }
 
-    # Create order
+    # Create Razorpay order
+    client = razorpay.Client(auth=(RAZORPAY_API_KEY, RAZORPAY_API_SECRETE_KEY))
     payment_order = client.order.create(DATA)
     payment_order_id = payment_order['id']
 
-   
+    # Determine if the logged-in user is a doctor or patient
+    user_type = None
+    if request.session.get('patient_id'):
+        user_type = "patient"  # Patient logged in
+    elif request.session.get('doctor_id'):
+        user_type = "doctor"  # Doctor logged in
 
     context = {
         "appointment": appointment_obj,
         "doctor": doctor_obj,
+        "patient": patient_obj,
         "doctor_fee": doctor_fee,
         "tax_amount": tax_amount,
         "total_amount": total_amount,
         "api_key": RAZORPAY_API_KEY,
         "order_id": payment_order_id,
-         "user_name": user_name,
+        "user_name": user_name,
         "user_email": user_email,
-        "user_phno": user_phno
+        "user_phno": user_phno,
+        "user_type": user_type  # This helps hide the profile section for patients
     }
 
     return render(request, "payment.html", context)
-
 
 
 from django.http import JsonResponse
@@ -738,6 +958,8 @@ def doctor_change_password(request):
 #         form = passwordChangeForm(user=patient)
 
 #     return render(request, "patient-change-password.html",{"patient":patient,"form":form})
+
+
 
 def patient_change_password(request):
     patient_id = request.session.get('patient_id')  
@@ -1555,17 +1777,17 @@ def doctor_register(request):
             messages.error(request, "Invalid email address format. Please enter a valid email.")
             return redirect('doctor_register')
 
-        # 🚨 Check if email already exists
+        #  Check if email already exists
         if doctorRegister.objects.filter(email=email).exists():
             messages.error(request, "Email is already registered. Try logging in.")
             return redirect('doctor_register')
 
-            # ✅ Validate if the email actually exists
+            #  Validate if the email actually exists
         if not validate_email_existence(email):
             messages.error(request, "Email address does not exist. Please enter a valid email.")
             return redirect('doctor_register')
 
-        # ✅ If email is new, proceed with storing data temporarily
+        #  If email is new, proceed with storing data temporarily
         form = doctorForm(request.POST, request.FILES)
 
         if form.is_valid():
@@ -1584,7 +1806,7 @@ def doctor_register(request):
 
             # Generate OTP for email verification
             otp = random.randint(100000, 999999)
-            print(f"Generated OTP: {otp}")  # ✅ Print OTP in terminal
+            print(f"Generated OTP: {otp}")  #  Print OTP in terminal
 
             request.session['otp'] = otp  # Store OTP in session
             request.session['email'] = email  # Store email in session

@@ -83,7 +83,90 @@
     </script> {% endcomment %}
     
     <!-- Header Section -->
-    {% include "header.html" %}
+    {% comment %} {% include "header.html" %} {% endcomment %}
+    <header class="header header-fixed header-one header-space">
+        <div class="container">
+        <nav class="navbar navbar-expand-lg header-nav">
+        <div class="navbar-header">
+        <a id="mobile_btn" href="javascript:void(0);">
+        <span class="bar-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+        </span>
+        </a>
+        <a href="{% url 'index' %}" class="navbar-brand logo">
+          <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+        </a>
+        </a>
+        </div>
+        <div class="main-menu-wrapper">
+        <div class="menu-header">
+          <a href="{% url 'index' %}" class="menu-logo">
+            <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+          </a>
+        <a id="menu_close" class="menu-close" href="javascript:void(0);">
+        <svg class="svg-inline--fa fa-times fa-w-11" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" data-fa-i2svg=""><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg><!-- <i class="fas fa-times"></i> Font Awesome fontawesome.com -->
+        </a>
+        </div>
+        <ul class="main-nav">
+          <li>
+            <a href="{% url 'index' %}">Home</a>
+          </li>
+          
+          <li>
+            <a href="{% url 'doctor_list' %}">Doctors</a>
+          </li>
+          <li>
+            <a href="{% url 'about_us' %}">About Us</a>
+          </li>
+          
+          <li>
+            <a href="{% url 'contact_us' %}">Contact Us</a>
+          </li>
+        
+        
+        <ul class="nav header-navbar-rht" style="padding-top: 20px;">
+        
+        <li class="nav-item dropdown has-arrow logged-item">
+        <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="user-img">
+       
+          {% if patient.profile_img %}
+    <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
+    {% else %}
+      <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
+    {% endif %}
+    </span>
+        </span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end">
+        <div class="user-header">
+        <div class="avatar avatar-sm">
+   
+          {% if patient.profile_img %}
+          <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
+          {% else %}
+          <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
+          {% endif %}
+
+        </div>
+        <div class="user-text">
+        <h6>{{patient.name}}</h6>
+        <p class="text-muted mb-0">{{patient.user}}</p>
+        </div>
+        </div>
+        <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
+        <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
+        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>       
+       </div>
+        </li>
+        </ul>
+        </ul>
+        </div>
+        </nav>
+        </div>
+        </header>
 
 
     <section class="error-section">

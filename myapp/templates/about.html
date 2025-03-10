@@ -48,13 +48,15 @@
                         </a>
                     </div>
                     <ul class="main-nav">
-                        <li><a href="/">Home</a></li>
-                        <li class="active"><a href="/about">About Us</a></li>
-                        <li><a href="/contact">Contact Us</a></li>
-                        <li class="phone_login"><a href="/register">Register</a></li>
-                        <li class="phone_login"><a href="/login">Login</a></li>
-                        <li class="register-btn"><a href="/register" class="btn reg-btn"><i class="feather-user"></i>Register</a></li>
-                        <li class="register-btn"><a href="/login" class="btn btn-primary log-btn"><i class="feather-lock"></i>Login</a></li>
+                        <li><a href="{% url 'index' %}">Home</a></li>
+                        <li>
+                            <a href="{% url 'doctor_list' %}">Doctors</a>
+                          </li>
+                        <li class="active"><a href="{% url 'about' %}">About Us</a></li>
+                        <li><a href="{% url 'contact' %}">Contact Us</a></li>
+    
+                        <li class="register-btn"><a href="{% url 'register' %}" class="btn reg-btn"><i class="feather-user"></i>Register</a></li>
+                        <li class="register-btn"><a href="{% url 'login' %}" class="btn btn-primary log-btn"><i class="feather-lock"></i>Login</a></li>
                     </ul>
                 </div>
             </nav>
