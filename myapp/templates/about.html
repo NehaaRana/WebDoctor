@@ -40,7 +40,7 @@
                 </div>
                 <div class="main-menu-wrapper">
                     <div class="menu-header">
-                        <a href="/index" class="menu-logo">
+                        <a href="/" class="menu-logo">
                             <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
                         </a>
                         <a id="menu_close" class="menu-close" href="javascript:void(0);">
@@ -48,7 +48,7 @@
                         </a>
                     </div>
                     <ul class="main-nav">
-                        <li><a href="{% url 'index' %}">Home</a></li>
+                        <li><a href="{% url 'home' %}">Home</a></li>
                         <li>
                             <a href="{% url 'doctor_list' %}">Doctors</a>
                           </li>

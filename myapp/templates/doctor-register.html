@@ -131,10 +131,7 @@
             }
         }
 
-        .toast-success { background-color:rgba(84, 162, 102, 0.89) !important; color:black !important; border:2px solid green !important}
-        .toast-error { background-color:rgba(210, 93, 105, 0.88) !important; color:black !important; border:2px solid red !important }
-        .toast-warning { background-color:rgb(241, 216, 141)  !important; color:black !important; border:2px solid yellow !important}
-        .toast-info { background-color:black !important; color:  #17a2b8 !important; }
+      
     </style>
 </head>
 
@@ -160,7 +157,7 @@
                     </div>
                     <div class="main-menu-wrapper">
                         <div class="menu-header">
-                            <a href="/index" class="menu-logo">
+                            <a href="/home" class="menu-logo">
                                 <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
                             </a>
                             <a id="menu_close" class="menu-close" href="javascript:void(0);">
@@ -168,7 +165,7 @@
                             </a>
                         </div>
                         <ul class="main-nav">
-                            <li><a href="{% url 'index' %}">Home</a></li>
+                            <li><a href="{% url 'home' %}">Home</a></li>
                             <li>
                                 <a href="{% url 'doctor_list' %}">Doctors</a>
                               </li>
@@ -185,7 +182,7 @@
         
 
         {% comment %} alerts {% endcomment %}
-<script>
+{% comment %} <script>
     $(document).ready(function () {
         {% if messages %}
             {% for message in messages %}
@@ -198,7 +195,7 @@
             {% endfor %}
         {% endif %}
     });
-  </script>
+  </script> {% endcomment %}
   
         <div class="register-container">
             <div class="register-box">

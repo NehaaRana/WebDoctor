@@ -187,7 +187,7 @@ type="image/x-icon"
                   </a>
               </div>
               <ul class="main-nav">
-                  <li><a href="{% url 'index' %}">Home</a></li>
+                  <li><a href="{% if user_type == 'patient' or user_type == 'doctor' %}{% url 'index' %}{% else %}{% url 'home' %}{% endif %}">Home</a></li>
                   <li><a href="{% url 'doctor_list' %}">Doctors</a></li>
                   <li><a href="{% url 'about_us' %}">About Us</a></li>
                   <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
