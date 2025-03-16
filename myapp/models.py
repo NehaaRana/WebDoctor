@@ -99,6 +99,7 @@ class appointment(models.Model):
      reason = models.TextField(null=True)
      symptoms = models.CharField(max_length=255, blank=True, null=True)
      booking_date = models.DateField(default=now)
+     meeting_link = models.URLField(blank=True, null=True)
 
 
      def __str__(self):
@@ -186,3 +187,29 @@ class review(models.Model):
       def __str__(self):
           return f"{self.rating} | {self.review_text} | {self.review_date} |"
 
+
+
+
+class HealthRecord(models.Model):
+    patient = models.ForeignKey(patientRegister, on_delete=models.CASCADE)
+    bp_systolic = models.IntegerField(null=True, blank=True)
+    bp_diastolic = models.IntegerField(null=True, blank=True)
+    heart_rate = models.IntegerField(null=True, blank=True)  # New
+    sugar_level = models.FloatField(null=True, blank=True)
+    steps_walked = models.IntegerField(null=True, blank=True)  # New
+    sleep_hours = models.FloatField(null=True, blank=True)  # New
+    recorded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Health Record for {self.patient} on {self.recorded_at}"
+    
+
+
+# for chatbot
+class MedicalInfo(models.Model):
+    symptom = models.CharField(max_length=255, unique=True)  # e.g., "fever"
+    condition = models.TextField()  # e.g., "Possible viral infection"
+    treatment = models.TextField()  # e.g., "Drink fluids, rest, take paracetamol"
+    
+    def __str__(self):
+        return self.symptom

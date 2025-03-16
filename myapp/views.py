@@ -152,7 +152,10 @@ def register(request):
 
 
 
+from django.contrib.messages import get_messages
+
 def login(request):
+   
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
@@ -191,7 +194,7 @@ def login(request):
 
         # **Check password securely**
         if check_password(password, user.password):
-            messages.success(request, "Login successful! Redirecting...")
+            # messages.success(request, "Login successful! Redirecting...")
             if user_type == "patient":
                 return redirect("patient_dashboard")
             elif user_type == "doctor":
@@ -200,7 +203,7 @@ def login(request):
             messages.error(request, "Invalid email or password!")
             return redirect("login")
 
-    return render(request, "login.html")
+    return render(request, "login.html",{"redirect_url": request.session.get("redirect_url", "")})
 
 
 def search_doctors(request):
@@ -244,57 +247,9 @@ def doctor_dashboard(request):
     # upcoming_patients = appointment.objects.filter(doctor_id=doctor).select_related('patient_id')
     return render(request, "doctor-dashboard.html", {"doctor": doctor,"upcoming_patients":upcoming_patients, "today_patients": today_patients,})
 
-
-# def doctor_register(request):
-#     if request.method == "POST":
-#         form = doctorForm(request.POST, request.FILES)
-        
-#         if form.is_valid():
-#             doctor = form.save(commit=False)
-#             doctor.password = make_password(doctor.password)  # Hash the password
-            
-#             if doctor.fee is None:  
-#                 doctor.fee = 0  # Ensure fee is not None
-            
-#             doctor.save()
-#             messages.success(request, "Registration successful! Please log in.")  # Success message
-#             return redirect('login')
-#         else:
-#             messages.error(request, "Registration failed! Please correct the errors below.")  # Error message
-
-#     else:
-#         form = doctorForm()
-
-#     return render(request, 'doctor-register.html', {'form': form})
-   
-
-
-
-
-# def patient_register(request):
-#     if request.method == "POST":
-#         form = patientForm(request.POST, request.FILES)
-        
-#         if form.is_valid():
-#             patient = form.save(commit=False)
-#             patient.password = make_password(patient.password)  # Hash password before saving
-#             patient.save()
-            
-#             messages.success(request, "Registration successful! Please log in.")  # Success alert
-#             return redirect('login')
-#         else:
-#             messages.error(request, "Registration failed! Please check your details.")  # Error alert
-
-#     else:
-#         form = patientForm()
-
-#     return render(request, 'patient-register.html', {'form': form})
     
-
-
-
 def terms_condition(request):
-         return render(request, 'terms_condition.html')
+    return render(request, 'terms_condition.html')
 def index(request):
     print("🚀 about_us view is being executed!")
 
@@ -323,10 +278,18 @@ def index(request):
 
     return render(request, "index.html", {"profile": profile, "user_type": user_type})
 
-def logout_view(request):
-    logout(request)
-    return redirect('login')
+# def logout_view(request):
+#     logout(request)
+#     return redirect('login')
 
+def logout_view(request):
+     # Clear all existing messages to prevent duplicates
+    storage = get_messages(request)
+    for _ in storage:
+        pass  # This ensures all old messages are removed
+    messages.success(request, "You have been logged out successfully!")  # Add success message
+    logout(request)  # Logout the user
+    return redirect("login")  # Redirect to login page
 
 
 def coming_soon(request):
@@ -455,6 +418,7 @@ from .models import  doctorRegister, patientRegister,appointment
 from .forms import appointmentForm
 
 # @login_required(login_url='/login/')  # Redirects to login page if user is not logged in
+import uuid
 def book_appointment(request, doctor_id, appointment_id=None):
     doctor = get_object_or_404(doctorRegister, id=doctor_id)
     patient_id = request.session.get('patient_id')
@@ -482,11 +446,13 @@ def book_appointment(request, doctor_id, appointment_id=None):
             appointment_obj.patient_id = patient
             appointment_obj.doctor_id = doctor
             appointment_obj.booking_date = now().date()  # Update booking date
-            
+            # Generate Jitsi Meet Link
+            unique_meeting_id = uuid.uuid4().hex[:10]  
+            appointment_obj.meeting_link = f"https://meet.jit.si/{unique_meeting_id}"
             appointment_obj.save()  #  Update appointment instead of creating a new one
             print(f"Appointment updated: {appointment_obj.id}")
              # **Set success message**
-            messages.success(request, "Appointment booked successfully! Redirecting to payment...")
+            # messages.success(request, "Appointment booked successfully! Redirecting to payment...")
             return redirect("payment", appointment_id=appointment_obj.id, doctor_id=doctor.id)
         else:
             print("Form errors:", form.errors)  # Debugging error messages
@@ -688,6 +654,57 @@ client = razorpay.Client(auth=(RAZORPAY_API_KEY, RAZORPAY_API_SECRETE_KEY))
 
 #     return render(request, "payment.html", context)
 
+import random
+from django.core.cache import cache
+from django.http import JsonResponse
+from twilio.rest import Client  # Example SMS API
+
+# TWILIO_SID = "your_twilio_sid"
+# TWILIO_AUTH_TOKEN = "your_twilio_auth_token"
+# TWILIO_PHONE = "your_twilio_number"
+
+# def send_otp(request):
+#     if request.method == "POST":
+#         data = json.loads(request.body)
+#         phone_number = data.get("phno")
+#         otp = str(random.randint(100000, 999999))  # Generate OTP
+#         cache.set(f"otp_{phone_number}", otp, timeout=300)  # Store OTP for 5 minutes
+        
+#         # Send SMS via Twilio
+#         client = Client(TWILIO_SID, TWILIO_AUTH_TOKEN)
+#         message = client.messages.create(
+#             body=f"Your OTP is {otp}. Do not share it with anyone.",
+#             from_=TWILIO_PHONE,
+#             to=phone_number
+#         )
+#         return JsonResponse({"status": "otp_sent"})
+#     return JsonResponse({"status": "failed"})
+
+# def verify_payment_otp(request):
+#     if request.method == "POST":
+#         data = json.loads(request.body)
+#         phone_number = data.get("phno")
+#         entered_otp = data.get("otp")
+#         stored_otp = cache.get(f"otp_{phone_number}")
+
+#         if stored_otp and entered_otp == stored_otp:
+#             cache.delete(f"otp_{phone_number}")  # OTP used, remove from cache
+#             return JsonResponse({"status": "verified"})
+#         return JsonResponse({"status": "invalid"})
+
+# def verify_payment(request):
+#     if request.method == "POST":
+#         data = json.loads(request.body)
+#         payment_id = data.get("payment_id")
+#         order_id = data.get("order_id")
+
+#         client = razorpay.Client(auth=("RAZORPAY_API_KEY", "RAZORPAY_API_SECRET"))
+#         payment = client.payment.fetch(payment_id)
+
+#         if payment["status"] == "captured":
+#             return JsonResponse({"status": "verified"})
+#         else:
+#             return JsonResponse({"status": "failed"})
 
 def payment_page(request, appointment_id, doctor_id):
     # Get appointment and doctor objects or return 404
@@ -1948,3 +1965,403 @@ def verify_otp_patient(request, email):
             messages.error(request, "Invalid OTP! Please try again.")
 
     return render(request, 'verify_otp_patient.html', {'email': email})
+
+
+
+from django.shortcuts import render, redirect
+from .models import patientRegister, HealthRecord
+from .forms import HealthRecordForm
+
+def add_health_record(request):
+    patient_id = request.session.get('patient_id')
+
+    if not patient_id:
+        return redirect("login")
+
+    try:
+        patient = patientRegister.objects.get(id=patient_id)
+    except patientRegister.DoesNotExist:
+        return redirect("login")
+
+    if request.method == "POST":
+        form = HealthRecordForm(request.POST)
+        if form.is_valid():
+            health_record = form.save(commit=False)
+            health_record.patient = patient
+            health_record.save()
+            return JsonResponse({"success": True})  # Return success response for AJAX
+        else:
+            return JsonResponse({"success": False, "error": "Invalid form data"})
+
+    # If AJAX request, return form only (no full page)
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return render(request, 'add-health-record.html', {'form': HealthRecordForm()})
+
+    # Otherwise, return the full page (fallback)
+    return render(request, 'add-health-record.html', {'form': HealthRecordForm(), 'patient': patient})
+
+
+def health_dashboard(request):
+    patient_id = request.session.get('patient_id')  # Get logged-in patient ID
+    if not patient_id:
+        return redirect("login")  # Redirect if not logged in
+
+    try:
+        patient = patientRegister.objects.get(id=patient_id)
+        records = HealthRecord.objects.filter(patient=patient).order_by('-recorded_at')
+    except patientRegister.DoesNotExist:
+        return redirect("login")
+    
+    records = HealthRecord.objects.filter(patient=patient).order_by('-recorded_at')
+
+    if request.method == "POST":
+        form = HealthRecordForm(request.POST)
+        if form.is_valid():
+            health_record = form.save(commit=False)  # Don't save to DB yet
+            health_record.patient = patient  # Assign patient before saving
+            health_record.save()  # Now save it to the database
+            return redirect("health_dashboard")  # Refresh page after saving
+    else:
+        form = HealthRecordForm()  # Create a blank form
+
+    latest_record = records.first() if records.exists() else None
+
+    # Check for abnormal values and send alerts
+    alert_messages = []  # Store multiple alerts
+
+    # Check for abnormal values
+    if latest_record:
+        if latest_record.bp_systolic > 140:
+            alert_messages.append("⚠️ High Blood Pressure! Your systolic BP is too high.")
+        elif latest_record.bp_systolic < 90:
+            alert_messages.append("⚠️ Low Blood Pressure! Your systolic BP is too low.")
+
+        if latest_record.bp_diastolic > 90:
+            alert_messages.append("⚠️ High Blood Pressure! Your diastolic BP is too high.")
+        elif latest_record.bp_diastolic < 60:
+            alert_messages.append("⚠️ Low Blood Pressure! Your diastolic BP is too low.")
+
+        if latest_record.heart_rate > 100:
+            alert_messages.append("⚠️ High Heart Rate! Your pulse is too high.")
+        elif latest_record.heart_rate < 60:
+            alert_messages.append("⚠️ Low Heart Rate! Your pulse is too low.")
+
+        if latest_record.sugar_level > 180:
+            alert_messages.append("⚠️ High Blood Sugar! Please monitor your glucose levels.")
+        elif latest_record.sugar_level < 70:
+            alert_messages.append("⚠️ Low Blood Sugar! You may be at risk of hypoglycemia.")
+
+        if latest_record.sleep_hours < 5:
+            alert_messages.append("⚠️ Lack of Sleep! You need more rest for good health.")
+        elif latest_record.sleep_hours > 10:
+            alert_messages.append("⚠️ Excessive Sleep! Too much sleep can affect your health.")
+
+    return render(request, 'health-dashboard.html', {'records': records, 'patient': patient, 'form': form, 'alert_messages': alert_messages })
+
+# import requests
+# from bs4 import BeautifulSoup
+# from django.http import JsonResponse
+
+# def get_medical_info(query):
+#     """Scrapes medical information from WebMD"""
+#     url = f"https://www.webmd.com/search/search_results/default.aspx?query={query}"
+#     headers = {"User-Agent": "Mozilla/5.0"}
+
+#     response = requests.get(url, headers=headers)
+#     soup = BeautifulSoup(response.text, "html.parser")
+
+#     articles = soup.find_all("li", class_="search-results-doc")
+#     results = []
+    
+#     for article in articles[:5]:  # Get top 5 results
+#         title_tag = article.find("a")
+#         title = title_tag.text.strip() if title_tag else "No title"
+#         link = title_tag["href"] if title_tag else "#"
+#         summary = article.find("p").text.strip() if article.find("p") else "No summary available."
+#         results.append({"title": title, "link": link, "summary": summary})
+
+#     return results
+
+# def chatbot_response(request):
+#     """Reads a medical knowledge file and returns a detailed response."""
+#     user_query = request.GET.get("query", "").strip().lower()
+
+#     if not user_query:
+#         return JsonResponse({"response": "Please enter a valid medical question."})
+
+#     # Get the absolute path to the file
+#     # base_dir = os.path.dirname(os.path.abspath(__file__))  # Get the current directory
+#     file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "medical_data.txt")
+
+
+#     # Open the medical knowledge file
+#     try:
+#         with open(file_path, "r", encoding="utf-8") as file:
+#             for line in file:
+#                 if line.lower().startswith(user_query):
+#                     return JsonResponse({"response": line.split(":", 1)[1].strip()})
+#     except FileNotFoundError:
+#         return JsonResponse({"response": "Medical knowledge file not found."})
+
+#     return JsonResponse({"response": "Sorry, no relevant medical information found."})
+
+
+
+
+# # Extract keyword
+# import requests
+# from bs4 import BeautifulSoup
+# from django.http import JsonResponse
+# import spacy
+
+# # Load spaCy's English NLP model
+# nlp = spacy.load("en_core_web_sm")
+
+# def extract_keywords(query):
+#     """Extracts important medical keywords from the user query."""
+#     doc = nlp(query.lower())  # Process text with NLP
+#     keywords = [token.lemma_ for token in doc if token.pos_ in ["NOUN", "ADJ"]]
+#     return keywords[0] if keywords else query  # Use first keyword or fallback
+
+
+# import requests
+# from bs4 import BeautifulSoup
+# from django.http import JsonResponse
+# import spacy
+# from spellchecker import SpellChecker
+# import openai  # Install using: pip install openai
+# # Load spaCy NLP model
+# nlp = spacy.load("en_core_web_sm")
+
+# # Load Spell Checker
+# spell = SpellChecker()
+
+# # OpenAI API Key (Replace with your actual key)
+# OPENAI_API_KEY="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"
+
+# def correct_spelling(text):
+#     """Correct spelling mistakes in the user input."""
+#     words = text.split()
+#     corrected_words = [spell.correction(word) if spell.correction(word) else word for word in words]
+#     return " ".join(corrected_words)
+
+# def extract_medical_keywords(query):
+#     """Extracts important medical terms from the user query."""
+#     doc = nlp(query.lower())  # Process text with NLP
+#     keywords = [token.lemma_ for token in doc if token.pos_ in ["NOUN", "ADJ"]]
+#     return keywords if keywords else [query]  # Return all detected keywords
+
+
+# def extract_keywords(query):
+#     """Extracts important words from the query (not limited to medical terms)."""
+#     doc = nlp(query.lower())  
+#     keywords = [token.lemma_ for token in doc if token.pos_ in ["NOUN", "PROPN", "ADJ"]]
+#     return keywords if keywords else [query]
+
+# # search  wikipedia
+# def search_wikipedia(topic):
+#     """Searches Wikipedia for a given topic and returns a brief summary."""
+#     url = f"https://en.wikipedia.org/wiki/{topic.replace(' ', '_')}"
+#     headers = {"User-Agent": "Mozilla/5.0"}
+#     response = requests.get(url, headers=headers)
+    
+#     if response.status_code == 200:
+#         soup = BeautifulSoup(response.text, "html.parser")
+#         paragraphs = soup.find_all("p")
+        
+#         for para in paragraphs:
+#             if len(para.text) > 100:  # Avoid short paragraphs
+#                 return para.text.strip()
+#     return "No relevant information found on Wikipedia."
+
+# def generate_gpt_response(query):
+#     """Uses OpenAI GPT to generate a response for the given query."""
+#     try:
+#         response = openai.ChatCompletion.create(
+#             model="gpt-3.5-turbo",  # Change model if needed
+#             messages=[{"role": "user", "content": query}],
+#             api_key=OPENAI_API_KEY
+#         )
+#         return response["choices"][0]["message"]["content"].strip()
+#     except Exception as e:
+#         return f"Error generating response: {str(e)}"
+
+# def chatbot_response(request):
+#     query = request.GET.get("query", "").strip()
+#     if not query:
+#         return JsonResponse({"response": "Please enter a valid question."})
+
+#     # Correct spelling mistakes
+#     corrected_query = correct_spelling(query)
+
+#     # Extract keywords
+#     keywords = extract_keywords(corrected_query)
+
+#     responses = []
+
+#     # Try Wikipedia first
+#     for keyword in keywords:
+#         wiki_response = search_wikipedia(keyword)
+#         if "No relevant information" not in wiki_response:
+#             responses.append(f"**{keyword.capitalize()}**: {wiki_response}")
+#             break  # Use the first relevant Wikipedia response
+
+#     # If Wikipedia fails, use GPT
+#     if not responses:
+#         ai_response = generate_gpt_response(corrected_query)
+#         responses.append(ai_response)
+
+#     return JsonResponse({"response": "\n\n".join(responses)})
+
+
+
+# wikipedia
+# def chatbot_response(request):
+#     query = request.GET.get("query", "").strip()
+#     if not query:
+#         return JsonResponse({"response": "Please enter a valid medical question."})
+
+#     # Correct spelling mistakes
+#     corrected_query = correct_spelling(query)
+    
+#     # Extract medical keywords (e.g., "I have fever and cold" → ["fever", "cold"])
+#     keywords = extract_medical_keywords(corrected_query)
+
+#     responses = []
+    
+#     for keyword in keywords:
+#         url = f"https://en.wikipedia.org/wiki/{keyword.replace(' ', '_')}"
+#         headers = {"User-Agent": "Mozilla/5.0"}
+        
+#         response = requests.get(url, headers=headers)
+        
+#         if response.status_code == 200:
+#             soup = BeautifulSoup(response.text, "html.parser")
+#             paragraphs = soup.find_all("p")
+            
+#             for para in paragraphs:
+#                 if len(para.text) > 100:  # Avoid short paragraphs
+#                     responses.append(f"**{keyword.capitalize()}**: {para.text}")
+#                     break  # Take only the first relevant paragraph
+#         else:
+#             responses.append(f"**{keyword.capitalize()}**: No relevant medical information found.")
+    
+#     if responses:
+#         return JsonResponse({"response": "\n\n".join(responses)})
+#     return JsonResponse({"response": "No relevant medical information found."})
+
+# def chatbot_response(request):
+#     query = request.GET.get("query", "").strip()
+#     if not query:
+#         return JsonResponse({"response": "Please enter a valid medical question."})
+
+#     url = f"https://en.wikipedia.org/wiki/{query.replace(' ', '_')}"
+#     headers = {"User-Agent": "Mozilla/5.0"}
+    
+#     response = requests.get(url, headers=headers)
+    
+#     if response.status_code != 200:
+#         return JsonResponse({"response": "No relevant information found."})
+
+#     soup = BeautifulSoup(response.text, "html.parser")
+#     paragraphs = soup.find_all("p")
+
+#     for para in paragraphs:
+#         if len(para.text) > 100:  # Avoid empty or short paragraphs
+#             return JsonResponse({"response": para.text})
+    
+#     return JsonResponse({"response": "No relevant medical information found."})
+
+
+# with RAPIDAPI 
+import requests
+from django.http import JsonResponse
+
+# Replace with your API key from RapidAPI
+RAPIDAPI_KEY ="6ccee8141bmsh4f94b07bb292d1cp144ddcjsn98da5443cf4d"
+
+def get_symptom_info(query):
+    """Fetch medical information from the Symptom Checker API."""
+    url =  "https://ai-doctor-api-ai-medical-chatbot-healthcare-ai-assistant.p.rapidapi.com/chat" # Check API docs for correct endpoint
+    headers = {
+        "X-RapidAPI-Key": RAPIDAPI_KEY,
+        "X-RapidAPI-Host": "ai-doctor-api-ai-medical-chatbot-healthcare-ai-assistant.p.rapidapi.com",
+        'Content-Type': "application/json"
+    }
+    params = {
+        "text": query,  # Query to analyze symptoms
+        "language": "en"  # English language
+    }
+
+    try:
+        response = requests.get(url, headers=headers, params=params)
+        print("✅ Status Code:", response.status_code)  # Print status code
+        print("✅ Response Text:", response.text)  # Print full response in terminal
+
+        if response.status_code == 200:
+            data = response.json()
+            if "conditions" in data and data["conditions"]:
+                # Extract relevant conditions from response
+                conditions = [cond["name"] for cond in data["conditions"]]
+                return "\n".join(conditions)
+            else:
+                return "No relevant conditions found."
+        else:
+            return f"Error fetching data, status code: {response.status_code}"
+
+    except Exception as e:
+        print("❌ Error:", e)  # Print error in terminal
+        return "An error occurred while fetching data."
+
+
+def chatbot_response(request):
+    """Django view to handle chatbot queries."""
+    query = request.GET.get("query", "").strip()
+    if not query:
+        return JsonResponse({"response": "Please enter a valid medical question."})
+
+    response_text = get_symptom_info(query)
+    return JsonResponse({"response": response_text})
+
+
+
+
+def chatbot_page(request):
+    return render(request, "chatbot.html")  # Render the chatbot UI
+
+
+
+
+# video consultion
+def video_consultation(request, appointment_id):
+    # Fetch the appointment details
+    appointment = get_object_or_404(appointment, id=appointment_id)
+
+    # Pass the meeting link to the template
+    context = {'meeting_link': appointment.meeting_link}
+    
+    return render(request, 'video-call.html', context)
+
+
+# send mail for video in patient mail
+def send_meeting_link(request, appointment_id):
+    appointment_obj = get_object_or_404(appointment, id=appointment_id)
+
+    # Email content
+    subject = "Your Video Consultation Appointment"
+    message = f"""
+    Hello,
+
+    Your video consultation is scheduled.
+
+    🔗 Join the call: {appointment_obj.meeting_link}
+
+    Thank you!
+    Doctor-Patient System Team
+    """
+    recipient_list = [appointment_obj.patient_id.email]
+
+    # Send email
+    send_mail(subject, message, "webdoctors123@gmail.com", recipient_list, fail_silently=False)
+
+    return redirect('doctor_dashboard')  # Redirect after sending email

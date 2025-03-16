@@ -81,5 +81,12 @@ urlpatterns =[
   path('admin_manage_payment/',views.admin_manage_payment,name='admin_manage_payment'),
   path('delete_review/<int:review_id>/', views.delete_review, name='delete_review'),
   path('delete_patient/<int:patient_id>/', views.delete_patient, name='delete_patient'),
-
+  path('add_health_record/',views.add_health_record,name='add_health_record'),
+  path('health_dashboard/',views.health_dashboard,name='health_dashboard'),
+    # wikipidea
+    path("chatbot/", views.chatbot_page, name="chatbot"),  # Show chatbot UI
+    path("chat/", views.chatbot_response, name="chat_response"),  
+    # video consultion
+    path('video_call/<int:appointment_id>/', views.video_consultation, name='video_consultation'),
+    path('send_meeting_link/<int:appointment_id>/', views.send_meeting_link, name='send_meeting_link'),
 ]

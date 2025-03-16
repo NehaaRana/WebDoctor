@@ -1,0 +1,11 @@
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <input type="file" name="csv_file" required>
+  <button type="submit">Upload CSV</button>
+</form>
+
+{% if messages %}
+  {% for message in messages %}
+      <p>{{ message }}</p>
+  {% endfor %}
+{% endif %}

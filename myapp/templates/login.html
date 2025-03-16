@@ -1,372 +1,455 @@
 {% load static %}
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %} WebDoctor {% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <!-- jquery-confirm CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css"
+    />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>
-    {% block title %}
-    WebDoctor
-    {% endblock %}
-  </title>
-  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
-  <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <!-- jquery-confirm CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
-
-   {% comment %} alerts {% endcomment %}
+    {% comment %} alerts {% endcomment %}
 
     <!-- jQuery (Required for Toastr) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"
+      integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
 
-<!-- Toastr CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
+    <!-- Toastr CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css"
+    />
 
-  <style>
-    .login-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
-
-    .login-box {
-      display: flex;
-      flex-wrap: wrap;
-      max-width: 900px;
-      width: 100%;
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-    }
-
-    .svg-container {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #f8f9fa;
-      padding: 20px;
-    }
-
-    .form-container {
-      flex: 1;
-      padding: 30px;
-      background: linear-gradient(45deg, rgb(33, 37, 240) -200%, rgba(255, 255, 255, 1) 25%, rgba(255, 255, 255, 1) 75%, rgb(33, 37, 240) 200%);
-    }
-
-    .btn_login {
-      position: relative;
-      transition: all 0.3s ease-in-out;
-      padding-block: 0.5rem;
-      padding-inline: 1.25rem;
-      background-color: #0e82fd;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: #fff;
-      font-weight: bold;
-      border: none;
-      outline: none;
-      overflow: hidden;
-      font-size: 15px;
-    }
-
-    .btn_login:hover {
-      border-color: #fff9;
-    }
-
-    .btn_login:hover .icon {
-      transform: translate(4px);
-    }
-
-    .btn_login:hover::before {
-      animation: shine 1.5s ease-out infinite;
-    }
-
-    .btn_login::before {
-      content: '';
-      position: absolute;
-      width: 100px;
-      height: 100%;
-      background-image: linear-gradient(120deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0) 70%);
-      top: 0;
-      left: -100px;
-      opacity: 0.6;
-    }
-
-    @keyframes shine {
-      0% {
-        left: -100px;
+    <style>
+      .login-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
       }
 
-      60% {
-        left: 100%;
-      }
-
-      to {
-        left: 100%;
-      }
-    }
-
-    @media (max-width: 768px) {
       .login-box {
-        flex-direction: column;
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 900px;
+        width: 100%;
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
       }
 
       .svg-container {
-        width: 100%;
-        order: 1;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8f9fa;
+        padding: 20px;
       }
 
       .form-container {
-        width: 100%;
-        order: 2;
+        flex: 1;
         padding: 30px;
+        background: linear-gradient(
+          45deg,
+          rgb(33, 37, 240) -200%,
+          rgba(255, 255, 255, 1) 25%,
+          rgba(255, 255, 255, 1) 75%,
+          rgb(33, 37, 240) 200%
+        );
       }
-    }
-    .toast-success { background-color:rgba(84, 162, 102, 0.89) !important; color:black !important; border:2px solid green !important}
-    .toast-error { background-color:rgba(210, 93, 105, 0.88) !important; color:black !important; border:2px solid red !important }
-    .toast-warning { background-color:rgb(241, 216, 141)  !important; color:black !important; border:2px solid yellow !important}
-    .toast-info { background-color:black !important; color:  #17a2b8 !important; }
-  </style>
-</head>
 
-<body>
-  {% block content %}
+      .btn_login {
+        position: relative;
+        transition: all 0.3s ease-in-out;
+        padding-block: 0.5rem;
+        padding-inline: 1.25rem;
+        background-color: #0e82fd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #fff;
+        font-weight: bold;
+        border: none;
+        outline: none;
+        overflow: hidden;
+        font-size: 15px;
+      }
 
+      .btn_login:hover {
+        border-color: #fff9;
+      }
 
-  <script>
-    $(document).ready(function () {
-        {% if messages %}
-            {% for message in messages %}
-                toastr.options = {
-                    closeButton: true,
-                    progressBar: true,
-                    timeOut: 5000,  // 5 seconds
-                };
-                toastr["{{ message.tags }}"]("{{ message }}");
-            {% endfor %}
-        {% endif %}
-    });
-  </script>
-  
-  <div class="main-wrapper">
-   {% comment %} header section {% endcomment %}
-   <header class="header header-fixed header-one header-space">
-    <div class="container">
-      <nav class="navbar navbar-expand-lg header-nav">
-        <div class="navbar-header">
-          <a id="mobile_btn" href="javascript:void(0);">
-            <span class="bar-icon">
-              <span></span>
-              <span></span>
-              <span></span>
-            </span>
-          </a>
-          <a href="{% url 'home' %}" class="navbar-brand logo">
-            <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo" />
-          </a>
-        </div>
-        <div class="main-menu-wrapper">
-          <div class="menu-header">
-            <a href="{% url 'home' %}" class="menu-logo">
-              <img src="{% static 'assets/img/logo.png' %}"class="img-fluid"alt="Logo"/>
-            </a>
-            
-            <a
-              id="menu_close"
-              class="menu-close"
-              href="javascript:void(0);"
-            >
-              <svg
-                class="svg-inline--fa fa-times fa-w-11"
-                aria-hidden="true"
-                focusable="false"
-                data-prefix="fas"
-                data-icon="times"
-                role="img"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 352 512"
-                data-fa-i2svg=""
-              >
-                <path
-                  fill="currentColor"
-                  d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                ></path>
-              </svg>
-            </a>
-          </div>
-          <ul class="main-nav">
-            <li>
-              <a href="{% url 'home' %}">Home</a>
-            </li>
-            <li>
-              <a href="{% url 'doctor_list' %}">Doctors</a>
-            </li>
-            <li>
-              <a href="{% url 'about' %}">About Us</a>
-            </li>
-            <li>
-              <a href="{% url 'contact' %}">Contact Us</a>
-            </li>
+      .btn_login:hover .icon {
+        transform: translate(4px);
+      }
 
-            <li class="phone_login">
-              <a href="{% url 'register' %}">Register</a>
-            </li>
-            <li class="phone_login">
-              <a href="{% url 'login' %}">Login</a>
-            </li>
+      .btn_login:hover::before {
+        animation: shine 1.5s ease-out infinite;
+      }
 
-            <li class="register-btn">
-              <a href="{% url 'register' %}" class="btn reg-btn">
-                <i class="feather-user"></i>Register
+      .btn_login::before {
+        content: "";
+        position: absolute;
+        width: 100px;
+        height: 100%;
+        background-image: linear-gradient(
+          120deg,
+          rgba(255, 255, 255, 0) 30%,
+          rgba(255, 255, 255, 0.8),
+          rgba(255, 255, 255, 0) 70%
+        );
+        top: 0;
+        left: -100px;
+        opacity: 0.6;
+      }
+
+      @keyframes shine {
+        0% {
+          left: -100px;
+        }
+
+        60% {
+          left: 100%;
+        }
+
+        to {
+          left: 100%;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .login-box {
+          flex-direction: column;
+        }
+
+        .svg-container {
+          width: 100%;
+          order: 1;
+        }
+
+        .form-container {
+          width: 100%;
+          order: 2;
+          padding: 30px;
+        }
+      }
+      .toast-success {
+        background-color: rgba(84, 162, 102, 0.89) !important;
+        color: black !important;
+        border: 2px solid green !important;
+      }
+      .toast-error {
+        background-color: rgba(210, 93, 105, 0.88) !important;
+        color: black !important;
+        border: 2px solid red !important;
+      }
+      .toast-warning {
+        background-color: rgb(241, 216, 141) !important;
+        color: black !important;
+        border: 2px solid yellow !important;
+      }
+      .toast-info {
+        background-color: black !important;
+        color: #17a2b8 !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    {% block content %}
+
+    <div class="main-wrapper">
+      {% comment %} header section {% endcomment %}
+      <header class="header header-fixed header-one header-space">
+        <div class="container">
+          <nav class="navbar navbar-expand-lg header-nav">
+            <div class="navbar-header">
+              <a id="mobile_btn" href="javascript:void(0);">
+                <span class="bar-icon">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </span>
               </a>
-            </li>
-            <li class="register-btn">
-              <a href="{% url 'login' %}" class="btn btn-primary log-btn">
-                <i class="feather-lock"></i>Login
+              <a href="{% url 'home' %}" class="navbar-brand logo">
+                <img
+                  src="{% static 'assets/img/logo.png' %}"
+                  class="img-fluid"
+                  alt="Logo"
+                />
               </a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </div>
-  </header>
+            </div>
+            <div class="main-menu-wrapper">
+              <div class="menu-header">
+                <a href="{% url 'home' %}" class="menu-logo">
+                  <img
+                    src="{% static 'assets/img/logo.png' %}"
+                    class="img-fluid"
+                    alt="Logo"
+                  />
+                </a>
 
-    <div class="login-container">
-      <div class="login-box mt-5">
-        <div class="svg-container">
-          <img src="{% static 'assets/img/login-animate_2.svg' %}" alt="Animated SVG" class="img-fluid" />
+                <a
+                  id="menu_close"
+                  class="menu-close"
+                  href="javascript:void(0);"
+                >
+                  <svg
+                    class="svg-inline--fa fa-times fa-w-11"
+                    aria-hidden="true"
+                    focusable="false"
+                    data-prefix="fas"
+                    data-icon="times"
+                    role="img"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 352 512"
+                    data-fa-i2svg=""
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                    ></path>
+                  </svg>
+                </a>
+              </div>
+              <ul class="main-nav">
+                <li>
+                  <a href="{% url 'home' %}">Home</a>
+                </li>
+                <li>
+                  <a href="{% url 'doctor_list' %}">Doctors</a>
+                </li>
+                <li>
+                  <a href="{% url 'about' %}">About Us</a>
+                </li>
+                <li>
+                  <a href="{% url 'contact' %}">Contact Us</a>
+                </li>
+
+                <li class="phone_login">
+                  <a href="{% url 'register' %}">Register</a>
+                </li>
+                <li class="phone_login">
+                  <a href="{% url 'login' %}">Login</a>
+                </li>
+
+                <li class="register-btn">
+                  <a href="{% url 'register' %}" class="btn reg-btn">
+                    <i class="feather-user"></i>Register
+                  </a>
+                </li>
+                <li class="register-btn">
+                  <a href="{% url 'login' %}" class="btn btn-primary log-btn">
+                    <i class="feather-lock"></i>Login
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </nav>
         </div>
-        <div class="form-container">
-          <div class="login-back">
-            <a href="/" class="text-secondary">
-              <i class="fa-solid fa-arrow-left-long text-secondary"></i>
-              Back
-            </a>
+      </header>
+
+      <div class="login-container">
+        <div class="login-box mt-5">
+          <div class="svg-container">
+            <img
+              src="{% static 'assets/img/login-animate_2.svg' %}"
+              alt="Animated SVG"
+              class="img-fluid"
+            />
           </div>
-          <h2 class="text-center fw-bolder">Sign in</h2>
-          <p class="text-center">Caring for your health, every step.</p>
-          {% if error %}
-          <div class="alert alert-danger" role="alert"><i class="fas fa-exclamation-triangle fa-beat-fade"></i>&nbsp;&nbsp;<span>{{ error }}</span></div>
-          {% endif %}
-          <form action="/login/" method="POST">
-            {% csrf_token %}
-            <div class="mb-3">
-              <label for="email" class="form-label">E-mail</label>
-              <input type="email" id="email" class="form-control" name="email" placeholder="example@email.com" />
+          <div class="form-container">
+            <div class="login-back">
+              <a href="/" class="text-secondary">
+                <i class="fa-solid fa-arrow-left-long text-secondary"></i>
+                Back
+              </a>
             </div>
-            <div class="mb-3">
-              <label for="user_type" class="form-label">User Type</label>
-              <select id="user_type" class="form-select form-control" name="user_type">
-                <option value="" selected disabled>Select</option>
-                <option value="patient">Patient</option>
-                <option value="doctor">Doctor</option>
-              </select>
+            <h2 class="text-center fw-bolder">Sign in</h2>
+            <p class="text-center">Caring for your health, every step.</p>
+
+             {% if error %}
+            <div class="alert alert-danger" role="alert">
+              <i class="fas fa-exclamation-triangle fa-beat-fade"></i
+              >&nbsp;&nbsp;<span>{{ error }}</span>
             </div>
-            <div class="mb-3">
-              <label for="password" class="form-label">Password</label>
-              <input type="password" id="password" class="form-control" name="password" placeholder="*******" />
-            </div>
-            <div class="d-grid">
-              <button class="btn_login" type="submit">
-                Sign in &nbsp;&nbsp;<span><i class="fa-solid fa-right-to-bracket"></i></span>
-              </button>
-            </div>
-            <p class="text-center mt-3">
-              Not signed up?
-              <a href="/register/" class="text-secondary text-decoration-underline fw-bolder">Sign up here</a>
-            </p>
-          </form>
+            {% endif %}
+            <form action="/login/" method="POST">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="email" class="form-label">E-mail</label>
+                <input
+                  type="email"
+                  id="email"
+                  class="form-control"
+                  name="email"
+                  placeholder="example@email.com"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="user_type" class="form-label">User Type</label>
+                <select
+                  id="user_type"
+                  class="form-select form-control"
+                  name="user_type"
+                >
+                  <option value="" selected disabled>Select</option>
+                  <option value="patient">Patient</option>
+                  <option value="doctor">Doctor</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  class="form-control"
+                  name="password"
+                  placeholder="*******"
+                />
+              </div>
+              <div class="d-grid">
+                <button class="btn_login" type="submit">
+                  Sign in &nbsp;&nbsp;<span
+                    ><i class="fa-solid fa-right-to-bracket"></i
+                  ></span>
+                </button>
+              </div>
+              <p class="text-center mt-3">
+                Not signed up?
+                <a
+                  href="/register/"
+                  class="text-secondary text-decoration-underline fw-bolder"
+                  >Sign up here</a
+                >
+              </p>
+            </form>
+          </div>
         </div>
       </div>
+      {% include 'footer.html' %}
     </div>
-    {% include 'footer.html' %}
-  </div>
-  {% endblock %}
+    {% endblock %}
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var messageBox = document.getElementById("message-box");
 
-  <!-- jQuery library (required for jquery-confirm) -->
-  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      // Function to show an alert with an animated icon
-      function showAlert(icon, message) {
-        $.alert({
-          title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
-          content: `<span style="font-size: 15px;">${message}</span>`,
-          type: "blue",
-          theme: "modern",
-          buttons: {
-                ok: {
-                  text: "OK",
-                  btnClass: "btn-blue",
-                },
-              },
-        });
-      }
-  
-      // Validate email field
-      function validateEmail() {
-        let email = $('#email').val().trim();
-        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (email === "" || !emailRegex.test(email)) {
-          showAlert("fa-envelope", "Please enter a valid email address.");
-          return false;
+        // Check if message contains "Login successful" and redirect after 2 seconds
+        if (messageBox && messageBox.innerText.includes("Login successful")) {
+          setTimeout(function () {
+            window.location.href = "{% url 'patient_dashboard' %}"; // Change if needed
+          }, 2000);
         }
-        return true;
-      }
-  
-      // Validate user type field
-      function validateUserType() {
-        let userType = $('#user_type').val();
-        // Check if userType is empty, null, or undefined
-        if (!userType || userType === "") {
-          showAlert("fa-users", "Please select a user type.");
-          return false;
-        }
-        return true;
-      }
-  
-      // Validate password field
-      function validatePassword() {
-        let password = $('#password').val().trim();
-        if (password.length < 6) {
-          showAlert("fa-lock", "Password must be at least 6 characters long.");
-          return false;
-        }
-        return true;
-      }
-  
-      // On form submission, validate each field one at a time
-      $('form').submit(function (e) {
-        e.preventDefault(); // Prevent the default form submission
-  
-        if (!validateEmail()) {
-          return; // Stop if email is invalid
-        }
-        if (!validateUserType()) {
-          return; // Stop if user type is not selected
-        }
-        if (!validatePassword()) {
-          return; // Stop if password is invalid
-        }
-  
-        // If all validations pass, submit the form
-        e.target.submit();
       });
-    });
-  </script>
-  
+    </script>
 
-</body>
+    <!-- jQuery library (required for jquery-confirm) -->
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        // Function to show an alert with an animated icon
+        function showAlert(icon, message) {
+          $.alert({
+            title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+            content: `<span style="font-size: 15px;">${message}</span>`,
+            type: "blue",
+            theme: "modern",
+            buttons: {
+              ok: {
+                text: "OK",
+                btnClass: "btn-blue",
+              },
+            },
+          });
+        }
 
+        //backend error
+        {% if messages %}
+        {% for message in messages %}
+            showAlert(
+                "{% if message.tags == 'success' %}fa-circle-check{% elif message.tags == 'warning' %}fa-exclamation-triangle{% else %}fa-circle-xmark{% endif %}",
+                "{{ message|escapejs }}",
+                "{{ message.tags }}"
+            );
+        {% endfor %}
+    {% endif %}
+
+        // Validate email field
+        function validateEmail() {
+          let email = $("#email").val().trim();
+          let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (email === "" || !emailRegex.test(email)) {
+            showAlert("fa-envelope", "Please enter a valid email address.");
+            return false;
+          }
+          return true;
+        }
+
+        // Validate user type field
+        function validateUserType() {
+          let userType = $("#user_type").val();
+          // Check if userType is empty, null, or undefined
+          if (!userType || userType === "") {
+            showAlert("fa-users", "Please select a user type.");
+            return false;
+          }
+          return true;
+        }
+
+        // Validate password field
+        function validatePassword() {
+          let password = $("#password").val().trim();
+          if (password.length < 6) {
+            showAlert(
+              "fa-lock",
+              "Password must be at least 6 characters long."
+            );
+            return false;
+          }
+          return true;
+        }
+
+        // On form submission, validate each field one at a time
+        $("form").submit(function (e) {
+          e.preventDefault(); // Prevent the default form submission
+
+          if (!validateEmail()) {
+            return; // Stop if email is invalid
+          }
+          if (!validateUserType()) {
+            return; // Stop if user type is not selected
+          }
+          if (!validatePassword()) {
+            return; // Stop if password is invalid
+          }
+
+          // If all validations pass, submit the form
+          e.target.submit();
+        });
+      });
+    </script>
+  </body>
 </html>

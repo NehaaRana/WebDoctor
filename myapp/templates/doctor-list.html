@@ -1,403 +1,374 @@
 {% load static %}
 <html lang="en">
-  <head>
-<meta charset="utf-8">
-<title>{% block title %} webDocter {% endblock %}</title>
-<link
-rel="shortcut icon"
-href="{% static 'assets/img/favicon.png' %}"
-type="image/x-icon"
-/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %} webDocter {% endblock %}</title>
+  <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
   <!-- -------------------- social icons ----------------------- -->
-  <link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 
-<link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-/>
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
-<link
-  rel="stylesheet"
-  href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}"
-/>
-<link
-  rel="stylesheet"
-  href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}"
-/>
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}" />
 
-<link rel="stylesheet" href="{% static 'assets/css/feather.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}" />
 
-<link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
 
-<style type="text/css">
-  @font-face {
-    font-family: Roboto;
-    src: url("{% static 'assets/fonts/Roboto-Regular.ttf' %}") format("truetype");
-  }
-</style>
+  <style type="text/css">
+    @font-face {
+      font-family: Roboto;
+      src: url("{% static 'assets/fonts/Roboto-Regular.ttf' %}") format("truetype");
+    }
+  </style>
 </head>
+
 <body>
   {% block content %}
-<div class="main-wrapper">
-  {% comment %} <header class="header header-fixed header-one">
-    <div class="container">
-        <nav class="navbar navbar-expand-lg header-nav">
-            <div class="navbar-header">
-                <a id="mobile_btn" href="javascript:void(0);">
-                    <span class="bar-icon">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </span>
-                </a>
-                <a href="/" class="navbar-brand logo">
-                    <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
-                </a>
-            </div>
-            <div class="main-menu-wrapper">
-                <div class="menu-header">
-                    <a href="/index" class="menu-logo">
-                        <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
-                    </a>
-                    <a id="menu_close" class="menu-close" href="javascript:void(0);">
-                        <i class="fas fa-times"></i>
-                    </a>
-                </div>
-                <ul class="main-nav">
-                    <li><a href="{% url 'index' %}">Home</a></li>
-                    <li class="active">
-                        <a href="{% url 'doctor_list' %}">Doctors</a>
-                      </li>
-                    <li ><a href="{% url 'about' %}">About Us</a></li>
-                    <li ><a href="{% url 'contact' %}">Contact Us</a></li>
-
-                    <li class="register-btn"><a href="{% url 'register' %}" class="btn reg-btn"><i class="feather-user"></i>Register</a></li>
-                    <li class="register-btn"><a href="{% url 'login' %}" class="btn btn-primary log-btn"><i class="feather-lock"></i>Login</a></li>
-                </ul>
-            </div>
-        </nav>
-    </div>
-</header> {% endcomment %}
-
-{% comment %} <header class="header header-fixed header-one">
-  <div class="container">
-      <nav class="navbar navbar-expand-lg header-nav">
-          <div class="navbar-header">
-              <a id="mobile_btn" href="javascript:void(0);">
-                  <span class="bar-icon">
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                  </span>
-              </a>
-              <a href="/" class="navbar-brand logo">
-                  <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
-              </a>
-          </div>
-          <div class="main-menu-wrapper">
-              <div class="menu-header">
-                  <a href="/index" class="menu-logo">
+  <div class="main-wrapper">
+    <header class="header header-fixed header-one">
+      <div class="container">
+          <nav class="navbar navbar-expand-lg header-nav">
+              <div class="navbar-header">
+                  <a id="mobile_btn" href="javascript:void(0);">
+                      <span class="bar-icon">
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                      </span>
+                  </a>
+                  <a href="/" class="navbar-brand logo">
                       <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
                   </a>
-                  <a id="menu_close" class="menu-close" href="javascript:void(0);">
-                      <i class="fas fa-times"></i>
-                  </a>
               </div>
-              <ul class="main-nav">
-                  <li><a href="{% url 'index' %}">Home</a></li>
-                  <li><a href="{% url 'doctor_list' %}">Doctors</a></li>
-                  <li><a href="{% url 'about_us' %}">About Us</a></li>
-                  <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
-
-                  {% if request.session.patient_id or request.session.doctor_id %}
-                    
-                      <li class="nav-item dropdown has-arrow logged-item">
-                          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                              {% if profile.profile_img %}
-                                  <img src="{{ profile.profile_img.url }}" class="rounded-circle" width="31" alt="Profile">
-                              {% else %}
-                                  <img src="{% static 'assets/img/default_profile.png' %}" class="rounded-circle" width="31" alt="Default Profile">
-                              {% endif %}
-                              
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-end">
-                              <div class="user-header">
-                                  <div class="avatar avatar-sm">
-                                      {% if profile.profile_img %}
-                                          <img class="rounded-circle" src="{{ profile.profile_img.url }}" width="31" alt="Profile">
-                                      {% else %}
-                                          <img class="rounded-circle" src="{% static 'assets/img/default_profile.png' %}" width="31" alt="Default Profile">
-                                      {% endif %}
-                                  </div>
-                                  <div class="user-text">
-                                      <h6>{{ profile.name }}</h6>
-                                  </div>
-                              </div>
-                              {% if user_type == "patient" %}
-                                  <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
-                                  <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
-                              {% elif user_type == "doctor" %}
-                                  <a class="dropdown-item" href="{% url 'doctor_dashboard' %}">Dashboard</a>
-                                  <a class="dropdown-item" href="{% url 'doctor_profile_settings' %}">Profile Settings</a>
-                              {% endif %}
-                              <a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a>
-                          </div>
-                      </li>
-                  {% else %}
-                     
-                      <li class="register-btn"><a href="{% url 'register' %}" class="btn reg-btn"><i class="feather-user"></i>Register</a></li>
-                      <li class="register-btn"><a href="{% url 'login' %}" class="btn btn-primary log-btn"><i class="feather-lock"></i>Login</a></li>
-                  {% endif %}
-              </ul>
-          </div>
-      </nav>
-  </div>
-</header> {% endcomment %}
-
-
-<header class="header header-fixed header-one">
-  <div class="container">
-      <nav class="navbar navbar-expand-lg header-nav">
-          <div class="navbar-header">
-              <a id="mobile_btn" href="javascript:void(0);">
-                  <span class="bar-icon">
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                  </span>
-              </a>
-              <a href="/" class="navbar-brand logo">
-                  <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
-              </a>
-          </div>
-          <div class="main-menu-wrapper">
-              <div class="menu-header">
-                  <a href="/index" class="menu-logo">
-                      <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
-                  </a>
-                  <a id="menu_close" class="menu-close" href="javascript:void(0);">
-                      <i class="fas fa-times"></i>
-                  </a>
-              </div>
-              <ul class="main-nav">
-                  <li><a href="{% if user_type == 'patient' or user_type == 'doctor' %}{% url 'index' %}{% else %}{% url 'home' %}{% endif %}">Home</a></li>
-                  <li><a href="{% url 'doctor_list' %}">Doctors</a></li>
-                  <li><a href="{% url 'about_us' %}">About Us</a></li>
-                  <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
-                  <ul class="nav header-navbar-rht pt-3">
-
-                  {% if request.session.patient_id or request.session.doctor_id %}
-    <li class="nav-item dropdown has-arrow logged-item">
-        <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
-            <span class="user-img">
-                {% if profile and profile.profile_img %}
-                    <img class="rounded-circle" src="{{ profile.profile_img.url }}" width="31" alt="profile" />
-                {% else %}
-                    <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
-                {% endif %}
-                {% comment %} <span class="user-name ms-2">{{ profile.name }}</span> <!-- Display Name Beside Image --> {% endcomment %}
-            </span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-end">
-            <div class="user-header d-flex align-items-center">
-                <div class="avatar avatar-sm me-2">
+              <div class="main-menu-wrapper">
+                  <div class="menu-header">
+                      <a href="/index" class="menu-logo">
+                          <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+                      </a>
+                      <a id="menu_close" class="menu-close" href="javascript:void(0);">
+                          <i class="fas fa-times"></i>
+                      </a>
+                  </div>
+                  <ul class="main-nav">
+                      <li><a href="{% if user_type == 'patient' or user_type == 'doctor' %}{% url 'index' %}{% else %}{% url 'home' %}{% endif %}">Home</a></li>
+                      <li><a href="{% url 'doctor_list' %}">Doctors</a></li>
+                      <li><a href="{% url 'about_us' %}">About Us</a></li>
+                      <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+                      <ul class="nav header-navbar-rht pt-3">
+    
+                      {% if request.session.patient_id or request.session.doctor_id %}
+        <li class="nav-item dropdown has-arrow logged-item">
+            <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="user-img">
                     {% if profile and profile.profile_img %}
                         <img class="rounded-circle" src="{{ profile.profile_img.url }}" width="31" alt="profile" />
                     {% else %}
                         <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
                     {% endif %}
+                    {% comment %} <span class="user-name ms-2">{{ profile.name }}</span> <!-- Display Name Beside Image --> {% endcomment %}
+                </span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end">
+                <div class="user-header d-flex align-items-center">
+                    <div class="avatar avatar-sm me-2">
+                        {% if profile and profile.profile_img %}
+                            <img class="rounded-circle" src="{{ profile.profile_img.url }}" width="31" alt="profile" />
+                        {% else %}
+                            <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
+                        {% endif %}
+                    </div>
+                    <div class="user-text">
+                        <h6 class="mb-0">{{ profile.name }}</h6>
+                    </div>
                 </div>
-                <div class="user-text">
-                    <h6 class="mb-0">{{ profile.name }}</h6>
-                </div>
+                {% if user_type == "patient" %}
+                    <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
+                    <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
+                {% elif user_type == "doctor" %}
+                    <a class="dropdown-item" href="{% url 'doctor_dashboard' %}">Dashboard</a>
+                    <a class="dropdown-item" href="{% url 'doctor_profile_settings' %}">Profile Settings</a>
+                {% endif %}
+                <a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a>
             </div>
-            {% if user_type == "patient" %}
-                <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
-                <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
-            {% elif user_type == "doctor" %}
-                <a class="dropdown-item" href="{% url 'doctor_dashboard' %}">Dashboard</a>
-                <a class="dropdown-item" href="{% url 'doctor_profile_settings' %}">Profile Settings</a>
-            {% endif %}
-            <a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a>
-        </div>
-    </li>
-
-
-                  {% else %}
-                      
-                  
-                      <li class="register-btn mb-3 mx-2">
-                        <a href="{% url 'register' %}" class="btn reg-btn btn-primary" >
-                          <i class="feather-user"></i>Register
-                        </a>
-                      </li>
-                      <li class="register-btn mb-3 ">
-                        <a href="{% url 'login' %}" class="btn btn-primary log-btn">
-                          <i class="feather-lock"></i>Login
-                        </a>
-                      </li>
-                  
-                  {% endif %}
-              </ul>
-            </ul>
-          </div>
-      </nav>
-  </div>
-</header>
-
-
-  <!-- Doctors listing static Section -->
-<section id="team" class="team section py-5 bg-primary-light" style="padding-top:100px !important">
-  <div class="container">
-    <div class="row g-4"> <!-- Bootstrap grid gap for spacing -->
-      <div class="col-md-12 aos" data-aos="fade-up">
-        <div class="section-header-one text-center">
-            <h2 class="section-title" id="highlights">Our dedicated life savers</h2>
-        </div>
-    </div>
-      <!-- Card Start -->
-      {% for doctor in doctors %}
-      {% if doctor.is_approved %}
-      <div class="col-12 col-sm-6 col-md-4 col-lg-3 aos" data-aos="fade-up">
-        <div class="card h-100">
-            {% if doctor.profile_img %}
-                      <img class="card-img-top" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
+        </li>
+    
+    
                       {% else %}
-                      <img class="card-img-top" src="/static/assets/img/default_profile.png" width="31"
-                        alt="default profile" />
+                          
+                      
+                          <li class="register-btn mb-3 mx-2">
+                            <a href="{% url 'register' %}" class="btn reg-btn btn-primary" >
+                              <i class="feather-user"></i>Register
+                            </a>
+                          </li>
+                          <li class="register-btn mb-3 ">
+                            <a href="{% url 'login' %}" class="btn btn-primary log-btn">
+                              <i class="feather-lock"></i>Login
+                            </a>
+                          </li>
+                      
                       {% endif %}
-          <div class="card-body text-center d-flex flex-column justify-content-between">
-            <h5 class="card-title">{{doctor.name}}</h5>
-            <p class="card-text">{{ doctor.specialization }}</p>
-            <p class="card-text">{{ doctor.qualification }}</p>
-            <a href="{% url 'doctor_profile' doctor.id %}" class="btn_dr mt-auto mx-auto">Show Profile</a>
+                  </ul>
+                </ul>
+              </div>
+          </nav>
+      </div>
+    </header>
+    <!-- Doctors listing static Section -->
+    <section id="team" class="team section py-5 bg-primary-light" style="padding-top:100px !important">
+      <div class="container">
+        <div class="row g-4"> <!-- Bootstrap grid gap for spacing -->
+          <div class="col-md-12 aos" data-aos="fade-up">
+            <div class="section-header-one text-center">
+              <h2 class="section-title" id="highlights">Our dedicated life savers</h2>
 
+              <!-- Search Input -->
+              <!-- <input type="text" id="search" class="form-control mt-3" placeholder="Search by Specialization..."
+                style="width: 50%; margin: auto;"> -->
+
+               <!-- Search Input with Microphone -->
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-6 d-flex">
+        <input type="text" id="search" class="form-control" placeholder="Search by Name or Specialization">
+        <button id="voice-search-btn" class="btn btn-primary ms-2"><i class="fas fa-microphone"></i></button>
+      </div>
+    </div>
+            </div>
           </div>
+          <!-- Card Start -->
+          {% for doctor in doctors %}
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3 aos doctor-card" data-name="{{ doctor.name|lower }}"
+            data-specialization="{{ doctor.specialization|lower }}" data-aos="fade-up">
+            <div class="card h-100">
+              {% if doctor.profile_img %}
+              <img class="card-img-top" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
+              {% else %}
+              <img class="card-img-top" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
+              {% endif %}
+              <div class="card-body text-center d-flex flex-column justify-content-between">
+                <h5 class="card-title">{{doctor.name}}</h5>
+                <p class="card-text specialization">{{ doctor.specialization }}</p>
+                <p class="card-text">{{ doctor.qualification }}</p>
+                <a href="{% url 'doctor_profile' doctor.id %}" class="btn_dr mt-auto mx-auto">Show Profile</a>
+
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          <!-- Card End -->
+          <!-- No doctors message -->
+          <p id="no-results" class="text-center mt-4"
+            style="display: none; font-size: 18px; font-weight: bold; color: red;">
+            No doctor available
+          </p>
+
         </div>
       </div>
-      {% endif %}
-      {% endfor %}
-      <!-- Card End -->
+    </section>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script>
+      $(document).ready(function () {
+        $("#search").on("keyup", function () {
+          var searchText = $(this).val().toLowerCase();
+          var matchFound = false;
 
-    </div>
-  </div>
-</section>
+          $(".doctor-card").each(function () {
+            var specialization = $(this).data("specialization");
 
-<!-- CSS Styling for Cards and Button -->
-<style>
-  .card {
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out;
-  }
+            if (specialization.includes(searchText)) {
+              $(this).show();
+              matchFound = true;
+            } else {
+              $(this).hide();
+            }
+          });
 
-  .card:hover {
-    transform: translateY(-10px);
-  }
+          // Show "No doctor available" if no matches found
+          if (matchFound) {
+            $("#no-results").hide();
+          } else {
+            $("#no-results").show();
+          }
+        });
+      });
+    </script> -->
 
-  .card-img-top {
-    border-radius: 15px 15px 0 0;
-    height: 200px;
-    object-fit: cover; /* Prevents image cropping */
-  }
+    <script>
+      $(document).ready(function () {
+        // Function to filter doctors based on search input
+        function filterDoctors(searchText) {
+          var found = false;
+    
+          $(".doctor-card").each(function () {
+            var name = $(this).data("name");
+            var specialization = $(this).data("specialization");
+    
+            if (name.includes(searchText) || specialization.includes(searchText)) {
+              $(this).show();
+              found = true;
+            } else {
+              $(this).hide();
+            }
+          });
+    
+          // Show/hide "No doctor available" message
+          if (found) {
+            $("#no-results").hide();
+          } else {
+            $("#no-results").show();
+          }
+        }
+    
+        // Live search
+        $("#search").on("keyup", function () {
+          var searchText = $(this).val().toLowerCase();
+          filterDoctors(searchText);
+        });
+    
+        // Voice Search Button Click
+        $("#voice-search-btn").on("click", function () {
+          var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+          recognition.lang = "en-US";
+    
+          recognition.onstart = function () {
+            $("#voice-search-btn").html('<i class="fas fa-microphone-slash"></i>'); // Change icon when listening
+          };
+    
+          recognition.onspeechend = function () {
+            recognition.stop();
+            $("#voice-search-btn").html('<i class="fas fa-microphone"></i>'); // Reset icon
+          };
+    
+          recognition.onresult = function (event) {
+            var transcript = event.results[0][0].transcript;
+            $("#search").val(transcript.toLowerCase()); // Set spoken text to input field
+            filterDoctors(transcript.toLowerCase()); // Filter results
+          };
+    
+          recognition.start();
+        });
+      });
+    </script>
+    
+    <!-- Font Awesome for Microphone Icon -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    
 
-  .card-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-  }
+    <!-- CSS Styling for Cards and Button -->
+    <style>
+      .card {
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+      }
 
-  .team {
-    background-color: #f5f5f5;
-  }
+      .card:hover {
+        transform: translateY(-10px);
+      }
 
-  /* Button Styling */
-  .btn_dr {
-    position: relative;
-    transition: all 0.3s ease-in-out;
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-    padding-block: 0.5rem;
-    padding-inline: 1.25rem;
-    background-color: #0E82FD;
-    border-radius: 9999px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: #fff;
-    font-weight: bold;
-    border: 3px solid #ffffff4d;
-    outline: none;
-    overflow: hidden;
-    font-size: 15px;
-  }
+      .card-img-top {
+        border-radius: 15px 15px 0 0;
+        height: 200px;
+        object-fit: cover;
+        /* Prevents image cropping */
+      }
 
-  .icon {
-    width: 24px;
-    height: 24px;
-    transition: all 0.3s ease-in-out;
-  }
-  
-  .btn_dr:hover {
-    transform: scale(1.05);
-    border-color: #fff9;
-  }
-  
-  .btn_dr:hover .icon {
-    transform: translate(4px);
-  }
-  
-  .btn_dr:hover::before {
-    animation: shine 1.5s ease-out infinite;
-  }
-  
-  .btn_dr::before {
-    content: "";
-    position: absolute;
-    width: 100px;
-    height: 100%;
-    background-image: linear-gradient(
-      120deg,
-      rgba(255, 255, 255, 0) 30%,
-      rgba(255, 255, 255, 0.8),
-      rgba(255, 255, 255, 0) 70%
-    );
-    top: 0;
-    left: -100px;
-    opacity: 0.6;
-  }
-  
-  @keyframes shine {
-    0% {
-      left: -100px;
-    }
-  
-    60% {
-      left: 100%;
-    }
-  
-    to {
-      left: 100%;
-    }
-  }
+      .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-  /* Mobile Responsiveness */
-  @media (max-width: 576px) {
-    .card {
-      margin-bottom: 20px;
-    }
-  }
-</style>
+      .team {
+        background-color: #f5f5f5;
+      }
 
-{% include "footer.html" %}  
-{% endblock %}
+      /* Button Styling */
+      .btn_dr {
+        position: relative;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+        padding-block: 0.5rem;
+        padding-inline: 1.25rem;
+        background-color: #0E82FD;
+        border-radius: 9999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #fff;
+        font-weight: bold;
+        border: 3px solid #ffffff4d;
+        outline: none;
+        overflow: hidden;
+        font-size: 15px;
+      }
+
+      .icon {
+        width: 24px;
+        height: 24px;
+        transition: all 0.3s ease-in-out;
+      }
+
+      .btn_dr:hover {
+        transform: scale(1.05);
+        border-color: #fff9;
+      }
+
+      .btn_dr:hover .icon {
+        transform: translate(4px);
+      }
+
+      .btn_dr:hover::before {
+        animation: shine 1.5s ease-out infinite;
+      }
+
+      .btn_dr::before {
+        content: "";
+        position: absolute;
+        width: 100px;
+        height: 100%;
+        background-image: linear-gradient(120deg,
+            rgba(255, 255, 255, 0) 30%,
+            rgba(255, 255, 255, 0.8),
+            rgba(255, 255, 255, 0) 70%);
+        top: 0;
+        left: -100px;
+        opacity: 0.6;
+      }
+
+      @keyframes shine {
+        0% {
+          left: -100px;
+        }
+
+        60% {
+          left: 100%;
+        }
+
+        to {
+          left: 100%;
+        }
+      }
+
+      /* Mobile Responsiveness */
+      @media (max-width: 576px) {
+        .card {
+          margin-bottom: 20px;
+        }
+      }
+    </style>
+
+    {% include "footer.html" %}
+    {% endblock %}
 </body>
+
 </html>

@@ -3,7 +3,7 @@ from . models import patientRegister,doctorRegister,appointment,Payment,review
 from django.core.exceptions import ValidationError
 from datetime import datetime, time, timedelta
 from .models import adminLogin
-from . models import patientRegister,doctorRegister,appointment,Payment
+from . models import patientRegister,doctorRegister,appointment,Payment,HealthRecord
 from django.core.exceptions import ValidationError
 from datetime import datetime, time, timedelta
 
@@ -136,19 +136,42 @@ class appointmentForm(forms.ModelForm):
         return appointment_time
     
    
-
-    # def clean_status(self):
-    #     status = self.cleaned_data.get('status')
-    #     valid_statuses = ['pending', 'confirmed', 'cancelled']
-    #     if status not in valid_statuses:
-    #         raise ValidationError(f"Status must be one of the following: {', '.join(valid_statuses)}.")
-    #     return status
-
 class PaymentForm(forms.ModelForm):
     class Meta:
         model = Payment
         fields = ['amount', 'payment_status', 'payment_method']
 
+# class HealthRecordForm(forms.ModelForm):
+#     class Meta:
+#         model = HealthRecord
+#         fields = ['bp_systolic', 'bp_diastolic', 'sugar_level', 'weight']
 
 
+class HealthRecordForm(forms.ModelForm):
+    class Meta:
+        model = HealthRecord
+        fields = [
+            'bp_systolic', 'bp_diastolic', 'heart_rate',  'sugar_level',
+            'steps_walked', 'sleep_hours'
+        ]
+        widgets = {
+            'bp_systolic': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Systolic BP (e.g., 120 mmHg)'}),
+            'bp_diastolic': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Diastolic BP(e.g., 80 mmHg)'}),
+            'heart_rate': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Heart Rate(e.g., 75 BPM)'}),
+            'sugar_level': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Sugar Level(e.g., 90 mg/dL)'}),
+            'steps_walked': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Steps Walked(e.g., 8000 steps)'}),
+            'sleep_hours': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Sleep Hours(e.g., 8 hours)'}),
+        }
 
+# class HealthRecordForm(forms.ModelForm):
+#     class Meta:
+#         model = HealthRecord
+#         fields = ['bp_systolic', 'bp_diastolic', 'heart_rate', 'sugar_level', 'steps_walked', 'sleep_hours']
+#         widgets = {
+#             'bp_systolic': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Systolic BP'}),
+#             'bp_diastolic': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Diastolic BP'}),
+#             'heart_rate': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Heart Rate'}),
+#             'sugar_level': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Sugar Level'}),
+#             'steps_walked': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Steps Walked'}),
+#             'sleep_hours': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Sleep Hours'}),
+#         }

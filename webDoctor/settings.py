@@ -178,3 +178,13 @@ from django.contrib.messages import constants as messages
 #     messages.WARNING: 'warning',
 #     messages.ERROR: 'error',
 # }
+
+
+# openAI API KEYS
+OPENAI_API_KEY="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"
+
+#vaishnavi OPENAI_API_KEY="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"
+
+
+
+

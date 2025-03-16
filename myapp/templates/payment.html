@@ -1,363 +1,259 @@
 {% load static %}
-<html lang="en" style="transform: none;" class="fontawesome-i2svg-active fontawesome-i2svg-complete">
+<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>{% block title %} webDocter {% endblock %}</title>
-  <link
-      rel="shortcut icon"
-      href="{% static 'assets/img/favicon.png' %}"
-      type="image/x-icon"
-    />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-  <link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+  <title>Appointment Date Picker</title>
 
-<link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-/>
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon">
 
-<link
-  rel="stylesheet"
-  href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}"
-/>
-<link
-  rel="stylesheet"
-  href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}"
-/>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
 
-<link rel="stylesheet" href="{% static 'assets/css/feather.css' %}" />
+  <!-- FontAwesome CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}">
 
-<link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
+  <!-- Feather Icons -->
+  <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}">
 
-<!-- Theia Sticky Sidebar -->
-<style id="theia-sticky-sidebar-stylesheet-TSS">
-  .theiaStickySidebar:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
 
-  @font-face {
-    font-family: Roboto;
-    src: url("chrome-extension://mcgbeeipkmelnpldkobichboakdfaeon/css/Roboto-Regular.ttf");
-  }
-</style>
+  <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  
+  <!-- DateDropper Styles -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datedropper/datedropper.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/datedropper/datedropper.min.js"></script>
+
 </head>
 
-<body style="transform: none;">
+<body>
   {% block content %}
-<div class="main-wrapper" style="transform: none;">
+  <div class="main-wrapper">
 
-  {% comment %} <header class="header header-fixed header-one header-space">
-    <div class="container">
-    <nav class="navbar navbar-expand-lg header-nav">
-    <div class="navbar-header">
-    <a id="mobile_btn" href="javascript:void(0);">
-    <span class="bar-icon">
-    <span></span>
-    <span></span>
-    <span></span>
-    </span>
-    </a>
-    <a href="{% url 'index' %}" class="navbar-brand logo">
-      <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
-    </a>
-    </a>
-    </div>
-    <div class="main-menu-wrapper">
-    <div class="menu-header">
-      <a href="{% url 'index' %}" class="menu-logo">
-        <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
-      </a>
-    <a id="menu_close" class="menu-close" href="javascript:void(0);">
-    <svg class="svg-inline--fa fa-times fa-w-11" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" data-fa-i2svg=""><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg><!-- <i class="fas fa-times"></i> Font Awesome fontawesome.com -->
-    </a>
-    </div>
-    <ul class="main-nav">
-      <li>
-        <a href="{% url 'index' %}">Home</a>
-      </li>
-      
-      <li>
-        <a href="{% url 'patient_dashboard' %}">Patients</a>
-      </li>
-      
-      <li>
-        <a href="{% url 'doctor_dashboard' %}">Doctors</a>
-      </li>
-      
-      <li>
-        <a href="{% url 'admin_dashboard' %}">Admin</a>
-      </li>
-      
-      <li>
-        <a href="{% url 'contact_us' %}">Contact Us</a>
-      </li>
-    
-    
-    <ul class="nav header-navbar-rht" style="padding-top: 20px;">
-    
-    <li class="nav-item dropdown has-arrow logged-item">
-    <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
-    <span class="user-img">
-    <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile">
-    </span>
-    </a>
-    <div class="dropdown-menu dropdown-menu-end">
-    <div class="user-header">
-    <div class="avatar avatar-sm">
-      <img
-      class="rounded-circle"
-     src="{{ patient.profile_img.url }}"
-     width="31"
-     alt="profile"
-     />
-    </div>
-    <div class="user-text">
-    <h6>{{patient.name}}</h6>
-    <p class="text-muted mb-0">{{patient.user}}</p>
-    </div>
-    </div>
-    <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
-    <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
-    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>    
-    </div>
-    </li>
-    </ul>
-    </ul>
-    </div>
-    </nav>
-    </div>
-    </header>
-     {% endcomment %}
-     <header class="header header-fixed header-one header-space">
-      <div class="container">
-      <nav class="navbar navbar-expand-lg header-nav">
-      <div class="navbar-header">
-      <a id="mobile_btn" href="javascript:void(0);">
-      <span class="bar-icon">
-      <span></span>
-      <span></span>
-      <span></span>
-      </span>
-      </a>
-      <a href="{% url 'index' %}" class="navbar-brand logo">
-        <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
-      </a>
-      </a>
-      </div>
-      <div class="main-menu-wrapper">
-      <div class="menu-header">
-        <a href="{% url 'index' %}" class="menu-logo">
+      <!--  Navbar section Start-->
+      <header class="header header-fixed header-one header-space">
+        <div class="container">
+        <nav class="navbar navbar-expand-lg header-nav">
+        <div class="navbar-header">
+        <a id="mobile_btn" href="javascript:void(0);">
+        <span class="bar-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+        </span>
+        </a>
+        <a href="{% url 'index' %}" class="navbar-brand logo">
           <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
         </a>
-      <a id="menu_close" class="menu-close" href="javascript:void(0);">
-      <svg class="svg-inline--fa fa-times fa-w-11" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" data-fa-i2svg=""><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg><!-- <i class="fas fa-times"></i> Font Awesome fontawesome.com -->
-      </a>
-      </div>
-      <ul class="main-nav">
-        <li>
-          <a href="{% url 'index' %}">Home</a>
-        </li>
+        </a>
+        </div>
+        <div class="main-menu-wrapper">
+        <div class="menu-header">
+          <a href="{% url 'index' %}" class="menu-logo">
+            <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+          </a>
+        <a id="menu_close" class="menu-close" href="javascript:void(0);">
+        <svg class="svg-inline--fa fa-times fa-w-11" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" data-fa-i2svg=""><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg><!-- <i class="fas fa-times"></i> Font Awesome fontawesome.com -->
+        </a>
+        </div>
+        <ul class="main-nav">
+          <li>
+            <a href="{% url 'index' %}">Home</a>
+          </li>
+          
+          <li>
+            <a href="{% url 'doctor_list' %}">Doctors</a>
+          </li>
+          <li>
+            <a href="{% url 'about_us' %}">About Us</a>
+          </li>
+          
+          <li>
+            <a href="{% url 'contact_us' %}">Contact Us</a>
+          </li>
         
-        <li>
-          <a href="{% url 'doctor_list' %}">Doctors</a>
-        </li>
-        <li>
-          <a href="{% url 'about_us' %}">About Us</a>
-        </li>
         
-        <li>
-          <a href="{% url 'contact_us' %}">Contact Us</a>
-        </li>
-      
-      
-      <ul class="nav header-navbar-rht" style="padding-top: 20px;">
-      
-      <li class="nav-item dropdown has-arrow logged-item">
-      <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
-      <span class="user-img">
-     
-        {% if patient.profile_img %}
-  <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
-  {% else %}
-    <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
-  {% endif %}
-  </span>
-      </span>
-      </a>
-      <div class="dropdown-menu dropdown-menu-end">
-      <div class="user-header">
-      <div class="avatar avatar-sm">
- 
-        {% if patient.profile_img %}
-        <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
-        {% else %}
-        <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
-        {% endif %}
-
-      </div>
-      <div class="user-text">
-      <h6>{{patient.name}}</h6>
-      <p class="text-muted mb-0">{{patient.user}}</p>
-      </div>
-      </div>
-      <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
-      <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
-      <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>       
-     </div>
-      </li>
-      </ul>
-      </ul>
-      </div>
-      </nav>
-      </div>
-      </header>
-
-
-<div class="doctor-content">
-<div class="container">
-
-<div class="row">
-<div class="col-md-12">
-<div class="back-link">
-<a href="consultation.html"><i class="fa-solid fa-arrow-left-long"></i> Back</a>
-{% comment %} <p style="text-align: center;">Only Cash on Visit Payment Accepted.</p> {% endcomment %}
-</div>
-</div>
-</div>
-<div class="row">
-<div class="col-lg-8 col-md-12">
-<div class="paitent-header">
-<h4 class="paitent-title">Payment</h4>
-</div>
-<div class="booking-header">
-<h4 class="booking-title">Payments Methods</h4>
-</div>
-<!-- <div class="payments-form">
-  <form action="{% url 'payment' appointment.id doctor.id %}" method="POST">
-    {% csrf_token %}
-
-<div class="payment-form-group"><div class="form-group">
-<label class="custom_radio">
-<input type="radio" name="payment_method"  value="CARD">
-<span class="checkmark"></span> Debit or Credit Card
-</label>
-</div>
-
-
-{% comment %} <div class="form-group">
-  <label class="custom_radio">
-    <input type="radio" name="payment" value="cash" checked>
-    <span class="checkmark"></span> Cash on Visit
-  </label>
-</div> {% endcomment %}
-<div class="form-group">
-<label class="custom_radio">
-<input type="radio" name="payment_method" value="BANK">
-<span class="checkmark"></span> Bank Transfer
-</label>
-</div>
-<div class="form-group">
-<label class="custom_radio">
-<input type="radio" name="payment_method" value="UPI">
-<span class="checkmark"></span> UPI
-</label>
-</div>
-</div>
-<div class="form-group mb-0">
-<div class="booking-btn">
-<button type="submit" class="btn btn-primary prime-btn justify-content-center align-items-center" value="Update">
-Next <i class="feather-arrow-right-circle"></i>
-</button>
-</div>
-</div>
-</form> -->
-</div>
-</div>
-<div class="col-lg-4 col-md-12">
-<div class="booking-header">
-<h4 class="booking-title">Booking Summary</h4>
-</div>
-<div class="card booking-card">
-<div class="card-body booking-card-body">
-<div class="booking-doctor-details">
-<div class="booking-doctor-left">
-<div class="booking-doctor-img">
-<a href="{% url 'doctor_profile' doctor.id %}">
-    {% comment %} <img src="{{ doctor.profile_img.url }}" alt=""> {% endcomment %}
-    {% if doctor.profile_img %}
-    <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
+        <ul class="nav header-navbar-rht" style="padding-top: 20px;">
+        
+        <li class="nav-item dropdown has-arrow logged-item">
+        <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="user-img">
+       
+          {% if patient.profile_img %}
+    <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
     {% else %}
-      <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
+      <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
     {% endif %}
-</a> 
+    </span>
+        </span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end">
+        <div class="user-header">
+        <div class="avatar avatar-sm">
+   
+          {% if patient.profile_img %}
+          <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
+          {% else %}
+          <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
+          {% endif %}
+  
+        </div>
+        <div class="user-text">
+        <h6>{{patient.name}}</h6>
+        <p class="text-muted mb-0">{{patient.user}}</p>
+        </div>
+        </div>
+        <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
+        <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
+        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>       
+       </div>
+        </li>
+        </ul>
+        </ul>
+        </div>
+        </nav>
+        </div>
+        </header>
+  
+    <!--  Navbar section End-->
 
-</a>
-</div>
-<div class="booking-doctor-info">
-<h4>
-   <a href="{% url 'doctor_profile' doctor.id %}">
-  Dr. {{ doctor.name }}</a>
-</h4>
-<p>{{ doctor.qualification }}, {{ doctor.specialization }}</p>
-</div>
-</div>
-
-</div>
-</div>
-</div>
-<div class="card booking-card">
-<div class="card-body booking-card-body booking-list-body">
-<div class="booking-list">
-<div class="booking-date-list">
-<ul>
-<li>Appoinment Date: <span>{{ appointment.appointment_date}}</span></li>
-<li>Appoinment Time: <span>{{ appointment.appointment_time}}</span></li>
-</ul>
-</div>
-<div class="booking-doctor-right">
-<p>
-  <a href="{% url 'edit_appointment' doctor.id appointment.id %}" class="btn btn-warning">
-    Edit {{ appointment.id }}
-</a>
-
- {% comment %} <a href="{% url 'edit_appointment' doctor_id=doctor.id appointment_id=appointment.id %}" class="btn btn-warning">
-  Edit {{ appointment.id }} {% endcomment %}
-</a>
-
-</p>
-</div>
-</div>
-
-</div>
-</div>
-<div class="card booking-card">
-<div class="card-body booking-card-body booking-list-body">
-<div class="booking-list">
-<div class="booking-date-list consultation-date-list">
-<ul>
-{% comment %} <li>Consultation Fee: <span>₹{{ doctor_fee }}</span></li> {% endcomment %}
-<li>Booking Fee: <span>₹{{ doctor_fee }}</span></li>
-<li>GST: <span>₹{{ tax_amount }}</span></li>
-<li><span class="total-amount"></span>Total <span>₹{{ total_amount }}</span></li>
-<form id="payment-form" method="POST" action="/payment_success/">
-  <input type="hidden" name="amount" value="{{ total_amount }}">
-  </form>
-</ul>
-<!-- <button class="btn btn-success"  id="rzp-button1">Pay</button><script src="https://checkout.razorpay.com/v1/checkout.js"></script> -->
+     <!-- Main Content Section -->
+     <div class="content" style="min-height: calc(100vh - 150px);">
+        <div class="container mt-5">
+            <div class="row g-4">
 
 
+                <!-- Appointment Form Card -->
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div class="card-body">
 
-<button class="btn btn-success" id="rzp-button1">Pay</button>
+                                <!-- Doctor Profile Card -->
+                                    <div class="col-12">
+                                        <div class="card shadow-sm">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center gap-4 flex-wrap">
+                                                    <!-- Doctor Image -->
+                                                    <div class="doctor-img">
+                                                        {% if doctor.id %}
+                                                        <a href="{% url 'doctor_profile' doctor.id|add:0 %}" class="booking-doc-img">
+                                                            {% if doctor.profile_img %}
+                                                                <img src="{{ doctor.profile_img.url }}" alt="profile">
+                                                            {% else %}
+                                                                <img src="/static/assets/default_profile.jpg" class="rounded-circle" alt="default profile" width="120" height="120">
+                                                            {% endif %}
+                                                        </a>
+                                                        {% else %}
+                                                            <p>Doctor profile not available</p>
+                                                        {% endif %}
+                                                    </div>
+                                                    
+                                                    <!-- Doctor Info -->
+                                                    <div class="flex-grow-1">
+                                                        <h2 class="mb-1">Dr. {{ doctor.name }}</h2>
+                                                        <p class="text-muted mb-2">{{ doctor.qualification }} & {{ doctor.specialization }}</p>
+                                                        <p class="mb-0">
+                                                            <i class="fas fa-map-marker-alt"></i>
+                                                            {{ doctor.clinic_address }}, {{ doctor.state }}
+                                                            <a href="javascript:void(0);" class="text-primary ms-2">Get Directions</a>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+          
+                                <!-- Booking Details -->
+                                <div class="booking-details mb-4">
+                                    <h5 class="mb-4 fw-bolder">Appointment Details</h5>
+                                    <ul class="list-unstyled">
+                                        <li class="d-flex justify-content-between align-items-center py-2">
+                                            <span class="text-muted">Appointment Date:</span>
+                                            <strong>{{ appointment.appointment_date }}</strong>
+                                        </li>
+                                        <li class="d-flex justify-content-between align-items-center py-2">
+                                            <span class="text-muted">Appointment Time:</span>
+                                            <strong>{{ appointment.appointment_time }}</strong>
+                                        </li>
+                                        <li class="d-flex justify-content-between align-items-center py-2">
+                                            <span class="text-muted">Consultation Fee:</span>
+                                            <strong>₹{{ doctor_fee }}</strong>
+                                        </li>
+                                        <li class="d-flex justify-content-between align-items-center py-2">
+                                            <span class="text-muted">GST (18%):</span>
+                                            <strong>₹{{ tax_amount }}</strong>
+                                        </li>
+                                        <li class="d-flex justify-content-between align-items-center py-3 border-top mt-3">
+                                            <span class="total-amount">Total Amount:</span>
+                                            <strong class="total-amount">₹{{ total_amount }}</strong>
+                                        </li>
+                                    </ul>
+                                </div>
+          
+                                <!-- Updated Payment Actions Section -->
+                                <div class="payment-actions mt-4">
+                                    <div class="row g-3">
+                                        <div class="col-md-6 text-start">
+                                            <a href="{% url 'edit_appointment' doctor.id appointment.id %}" class="btn btn-edit btn-primary w-md-auto">
+                                                <i class="fas fa-edit me-2"></i>Edit Appointment
+                                            </a>
+                                        </div>
+                                        <div class="col-md-6 text-end">
+                                            <button class="btn btn-pay btn-success w-md-auto" id="rzp-button1">
+                                                <i class="fas fa-lock me-2"></i>Pay Now ₹{{ total_amount }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Razorpay Integration -->
+{% comment %} <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    var options = {
+        "key": "{{ api_key }}",
+        "name": "webDoctor",
+        "description": "Appointment Payment",
+        "image": "{% static 'assets/img/logo.png' %}",
+        "order_id": "{{ order_id }}",
+        "callback_url": "{% url 'payment_success' %}",
+        "prefill": {
+            "name": "{{ patient.name }}",
+            "email": "{{ patient.user.email }}",
+            "contact": "{{ patient.phone_number }}"
+        },
+        "theme": {"color": "#4B49AC"},
+        "handler": function(response) {
+            window.location.href = "{% url 'payment_success_page' appointment.id doctor.id %}";
+        }
+    };
+
+    var rzp1 = new Razorpay(options);
+    document.getElementById('rzp-button1').onclick = function(e) {
+        rzp1.open();
+        e.preventDefault();
+    }
+</script> {% endcomment %}
+
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-var options = {
+
+  var options = {
     "key": "{{ api_key }}", // Razorpay Key
     "name": "{{ user_name }}", 
     "description": "Test Transaction",
@@ -367,50 +263,66 @@ var options = {
     "prefill": {
         "name": "{{ user_name }}",
         "email": "{{ user_email }}",
-        "contact": "{{ user_phno }}"
+        "contact": "{{ user_phno }}"  // Ensure this is correctly formatted
     },
     "theme": {
         "color": "#3399cc"
     },
     "handler": function(response) {
+        console.log("Payment Response: ", response);
+  
+        // Show loading indicator while verifying OTP & payment
+       // speakMessage("Processing your payment. Please wait...");
+        
         fetch("/payment_success/", {
-            method: "POST",
+            method: "POST",   
             headers: {
                 "Content-Type": "application/json",
                 "X-CSRFToken": getCookie("csrftoken") // Ensure CSRF token is included
             },
             body: JSON.stringify({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-              appointment_id: "{{ appointment.id }}", // Ensure this is passed
-              amount: "{{ total_amount }}"  // Use the correct key "amount"
-          })
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                appointment_id: "{{ appointment.id }}", // Ensure this is passed
+                amount: "{{ total_amount }}"  // Use the correct key "amount"
+            })
         })
         .then(res => res.json())
-.then(data => {
-    if (data.status === "success") {
-        let appointmentId = "{{ appointment.id }}"; // Get appointment ID from Django
-        let doctorId = "{{ doctor.id }}"; // Get doctor ID from Django
-
-        alert("Payment Successful!");
-        window.location.href = `/payment_success_page/${appointmentId}/${doctorId}/`; // Redirect with IDs
-    } else {
-        alert("Payment Verification Failed!" + (data.message || ""));
+        .then(data => {
+            if (data.status === "success") {
+                let appointmentId = "{{ appointment.id }}"; // Get appointment ID from Django
+                let doctorId = "{{ doctor.id }}"; // Get doctor ID from Django
+  
+                speakMessage("Your payment has been successfully completed!");
+                window.location.href = `/payment_success_page/${appointmentId}/${doctorId}/`; // Redirect with IDs
+            } else {
+                speakMessage("Payment verification failed. Please try again.");
+                alert("Payment Failed: " + (data.message || "Unknown error"));
+            }
+        })
+        .catch(error => {
+            console.error("Payment Error:", error);
+            speakMessage("There was an error processing your payment.");
+            alert("Payment Error: Please try again.");
+        });
+    },
+    "modal": {
+        "ondismiss": function() {
+            speakMessage("Payment process cancelled.");
+        }
     }
-});
-    }
-};
-
-// Razorpay instance
-var rzp1 = new Razorpay(options);
-document.getElementById('rzp-button1').onclick = function(e) {
+  };
+  
+  // Razorpay instance
+  var rzp1 = new Razorpay(options);
+  document.getElementById('rzp-button1').onclick = function(e) {
     rzp1.open();
     e.preventDefault();
-};
-
-// Function to get CSRF token
-function getCookie(name) {
+  };
+  
+  // Function to get CSRF token
+  function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== "") {
         let cookies = document.cookie.split(";");
@@ -423,71 +335,29 @@ function getCookie(name) {
         }
     }
     return cookieValue;
-}
-</script>
-
-
-<!-- <script>
-  var options = {
-      "key": "{{ api_key }}",
-      "amount": "{{ total_amount|floatformat:2 }}",
-      "currency": "INR",
-      "name": "Your Business",
-      "description": "Payment for appointment #{{ appointment_id }}",
-      "order_id": "{{ order_id }}",  // Required for Razorpay
-      "handler": function (response){
-          // ✅ Send `appointment_id` in POST request
-          fetch("/payment_success/", {
-              method: "POST",
-              headers: {
-                  "Content-Type": "application/json",
-                  "X-CSRFToken": "{{ csrf_token }}"
-              },
-              body: JSON.stringify({
-                  razorpay_order_id: response.razorpay_order_id,
-                  razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_signature: response.razorpay_signature,
-                  appointment_id: "{{ appointment_id }}"
-              })
-          })
-          .then(response => response.json())
-          .then(data => {
-              if (data.status === "success") {
-                  alert("Payment Successful!");
-                  window.location.href = "/payment_success_page/";
-              } else {
-                  alert("Payment Failed! Please try again.");
-              }
-          });
-      },
-      "theme": {
-          "color": "#3399cc"
-      }
-  };
-
-  var rzp1 = new Razorpay(options);
-  document.getElementById('rzp-button1').onclick = function(e){
-      rzp1.open();
-      e.preventDefault();
   }
-</script> -->
+  
+  // 🎤 Function to Play Voice Message
+  function speakMessage(message) {
+    const speech = new SpeechSynthesisUtterance(message);
+    speech.lang = "en-US";  // Set language
+    speech.volume = 1;      // Volume (0 to 1)
+    speech.rate = 1;        // Speed (0.1 to 10)
+    speech.pitch = 1;       // Pitch (0 to 2)
+    window.speechSynthesis.speak(speech);
+  }
+  </script>
+  
 
-
+{% include "footer.html" %}
 </div>
-</div>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-</div>
-
-
-
-
-
-{% include "footer.html" %}  
 {% endblock %}
-</body></html>
+
+<!-- Scripts -->
+<script src="{% static 'assets/js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/js/feather.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Symptom Checker Chatbot</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 40px; }
+    input, button { padding: 10px; margin: 10px; }
+    #responseArea { margin-top: 20px; font-size: 18px; }
+  </style>
+</head>
+<body>
+  <h1>Symptom Checker Chatbot</h1>
+  <div>
+    <input type="text" id="userMessage" placeholder="Enter your symptoms">
+    <button onclick="sendMessage()">Send</button>
+  </div>
+  <div id="responseArea"></div>
+
+  <script>
+    function sendMessage() {
+      const message = document.getElementById('userMessage').value;
+      fetch('/chatbot_response/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: message })
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('responseArea').innerText = data.response || data.error;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+  </script>
+</body>
+</html>
+
+
+
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Symptom Checker Chatbot</title>
+</head>
+<body>
+  <h1>Symptom Checker Chatbot</h1>
+  <div>
+    <input type="text" id="userMessage" placeholder="Enter your symptoms">
+    <button onclick="sendMessage()">Send</button>
+  </div>
+  <div id="responseArea"></div>
+
+  <script>
+    function sendMessage() {
+      const message = document.getElementById('userMessage').value;
+      fetch('/api/chat/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: message })
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('responseArea').innerText = data.response || data.error;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+  </script>
+</body>
+</html> {% endcomment %}

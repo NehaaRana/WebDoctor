@@ -350,6 +350,16 @@
                                   <td>{{appointment.reason }}</td>
                                   <td class="text-center">{{appointment.symptoms}}</td>
                                   <td>{{appointment.doctor_id.fee}}</td>
+                                  <td class="text-center">
+                                    <!-- Send Meeting Link Button -->
+                                    <a href="{% url 'send_meeting_link' appointment.id %}" class="btn btn-sm bg-success-light">
+                                      Send Meeting Link
+                                    </a>
+                                    <!-- Join Meeting Button -->
+                                    <a href="{{ appointment.meeting_link }}" target="_blank" class="btn btn-sm bg-primary-light">
+                                      Join Meeting
+                                    </a>
+                                  </td>
                                   {% comment %} <td>
                                     
                                     <a href="" class="btn btn-success">Confirm</a>

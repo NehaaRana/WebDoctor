@@ -1,0 +1,546 @@
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %} webDocter {% endblock %}</title>
+  <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- FontAwesome JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+
+   {% comment %} alerts {% endcomment %}
+
+    <!-- jQuery (Required for Toastr) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- Toastr CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
+
+
+  <script>
+    function handleImageUpload(event) {
+      var file = event.target.files[0]; // Get selected file
+      if (!file) return; // Exit if no file is chosen
+  
+      var reader = new FileReader();
+      reader.onload = function () {
+          $(".profile-img img").attr("src", reader.result); // Update profile image src
+      };
+      reader.readAsDataURL(file);
+  }
+  </script> 
+
+  <style>
+    * {
+      filter: none !important;
+      backdrop-filter: none !important;
+    }   
+    
+    
+  </style>
+ 
+
+</head>
+
+<body style="transform: none;">
+  {% block content %}
+
+
+  <div class="main-wrapper" style="transform: none;">
+     {% if alert_messages %}
+    <script>
+      {% for message in alert_messages %}
+        alert("{{ message }}");
+        {% endfor %}
+    </script>
+{% endif %} 
+
+    <!-- Header Section -->
+   
+    <header class="header header-fixed header-one header-space">
+      <div class="container">
+      <nav class="navbar navbar-expand-lg header-nav">
+      <div class="navbar-header">
+      <a id="mobile_btn" href="javascript:void(0);">
+      <span class="bar-icon">
+      <span></span>
+      <span></span>
+      <span></span>
+      </span>
+      </a>
+      <a href="{% url 'index' %}" class="navbar-brand logo">
+        <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+      </a>
+      </a>
+      </div>
+      <div class="main-menu-wrapper">
+      <div class="menu-header">
+        <a href="{% url 'index' %}" class="menu-logo">
+          <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+        </a>
+      <a id="menu_close" class="menu-close" href="javascript:void(0);">
+      <svg class="svg-inline--fa fa-times fa-w-11" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" data-fa-i2svg=""><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg><!-- <i class="fas fa-times"></i> Font Awesome fontawesome.com -->
+      </a>
+      </div>
+      <ul class="main-nav">
+        <li>
+          <a href="{% url 'index' %}">Home</a>
+        </li>
+        
+       
+        
+        <li>
+          <a href="{% url 'doctor_dashboard' %}">Doctors</a>
+        </li>
+        
+        <li>
+          <a href="{% url 'about_us' %}">About Us</a>
+        </li>
+        
+        <li>
+          <a href="{% url 'contact_us' %}">Contact Us</a>
+        </li>
+      
+        
+        
+      
+      
+      <ul class="nav header-navbar-rht" style="padding-top: 20px;">
+      
+      <li class="nav-item dropdown has-arrow logged-item">
+      <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
+      <span class="user-img">
+       
+        {% if patient.profile_img %}
+        <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
+        {% else %}
+          <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
+        {% endif %}
+        
+  </span>
+      </a>
+      <div class="dropdown-menu dropdown-menu-end">
+      <div class="user-header">
+      <div class="avatar avatar-sm">
+ 
+        {% if patient.profile_img %}
+        <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
+        {% else %}
+          <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
+        {% endif %}
+
+      </div>
+      <div class="user-text">
+      <h6>{{patient.name}}</h6>
+      <p class="text-muted mb-0">{{patient.user}}</p>
+      </div>
+      </div>
+      <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
+      <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
+      <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>         
+     </div>
+      </li>
+      </ul>
+      </ul>
+      </div>
+      </nav>
+      </div>
+      </header>
+
+
+
+    <div class="content" style="transform: none; min-height: 385.906px;">
+      <div class="container" style="transform: none; padding-top:50px">
+        <div class="row" style="transform: none;">
+          <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar"
+            style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+            <div class="theiaStickySidebar"
+              style="padding-top: 0px; padding-bottom: 1px; position: static; transform: none;">
+              <div class="profile-sidebar">
+                <div class="widget-profile pro-widget-content">
+                  <div class="profile-info-widget">
+                    <a href="#" class="booking-doc-img">
+                      {% if patient.profile_img %}
+    <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
+    {% else %}
+      <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
+    {% endif %}
+                    </a>
+                    <div class="profile-det-info">
+                      <h3>{{ patient.name }}</h3>
+                      <div class="patient-details">
+                        <h5>
+                          <i class="fas fa-birthday-cake"></i>
+                          {{ patient.dob }}
+                        </h5>
+                        <h5 class="mb-0">
+                          <i class="fas fa-map-marker-alt"></i>
+                          {{ patient.city }}, {{ patient.state }}
+                        </h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="dashboard-widget">
+                  <nav class="dashboard-menu">
+                    <ul>
+                      <li>
+                        <a href="{% url 'patient_dashboard' %}">
+                          <i class="fas fa-columns"></i>
+                          <span>Dashboard</span>
+                        </a>
+                      </li>
+                      <li >
+                        <a href="{% url 'patient_profile_settings' %}">
+                          <i class="fas fa-user-cog"></i>
+                          <span>Profile Settings</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="{% url 'patient_change_password' %}">
+                          <i class="fas fa-user-cog"></i>
+                          <span>change password</span>
+                        </a>
+                      </li>
+                      <li class="active">
+                        <a href="{% url 'health_dashboard' %}">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 448 512"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                          >
+                            <path
+                              d="M224 32c-35.3 0-64 28.7-64 64H72c-13.3 0-24 10.7-24 24v352c0 13.3 10.7 24 24 24h304c13.3 0 24-10.7 24-24V120c0-13.3-10.7-24-24-24h-88c0-35.3-28.7-64-64-64zm-80 64c0-44.2 35.8-80 80-80s80 35.8 80 80h80c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48H72c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h72zm72 72c-8.8 0-16 7.2-16 16v56h-56c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h56v56c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16v-56h56c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16h-56v-56c0-8.8-7.2-16-16-16h-32z"
+                            ></path>
+                          </svg>
+                          <span>Health Dashboard</span>
+                        </a>
+                      </li>
+                      
+                      <li>
+                        <a href="{% url 'logout' %}">
+                          <i class="fas fa-user-cog"></i>
+                          <span>logout</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+          <div class="col-md-7 col-lg-8 col-xl-9">
+            <div class="card">
+              <div class="card-body">
+                <div class="col-12" id="chart-container">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>Health Monitoring Dashboard</h2>
+                        <!-- Button to Open Modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addHealthRecordModal">
+  Add Health Record
+</button>
+
+</div>
+            
+<!-- Modal Structure -->
+<div class="modal fade" id="addHealthRecordModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="modalLabel">Add Health Record</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <!-- Form will be loaded here via AJAX -->
+              <div id="modal-form-container">
+                  <p>Loading form...</p>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+  <canvas id="healthChart"></canvas>
+</div>                    
+                
+               
+<!-- Bootstrap JS (Required for Modal) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                {% comment %} <script>
+                  var chartData = {
+                    labels: [{% for record in records %}"{{ record.recorded_at|date:'M d' }}"{% if not forloop.last %},{% endif %}{% endfor %}],
+                    datasets: [
+                        {
+                            label: 'Blood Pressure (Systolic)',
+                            data: [{% for record in records %}{{ record.bp_systolic }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                            borderColor: 'red',
+                            backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Blood Pressure (Diastolic)',
+                            data: [{% for record in records %}{{ record.bp_diastolic }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                            borderColor: 'blue',
+                            backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Sugar Level',
+                            data: [{% for record in records %}{{ record.sugar_level }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                            borderColor: 'green',
+                            backgroundColor: 'rgba(0, 255, 0, 0.2)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Steps Walked',
+                            data: [{% for record in records %}{{ record.steps_walked }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                            borderColor: 'yellow',
+                            backgroundColor: 'rgba(252, 254, 130, 0.83)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Sleep Hours',
+                            data: [{% for record in records %}{{ record.sleep_hours }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                            borderColor: 'cyan',
+                            backgroundColor: 'rgba(109, 255, 236, 0.41)',
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                };
+                var myChart = new Chart(ctx, {
+                        type: 'bar', // Use 'line' to create an area chart
+                        data: chartData,
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    display: true
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Date'
+                                    }
+                                },
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: 'Values'
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+
+                    //for modal
+                    document.addEventListener("DOMContentLoaded", function () {
+                      document.getElementById("addHealthRecordModal").addEventListener("shown.bs.modal", function () {
+                          fetch("{% url 'add_health_record' %}") // Call Django view to get form
+                              .then(response => response.text())
+                              .then(html => {
+                                  document.getElementById("modal-form-container").innerHTML = html;
+                              })
+                              .catch(error => console.error("Error loading form:", error));
+                      });
+                  });
+                  //document.body.style.filter = "none";
+                  //document.body.style.backdropFilter = "none";
+                  
+                  
+                </script> {% endcomment %}
+                
+                <script>
+                  document.addEventListener("DOMContentLoaded", function () {
+                      // Fixing Chart.js initialization
+                      var ctx = document.getElementById('healthChart').getContext('2d');
+                      var chartData = {
+                          labels: [{% for record in records %}"{{ record.recorded_at|date:'M d' }}"{% if not forloop.last %},{% endif %}{% endfor %}],
+                          datasets: [
+                              {
+                                  label: 'Blood Pressure (Systolic)',
+                                  data: [{% for record in records %}{{ record.bp_systolic }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                                  borderColor: 'red',
+                                  backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                                  fill: true,
+                                  tension: 0.4
+                              },
+                              {
+                                  label: 'Blood Pressure (Diastolic)',
+                                  data: [{% for record in records %}{{ record.bp_diastolic }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                                  borderColor: 'blue',
+                                  backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                                  fill: true,
+                                  tension: 0.4
+                              },
+                              {
+                                  label: 'Sugar Level',
+                                  data: [{% for record in records %}{{ record.sugar_level }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                                  borderColor: 'green',
+                                  backgroundColor: 'rgba(0, 255, 0, 0.2)',
+                                  fill: true,
+                                  tension: 0.4
+                              },
+                              {
+                                  label: 'Steps Walked',
+                                  data: [{% for record in records %}{{ record.steps_walked }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                                  borderColor: 'yellow',
+                                  backgroundColor: 'rgba(252, 254, 130, 0.83)',
+                                  fill: true,
+                                  tension: 0.4
+                              },
+                              {
+                                  label: 'Sleep Hours',
+                                  data: [{% for record in records %}{{ record.sleep_hours }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                                  borderColor: 'cyan',
+                                  backgroundColor: 'rgba(109, 255, 236, 0.41)',
+                                  fill: true,
+                                  tension: 0.4
+                              }
+                          ]
+                      };
+                
+                      // Initialize Chart
+                      new Chart(ctx, {
+                          type: 'bar',
+                          data: chartData,
+                          options: {
+                              responsive: true,
+                              plugins: {
+                                  legend: {
+                                      display: true
+                                  }
+                              },
+                              scales: {
+                                  x: {
+                                      title: {
+                                          display: true,
+                                          text: 'Date'
+                                      }
+                                  },
+                                  y: {
+                                      title: {
+                                          display: true,
+                                          text: 'Values'
+                                      }
+                                  }
+                              }
+                          }
+                      });
+                
+                      // Fixing Modal AJAX Form Loading
+                      document.getElementById("addHealthRecordModal").addEventListener("shown.bs.modal", function () {
+                          fetch("{% url 'add_health_record' %}") // Call Django view to get form
+                              .then(response => response.text())
+                              .then(html => {
+                                  document.getElementById("modal-form-container").innerHTML = html;
+                              })
+                              .catch(error => {
+                                  console.error("Error loading form:", error);
+                                  document.getElementById("modal-form-container").innerHTML = "<p>Error loading form.</p>";
+                              });
+                      });
+                  });
+                </script>
+                
+                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                 {% comment %} <script>
+                     var ctx = document.getElementById('healthChart').getContext('2d');
+                     var chartData = {
+                         labels: [{% for record in records %}"{{ record.recorded_at|date:'M d' }}",{% endfor %}],
+                         datasets: [
+                             {
+                                 label: 'Systolic BP',
+                                 data: [{% for record in records %}{{ record.bp_systolic }},{% endfor %}],
+                                 borderColor: 'red',
+                                 fill: false
+                             },
+                             {
+                                 label: 'Diastolic BP',
+                                 data: [{% for record in records %}{{ record.bp_diastolic }},{% endfor %}],
+                                 borderColor: 'blue',
+                                 fill: false
+                             },
+                             {
+                                 label: 'Heart Rate (BPM)',
+                                 data: [{% for record in records %}{{ record.heart_rate }},{% endfor %}],
+                                 borderColor: 'purple',
+                                 fill: false
+                             },
+                             {
+                                 label: 'Blood Sugar',
+                                 data: [{% for record in records %}{{ record.sugar_level }},{% endfor %}],
+                                 borderColor: 'green',
+                                 fill: false
+                             },
+                             
+                             
+                         ]
+                     };
+                 
+                     var myChart = new Chart(ctx, {
+                         type: 'bar',
+                         data: chartData
+                     });
+                 </script> {% endcomment %}
+    
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    {% comment %} for model {% endcomment %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    {% comment %} <script>
+        $(document).ready(function () {
+            $("#addHealthRecordModal").on("show.bs.modal", function () {
+                $.ajax({
+                    url: "{% url 'add_health_record' %}",  // Django URL for add_health_record
+                    type: "GET",
+                    success: function (data) {
+                        $("#addHealthRecordFormContainer").html(data);
+                    },
+                    error: function () {
+                        $("#addHealthRecordFormContainer").html("<p>Error loading form.</p>");
+                    }
+                });
+            });
+        });
+    </script> {% endcomment %}
+   
+
+    {% include "footer.html" %}
+    {% endblock %}
+</body>
+
+</html>

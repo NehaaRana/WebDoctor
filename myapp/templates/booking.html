@@ -1,10 +1,10 @@
-{% load static %} <!-- Load static files in Django -->
-
+{% load static %}
+<html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+  <title>Appointment Date Picker</title>
 
   <!-- Favicon -->
   <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon">
@@ -23,68 +23,21 @@
   <!-- Custom Styles -->
   <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
 
-
-  {% comment %} alerts {% endcomment %}
-
-    <!-- jQuery (Required for Toastr) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<!-- Toastr CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
-
-  <style>
-    .toast-success { background-color:rgba(84, 162, 102, 0.89) !important; color:black !important; border:2px solid green !important}
-      .toast-error { background-color:rgba(210, 93, 105, 0.88) !important; color:black !important; border:2px solid red !important }
-      .toast-warning { background-color:rgb(241, 216, 141)  !important; color:black !important; border:2px solid yellow !important}
-      .toast-info { background-color:black !important; color:  #17a2b8 !important; }
-  </style>
+  <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  
+  <!-- DateDropper Styles -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datedropper/datedropper.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/datedropper/datedropper.min.js"></script>
 
 </head>
 
-<body class="login-body">
+<body>
   {% block content %}
   <div class="main-wrapper">
 
-    <script>
-        $(document).ready(function () {
-            {% if messages %}
-                {% for message in messages %}
-                    toastr.options = {
-                        closeButton: true,
-                        progressBar: true,
-                        timeOut: 5000,  // 5 seconds
-                    };
-                    toastr["{{ message.tags }}"]("{{ message }}");
-                {% endfor %}
-            {% endif %}
-        });
-      </script>
-
-
-       {% comment %} <script>
-        $(document).ready(function () {
-            {% if request.session.toastr_message %}
-                toastr.options = {
-                    closeButton: true,
-                    progressBar: true,
-                    timeOut: 5000,  // 5 seconds
-                };
-                toastr["{{ request.session.toastr_tag }}"]("{{ request.session.toastr_message }}");
-    
-                // ✅ Clear the session message after displaying
-                $.ajax({
-                    url: "{% url 'clear_messages' %}",
-                    type: "GET"
-                });
-            {% endif %}
-        });
-    </script> {% endcomment %}
-    
-    <!-- Header Section -->
-    {% comment %} {% include "header.html" %} {% endcomment %}
-    <header class="header header-fixed header-one header-space">
+      <!--  Navbar section Start-->
+      <header class="header header-fixed header-one header-space">
         <div class="container">
         <nav class="navbar navbar-expand-lg header-nav">
         <div class="navbar-header">
@@ -168,156 +121,175 @@
         </div>
         </header>
 
+    <!--  Navbar section End-->
 
-    <section class="error-section">
-      <div class="content" style="min-height: 382.328px;">
-          <div class="container">
-              <div class="row">
-                  <div class="col-12">
-                      <div class="card">
-                          <div class="card-body">
-                              <div class="booking-doc-info">
-                                  {% if doctor.id %}
-                                  <a href="{% url 'doctor_profile' doctor.id|add:0 %}" class="booking-doc-img">
+     <!-- Main Content Section -->
+     <div class="content" style="min-height: calc(100vh - 150px);">
+        <div class="container mt-5">
+            <div class="row g-4">
+                <!-- Doctor Profile Card -->
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-4 flex-wrap">
+                                <!-- Doctor Image -->
+                                <div class="doctor-img">
+                                    {% if doctor.id %}
+                                    <a href="{% url 'doctor_profile' doctor.id|add:0 %}" class="booking-doc-img">
+                                        {% if doctor.profile_img %}
+                                            <img src="{{ doctor.profile_img.url }}" alt="profile">
+                                        {% else %}
+                                            <img src="/static/assets/default_profile.jpg" class="rounded-circle" alt="default profile" width="120" height="120">
+                                        {% endif %}
+                                    </a>
                                     {% else %}
-    <p>Doctor profile not available</p>
-{% endif %}
+                                        <p>Doctor profile not available</p>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Doctor Info -->
+                                <div class="flex-grow-1">
+                                    <h2 class="mb-1">Dr. {{ doctor.name }}</h2>
+                                    <p class="text-muted mb-2">{{ doctor.qualification }} & {{ doctor.specialization }}</p>
+                                    <p class="mb-0">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        {{ doctor.clinic_address }}, {{ doctor.state }}
+                                        <a href="javascript:void(0);" class="text-primary ms-2">Get Directions</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Appointment Form Card -->
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <form method="POST" action="{% if appointment_data_list %}{% url 'edit_appointment' doctor.id appointment_data_list.id %}{% else %}{% url 'book_appointment' doctor.id %}{% endif %}">
+                                {% csrf_token %}
+                                
 
-{% if doctor.profile_img %}
-<img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
-{% else %}
-  <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
-{% endif %}
-                                  </a>
-                                  <div class="booking-info">
-                                      <h4>
-                                          <a href="{% url 'doctor_profile' doctor.id %}">
-                                              Dr. {{ doctor.name }}
-                                          </a>
-                                      </h4>
-                                      <p class="text-muted mb-0">
-                                          <svg class="svg-inline--fa fa-map-marker-alt fa-w-12"
-                                               aria-hidden="true" focusable="false" data-prefix="fas" 
-                                               data-icon="map-marker-alt" role="img"
-                                               xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" 
-                                               style="width: 16px; height: 16px;">
-                                              <path fill="currentColor"
-                                                    d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z">
-                                              </path>
-                                          </svg>
-                                          {{ doctor.clinic_address }}, {{ doctor.state }}
-                                      </p>
+                                <!-- Time Slots -->
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold">Available Time Slots</label>
+                                    <div class="row g-3">
+                                        <div class="time-slot">
+                                            <ul class="clearfix">
+                                              <ul class="clearfix">
+                                                {% for time in time_slots %}
+                                                  <li>
+                                                    <a class="timing {% if time == appointment_data_list.appointment_time|time:'h:i A' %}selected{% endif %}" href="#" onclick="selectTimeSlot(this)">
+                                                      <span>{{ time }}</span>
+                                                    </a>
+                                                  </li>
+                                                {% endfor %}
+                                              </ul>
+                                              
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="appointment_time" id="appointment_time" 
+                                           value="{{ appointment_data_list.appointment_time }}">
+                                           <script>
+                                            function selectTimeSlot(element) {
+                                                document.querySelectorAll('.timing').forEach(slot => slot.classList.remove('selected'));
+                                                element.classList.add('selected');
+                                                // Get selected time (12-hour format)
+                                                let selectedTime = element.querySelector("span").innerText.trim();
+                                                // Convert to 24-hour format (HH:MM:SS)
+                                                let timeObject = new Date("2000-01-01 " + selectedTime);
+                                                let formattedTime = timeObject.toTimeString().split(" ")[0]; // Extract HH:MM:SS
+                                    
+                                                // Set the converted time in the hidden input field
+                                                document.getElementById('appointment_time').value = formattedTime;
+                                    
+                                                console.log("Selected Time:", formattedTime);  // Debugging
+                                                console.log("Selected Time:", selectedTime);  // Debugging
+                                            }
+                                        </script>
+                                </div>
+
+                                 <!-- Date Picker -->
+                                 <div class="mb-4">
+                                    <label class="form-label fw-bold">Appointment Date</label>
+                                    <div class="input-group">
+                                      <input type="date" class="form-control" name="appointment_date" id="date-format" 
+                                             placeholder="Select Appointment Date" value="{{ appointment_data_list.appointment_date }}" required>
+                                    </div>
+                                    {% if date_error %}
+                                        <div class="text-danger small mt-2">{{ date_error }}</div>
+                                    {% endif %}
                                   </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </section>
-  
+                                  <!-- Date Picker End-->
 
-  <form action="{% if appointment_data_list %}{% url 'edit_appointment' doctor.id appointment_data_list.id %}{% else %}{% url 'book_appointment' doctor.id %}{% endif %}" method="POST">
-    {% csrf_token %}
-    
-    <div class="row">
-        <div class="search-input search-calendar-line">
-            <i class="feather-calendar"></i>
-            <div class="form-group mb-0">
-                <input type="date" class="form-control" name="appointment_date"  id="appointment_date" placeholder="Date" required value="{{ appointment_data_list.appointment_date }}">
-            </div>
-        </div>
-        
-        <div class="search-input search-calendar-line">
-            <div class="form-group mb-0">
-                <p>{{ date_error }}</p>
-            </div>
-        </div>
-    </div>
+                                <!-- Reason & Symptoms -->
+                                <div class="row ">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="form-label fw-bold">Reason for Visit</label>
+                                            <textarea class="form-control" name="reason" rows="3" 
+                                                      placeholder="Describe your reason..." 
+                                                      maxlength="400">{{ appointment_data_list.reason }}</textarea>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-12">
+                                        <div class="form-group">    
+                                            <label class="form-label fw-bold">Symptoms <span class="text-muted">(Optional)</span></label>
+                                            <input type="text" class="form-control" name="symptoms" 
+                                                   placeholder="E.g., Fever, Headache" 
+                                                   value="{{ appointment_data_list.symptoms }}">
+                                        </div>
+                                    </div>
+                                </div>
 
-    <div class="card booking-schedule schedule-widget">
-        <div class="schedule-cont">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="time-slot">
-                        <ul class="clearfix">
-                          <ul class="clearfix">
-                            {% for time in time_slots %}
-                              <li>
-                                <a class="timing {% if time == appointment_data_list.appointment_time|time:'h:i A' %}selected{% endif %}" 
-                                href="#" onclick="selectTimeSlot(this)">
-                                  <span>{{ time }}</span>
-                                </a>
-                              </li>
-                            {% endfor %}
-                          </ul>
-                          
-                        </ul>
+                                <!-- Submit Button -->
+                                <div class="text-end mt-4">
+                                    <button type="submit" class="btn book_btn px-4"> 
+                                        Next <i class="feather-arrow-right-circle ms-2"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <input type="hidden" name="appointment_time" id="appointment_time" value="{{ appointment_data_list.appointment_time }}">
+</div>
 
-    <script>
-        function selectTimeSlot(element) {
-            document.querySelectorAll('.timing').forEach(slot => slot.classList.remove('selected'));
-            element.classList.add('selected');
-            // Get selected time (12-hour format)
-            let selectedTime = element.querySelector("span").innerText.trim();
-            // Convert to 24-hour format (HH:MM:SS)
-            let timeObject = new Date("2000-01-01 " + selectedTime);
-            let formattedTime = timeObject.toTimeString().split(" ")[0]; // Extract HH:MM:SS
-
-            // Set the converted time in the hidden input field
-            document.getElementById('appointment_time').value = formattedTime;
-
-            console.log("Selected Time:", formattedTime);  // Debugging
-            console.log("Selected Time:", selectedTime);  // Debugging
-        }
-    </script>
-
-
-    <div class="form-group">
-        <label class="form-group-title">Reason</label>
-        <textarea class="form-control" name="reason" placeholder="Enter Your Reason">{{ appointment_data_list.reason }}</textarea>
-        <p class="characters-text" style="text-align: right;">400 Characters</p>
-    </div>
-
-     <div class="form-group">
-        <label class="form-group-title">Symptoms <span>(Optional)</span></label>
-        <input type="text" class="form-control" name="symptoms" placeholder="Skin Allergy" value="{{ appointment_data_list.symptoms }}">
-    </div> 
-
-    <div class="submit-section proceed-btn text-end">
-        <button type="submit" class="btn btn-primary prime-btn justify-content-center align-items-center">
-            Next <i class="feather-arrow-right-circle"></i>
-        </button>
-    </div>
-</form>
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-
-    <!-- Add jQuery and jQuery UI (For DatePicker) -->
+<!-- External Resources -->
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-<!-- Add Timepicker -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 
+<!-- Include jQuery and DateDropper -->
+{% comment %} <script src="https://cdn.jsdelivr.net/npm/datedropper/datedropper.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datedropper/datedropper.min.css"> {% endcomment %}
+<link rel="stylesheet" href="{% static 'assets/vendor/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css' %}">
 
-{% include "footer.html" %}
+<!-- DateDropper Initialization -->
+{% comment %} <script>
+    $(document).ready(function() {
+      $('#appointment_date').dateDropper({
+        format: 'Y-m-d',
+        color: '#0d6efd',
+        minDate: 'today',
+        large: true,
+        theme: 'leaf',
+        modal: true,
+        init_animation: 'bounce',
+        dropdownAnimation: 'fade',
+        lock: 'from'
+      });
+    });
+</script> {% endcomment %}
+
+    <!-- Include Footer -->
+    {% include "footer.html" %}
 {% endblock %}
 </body>
 </html>

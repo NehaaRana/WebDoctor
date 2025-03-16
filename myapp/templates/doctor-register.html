@@ -275,7 +275,7 @@
         <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
-        <!-- <script>
+        <script>
         $(document).ready(function () {
           $("#signup-form").submit(function (e) {
             e.preventDefault();
@@ -300,6 +300,18 @@
                 theme: "modern",
               });
             }
+
+            //backend error
+        {% if messages %}
+        {% for message in messages %}
+            showAlert(
+                "{% if message.tags == 'success' %}fa-circle-check{% elif message.tags == 'warning' %}fa-exclamation-triangle{% else %}fa-circle-xmark{% endif %}",
+                "{{ message|escapejs }}",
+                "{{ message.tags }}"
+            );
+        {% endfor %}
+    {% endif %}
+
 
             if (name === "") {
               showAlert("fa-user", "Full Name is required");
@@ -347,7 +359,7 @@
             });
           });
         });
-      </script> -->
+      </script>
 
 
         {% include 'footer.html' %}

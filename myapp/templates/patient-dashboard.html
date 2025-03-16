@@ -292,6 +292,47 @@
                             <span>Change Password</span>
                           </a>
                         </li>
+
+                        {% comment %} <li>
+                          <a href="{% url 'add_health_record' %}">
+                            <svg
+                              class="svg-inline--fa fa-lock fa-w-14"
+                              aria-hidden="true"
+                              focusable="false"
+                              data-prefix="fas"
+                              data-icon="lock"
+                              role="img"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 448 512"
+                              data-fa-i2svg=""
+                              style="width: 16px; height: 16px"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M400 224h-24v-72C376 68.2 307.8 0 224 0S72 68.2 72 152v72H48c-26.5 0-48 21.5-48 48v192c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V272c0-26.5-21.5-48-48-48zm-104 0H152v-72c0-39.7 32.3-72 72-72s72 32.3 72 72v72z"
+                              ></path>
+                            </svg>
+                            <!-- <i class="fas fa-lock"></i> Font Awesome fontawesome.com -->
+                            <span>Add Health Record</span>
+                          </a>
+                        </li> {% endcomment %}
+                        <li>
+                          <a href="{% url 'health_dashboard' %}">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 448 512"
+                              width="16"
+                              height="16"
+                              fill="currentColor"
+                            >
+                              <path
+                                d="M224 32c-35.3 0-64 28.7-64 64H72c-13.3 0-24 10.7-24 24v352c0 13.3 10.7 24 24 24h304c13.3 0 24-10.7 24-24V120c0-13.3-10.7-24-24-24h-88c0-35.3-28.7-64-64-64zm-80 64c0-44.2 35.8-80 80-80s80 35.8 80 80h80c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48H72c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h72zm72 72c-8.8 0-16 7.2-16 16v56h-56c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h56v56c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16v-56h56c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16h-56v-56c0-8.8-7.2-16-16-16h-32z"
+                              ></path>
+                            </svg>
+                            <span>Health Dashboard</span>
+                          </a>
+                        </li>
+                        
                         <li>
                           <a href="{% url 'logout' %}">
                             <svg
