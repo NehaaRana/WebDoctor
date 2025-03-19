@@ -356,6 +356,7 @@
                           {% comment %} <th>Password</th> {% endcomment %}
                           <th>Approval Status</th>
                           <th>Action</th>
+                          
                         </tr>
                       </thead>
                       <tbody class="fs-6">
@@ -402,21 +403,29 @@
                         </td>
                         
                         <td class="mb-2">
-                            {% if not doctor.is_approved and not doctor.is_rejected %}
-                                <a href="#" class="btn btn-success light btn-sm approve-doctor" data-doctor-id="{{ doctor.id }}"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform:msFilter;"><path d="M19.965 8.521C19.988 8.347 20 8.173 20 8c0-2.379-2.143-4.288-4.521-3.965C14.786 2.802 13.466 2 12 2s-2.786.802-3.479 2.035C6.138 3.712 4 5.621 4 8c0 .173.012.347.035.521C2.802 9.215 2 10.535 2 12s.802 2.785 2.035 3.479A3.976 3.976 0 0 0 4 16c0 2.379 2.138 4.283 4.521 3.965C9.214 21.198 10.534 22 12 22s2.786-.802 3.479-2.035C17.857 20.283 20 18.379 20 16c0-.173-.012-.347-.035-.521C21.198 14.785 22 13.465 22 12s-.802-2.785-2.035-3.479zm-9.01 7.895-3.667-3.714 1.424-1.404 2.257 2.286 4.327-4.294 1.408 1.42-5.749 5.706z"></path></svg>&nbsp;Approve</a>
-
-                                <a href="#" class="btn btn-danger light btn-sm reject-doctor" data-doctor-id="{{ doctor.id }}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="15" width="15" viewBox="0 0 448 512">
-                                        <path fill="#fafafa"
-                                            d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z" />
-                                    </svg> &nbsp;&nbsp;Reject</a>
-
-                            {% elif doctor.is_approved %}
-                                <button class="btn btn-success light btn-square btn-sm" disabled>Approved</button>
-                            {% else %}
-                                <button class="btn btn-danger light btn-square btn-sm" disabled>Rejected</button>
-                            {% endif %}
-                        </td>
+                          {% if not doctor.is_approved and not doctor.is_rejected %}
+                              <a href="#" class="btn btn-success light btn-sm approve-doctor" data-doctor-id="{{ doctor.id }}">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform:msFilter;">
+                                      <path d="M19.965 8.521C19.988 8.347 20 8.173 20 8c0-2.379-2.143-4.288-4.521-3.965C14.786 2.802 13.466 2 12 2s-2.786.802-3.479 2.035C6.138 3.712 4 5.621 4 8c0 .173.012.347.035.521C2.802 9.215 2 10.535 2 12s.802 2.785 2.035 3.479A3.976 3.976 0 0 0 4 16c0 2.379 2.138 4.283 4.521 3.965C9.214 21.198 10.534 22 12 22s2.786-.802 3.479-2.035C17.857 20.283 20 18.379 20 16c0-.173-.012-.347-.035-.521C21.198 14.785 22 13.465 22 12s-.802-2.785-2.035-3.479zm-9.01 7.895-3.667-3.714 1.424-1.404 2.257 2.286 4.327-4.294 1.408 1.42-5.749 5.706z"></path>
+                                  </svg>&nbsp;Approve
+                              </a>
+                      
+                              <a href="#" class="btn btn-danger light btn-sm reject-doctor" data-doctor-id="{{ doctor.id }}">
+                                  <svg xmlns="http://www.w3.org/2000/svg" height="15" width="15" viewBox="0 0 448 512">
+                                      <path fill="#fafafa" d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"/>
+                                  </svg>&nbsp;&nbsp;Reject
+                              </a>
+                          {% elif doctor.is_approved %}
+                              <button class="btn btn-success light btn-square btn-sm" disabled>Approved</button>
+                              <a href="#" class="btn btn-danger light btn-sm delete-doctor" data-doctor-id="{{ doctor.id }}" data-doctor-name="{{ doctor.name }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="15" width="15" viewBox="0 0 448 512">
+                                    <path fill="#fafafa" d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"/>
+                                </svg>&nbsp;&nbsp;Delete
+                            </a>
+                          {% else %}
+                              <button class="btn btn-danger light btn-square btn-sm" disabled>Rejected</button>
+                          {% endif %}
+                      </td>
                         </tr>
                         {% endfor %}
                       </tbody>
@@ -559,6 +568,40 @@ $(document).ready(function () {
           });
       });
     });
+// <!-- Delete Confirmation Script -->
+
+$(document).ready(function () {
+    // Delete Doctor Confirmation
+    $(document).on("click", ".delete-doctor", function (e) {
+        e.preventDefault();  // Prevent the default link behavior
+        var doctorId = $(this).data("doctor-id");  // Get the doctor ID from the data attribute
+        var doctorName = $(this).data("doctor-name");  // Get the doctor name from the data attribute
+
+        // Show confirmation dialog
+        $.confirm({
+            title: "Confirm Deletion",
+            icon: "fa fa-trash",
+            content: `Are you sure you want to delete the doctor <strong>${doctorName}</strong>? This action cannot be undone.`,
+            theme: "modern",
+            type: "red",
+            buttons: {
+                confirm: {
+                    text: "Delete",
+                    btnClass: "btn-danger",
+                    action: function () {
+                        // Redirect to the delete URL
+                        window.location.href = `/delete_doctor/${doctorId}/`;
+                    },
+                },
+                cancel: {
+                    text: "Cancel",
+                    btnClass: "btn-secondary",
+                },
+            },
+        });
+    });
+});
+
 </script>
 </body>
 

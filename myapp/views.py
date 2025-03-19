@@ -154,56 +154,151 @@ def register(request):
 
 from django.contrib.messages import get_messages
 
-def login(request):
+# def login(request):
    
+#     if request.method == "POST":
+#         email = request.POST.get("email")
+#         password = request.POST.get("password")
+#         user_type = request.POST.get("user_type")
+#         user = None
+
+#         print(f"Login attempt: Email={email}, UserType={user_type}")
+
+#         if user_type == "patient":
+#             try:
+#                 user = patientRegister.objects.get(email=email)
+#                 request.session['patient_id'] = user.id
+#                 print(f"Patient found: {user.email}")
+#             except patientRegister.DoesNotExist:
+#                 messages.error(request, "Patient does not exist!")
+#                 return redirect("login")  # Redirect instead of render to persist messages
+
+#         elif user_type == "doctor":
+#             try:
+#                 user = doctorRegister.objects.get(email=email)
+
+#                 if not user.is_approved:
+#                     messages.warning(request, "Your account is pending approval. Please wait for admin approval.")
+#                     return redirect("login")
+
+#                 request.session['doctor_id'] = user.id
+#                 print(f"Doctor found: {user.email}")
+
+#             except doctorRegister.DoesNotExist:
+#                 messages.error(request, "Doctor does not exist!")
+#                 return redirect("login")
+
+#         else:
+#             messages.error(request, "Invalid user type!")
+#             return redirect("login")
+
+#         # **Check password securely**
+#         if check_password(password, user.password):
+#             # messages.success(request, "Login successful! Redirecting...")
+#             if user_type == "patient":
+#                 return redirect("patient_dashboard")
+#             elif user_type == "doctor":
+#                 return redirect("doctor_dashboard")
+#         else:
+#             messages.error(request, "Invalid email or password!")
+#             return redirect("login")
+
+#     return render(request, "login.html",{"redirect_url": request.session.get("redirect_url", "")})
+
+
+# def login(request):
+#     if request.method == "POST":
+#         email = request.POST.get("email")
+#         password = request.POST.get("password")
+#         user_type = request.POST.get("user_type")
+#         user = None
+
+#         if user_type == "doctor":
+#             try:
+#                 user = doctorRegister.objects.get(email=email)
+                
+#                 # Check if the doctor is approved
+#                 if not user.is_approved:
+#                     return render(request, "login.html", {"error": "Your account is pending approval. Please wait for admin approval."})
+                
+#                 # Compare hashed password securely
+#                 if not check_password(password, user.password):
+#                     return render(request, "login.html", {"error": "Invalid email or password"})
+                
+#                 # Store doctor ID in session
+#                 request.session['doctor_id'] = user.id  
+
+#                 # Check for missing profile fields (excluding optional ones)
+#                 required_fields = ["qualification", "specialization", "experience", "address", "city", "state", "mci_no", "fee","clinic_name","clinic_address","gender"]
+#                 is_profile_complete = all(getattr(user, field) for field in required_fields)
+
+#                 if not is_profile_complete:
+#                     request.session['profile_incomplete'] = True  # Set session flag
+#                     return redirect("doctor_profile_settings")  # Redirect to profile settings
+                
+#                 return redirect("doctor_dashboard")  # Redirect to dashboard if profile is complete
+
+#             except doctorRegister.DoesNotExist:
+#                 return render(request, "login.html", {"error": "Doctor does not exist"})
+
+#     return render(request, "login.html")
+
+
+def login(request):
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
         user_type = request.POST.get("user_type")
         user = None
 
-        print(f"Login attempt: Email={email}, UserType={user_type}")
-
-        if user_type == "patient":
-            try:
-                user = patientRegister.objects.get(email=email)
-                request.session['patient_id'] = user.id
-                print(f"Patient found: {user.email}")
-            except patientRegister.DoesNotExist:
-                messages.error(request, "Patient does not exist!")
-                return redirect("login")  # Redirect instead of render to persist messages
-
-        elif user_type == "doctor":
+        if user_type == "doctor":
             try:
                 user = doctorRegister.objects.get(email=email)
 
+                # Check if the doctor is approved
                 if not user.is_approved:
-                    messages.warning(request, "Your account is pending approval. Please wait for admin approval.")
-                    return redirect("login")
+                    return render(request, "login.html", {"error": "Your account is pending approval. Please wait for admin approval."})
 
-                request.session['doctor_id'] = user.id
-                print(f"Doctor found: {user.email}")
+                # Compare hashed password securely
+                if not check_password(password, user.password):
+                    return render(request, "login.html", {"error": "Invalid email or password"})
+
+                # Store doctor ID in session
+                request.session['doctor_id'] = user.id  
+
+                # Check for missing profile fields (excluding optional ones)
+                required_fields = ["qualification", "specialization", "experience", "address", "city", "state", "mci_no", "fee","about_me"]
+                is_profile_complete = all(getattr(user, field) for field in required_fields)
+
+                if not is_profile_complete:
+                    request.session['profile_incomplete'] = True  # Set session flag
+                    return redirect("doctor_profile_settings")  # Redirect to profile settings
+                
+                return redirect("doctor_dashboard")  # Redirect to dashboard if profile is complete
 
             except doctorRegister.DoesNotExist:
-                messages.error(request, "Doctor does not exist!")
-                return redirect("login")
+                return render(request, "login.html", {"error": "Doctor does not exist"})
+
+        elif user_type == "patient":
+            try:
+                user = patientRegister.objects.get(email=email)
+
+                # Compare hashed password securely
+                if not check_password(password, user.password):
+                    return render(request, "login.html", {"error": "Invalid email or password"})
+
+                # Store patient ID in session
+                request.session['patient_id'] = user.id  
+
+                return redirect("patient_dashboard")  # Redirect patient to dashboard
+
+            except patientRegister.DoesNotExist:
+                return render(request, "login.html", {"error": "Patient does not exist"})
 
         else:
-            messages.error(request, "Invalid user type!")
-            return redirect("login")
+            return render(request, "login.html", {"error": "Invalid user type"})
 
-        # **Check password securely**
-        if check_password(password, user.password):
-            # messages.success(request, "Login successful! Redirecting...")
-            if user_type == "patient":
-                return redirect("patient_dashboard")
-            elif user_type == "doctor":
-                return redirect("doctor_dashboard")
-        else:
-            messages.error(request, "Invalid email or password!")
-            return redirect("login")
-
-    return render(request, "login.html",{"redirect_url": request.session.get("redirect_url", "")})
+    return render(request, "login.html")
 
 
 def search_doctors(request):
@@ -213,7 +308,7 @@ def search_doctors(request):
 
 def patient_dashboard(request):
     patient_id = request.session.get('patient_id')  # Get user ID from session
-    
+      
     if not patient_id:
         return redirect("login")  # Redirect to login if session is empty
     
@@ -223,18 +318,23 @@ def patient_dashboard(request):
     except patientRegister.DoesNotExist:
         return redirect("login")
     
+    patient = get_object_or_404(patientRegister, id=patient_id)  # ✅ Fetch the patient
+    # reports = ConsultationReport.objects.filter(patient=patient)  # ✅ Fetch reports
     appointment_data_list = appointment.objects.filter(patient_id=patient).select_related('doctor_id')
     return render(request, "patient-dashboard.html",{"patient": patient,"appointment_data_list":appointment_data_list})
 
 def doctor_dashboard(request):
     doctor_id = request.session.get('doctor_id')  # Get logged-in doctor ID
-
+    
     if not doctor_id:
         return redirect("login")  # Redirect to login if not logged in
     try:
         doctor = doctorRegister.objects.get(id=doctor_id)  # Fetch the doctor
     except doctorRegister.DoesNotExist:
         return redirect("login")  # Redirect if doctor not found
+    
+      # Fetch consultation reports for the doctor
+    # reports = ConsultationReport.objects.filter(doctor=doctor)
     
     today = timezone.now().date()
     today_patients = appointment.objects.filter(
@@ -245,7 +345,7 @@ def doctor_dashboard(request):
         doctor_id=doctor, appointment_date__gt=today
     ).select_related('patient_id')
     # upcoming_patients = appointment.objects.filter(doctor_id=doctor).select_related('patient_id')
-    return render(request, "doctor-dashboard.html", {"doctor": doctor,"upcoming_patients":upcoming_patients, "today_patients": today_patients,})
+    return render(request, "doctor-dashboard.html", {"doctor": doctor,"upcoming_patients":upcoming_patients, "today_patients": today_patients})
 
     
 def terms_condition(request):
@@ -396,19 +496,50 @@ def doctor_profile_cancel_appointment(request, doctor_id):
 
 
 
-def doctor_profile_settings(request):
-    doctor_id = request.session.get('doctor_id')  # Get logged-in doctor ID
+# def doctor_profile_settings(request):
+#     doctor_id = request.session.get('doctor_id')  # Get logged-in doctor ID
 
-    if not doctor_id:
-        return redirect("login")  # Redirect to login if not logged in
-    try:
-        doctor = doctorRegister.objects.get(id=doctor_id)  # Fetch the doctor
-    except doctorRegister.DoesNotExist:
-        return redirect("login")  # Redirect if doctor not found
+#     if not doctor_id:
+#         return redirect("login")  # Redirect to login if not logged in
+#     try:
+#         doctor = doctorRegister.objects.get(id=doctor_id)  # Fetch the doctor
+#     except doctorRegister.DoesNotExist:
+#         return redirect("login")  # Redirect if doctor not found
 
-    return render(request, "doctor-profile-settings.html", {"doctor": doctor})
+#     return render(request, "doctor-profile-settings.html", {"doctor": doctor})
 
     # return render(request, 'doctor-profile-settings.html')
+
+
+
+# profile completion
+def doctor_profile_settings(request):
+    doctor_id = request.session.get('doctor_id')  
+
+    if not doctor_id:
+        return redirect("login")  
+
+    try:
+        doctor = doctorRegister.objects.get(id=doctor_id)  
+    except doctorRegister.DoesNotExist:
+        return redirect("login")  
+
+    # Define fields to check
+    required_fields = ["name", "email", "phno", "specialization", "experience", "address", "profile_img","qualification","gender","fee","mci_no","state","city","clinic_name","clinic_address","about_me"]
+    
+    # Count completed fields
+    # filled_fields = sum(1 for field in required_fields if getattr(doctor, field, None))
+    
+    filled_fields = sum(1 for field in required_fields if getattr(doctor, field, "") not in [None, ""])
+
+    # Calculate profile completion percentage
+    total_fields = len(required_fields)
+    completion_percentage = (filled_fields / total_fields) * 100 if total_fields > 0 else 0
+
+    return render(request, "doctor-profile-settings.html", {
+        "doctor": doctor,
+        "completion_percentage": int(completion_percentage)  # Convert to integer for better display
+    })
 
 
 from django.shortcuts import render, get_object_or_404, redirect
@@ -1505,14 +1636,67 @@ from django.core.mail import send_mail, BadHeaderError
 #     return 'admin_id' in request.session
 
 # @login_required
-def admin_dashboard(request):
-        if 'admin_id' not in request.session:
-                return redirect('admin_login')  # Redirect if not logged in
+# def admin_dashboard(request):
+#         if 'admin_id' not in request.session:
+#                 return redirect('admin_login')  # Redirect if not logged in
 
-        # Get all unapproved doctors
-        pending_doctors = doctorRegister.objects.filter(is_approved=False)
-        approved_doctors = doctorRegister.objects.filter(is_approved=True)
-        return render(request, 'admin-dashboard.html',{'pending_doctors': pending_doctors, 'approved_doctors': approved_doctors})
+#         # Get all unapproved doctors
+#         pending_doctors = doctorRegister.objects.filter(is_approved=False)
+#         approved_doctors = doctorRegister.objects.filter(is_approved=True)
+#         return render(request, 'admin-dashboard.html',{'pending_doctors': pending_doctors, 'approved_doctors': approved_doctors})
+
+from django.db.models.functions import TruncMonth
+from django.db.models import Sum
+from django.db.models import Count, Sum
+def admin_dashboard(request):
+    if 'admin_id' not in request.session:
+        return redirect('admin_login')  # Redirect if not logged in
+
+    # Get only approved doctors
+    approved_doctors = doctorRegister.objects.filter(is_approved=True)
+    total_doctors = approved_doctors.count()  # Count only approved doctors
+    total_patients = patientRegister.objects.count()
+    total_appointments = appointment.objects.count()
+    total_revenue = round(Payment.objects.aggregate(total_amount=Sum('amount'))['total_amount'] or 0, 2)
+
+     # Get monthly appointments count
+    monthly_appointments = (
+        appointment.objects.annotate(month=TruncMonth("appointment_date"))  # Fixed field name
+        .values("month")
+        .annotate(count=Count("id"))
+        .order_by("month")
+    )
+
+    # Get monthly revenue
+    monthly_revenue = (
+        Payment.objects.annotate(month=TruncMonth("payment_date"))
+        .values("month")
+        .annotate(total=Sum("amount"))
+        .order_by("month")
+    )
+
+    # Convert data to list format
+    months = [entry["month"].strftime("%b") for entry in monthly_appointments]
+    appointments = [entry["count"] for entry in monthly_appointments]
+    revenue = [round(entry["total"], 2) for entry in monthly_revenue]
+    
+    # Get unapproved doctors separately
+    pending_doctors = doctorRegister.objects.filter(is_approved=False)
+
+    context = {
+        'total_doctors': total_doctors,
+        'total_patients': total_patients,
+        'total_appointments': total_appointments,
+        'total_revenue': total_revenue,
+        'pending_doctors': pending_doctors,
+        'approved_doctors': approved_doctors,
+        "months": months,
+        "appointments": appointments,
+        "revenue": revenue,  
+    }
+    return render(request, 'admin-dashboard.html', context)
+
+
 
 def approve_doctor(request, doctor_id):
     doctor = get_object_or_404(doctorRegister, id=doctor_id)
@@ -1542,6 +1726,22 @@ def approve_doctor(request, doctor_id):
     return redirect('admin_dashboard')
 
 
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from .models import doctorRegister  # Use the correct model name
+
+def delete_doctor(request, doctor_id):
+    try:
+        doctor = doctorRegister.objects.get(id=doctor_id)  # Fetch the doctor object
+    except doctorRegister.DoesNotExist:
+        messages.error(request, "Doctor not found.")  # Handle case where doctor does not exist
+        return redirect("admin_manage_doctors")
+
+    if request.method == "GET":
+        doctor_name = doctor.name  # Store the doctor's name for the success message
+        doctor.delete()  # Delete the doctor
+        messages.success(request, f"Doctor '{doctor_name}' deleted successfully.")
+        return redirect("admin_manage_doctors")
 
 # def reject_doctor(request, doctor_id):
 #     # if not is_admin_logged_in(request):
@@ -1767,7 +1967,7 @@ from django.core.exceptions import ValidationError
 import requests
 from django.conf import settings  # Ensure you add your API key in settings.py
 
-MAILBOXLAYER_API_KEY = "0572de9f84c546ad0ba81a96f9090fc2"  # Replace with your actual API key
+MAILBOXLAYER_API_KEY = "80eb99ae998257cf35ab2ed2dbca8239"  # Replace with your actual API key
 def validate_email_existence(email):
     """Check if an email exists using MailboxLayer API"""
     url = f"http://apilayer.net/api/check?access_key={MAILBOXLAYER_API_KEY}&email={email}&smtp=1&format=1"
@@ -2365,3 +2565,377 @@ def send_meeting_link(request, appointment_id):
     send_mail(subject, message, "webdoctors123@gmail.com", recipient_list, fail_silently=False)
 
     return redirect('doctor_dashboard')  # Redirect after sending email
+
+
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from .models import Prescription
+from .forms import PrescriptionForm
+from django.template.loader import render_to_string
+# prescription views
+# def add_prescription(request, doctor_id, patient_id):
+#     doctor = get_object_or_404(doctorRegister, id=doctor_id)
+#     patient = get_object_or_404(patientRegister, id=patient_id)
+
+#     if request.method == "POST":
+#         form = PrescriptionForm(request.POST)
+#         if form.is_valid():
+#             prescription = form.save(commit=False)
+#             prescription.doctor = doctor
+#             prescription.patient = patient
+#             prescription.save()
+#             return JsonResponse({"success": True})
+
+#     else:
+#         form = PrescriptionForm()
+
+#     html_form = render_to_string("add-prescription.html", {"form": form, "doctor": doctor, "patient": patient})
+#     return JsonResponse({"success": False, "html": html_form})
+
+
+from .models import patientRegister, Prescription
+from .forms import PrescriptionForm
+from django.core.mail import EmailMessage
+
+# def add_prescription(request, doctor_id, patient_id):
+#     patient = get_object_or_404(patientRegister, id=patient_id)
+
+#     if request.method == "POST":
+#         form = PrescriptionForm(request.POST)
+#         if form.is_valid():
+#             prescription = form.save(commit=False)
+#             prescription.patient = patient
+#             prescription.save()
+
+#             # Generate PDF
+#             pdf_path = generate_prescription_pdf(prescription)
+
+#             # Send Email
+#             send_prescription_email(patient.email, pdf_path)
+
+#             return JsonResponse({"success": True})
+
+#     else:
+#         form = PrescriptionForm()
+
+#     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+#         return JsonResponse({
+#             "success": False,
+#             "html": render(request, 'add-prescription.html', {'form': form}).content.decode("utf-8")
+#         })
+
+#     return render(request, 'add-prescription.html', {'form': form})
+
+from django.http import JsonResponse
+
+# def add_prescription(request, doctor_id, patient_id):
+#     doctor = get_object_or_404(doctorRegister, id=doctor_id)
+#     patient = get_object_or_404(patientRegister, id=patient_id)
+
+#     if request.method == "POST":
+#         form = PrescriptionForm(request.POST)
+#         if form.is_valid():
+#             prescription = form.save()
+#             return JsonResponse({"success": True, "prescription_id": prescription.id})  
+#         else:
+#             return JsonResponse({"success": False, "errors": form.errors})  
+#     else:
+#         form = PrescriptionForm()
+    
+#     return render(request, "add-prescription.html", {"form": form,"doctor":doctor,"patient":patient})
+
+
+# @csrf_exempt
+# def add_prescription(request, doctor_id, patient_id):
+#     doctor = get_object_or_404(doctorRegister, id=doctor_id)
+#     patient = get_object_or_404(patientRegister, id=patient_id)
+
+#     form = PrescriptionForm()  
+
+#     if request.method == "POST":
+#         form = PrescriptionForm(request.POST)
+#         print("Received POST request")  # Debugging
+#         print("POST Data:", request.POST)  # Debugging
+
+#         if form.is_valid():
+#             prescription = form.save()
+#             print("Prescription saved with ID:", prescription.id)  # Debugging
+#             return JsonResponse({"success": True, "prescription_id": prescription.id})  
+#         else:
+#             print("Form Errors:", form.errors)  # Debugging
+#             return JsonResponse({"success": False, "errors": form.errors})  
+
+#     return render(request, "add-prescription.html", {"form": form,"doctor":doctor,"patient":patient})
+
+
+# ***********************
+
+def add_prescription(request, doctor_id, patient_id):
+    doctor = get_object_or_404(doctorRegister, id=doctor_id)
+    patient = get_object_or_404(patientRegister, id=patient_id)
+
+    if request.method == "POST":
+        form = PrescriptionForm(request.POST)
+        if form.is_valid():
+            prescription = form.save(commit=False)
+            prescription.doctor = doctor
+            prescription.patient = patient
+            prescription.save()
+            
+              # ✅ Correctly generate the PDF URL
+            pdf_url = f"/generate-prescription-pdf/{prescription.id}/"
+
+            return JsonResponse({"success": True, "prescription_id": prescription.id, "pdf_url": pdf_url})
+        else:
+            return JsonResponse({"success": False, "errors": form.errors})
+
+    form = PrescriptionForm()
+    return render(request, "add-prescription.html", {"form": form, "doctor": doctor, "patient": patient})
+
+
+def generate_prescription_pdf(request, prescription_id):
+    """
+    Generates and returns a PDF file as an HTTP response.
+    """
+    prescription = get_object_or_404(Prescription, id=prescription_id)  # ✅ Fetch prescription
+
+    template_path = "prescription-pdf.html"
+    context = {"prescription": prescription}
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # Define PDF storage path
+    pdf_folder = os.path.join(settings.MEDIA_ROOT, "prescriptions")
+    os.makedirs(pdf_folder, exist_ok=True)
+    
+    pdf_path = os.path.join(pdf_folder, f"prescription_{prescription.id}.pdf")
+
+    with open(pdf_path, "wb") as pdf_file:
+        result = pisa.CreatePDF(html, dest=pdf_file)
+        if result.err:
+            return JsonResponse({"error": "PDF generation failed"}, status=500)
+
+    return JsonResponse({"success": True, "pdf_url": pdf_path})
+
+
+
+def send_prescription_email(request, prescription_id):
+    """
+    Sends an email with the prescription PDF as an attachment.
+    """
+    prescription = get_object_or_404(Prescription, id=prescription_id)
+    patient_email = prescription.patient.email  # ✅ Ensure email field exists
+
+    if not patient_email:
+        return JsonResponse({"success": False, "error": "No patient email found"})
+
+    # Generate PDF
+    template_path = "prescription-pdf.html"
+    context = {"prescription": prescription}
+    template = get_template(template_path)
+    html = template.render(context)
+
+    pdf_folder = os.path.join(settings.MEDIA_ROOT, "prescriptions")
+    os.makedirs(pdf_folder, exist_ok=True)
+    
+    pdf_path = os.path.join(pdf_folder, f"prescription_{prescription.id}.pdf")
+
+    with open(pdf_path, "wb") as pdf_file:
+        pisa.CreatePDF(html, dest=pdf_file)
+
+    # Send Email
+    subject = "Your Prescription"
+    message = "Dear Patient, please find your prescription attached."
+    email = EmailMessage(subject, message, "yourclinic@example.com", [patient_email])
+
+    try:
+        with open(pdf_path, "rb") as pdf_file:
+            email.attach(f"prescription_{prescription.id}.pdf", pdf_file.read(), "application/pdf")
+        
+        email.send()
+        return JsonResponse({"success": True, "message": "Email sent successfully."})
+    except Exception as e:
+        return JsonResponse({"success": False, "error": str(e)})
+
+
+
+# def add_prescription(request, doctor_id, patient_id):
+#     doctor = get_object_or_404(doctorRegister, id=doctor_id)
+#     patient = get_object_or_404(patientRegister, id=patient_id)
+
+#     if request.method == "POST":
+#         form = PrescriptionForm(request.POST)
+#         if form.is_valid():
+#             prescription = form.save()
+#             return JsonResponse({"success": True, "prescription_id": prescription.id})
+#         else:
+#             return JsonResponse({"success": False, "errors": form.errors})
+
+#     # ✅ Return the form for GET requests (so it loads inside the modal)
+#     form = PrescriptionForm()
+#     return render(request, "add-prescription.html", {"form": form, "doctor": doctor, "patient": patient})
+
+
+
+# def generate_prescription_pdf(request, prescription_id):
+#     prescription = get_object_or_404(Prescription, id=prescription_id)
+#     template_path = 'prescription-pdf.html'
+#     context = {'prescription': prescription}
+    
+#     template = get_template(template_path)
+#     html = template.render(context)
+
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = f'attachment; filename="prescription_{prescription.id}.pdf"'
+    
+#     pisa_status = pisa.CreatePDF(html, dest=response)
+#     if pisa_status.err:
+#         return HttpResponse("Error generating PDF", content_type='text/plain')
+    
+#     return response
+
+
+
+
+# def send_prescription_email(request, prescription_id):
+#     prescription = get_object_or_404(Prescription, id=prescription_id)
+#     patient_email = prescription.patient.email  # Ensure 'email' field exists in patientRegister model
+
+#     if not patient_email:
+#         return JsonResponse({"success": False, "error": "No patient email found"})
+
+#     # Generate PDF file
+#     template_path = 'prescription-pdf.html'
+#     context = {'prescription': prescription}
+#     template = get_template(template_path)
+#     html = template.render(context)
+
+#     pdf_path = f"media/prescriptions/prescription_{prescription.id}.pdf"
+#     with open(pdf_path, "wb") as pdf_file:
+#         pisa.CreatePDF(html, dest=pdf_file)
+
+#     # Send email with attachment
+#     subject = "Your Prescription"
+#     message = "Dear Patient, please find your prescription attached."
+#     email = EmailMessage(subject, message, "yourclinic@example.com", [patient_email])
+
+#     with open(pdf_path, "rb") as pdf_file:
+#         email.attach(f"prescription_{prescription.id}.pdf", pdf_file.read(), "application/pdf")
+
+#     email.send()
+    
+#     return JsonResponse({"success": True})
+
+
+# # Auto generated Report
+# from .models import ConsultationReport
+# from .forms import ConsultationReportForm
+
+# def submit_report(request):
+#     if request.method == "POST":
+#         doctor_id = request.session.get("doctor_id")  # Get doctor ID from session
+
+#         if not doctor_id:  
+#             return redirect("login")  # Redirect if doctor_id is missing
+        
+#         try:
+#             doctor = doctorRegister.objects.get(id=doctor_id)  # Fetch the doctor
+#         except doctorRegister.DoesNotExist:
+#             return redirect("login")  # Redirect if doctor not found
+
+
+#          # Get patient ID from the request
+#         patient_id = request.POST.get("patient_id")
+#         if not patient_id:
+#             return redirect("error_page")  # Handle case where patient_id is missing
+        
+#         patient = get_object_or_404(patientRegister, id=patient_id)  # Ensure patient exists
+#         # Create and save the consultation report
+#         report = ConsultationReport.objects.create(
+#              doctor=doctor,  # Assign doctor properly
+#             patient=patient,  #  Assign patient correctly as an instance
+#             diagnosis=request.POST.get("diagnosis"),
+#             prescription=request.POST.get("prescription"),
+#             notes=request.POST.get("notes"),
+#         )
+#         # report.save()  # Save the report
+
+#         return redirect("doctor_dashboard")  # Redirect after success
+    
+#     return render(request, "submit-report.html")
+
+
+# def submit_report(request, patient_id):
+#     doctor_id = request.session.get("doctor_id")  # ✅ Get doctor from session
+
+#     if not doctor_id:
+#         messages.error(request, "You must be logged in as a doctor!")
+#         return redirect("login")
+
+#     doctor = get_object_or_404(doctorRegister, id=doctor_id)  # ✅ Fetch the doctor
+#     patient = get_object_or_404(patientRegister, id=patient_id)  # ✅ Fetch the patient
+
+#     if request.method == "POST":
+#         diagnosis = request.POST.get("diagnosis")
+#         prescription = request.POST.get("prescription")
+#         notes = request.POST.get("notes")
+
+#         if not diagnosis or not prescription or not notes:
+#             messages.error(request, "All fields are required!")
+#             return render(request, "submit-report.html", {"patient": patient})
+
+#         # ✅ Create the consultation report
+#         ConsultationReport.objects.create(
+#             doctor=doctor,  
+#             patient=patient,
+#             diagnosis=diagnosis,
+#             prescription=prescription,
+#             notes=notes,
+#         )
+#         messages.success(request, "Report submitted successfully!")
+#         return redirect("doctor_dashboard")  
+
+#     return render(request, "submit-report.html", {"patient": patient})  # ✅ Show form first
+
+# from django.http import FileResponse
+# from reportlab.pdfgen import canvas
+# from .models import ConsultationReport
+
+# def generate_report_pdf(request, report_id):
+#     report = ConsultationReport.objects.get(id=report_id)
+#     response = FileResponse(generate_pdf(report), content_type='application/pdf')
+#     response['Content-Disposition'] = f'attachment; filename="report_{report_id}.pdf"'
+#     return response
+
+# def generate_pdf(report):
+#     from io import BytesIO
+#     buffer = BytesIO()
+#     p = canvas.Canvas(buffer)
+
+#     # Ensure fields are not None
+#     doctor_name = report.doctor.name if report.doctor.name else "N/A"
+#     patient_name = report.patient.name if report.patient.name else "N/A"
+#     diagnosis = report.diagnosis if report.diagnosis else "N/A"
+#     prescription = report.prescription if report.prescription else "N/A"
+#     notes = report.notes if report.notes else "N/A"
+#     created_at = report.created_at.strftime('%Y-%m-%d') if report.created_at else "N/A"
+
+#     p.drawString(100, 800, f"Doctor: {doctor_name}")
+#     p.drawString(100, 780, f"Patient: {patient_name}")
+#     p.drawString(100, 760, f"Date: {created_at}")
+#     p.drawString(100, 720, "Diagnosis:")
+#     p.drawString(120, 700, diagnosis)
+#     p.drawString(100, 660, "Prescription:")
+#     p.drawString(120, 640, prescription)
+#     p.drawString(100, 600, "Notes:")
+#     p.drawString(120, 580, notes)
+
+#     p.showPage()
+#     p.save()
+#     buffer.seek(0)
+#     return buffer
+
+
+
+def blog_details(request):
+    return render(request, 'blog-details.html')

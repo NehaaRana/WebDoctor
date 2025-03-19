@@ -442,6 +442,7 @@
                                   <th>Amount</th>
 
                                   <th>Status</th>
+                                  {% comment %} <th>Report</th> {% endcomment %}
                                   {% comment %} <th>Cancle Appointment</th> {% endcomment %}
                                   {% comment %} <th>Name</th> {% endcomment %}
                                 </tr>
@@ -483,6 +484,13 @@
                                       >{{appointment.status}}</span
                                     >
                                   </td>
+                                  {% comment %} <td>
+                                    {% for report in reports %}
+    <p>Consultation on {{ report.created_at }}</p>
+    <a href="{% url 'generate_report_pdf' report.id %}" class="btn btn-primary">Download Report</a>
+{% endfor %}
+
+                                  </td> {% endcomment %}
                                   {% comment %} <td>
                                     <a class="btn btn-danger text-white" href="{% url 'cancel_appointment' appointment.id %}">cancel</a> 
                                   </td> {% endcomment %}

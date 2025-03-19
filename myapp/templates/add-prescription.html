@@ -1,0 +1,93 @@
+{% block content %}
+<h1>Add Prescription</h1>
+<form method="post" id="prescriptionForm" action="{% url 'add_prescription' doctor.id patient.id %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Generate Prescription</button>
+</form>
+<div id="message"></div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function attachSubmitEvent() {
+            let form = document.getElementById("prescriptionForm");
+            if (!form) return;
+    
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+    
+                let formData = new FormData(this);
+                let csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+    
+                fetch(form.action, {
+                    method: "POST",
+                    body: formData,
+                    headers: { 
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRFToken": csrfToken 
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Prescription added successfully!");
+    
+                        // ✅ Check if `prescription_id` is present
+                        if (!data.prescription_id) {
+                            alert("Error: Missing prescription_id.");
+                            return;
+                        }
+    
+                        // ✅ Send Email Automatically
+                        fetch(`/send-prescription-email/${data.prescription_id}/`, {
+                            method: "GET"
+                        })
+                        .then(response => response.json())
+                        .then(emailData => {
+                            if (emailData.success) {
+                                alert("Prescription sent to the patient!");
+                            } else {
+                                alert("Email Error: " + emailData.error);
+                            }
+                        });
+    
+                        // ✅ Redirect to Download PDF
+                        window.location.href = `/generate-prescription-pdf/${data.prescription_id}/`;
+                    } else {
+                        alert("Error: " + JSON.stringify(data.errors));
+                    }
+                })
+                .catch(error => console.error("Fetch Error:", error));
+            });
+        }
+    
+        attachSubmitEvent(); // Attach when the page loads
+    });
+    
+    
+
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} {% block content %}
+<h1>Add Prescription</h1>
+<form method="post" id="prescriptionForm">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Generate Prescription</button>
+</form>
+
+{% endblock %} {% endcomment %}
+

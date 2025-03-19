@@ -63,6 +63,7 @@ urlpatterns =[
   path('admin_logout/', views.admin_logout, name='admin_logout'),
   path('approve_doctor/<int:doctor_id>/', views.approve_doctor, name='approve_doctor'),
   path('reject_doctor/<int:doctor_id>/', views.reject_doctor, name='reject_doctor'),
+  path("delete_doctor/<int:doctor_id>/", views.delete_doctor, name="delete_doctor"),
   ########################
    path('update-doctor/', views.update_doctor, name='update_doctor'),
     path('get-doctor/<int:doctor_id>/',views.get_doctor, name='get_doctor'),
@@ -89,4 +90,15 @@ urlpatterns =[
     # video consultion
     path('video_call/<int:appointment_id>/', views.video_consultation, name='video_consultation'),
     path('send_meeting_link/<int:appointment_id>/', views.send_meeting_link, name='send_meeting_link'),
+    path('add_prescription/<int:doctor_id>/<int:patient_id>/', views.add_prescription, name='add_prescription'),
+    # path('<int:prescription_id>/', views.prescription_detail, name='prescription_detail'),
+    # path('<int:prescription_id>/pdf/', views.generate_prescription_pdf, name='generate_prescription_pdf'),
+    
+     path("generate-prescription-pdf/<int:prescription_id>/", views.generate_prescription_pdf, name="generate_prescription_pdf"),
+    path("send-prescription-email/<int:prescription_id>/", views.send_prescription_email, name="send_prescription_email"),
+
+  #  path('submit_report/<int:patient_id>/', views.submit_report, name='submit_report'),
+  #  path('generate_report_pdf/<int:report_id>/', views.generate_report_pdf, name='generate_report_pdf'),
+   path("blog-details/", views.blog_details, name="blog-details"),
 ]
+

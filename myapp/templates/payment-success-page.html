@@ -1,9 +1,33 @@
-
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Successful</title>
+    <!-- Favicon -->
+  <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+
+  <!-- FontAwesome CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}">
+
+  <!-- Feather Icons -->
+  <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}">
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+
+  <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  
+  <!-- DateDropper Styles -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datedropper/datedropper.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/datedropper/datedropper.min.js"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -45,49 +69,314 @@
     color: #f5c518;
 }
 
-    </style>
+/* Animated Checkmark */
+.checkmark-animation {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: block;
+    stroke-width: 2;
+    stroke: #fff;
+    stroke-miterlimit: 10;
+    margin: 2rem auto;
+    box-shadow: 0 0 0 rgba(40, 167, 69, 0.4);
+    animation: scaleCheck 0.5s ease-in-out both, 
+               pulse 2s ease-in-out infinite;
+}
+
+.checkmark-animation path {
+    transform-origin: 50% 50%;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: drawCheck 0.5s cubic-bezier(0.65, 0, 0.45, 1) 0.5s forwards;
+}
+
+@keyframes scaleCheck {
+    0% { transform: scale(0); }
+    80% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes drawCheck {
+    100% { stroke-dashoffset: 0; }
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4); }
+    70% { box-shadow: 0 0 0 20px rgba(40, 167, 69, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+}
+
+/* Enhanced Card Styling */
+.success-card {
+    border: none;
+    border-radius: 20px;
+    overflow: hidden;
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+}
+
+
+.card-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+}
+
+/* Enhanced Review Section */
+.review-section {
+    border-radius: 15px;
+    padding: 2rem;
+    margin: 2rem 0;
+    backdrop-filter: blur(5px);
+}
+
+/* Animated Stars */
+.star-rating label {
+    transition: all 0.3s ease;
+}
+
+.star-rating label:hover {
+    transform: scale(1.2);
+}
+
+/* Submit Button Animation */
+.btn-submit {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+}
+
+
+
+/* Floating Animation */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+}
+
+.success-icon {
+    animation: float 3s ease-in-out infinite;
+}
+
+
+/* Star Rating Styling */
+.star-rating {
+    display: flex;
+    flex-direction: row;  /* Change row-reverse to row */
+    justify-content: center;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star {
+    font-size: 2rem;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.star:hover,
+.star-rating input:checked ~ label {
+    color: #f5c518;
+}
+
+</style>
 </head>
 <body>
-    <h1 class="success">✅ Payment Successful!</h1>
-    <p>Thank you for your payment. Your transaction was completed successfully.</p>
-    <form method="POST">
-        {% csrf_token %}
-        
-        <label for="rating">Your Rating:</label>
-        <div class="star-rating">
-            <input type="radio" id="star5" name="rating" value="5" required>
-            <label for="star5" class="star">&#9733;</label>
+    {% block content %}
+  <div class="main-wrapper">
+
+          <!--  Navbar section Start-->
+          <header class="header header-fixed header-one">
+            <div class="container">
+                <nav class="navbar navbar-expand-lg header-nav">
+                    <div class="navbar-header">
+                        <a id="mobile_btn" href="javascript:void(0);">
+                            <span class="bar-icon">
+                                <span></span><span></span><span></span>
+                            </span>
+                          </a>
+                          <a href="{% url 'index' %}" class="navbar-brand logo">
+                              <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+                          </a>
+                      </div>
+                      <div class="main-menu-wrapper">
+                        <div class="menu-header">
+                            <a href="{% url 'index' %}" class="menu-logo">
+                                <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+                            </a>
     
-            <input type="radio" id="star4" name="rating" value="4">
-            <label for="star4" class="star">&#9733;</label>
-    
-            <input type="radio" id="star3" name="rating" value="3">
-            <label for="star3" class="star">&#9733;</label>
-    
-            <input type="radio" id="star2" name="rating" value="2">
-            <label for="star2" class="star">&#9733;</label>
-    
-            <input type="radio" id="star1" name="rating" value="1">
-            <label for="star1" class="star">&#9733;</label>
+                            <a id="menu_close" class="menu-close" href="javascript:void(0);">
+                              <svg class="svg-inline--fa fa-times fa-w-11" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path>
+                              </svg>
+                            </a>
+                          </div>
+                          
+                          <ul class="main-nav">
+                              <li><a href="{% url 'index' %}">Home</a></li>
+                              <li><a href="{% url 'patient_dashboard' %}">Patients</a></li>
+                              <li><a href="{% url 'doctor_dashboard' %}">Doctors</a></li>
+                              <li><a href="{% url 'admin_dashboard' %}">Admin</a></li>
+                              <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+                        
+                              <ul class="nav header-navbar-rht" style="padding-top: 20px;">
+                                <li class="nav-item dropdown has-arrow logged-item">
+                                    <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="user-img">
+                                            {% if doctor.profile_img %}
+                                                <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile">
+                                            {% else %}
+                                                <img class="rounded-circle" src="/static/assets/default_profile.jpg" width="31" alt="default profile">
+                                            {% endif %}
+                                        </span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <div class="user-header">
+                                            <div class="avatar avatar-sm">
+                                                {% if doctor.profile_img %}
+                                                    <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile">
+                                                {% else %}
+                                                    <img class="rounded-circle" src="/static/assets/default_profile.jpg" width="31" alt="default profile">
+                                                {% endif %}
+                                            </div>
+                                            <div class="user-text">
+                                              <h6>{{doctor.name}}</h6>
+                                              <p class="text-muted mb-0">{{doctor.user}}</p>
+                                          </div>
+                                      </div>
+                                      <a class="dropdown-item" href="{% url 'doctor_dashboard' %}">Dashboard</a>
+                                      <a class="dropdown-item" href="{% url 'doctor_profile_settings' %}">Profile Settings</a>
+                                      <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                                  </div>
+                              </li>
+                          </ul>
+                      </div>
+                  </nav>
+              </div>
+        </header>
+        <!--  Navbar section End-->
+
+
+
+
+    <div class="content">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <!-- Success Card -->
+                    <div class="card success-card shadow-sm">
+                        <div class="card-body text-center">
+                            {% comment %} <div class="success-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div> {% endcomment %}
+                            <!-- Animated Checkmark SVG -->
+                                <svg class="checkmark-animation" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                                    <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" stroke="#28a745" stroke-width="2"/>
+                                    <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" stroke="#28a745" stroke-width="4"/>
+                                </svg>
+                            <h3 class="card-title">Payment Successful!</h3>
+                            <p class="card-text">Thank you for your payment. Your transaction was completed successfully.</p>
+                            
+                            <!-- Invoice Button -->
+                            {% if payment.id %}
+                            <a href="{% url 'payment_pdf' payment.id %}" class="btn btn-primary btn-invoice">
+                                <i class="fas fa-download me-2"></i>Download Invoice
+                            </a>
+                            {% endif %}
+                            
+                            <!-- Review Section -->
+                            <div class="review-section mt-4">
+                                <h5>Please Rate Your Experience</h5>
+                                <form method="POST" class="review-form">
+                                    {% csrf_token %}
+                                    
+                                    <!-- Star Rating -->
+                                    <div class="star-rating">
+                                        <input type="radio" id="star5" name="rating" value="5">
+                                        <label for="star5" class="star">&#9733;</label>
+
+                                        <input type="radio" id="star4" name="rating" value="4">
+                                        <label for="star4" class="star">&#9733;</label>
+
+                                        <input type="radio" id="star3" name="rating" value="3">
+                                        <label for="star3" class="star">&#9733;</label>
+
+                                        <input type="radio" id="star2" name="rating" value="2">
+                                        <label for="star2" class="star">&#9733;</label>
+
+                                        <input type="radio" id="star1" name="rating" value="1">
+                                        <label for="star1" class="star">&#9733;</label>
+                                    </div>
+                                    <!-- Review Text -->
+                                    <div class="form-group">
+                                        <textarea name="review_text" class="form-control" rows="4" 
+                                                  placeholder="Your review..." required></textarea>
+                                    </div>
+                                    
+                                    <!-- Submit Button -->
+                                    <button type="submit" class="btn btn-success btn-submit mt-3">
+                                        Submit Review
+                                    </button>
+                                </form>
+                                <p id="review-message" class="text-success mt-2" style="display: none;">
+                                    Review submitted successfully!
+                                </p>
+                            </div>
+                            
+                            <!-- Home Link -->
+                            <div class="back-home mt-4">
+                                <a href="{% url 'index' %}" class="btn btn-outline-primary">
+                                    <i class="fas fa-home me-2"></i>Return to Homepage
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    
-        <label for="review_text">Your Review:</label>
-        <textarea name="review_text" required></textarea>
-    
-        <button type="submit">Submit Review</button>
-    </form>
-    <p id="review-message" style="color: green; display: none;">Review submitted successfully!</p>
+    </div>
 
-    <a href="/" class="home-link">Go to Home</a>
-    <button class="btn btn-success">
-        {% if payment.id %}
-        <a href="{% url 'payment_pdf' payment.id %}" class="btn btn-success">Download Invoice</a>
-      {% else %}
-        <p>No payment record found.</p>
-      {% endif %}
-      
-      </button>
 
+
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+
+        // Trigger confetti animation
+        function triggerConfetti() {
+            var duration = 3000;
+            var end = Date.now() + duration;
+            // Keep only the central burst with colorful confetti
+            confetti({
+             particleCount: 200,
+             spread: 100,
+             origin: {
+                 y: 0.6
+             },
+             colors: ['#f94144', '#f3722c', '#f8961e', '#f9c74f', '#90be6d', '#43aa8b', '#577590', '#ff68b8',
+                 '#a561ff'
+                ]
+            });
+        }
+        // Trigger animations when page loads
+         document.addEventListener('DOMContentLoaded', function() {
+         triggerConfetti();
+         // Add success icon animation class
+         document.querySelector('.checkmark-animation').classList.add('animate');
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
     <script>
         document.getElementById("review-form").addEventListener("submit", function(event) {
             event.preventDefault();
@@ -134,5 +423,9 @@
             return cookieValue;
         }
     </script>
+    {% include "footer.html" %}
+</div>
+{% endblock %}
+
 </body>
 </html>

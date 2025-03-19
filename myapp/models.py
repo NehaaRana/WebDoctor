@@ -61,10 +61,11 @@ class doctorRegister(models.Model):
     city = models.CharField(max_length=50,blank=True, null=True)
     state = models.CharField(max_length=50,blank=True, null=True)
     clinic_name = models.CharField(max_length=255)
-    clinic_address = models.TextField()
+    clinic_address = models.TextField() 
     gender = models.CharField(max_length=5, choices=GENDER_CHOICES)
     mci_no = models.CharField(max_length=10,blank=True, null=True)
     fee = models.BigIntegerField(null=True)
+    about_me=models.TextField(null=True)
     is_approved = models.BooleanField(default=False)
     is_rejected = models.BooleanField(default=False)
 
@@ -176,16 +177,6 @@ class adminLogin(models.Model):
         return self.username
         
 
-class review(models.Model):
-      patient_id=models.ForeignKey(patientRegister,on_delete=models.CASCADE)
-      doctor_id=models.ForeignKey(doctorRegister,on_delete=models.CASCADE)
-      appointment_id=models.ForeignKey(appointment,on_delete=models.CASCADE)
-      rating=models.IntegerField(blank=True, null=True, validators=[MinValueValidator(1), MaxValueValidator(5)])
-      review_text=models.TextField(blank=True, null=True)
-      review_date=models.DateField()
-
-      def __str__(self):
-          return f"{self.rating} | {self.review_text} | {self.review_date} |"
 
 
 
@@ -206,10 +197,34 @@ class HealthRecord(models.Model):
 
 
 # for chatbot
-class MedicalInfo(models.Model):
-    symptom = models.CharField(max_length=255, unique=True)  # e.g., "fever"
-    condition = models.TextField()  # e.g., "Possible viral infection"
-    treatment = models.TextField()  # e.g., "Drink fluids, rest, take paracetamol"
+# class MedicalInfo(models.Model):
+#     symptom = models.CharField(max_length=255, unique=True)  # e.g., "fever"
+#     condition = models.TextField()  # e.g., "Possible viral infection"
+#     treatment = models.TextField()  # e.g., "Drink fluids, rest, take paracetamol"
     
+#     def __str__(self):
+#         return self.symptom
+
+
+from datetime import date
+class Prescription(models.Model):
+    doctor = models.ForeignKey(doctorRegister, on_delete=models.CASCADE, related_name="doctor_prescriptions")
+    patient = models.ForeignKey(patientRegister, on_delete=models.CASCADE, related_name="patient_prescriptions")
+    date_issued = models.DateField(default=date.today)
+    medicines = models.TextField()  # Store medicine details in JSON format or simple text
+    diagnosis = models.TextField()
+    instructions = models.TextField()
+
     def __str__(self):
-        return self.symptom
+        return f"Prescription {self.id} - {self.patient.username}"
+    
+
+
+# auto-generated Report
+class ConsultationReport(models.Model):
+    doctor = models.ForeignKey(doctorRegister, on_delete=models.CASCADE, related_name='doctor_reports')
+    patient = models.ForeignKey(patientRegister, on_delete=models.CASCADE, related_name='patient_reports')
+    diagnosis = models.TextField(null=True, blank=True)
+    prescription = models.TextField(null=True, blank=True)
+    notes = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)

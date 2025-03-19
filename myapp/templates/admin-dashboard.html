@@ -213,7 +213,7 @@
                                                 </div>
 
                                                 <div>
-                                                    <h4 class="mt-4 pt-1 mb-0 font-size-22">15</h4>
+                                                    <h4 class="mt-4 pt-1 mb-0 font-size-22">{{ total_doctors }}</h4>
                                                     <div class="d-flex mt-1 align-items-end overflow-hidden">
                                                         <div class="flex-grow-1">
                                                             <p class="text-muted mb-0 text-truncate">Total Doctors World
@@ -248,7 +248,7 @@
                                                 </div>
 
                                                 <div>
-                                                    <h4 class="mt-4 pt-1 mb-0 font-size-22">6</h4>
+                                                    <h4 class="mt-4 pt-1 mb-0 font-size-22">{{ total_patients }}</h4>
                                                     <div class="d-flex mt-1 align-items-end overflow-hidden">
                                                         <div class="flex-grow-1">
                                                             <p class="text-muted mb-0 text-truncate">Total Patients World
@@ -283,7 +283,7 @@
                                                 </div>
 
                                                 <div>
-                                                    <h4 class="mt-4 pt-1 mb-0 font-size-22">29</h4>
+                                                    <h4 class="mt-4 pt-1 mb-0 font-size-22">{{ total_appointments }}</h4>
                                                     <div class="d-flex mt-1 align-items-end overflow-hidden">
                                                         <div class="flex-grow-1">
                                                             <p class="text-muted mb-0 text-truncate">Total Appointments World
@@ -317,7 +317,7 @@
                                                 </div>
 
                                                 <div>
-                                                    <h4 class="mt-4 pt-1 mb-0 font-size-22">6,482.46</h4>
+                                                    <h4 class="mt-4 pt-1 mb-0 font-size-22">{{ total_revenue }}</h4>
                                                     <div class="d-flex mt-1 align-items-end overflow-hidden">
                                                         <div class="flex-grow-1">
                                                             <p class="text-muted mb-0 text-truncate">Total Revenue generated World
@@ -382,6 +382,35 @@
     <script src="{%static 'assets/admin_libs/metismenujs/metismenujs.min.js' %}"></script>
     <script src="{%static 'assets/admin_libs/simplebar/simplebar.min.js' %}"></script>
     <script src="{%static 'assets/admin_libs/eva-icons/eva.min.js' %}"></script>
+
+     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var options = {
+                chart: {
+                    type: "bar",
+                    height: 350
+                },
+                series: [
+                    {
+                        name: "Appointments",
+                        data: {{ appointments|safe }} // Django will insert data here
+                    },
+                    {
+                        name: "Revenue",
+                        data: {{ revenue|safe }} // Django will insert data here
+                    }
+                ],
+                xaxis: {
+                    categories: {{ months|safe }} // Months will be displayed
+                },
+                colors: ["#1f58c7", "#ff5733"] // Blue for Appointments, Red for Revenue
+            };
+    
+            var chart = new ApexCharts(document.querySelector("#overview"), options);
+            chart.render();
+        });
+    </script>
+    
 
     <!-- apexcharts -->
     <script src="{%static 'assets/admin_libs/apexcharts/apexcharts.min.js' %}"></script>

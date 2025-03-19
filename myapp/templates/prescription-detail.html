@@ -1,0 +1,10 @@
+{% block content %}
+<h2>Prescription for {{ prescription.patient.name }}</h2>
+<p><strong>Doctor:</strong> {{ prescription.doctor.name }}</p>
+<p><strong>Date:</strong> {{ prescription.date_issued }}</p>
+<p><strong>Diagnosis:</strong> {{ prescription.diagnosis }}</p>
+<p><strong>Medicines:</strong> {{ prescription.medicines }}</p>
+<p><strong>Instructions:</strong> {{ prescription.instructions }}</p>
+
+<a href="{% url 'generate_prescription_pdf' prescription.id %}">Download PDF</a>
+{% endblock %}

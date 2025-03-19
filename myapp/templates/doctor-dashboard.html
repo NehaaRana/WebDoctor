@@ -34,6 +34,13 @@
       font-family: Roboto;
       src: url("chrome-extension://mcgbeeipkmelnpldkobichboakdfaeon/css/Roboto-Regular.ttf");
     }
+
+    * {
+      filter: none !important;
+      backdrop-filter: none !important;
+    }   
+    
+  
   </style>
 </head>
 
@@ -319,8 +326,10 @@
                                   <th>Reason</th>
                                   <th>Symptoms</th>
                                   <th class="text-center">Doctor Fee</th>
+                                  <th>Video Consultation</th>
                                   <th>Appointment Status</th>
                                   <th>Action</th>
+                                  <th>prescription Detail</th>
                                 </tr>
                               </thead>
 
@@ -389,6 +398,33 @@
                             {% else %}
                                 <span class="text-muted">No Actions Available</span>
                             {% endif %}
+                        </td>
+                        <td>
+                          {% comment %} <a href="#" class="btn btn-primary add-prescription-btn"
+       data-url="{% url 'add_prescription' doctor.id appointment.patient_id.id %}">
+        Add Prescription
+    </a> {% endcomment %}
+    <button type="button" class="btn btn-primary add-prescription-btn" 
+        data-bs-toggle="modal" 
+        data-bs-target="#prescriptionModal" 
+        data-url="{% url 'add_prescription' doctor.id appointment.patient_id.id %}">
+  Add Prescription
+</button>
+
+                        {% comment %} <button type="button" class="btn btn-primary add-prescription-btn"
+        data-doctor-id="{{ doctor.id }}"
+        data-patient-id="{{ appointment.patient_id.id }}"
+        data-url="{% url 'add_prescription' doctor.id appointment.patient_id.id %}">
+    Add Prescription
+</button> {% endcomment %}
+                        </td>
+                        <td>
+                          {% comment %} to get patient id {% endcomment %}
+                          {% comment %} <input type="hidden" name="patient_id" value="{{ appointment.patient_id.id }}">
+                          <a href="{% url 'submit_report' %}" class="btn btn-primary">Submit Report</a> {% endcomment %}
+                          {% comment %} <a href="{% url 'submit_report' appointment.patient_id.id %}" class="btn btn-primary">
+                            Submit Report
+                        </a> {% endcomment %}
                         </td>
                           
                             <td class="text-center">
@@ -484,7 +520,132 @@
         </div>
       </div>
     </div>
+  
+<!-- Prescription Modal -->
+{% comment %} <div class="modal" id="prescriptionModal" tabindex="-1" aria-labelledby="prescriptionModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="prescriptionModalLabel">Create Prescription</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <div id="prescriptionFormContent"></div> <!-- Form will be loaded here -->
+          </div>
+      </div>
+  </div>
+</div> {% endcomment %}
+<!-- Prescription Modal -->
+<div class="modal fade" id="prescriptionModal" tabindex="-1" aria-labelledby="prescriptionModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="prescriptionModalLabel">Create Prescription</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <!-- AJAX loaded content will be inserted here -->
+              <div id="prescriptionFormContent"></div>
+          </div>
+      </div>
+  </div>
+</div>
 
+<!-- ✅ Place this script before the closing </body> tag -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>    
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      // Load the prescription form inside the modal via AJAX
+      document.querySelectorAll(".add-prescription-btn").forEach(button => {
+        button.addEventListener("click", function (event) {
+            event.preventDefault();
+            let url = this.getAttribute("data-url");
+    
+            fetch(url)
+                .then(response => {
+                    console.log("Response status:", response.status);
+                    return response.text();  // Log raw response
+                })
+                .then(html => {
+                    console.log("HTML Response:", html);
+                    document.getElementById("prescriptionFormContent").innerHTML = html;
+                    attachSubmitEvent();  // Attach form submit event after loading
+                })
+                .catch(error => console.error("Error loading form:", error));
+        });
+    });
+      // Function to attach submit event dynamically after form loads
+      
+      function attachSubmitEvent() {
+        let form = document.querySelector("#prescriptionForm"); // Select dynamically loaded form
+        if (!form) return;  
+    
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();  
+    
+            let formData = new FormData(form);
+    
+            fetch(form.action, {
+                method: "POST",
+                body: formData,
+                headers: { "X-Requested-With": "XMLHttpRequest" }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Prescription added successfully!");
+                    generateAndSendPDF(data.prescription_id);  
+                } else {
+                    alert("Error submitting prescription.");
+                }
+            })
+            .catch(error => console.log("Error:", error));
+        });
+    }
+    
+
+      // Function to generate PDF and send via email
+      function generateAndSendPDF(prescriptionId) {
+          fetch(`/generate-prescription-pdf/${prescriptionId}/`)  // Replace with actual Django URL
+              .then(response => {
+                  if (!response.ok) throw new Error("Error generating PDF");
+                  return response.blob();
+              })
+              .then(blob => {
+                  let a = document.createElement("a");
+                  a.href = window.URL.createObjectURL(blob);
+                  a.download = `prescription_${prescriptionId}.pdf`;
+                  a.click();
+  
+                  // Now send the email
+                  sendPrescriptionEmail(prescriptionId);
+              })
+              .catch(error => console.log("Error:", error));
+      }
+  
+      // Function to send email with prescription PDF
+      function sendPrescriptionEmail(prescriptionId) {
+          fetch(`/send-prescription-email/${prescriptionId}/`)  // Replace with actual Django URL
+              .then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      alert("Prescription sent to patient successfully!");
+                      location.reload();
+                  } else {
+                      alert("Error sending prescription email.");
+                  }
+              })
+              .catch(error => console.log("Error:", error));
+      }
+  });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  
     {% include "footer.html" %}
     {% endblock %}
 

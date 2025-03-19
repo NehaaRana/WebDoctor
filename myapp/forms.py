@@ -3,7 +3,7 @@ from . models import patientRegister,doctorRegister,appointment,Payment,review
 from django.core.exceptions import ValidationError
 from datetime import datetime, time, timedelta
 from .models import adminLogin
-from . models import patientRegister,doctorRegister,appointment,Payment,HealthRecord
+from . models import patientRegister,doctorRegister,appointment,Payment,HealthRecord,Prescription,ConsultationReport
 from django.core.exceptions import ValidationError
 from datetime import datetime, time, timedelta
 
@@ -163,15 +163,19 @@ class HealthRecordForm(forms.ModelForm):
             'sleep_hours': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Sleep Hours(e.g., 8 hours)'}),
         }
 
-# class HealthRecordForm(forms.ModelForm):
-#     class Meta:
-#         model = HealthRecord
-#         fields = ['bp_systolic', 'bp_diastolic', 'heart_rate', 'sugar_level', 'steps_walked', 'sleep_hours']
-#         widgets = {
-#             'bp_systolic': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Systolic BP'}),
-#             'bp_diastolic': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Diastolic BP'}),
-#             'heart_rate': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Heart Rate'}),
-#             'sugar_level': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Sugar Level'}),
-#             'steps_walked': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Steps Walked'}),
-#             'sleep_hours': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Sleep Hours'}),
-#         }
+# prescription form
+class PrescriptionForm(forms.ModelForm):
+    class Meta:
+        model = Prescription
+        fields = ['medicines', 'diagnosis', 'instructions']  # Removed 'patient' field
+        widgets = {
+            'medicines': forms.Textarea(attrs={'rows': 3}),
+            'diagnosis': forms.Textarea(attrs={'rows': 2}),
+            'instructions': forms.Textarea(attrs={'rows': 3}),
+        }
+
+# Auto-generated Report
+class ConsultationReportForm(forms.ModelForm):
+    class Meta:
+        model = ConsultationReport
+        fields = ['diagnosis', 'prescription', 'notes']
