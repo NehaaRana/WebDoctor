@@ -2695,3 +2695,22 @@ def send_prescription_email(request, prescription_id):
 
 def blog_details(request):
     return render(request, 'blog-details.html')
+
+
+# search doctor at home page
+def search_specialization(request):
+    query = request.GET.get("query", "")
+    if query:
+        doctors = doctorRegister.objects.filter(
+            specialization__icontains=query
+        ).values_list("specialization", flat=True).distinct()
+        
+        qualifications = doctorRegister.objects.filter(
+            qualification__icontains=query
+        ).values_list("qualification", flat=True).distinct()
+
+        results = list(set(doctors) | set(qualifications))  # Combine both and remove duplicates
+
+        suggestions_html = "".join(f"<div class='suggestion-item'>{res}</div>" for res in results)
+        return JsonResponse(suggestions_html, safe=False)
+    return JsonResponse("")

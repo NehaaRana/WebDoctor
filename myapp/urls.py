@@ -100,5 +100,6 @@ urlpatterns =[
   #  path('submit_report/<int:patient_id>/', views.submit_report, name='submit_report'),
   #  path('generate_report_pdf/<int:report_id>/', views.generate_report_pdf, name='generate_report_pdf'),
    path("blog-details/", views.blog_details, name="blog-details"),
+    path("search-specialization/", views.search_specialization, name="search-specialization"),
 ]
 
