@@ -220,11 +220,3 @@ class Prescription(models.Model):
     
 
 
-# auto-generated Report
-class ConsultationReport(models.Model):
-    doctor = models.ForeignKey(doctorRegister, on_delete=models.CASCADE, related_name='doctor_reports')
-    patient = models.ForeignKey(patientRegister, on_delete=models.CASCADE, related_name='patient_reports')
-    diagnosis = models.TextField(null=True, blank=True)
-    prescription = models.TextField(null=True, blank=True)
-    notes = models.TextField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)

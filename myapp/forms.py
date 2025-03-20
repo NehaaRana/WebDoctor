@@ -3,7 +3,7 @@ from . models import patientRegister,doctorRegister,appointment,Payment,review
 from django.core.exceptions import ValidationError
 from datetime import datetime, time, timedelta
 from .models import adminLogin
-from . models import patientRegister,doctorRegister,appointment,Payment,HealthRecord,Prescription,ConsultationReport
+from . models import patientRegister,doctorRegister,appointment,Payment,HealthRecord,Prescription
 from django.core.exceptions import ValidationError
 from datetime import datetime, time, timedelta
 
@@ -67,12 +67,7 @@ class appointmentForm(forms.ModelForm):
     
    
 
-    # def clean_status(self):
-    #     status = self.cleaned_data.get('status')
-    #     valid_statuses = ['pending', 'confirmed', 'cancelled']
-    #     if status not in valid_statuses:
-    #         raise ValidationError(f"Status must be one of the following: {', '.join(valid_statuses)}.")
-    #     return status
+   
 
 class PaymentForm(forms.ModelForm):
     class Meta:
@@ -175,7 +170,7 @@ class PrescriptionForm(forms.ModelForm):
         }
 
 # Auto-generated Report
-class ConsultationReportForm(forms.ModelForm):
-    class Meta:
-        model = ConsultationReport
-        fields = ['diagnosis', 'prescription', 'notes']
+# class ConsultationReportForm(forms.ModelForm):
+#     class Meta:
+#         model = ConsultationReport
+#         fields = ['diagnosis', 'prescription', 'notes']
