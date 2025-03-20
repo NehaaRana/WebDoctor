@@ -1,3 +1,0 @@
-flu symptoms: Flu symptoms include fever, cough, sore throat, runny nose, body aches, chills, and fatigue. Severe cases may cause pneumonia or hospitalization.
-treatment for fever: To treat a fever, drink plenty of fluids, rest, and take paracetamol or ibuprofen. If the fever is very high (above 102°F or 38.9°C), consult a doctor.
-covid symptoms: COVID-19 symptoms include fever, dry cough, difficulty breathing, loss of taste or smell, body aches, and fatigue. Some patients experience severe respiratory issues.

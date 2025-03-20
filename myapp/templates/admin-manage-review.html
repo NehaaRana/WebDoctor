@@ -20,6 +20,12 @@
      <!-- App Css-->
      <link href="{%static 'assets/admin_css/app.min.css' %}" id="app-style" rel="stylesheet" type="text/css" />
 
+     <!-- jquery-confirm CSS -->
+   <link
+   rel="stylesheet"
+   href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css"
+ />
+
     <!-- Icons Css -->
     <link href="{%static 'assets/admin_css/icons.min.css' %}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css" />
@@ -488,5 +494,37 @@
       });
     });
   </script>
+
+  <!-- delete review alert -->
+<script>
+    $(document).ready(function () {
+  function showAlert(icon, message) {
+       $.alert({
+         title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+         content: `<span style="font-size: 15px;">${message}</span>`,
+         type: "blue",
+         theme: "modern",
+         buttons: {
+           ok: {
+             text: "OK",
+             btnClass: "btn-blue",
+           },
+         },
+       });
+     }
+     let delay = 500; // Start with a small delay
+     {% for message in messages %}
+     setTimeout(function () {
+       showAlert(
+         "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
+         "{{ message|escape }}",
+         "{{ message.tags }}"
+       );
+     }, delay);
+     delay += 1000; // Increase delay for next message
+     {% endfor %}
+    })
+    
+</script>
 </body>
 </html>

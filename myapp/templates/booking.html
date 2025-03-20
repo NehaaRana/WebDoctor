@@ -26,6 +26,10 @@
   <!-- jQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   
+
+  <!-- jquery-confirm CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
+
   <!-- DateDropper Styles -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datedropper/datedropper.min.css">
   <script src="https://cdn.jsdelivr.net/npm/datedropper/datedropper.min.js"></script>
@@ -215,7 +219,7 @@
                                     <label class="form-label fw-bold">Appointment Date</label>
                                     <div class="input-group">
                                       <input type="date" class="form-control" name="appointment_date" id="date-format" 
-                                             placeholder="Select Appointment Date" value="{{ appointment_data_list.appointment_date }}" required>
+                                             placeholder="Select Appointment Date" value="{{ appointment_data_list.appointment_date }}" >
                                     </div>
                                     {% if date_error %}
                                         <div class="text-danger small mt-2">{{ date_error }}</div>
@@ -267,8 +271,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 
 <!-- Include jQuery and DateDropper -->
-{% comment %} <script src="https://cdn.jsdelivr.net/npm/datedropper/datedropper.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datedropper/datedropper.min.css"> {% endcomment %}
+
 <link rel="stylesheet" href="{% static 'assets/vendor/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css' %}">
 
 <!-- DateDropper Initialization -->
@@ -291,5 +294,94 @@
     <!-- Include Footer -->
     {% include "footer.html" %}
 {% endblock %}
+
+<!-- jQuery library (required for jquery-confirm) -->
+<script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    // Function to show an alert with an animated icon
+    function showAlert(icon, message) {
+      $.alert({
+        title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+        content: `<span style="font-size: 15px;">${message}</span>`,
+        type: "blue",
+        theme: "modern",
+        buttons: {
+          ok: {
+            text: "OK",
+            btnClass: "btn-blue",
+          },
+        },
+      });
+    }
+    //backend error
+    let delay = 500; // Start with a small delay
+    {% for message in messages %}
+    setTimeout(function () {
+      showAlert(
+        "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
+        "{{ message|escape }}",
+        "{{ message.tags }}"
+      );
+    }, delay);
+    delay += 1000; // Increase delay for next message
+    {% endfor %}
+
+    function validateAppointmentDate() {
+      let appointmentDate = $("#date-format").val();
+      let today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+
+      if (!appointmentDate) {
+        showAlert("fa-calendar", "Please select an appointment date.");
+        return false;
+      }
+
+      if (appointmentDate < today) {
+        showAlert("fa-calendar", "Past dates are not allowed. Please select today or a future date.");
+        return false;
+      }
+
+      return true;
+    }
+
+    // Validate appointment time
+    function validateAppointmentTime() {
+      let appointmentTime = $("#appointment_time").val();
+      if (!appointmentTime) {
+        showAlert("fa-clock", "Please select an available time slot.");
+        return false;
+      }
+      return true;
+    }
+
+    // Validate reason for visit
+    function validateReason() {
+      let reason = $("textarea[name='reason']").val().trim();
+      if (reason.length === 0) {
+        showAlert("fa-file-alt", "Please provide a reason for your visit.");
+        return false;
+      }
+      return true;
+    }
+
+    // On form submission, validate each field one at a time
+    $("form").on("submit", function (e) {
+      e.preventDefault(); // Prevent default form submission
+
+      if (!validateAppointmentDate()) return; // Stop if appointment date is missing
+      if (!validateAppointmentTime()) return; // Stop if appointment time is missing
+      if (!validateReason()) return; // Stop if reason for visit is missing
+
+      // If all validations pass, allow form submission
+      e.target.submit();
+    });
+  });
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

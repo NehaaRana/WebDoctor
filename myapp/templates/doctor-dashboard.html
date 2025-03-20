@@ -22,6 +22,12 @@
 
   <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
 
+  <!-- jquery-confirm CSS -->
+  <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css"
+/>
+
   <!-- Theia Sticky Sidebar -->
   <style id="theia-sticky-sidebar-stylesheet-TSS">
     .theiaStickySidebar:after {
@@ -138,8 +144,10 @@
         </nav>
       </div>
     </header>
+
+
     <div class="content" style="transform: none; min-height: 355.906px;">
-      <div class="container" style="transform: none; padding-top:50px">
+      <div class="container-fluid" style="transform: none; padding-top:50px">
         <div class="row" style="transform: none;">
           <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar"
             style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
@@ -427,7 +435,7 @@
                         </a> {% endcomment %}
                         </td>
                           
-                            <td class="text-center">
+                            {% comment %} <td class="text-center">
                                     <a href="javascript:void(0);" class="btn btn-sm bg-info-light">
                                       <svg class="svg-inline--fa fa-eye fa-w-18" aria-hidden="true" focusable="false"
                                         data-prefix="far" data-icon="eye" role="img" xmlns="http://www.w3.org/2000/svg"
@@ -438,7 +446,7 @@
                                       </svg><!-- <i class="far fa-eye"></i> Font Awesome fontawesome.com --> View
                                     </a>
                                   </td>
-                                  
+                                   {% endcomment %}
 
                                 </tr>
                                 {% endfor %}
@@ -463,7 +471,10 @@
                                   <th>Purpose</th>
                                   <th>Insurance</th>
                                   <th class="text-center">Paid Amount</th>
-                                  <th></th>
+                                  <th>Video Consultation</th>
+                                  <th>Appointment Status</th>
+                                  <th>Action</th>
+                                  <th>prescription Detail</th>
                                 </tr>
                               </thead>
 
@@ -491,6 +502,74 @@
                                   <td>{{appointment.symptoms }}</td>
                                   <td class="text-center">{{appointment.doctor_id.fee }}</td>
                                   <td class="text-center">
+                                    <!-- Send Meeting Link Button -->
+                                    <a href="{% url 'send_meeting_link' appointment.id %}" class="btn btn-sm bg-success-light">
+                                      Send Meeting Link
+                                    </a>
+                                    <!-- Join Meeting Button -->
+                                    <a href="{{ appointment.meeting_link }}" target="_blank" class="btn btn-sm bg-primary-light">
+                                      Join Meeting
+                                    </a>
+                                  </td>
+                                  {% comment %} <td>
+                                    
+                                    <a href="" class="btn btn-success">Confirm</a>
+                                    <a href="" class="btn btn-danger">Cancel</a>
+                                
+                            </td> {% endcomment %}
+                                 
+                            <td>
+                              {% if appointment.status == "Confirm" %}
+                                  <span class="text-success">Confirm</span>
+                              {% elif appointment.status == "Cancelled" %}
+                                  <span class="text-danger">Cancelled</span>
+                              {% else %}
+                                  <span class="text-warning">Pending</span>
+                              {% endif %}
+                          </td>
+
+
+                          <td>
+                            {% if appointment.status == "Pending" %}
+                                <a href="{% url 'update_appointment_status' appointment.id 'Confirm' %}" class="btn btn-success">
+                                    Confirm
+                                </a>
+                                <a href="{% url 'update_appointment_status' appointment.id 'Cancelled' %}" class="btn btn-danger">
+                                    Cancel
+                                </a>
+                            {% else %}
+                                <span class="text-muted">No Actions Available</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                          {% comment %} <a href="#" class="btn btn-primary add-prescription-btn"
+       data-url="{% url 'add_prescription' doctor.id appointment.patient_id.id %}">
+        Add Prescription
+    </a> {% endcomment %}
+    <button type="button" class="btn btn-primary add-prescription-btn" 
+        data-bs-toggle="modal" 
+        data-bs-target="#prescriptionModal" 
+        data-url="{% url 'add_prescription' doctor.id appointment.patient_id.id %}">
+  Add Prescription
+</button>
+
+                        {% comment %} <button type="button" class="btn btn-primary add-prescription-btn"
+        data-doctor-id="{{ doctor.id }}"
+        data-patient-id="{{ appointment.patient_id.id }}"
+        data-url="{% url 'add_prescription' doctor.id appointment.patient_id.id %}">
+    Add Prescription
+</button> {% endcomment %}
+                        </td>
+                        <td>
+                          {% comment %} to get patient id {% endcomment %}
+                          {% comment %} <input type="hidden" name="patient_id" value="{{ appointment.patient_id.id }}">
+                          <a href="{% url 'submit_report' %}" class="btn btn-primary">Submit Report</a> {% endcomment %}
+                          {% comment %} <a href="{% url 'submit_report' appointment.patient_id.id %}" class="btn btn-primary">
+                            Submit Report
+                        </a> {% endcomment %}
+                        </td>
+                          
+                                  {% comment %} <td class="text-center">
                                     <a href="javascript:void(0);" class="btn btn-sm bg-info-light">
                                       <svg class="svg-inline--fa fa-eye fa-w-18" aria-hidden="true" focusable="false"
                                         data-prefix="far" data-icon="eye" role="img" xmlns="http://www.w3.org/2000/svg"
@@ -500,7 +579,7 @@
                                         </path>
                                       </svg><!-- <i class="far fa-eye"></i> Font Awesome fontawesome.com --> View
                                     </a>
-                                  </td>
+                                  </td> {% endcomment %}
 
                                 </tr>
                                 {% endfor %}
@@ -552,7 +631,7 @@
 </div>
 
 <!-- ✅ Place this script before the closing </body> tag -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>    
@@ -643,11 +722,48 @@
   });
   </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
   
     {% include "footer.html" %}
     {% endblock %}
+    <!-- jQuery library (required for jquery-confirm) -->
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+
+      <script>
+        $(document).ready(function () {
+          function showAlert(icon, message) {
+            $.alert({
+              title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+              content: `<span style="font-size: 15px;">${message}</span>`,
+              type: "blue",
+              theme: "modern",
+              buttons: {
+                ok: {
+                  text: "OK",
+                  btnClass: "btn-blue",
+                },
+              },
+            });
+          }
+          let delay = 500; // Start with a small delay
+          {% for message in messages %}
+          setTimeout(function () {
+            showAlert(
+              "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
+              "{{ message|escape }}",
+              "{{ message.tags }}"
+            );
+          }, delay);
+          delay += 1000; // Increase delay for next message
+          {% endfor %}
+        })
+      
+      </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

@@ -14279,7 +14279,7 @@ progress {
 }
 
 .form-label {
-    margin-bottom: .5rem
+    margin-bottom: .7rem
 }
 
 .col-form-label {
@@ -14317,13 +14317,13 @@ progress {
     line-height: 1.5;
     color: #212529;
     background-color: #fff;
-    background-clip: padding-box;
+    background-clip: padding-box;   
     border: 1px solid #ced4da;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    border-radius: .25rem;
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out
+    border-radius: .80rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
 @media (prefers-reduced-motion:reduce) {
@@ -14342,10 +14342,11 @@ progress {
 
 .form-control:focus {
     color: #212529;
-    background-color: #fff;
+    background-color:#edf2f7;
     border-color: #86b7fe;
     outline: 0;
-    box-shadow: 0 0 0 .25rem rgba(13,110,253,.25)
+    box-shadow: 0 0 0 .25rem rgba(13,110,253,.25);
+    border: 1px dashed #0e82fd !important;
 }
 
 .form-control::-webkit-date-and-time-value {
@@ -14555,7 +14556,7 @@ textarea.form-control-lg {
     background-position: right .75rem center;
     background-size: 16px 12px;
     border: 1px solid #ced4da;
-    border-radius: .25rem;
+    border-radius: .8rem;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -14571,7 +14572,8 @@ textarea.form-control-lg {
 .form-select:focus {
     border-color: #86b7fe;
     outline: 0;
-    box-shadow: 0 0 0 .25rem rgba(13,110,253,.25)
+    box-shadow: 0 0 0 .25rem rgba(13,110,253,.25);
+    background-color: #edf2f7;
 }
 
 .form-select[multiple],.form-select[size]:not([size="1"]) {

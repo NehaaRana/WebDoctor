@@ -216,31 +216,11 @@
       .jconfirm .jconfirm-box.jconfirm-animation-news {
         transform: rotate(400deg) scale(0);
       }
-
-      .toast-success { background-color:rgba(84, 162, 102, 0.89) !important; color:black !important; border:2px solid green !important}
-      .toast-error { background-color:rgba(210, 93, 105, 0.88) !important; color:black !important; border:2px solid red !important }
-      .toast-warning { background-color:rgb(241, 216, 141)  !important; color:black !important; border:2px solid yellow !important}
-      .toast-info { background-color:black !important; color:  #17a2b8 !important; }
     </style>
   </head>
 
   <body>
     {% block content %}
-    {% comment %} toastr alerts {% endcomment %}
-    <script>
-      $(document).ready(function () {
-          {% if messages %}
-              {% for message in messages %}
-                  toastr.options = {
-                      closeButton: true,
-                      progressBar: true,
-                      timeOut: 5000,  // 5 seconds
-                  };
-                  toastr["{{ message.tags }}"]("{{ message }}");
-              {% endfor %}
-          {% endif %}
-      });
-    </script>
     
     <div class="main-wrapper">
       <div class="login-container">
@@ -267,7 +247,7 @@
               {% csrf_token %}
               <div class="form-group">
                 <input
-                  type="email"
+                  type="text"
                   id="email"
                   class="form-control"
                   name="email"
@@ -277,16 +257,14 @@
                 <span class="focus-input100"></span>
               </div>
               <div class="form-group">
-                <input
-                  type="password"
-                  id="password"
-                  class="form-control"
-                  name="password"
-                  placeholder="Password"
-                  
-                />
-                <span class="focus-input100"></span>
-              </div>
+                <label for="password">Password</label>
+                <div class="input-group">
+                    <input type="password" id="password" class="form-control" name="password" placeholder="*************"  />
+                        <span class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
+                            <i id="toggleIcon" class="fa fa-eye"></i>
+                        </span>
+                </div>
+            </div>
               <div>
                 <button class="btn_admin_log" type="submit">Sign in</button>
               </div>
@@ -296,6 +274,23 @@
       </div>
     </div>
     {% endblock %}
+    <!-- JavaScript for Toggling Password Visibility -->
+    <script>
+      function togglePassword() {
+          var passwordInput = document.getElementById("password");
+          var toggleIcon = document.getElementById("toggleIcon");
+  
+          if (passwordInput.type === "password") {
+              passwordInput.type = "text";
+              toggleIcon.classList.remove("fa-eye");
+              toggleIcon.classList.add("fa-eye-slash");
+          } else {
+              passwordInput.type = "password";
+              toggleIcon.classList.remove("fa-eye-slash");
+              toggleIcon.classList.add("fa-eye");
+          }
+      }
+  </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -315,8 +310,8 @@
               content: `<span style="font-size: 15px;">${message}</span>`,
               type: "blue",
               theme: "modern",
-              animation: "news",
-              closeAnimation: "news",
+              // animation: "news",
+              // closeAnimation: "news",
               boxWidth: "400px",
               buttons: {
                 ok: {
@@ -327,12 +322,32 @@
             });
           }
 
+          //backend error
+      let delay = 500; // Start with a small delay
+      {% for message in messages %}
+      setTimeout(function () {
+        showAlert(
+          "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
+          "{{ message|escape }}",
+          "{{ message.tags }}"
+        );
+      }, delay);
+      delay += 1000; // Increase delay for next message
+      {% endfor %}
           // Email Validation
-          if (email === "" || !emailPattern.test(email)) {
+          if (email === "") {
+            showAlert("fa-envelope", "Email address is required");
+            return false;
+          }
+          if (!emailPattern.test(email)) {
             showAlert("fa-envelope", "Enter a valid email address");
             return false;
           }
 
+          if (password === "") {
+            showAlert("fa-key", "Password is Required");
+            return false;
+          }
           // Password Validation
           if (password.length < 6) {
             showAlert("fa-key", "Password must be at least 6 characters long");

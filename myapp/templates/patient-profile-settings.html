@@ -18,37 +18,33 @@
   <!-- FontAwesome JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 
-   {% comment %} alerts {% endcomment %}
+  {% comment %} alerts {% endcomment %}
 
-    <!-- jQuery (Required for Toastr) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- jQuery (Required for Toastr) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"
+    integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<!-- Toastr CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
+  <!-- jquery-confirm CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
 
 
   <script>
     function handleImageUpload(event) {
       var file = event.target.files[0]; // Get selected file
       if (!file) return; // Exit if no file is chosen
-  
+
       var reader = new FileReader();
       reader.onload = function () {
-          $(".profile-img img").attr("src", reader.result); // Update profile image src
+        $(".profile-img img").attr("src", reader.result); // Update profile image src
       };
       reader.readAsDataURL(file);
-  }
-  </script> 
+    }
+  </script>
 
-  {% comment %} <style>
-    .toast-success { background-color:rgba(84, 162, 102, 0.89) !important; color:black !important; border:2px solid green !important}
-      .toast-error { background-color:rgba(210, 93, 105, 0.88) !important; color:black !important; border:2px solid red !important }
-      .toast-warning { background-color:rgb(241, 216, 141)  !important; color:black !important; border:2px solid yellow !important}
-      .toast-info { background-color:black !important; color:  #17a2b8 !important; }
-  </style>
-  {% endcomment %}
+
 
 </head>
 
@@ -58,113 +54,108 @@
 
   <div class="main-wrapper" style="transform: none;">
 
-    {% comment %} <script>
-      $(document).ready(function () {
-          {% if messages %}
-              {% for message in messages %}
-                  toastr.options = {
-                      closeButton: true,
-                      progressBar: true,
-                      timeOut: 5000,  // 5 seconds
-                  };
-                  toastr["{{ message.tags }}"]("{{ message }}");
-              {% endfor %}
-          {% endif %}
-      });
-    </script> {% endcomment %}
-    
-    <!-- Header Section -->
-   
-<header class="header header-fixed header-one header-space">
-        <div class="container">
-        <nav class="navbar navbar-expand-lg header-nav">
-        <div class="navbar-header">
-        <a id="mobile_btn" href="javascript:void(0);">
-        <span class="bar-icon">
-        <span></span>
-        <span></span>
-        <span></span>
-        </span>
-        </a>
-        <a href="{% url 'index' %}" class="navbar-brand logo">
-          <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
-        </a>
-        </a>
-        </div>
-        <div class="main-menu-wrapper">
-        <div class="menu-header">
-          <a href="{% url 'index' %}" class="menu-logo">
-            <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
-          </a>
-        <a id="menu_close" class="menu-close" href="javascript:void(0);">
-        <svg class="svg-inline--fa fa-times fa-w-11" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" data-fa-i2svg=""><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg><!-- <i class="fas fa-times"></i> Font Awesome fontawesome.com -->
-        </a>
-        </div>
-        <ul class="main-nav">
-          <li>
-            <a href="{% url 'index' %}">Home</a>
-          </li>
-          
-         
-          
-          <li>
-            <a href="{% url 'doctor_list' %}">Doctors</a>
-          </li>
-          
-          <li>
-            <a href="{% url 'about_us' %}">About Us</a>
-          </li>
-          
-          <li>
-            <a href="{% url 'contact_us' %}">Contact Us</a>
-          </li>
-        
-          
-          
-        
-        
-        <ul class="nav header-navbar-rht" style="padding-top: 20px;">
-        
-        <li class="nav-item dropdown has-arrow logged-item">
-        <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
-        <span class="user-img">
-         
-          {% if patient.profile_img %}
-          <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
-          {% else %}
-            <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
-          {% endif %}
-          
-    </span>
-        </span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-end">
-        <div class="user-header">
-        <div class="avatar avatar-sm">
-   
-          {% if patient.profile_img %}
-          <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
-          {% else %}
-            <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
-          {% endif %}
 
-        </div>
-        <div class="user-text">
-        <h6>{{patient.name}}</h6>
-        <p class="text-muted mb-0">{{patient.user}}</p>
-        </div>
-        </div>
-        <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
-        <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
-        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>         
-       </div>
-        </li>
-        </ul>
-        </ul>
-        </div>
+
+    <!-- Header Section -->
+
+    <header class="header header-fixed header-one header-space">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg header-nav">
+          <div class="navbar-header">
+            <a id="mobile_btn" href="javascript:void(0);">
+              <span class="bar-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </a>
+            <a href="{% url 'index' %}" class="navbar-brand logo">
+              <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+            </a>
+            </a>
+          </div>
+          <div class="main-menu-wrapper">
+            <div class="menu-header">
+              <a href="{% url 'index' %}" class="menu-logo">
+                <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+              </a>
+              <a id="menu_close" class="menu-close" href="javascript:void(0);">
+                <svg class="svg-inline--fa fa-times fa-w-11" aria-hidden="true" focusable="false" data-prefix="fas"
+                  data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"
+                  data-fa-i2svg="">
+                  <path fill="currentColor"
+                    d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z">
+                  </path>
+                </svg><!-- <i class="fas fa-times"></i> Font Awesome fontawesome.com -->
+              </a>
+            </div>
+            <ul class="main-nav">
+              <li>
+                <a href="{% url 'index' %}">Home</a>
+              </li>
+
+
+
+              <li>
+                <a href="{% url 'doctor_list' %}">Doctors</a>
+              </li>
+
+              <li>
+                <a href="{% url 'about_us' %}">About Us</a>
+              </li>
+
+              <li>
+                <a href="{% url 'contact_us' %}">Contact Us</a>
+              </li>
+
+
+
+
+
+              <ul class="nav header-navbar-rht" style="padding-top: 20px;">
+
+                <li class="nav-item dropdown has-arrow logged-item">
+                  <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="user-img">
+
+                      {% if patient.profile_img %}
+                      <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
+                      {% else %}
+                      <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
+                        alt="default profile" />
+                      {% endif %}
+
+                    </span>
+                    </span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end">
+                    <div class="user-header">
+                      <div class="avatar avatar-sm">
+
+                        {% if patient.profile_img %}
+                        <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
+                        {% else %}
+                        <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
+                          alt="default profile" />
+                        {% endif %}
+
+                      </div>
+                      <div class="user-text">
+                        <h6>{{patient.name}}</h6>
+                        <p class="text-muted mb-0">{{patient.user}}</p>
+                      </div>
+                    </div>
+                    <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
+                    <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
+                    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                  </div>
+                </li>
+              </ul>
+            </ul>
+          </div>
         </nav>
-        </div>
-</header>
+      </div>
+    </header>
 
 
     <!--Main content section -->
@@ -178,82 +169,78 @@
             <div class="profile-sidebar shadow-md">
               <div class="widget-profile pro-widget-content">
                 <div class="profile-info-widget">
-                    <a href="#" class="booking-doc-img">
-                      {% if patient.profile_img %}
-    <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
-    {% else %}
-      <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
-    {% endif %}
-                    </a>
-                    <div class="profile-det-info">
-                      <h3>{{ patient.name }}</h3>
-                      <div class="patient-details">
-                        <h5>
-                          <i class="fas fa-birthday-cake"></i>
-                          {{ patient.dob }}
-                        </h5>
-                        <h5 class="mb-0">
-                          <i class="fas fa-map-marker-alt"></i>
-                          {{ patient.city }}, {{ patient.state }}
-                        </h5>
-                      </div>
+                  <a href="#" class="booking-doc-img">
+                    {% if patient.profile_img %}
+                    <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
+                    {% else %}
+                    <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
+                      alt="default profile" />
+                    {% endif %}
+                  </a>
+                  <div class="profile-det-info">
+                    <h3>{{ patient.name }}</h3>
+                    <div class="patient-details">
+                      <h5>
+                        <i class="fas fa-birthday-cake"></i>
+                        {{ patient.dob }}
+                      </h5>
+                      <h5 class="mb-0">
+                        <i class="fas fa-map-marker-alt"></i>
+                        {{ patient.city }}, {{ patient.state }}
+                      </h5>
                     </div>
                   </div>
                 </div>
-                <div class="dashboard-widget">
-                  <nav class="dashboard-menu">
-                    <ul class="list-unstyled">
-                      <li>
-                        <a href="{% url 'patient_dashboard' %}">
-                          <i class="fas fa-columns"></i>
-                          <span>Dashboard</span>
-                        </a>
-                      </li>
-                      <li class="active">
-                        <a href="{% url 'patient_profile_settings' %}">
-                          <i class="fas fa-user-cog"></i>
-                          <span>Profile Settings</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="{% url 'patient_change_password' %}">
-                          <i class="fas fa-user-cog"></i>
-                          <span>change password</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="{% url 'health_dashboard' %}">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 448 512"
-                            width="16"
-                            height="16"
-                            fill="currentColor"
-                          >
-                            <path
-                              d="M224 32c-35.3 0-64 28.7-64 64H72c-13.3 0-24 10.7-24 24v352c0 13.3 10.7 24 24 24h304c13.3 0 24-10.7 24-24V120c0-13.3-10.7-24-24-24h-88c0-35.3-28.7-64-64-64zm-80 64c0-44.2 35.8-80 80-80s80 35.8 80 80h80c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48H72c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h72zm72 72c-8.8 0-16 7.2-16 16v56h-56c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h56v56c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16v-56h56c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16h-56v-56c0-8.8-7.2-16-16-16h-32z"
-                            ></path>
-                          </svg>
-                          <span>Health Dashboard</span>
-                        </a>
-                      </li>
-                      
-                      <li>
-                        <a href="{% url 'logout' %}">
-                          <i class="fas fa-user-cog"></i>
-                          <span>logout</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </nav>
-                </div>
+              </div>
+              <div class="dashboard-widget">
+                <nav class="dashboard-menu">
+                  <ul class="list-unstyled">
+                    <li>
+                      <a href="{% url 'patient_dashboard' %}">
+                        <i class="fas fa-columns"></i>
+                        <span>Dashboard</span>
+                      </a>
+                    </li>
+                    <li class="active">
+                      <a href="{% url 'patient_profile_settings' %}">
+                        <i class="fas fa-user-cog"></i>
+                        <span>Profile Settings</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{% url 'patient_change_password' %}">
+                        <i class="fas fa-user-cog"></i>
+                        <span>change password</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{% url 'health_dashboard' %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="16" height="16"
+                          fill="currentColor">
+                          <path
+                            d="M224 32c-35.3 0-64 28.7-64 64H72c-13.3 0-24 10.7-24 24v352c0 13.3 10.7 24 24 24h304c13.3 0 24-10.7 24-24V120c0-13.3-10.7-24-24-24h-88c0-35.3-28.7-64-64-64zm-80 64c0-44.2 35.8-80 80-80s80 35.8 80 80h80c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48H72c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h72zm72 72c-8.8 0-16 7.2-16 16v56h-56c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h56v56c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16v-56h56c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16h-56v-56c0-8.8-7.2-16-16-16h-32z">
+                          </path>
+                        </svg>
+                        <span>Health Dashboard</span>
+                      </a>
+                    </li>
+
+                    <li>
+                      <a href="{% url 'logout' %}">
+                        <i class="fas fa-user-cog"></i>
+                        <span>logout</span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
               </div>
             </div>
-    
+          </div>
+
           <!-- Right content area - REPLACED WITH NEW DESIGN -->
 
           <div class="col-md-8 col-lg-9 col-xl-9">
-            
+
             <!-- Photo Upload Card -->
             <div class="card shadow-sm">
               <div class="card-header bg-light">
@@ -261,7 +248,8 @@
               </div>
 
               <div class="card-body">
-                <form method="POST" id="updatePatientForm" action="{% url 'patient_profile_settings' %}" id="updatePatientForm" enctype="multipart/form-data">
+                <form method="POST" id="updatePatientForm" action="{% url 'patient_profile_settings' %}"
+                  id="updatePatientForm" enctype="multipart/form-data">
                   {% csrf_token %}
                   <div class="row">
                     <div class="col-md-12">
@@ -271,21 +259,22 @@
                             {% if patient.profile_img %}
                             <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
                             {% else %}
-                              <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
+                            <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
+                              alt="default profile" />
                             {% endif %}
                           </div>
 
-                          
+
                           <div class="upload-img">
                             <div class="change-photo-btn">
                               <span>
                                 <i class="fa fa-upload"></i>
                                 Upload Photo
                               </span>
-                
-                               <input type="file" id="photo" name="photo" accept="image/*" class="upload"
-                               onchange="handleImageUpload(event)"> 
-                                
+
+                              <input type="file" id="photo" name="photo" accept="image/*" class="upload"
+                                onchange="handleImageUpload(event)">
+
                             </div>
                             <small class="form-text text-muted">Allowed JPG or PNG. Max size of 2MB</small>
                           </div>
@@ -293,47 +282,59 @@
                       </div>
                     </div>
                   </div>
-                </div>
               </div>
-              <!-- /Photo Upload Card -->
+            </div>
+            <!-- /Photo Upload Card -->
 
 
-               <!-- Basic Information Card -->
-          <div class="card shadow-sm">
-                <div class="card-header bg-light">
-                  <h4 class="mb-0"><i class="fas fa-info-circle me-2"></i>Basic Information</h4>
+            <!-- Basic Information Card -->
+            <div class="card shadow-sm">
+              <div class="card-header bg-light">
+                <h4 class="mb-0"><i class="fas fa-info-circle me-2"></i>Basic Information</h4>
+              </div>
+              <div class="card-body">
+                <div class="row form-row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Patient ID <span class="text-danger">*</span></label>
+                      <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                      <input type="text" class="form-control" value="{{ patient.id }}" id="patient_id" readonly>
+                    </div>
+                  </div>
                 </div>
-                <div class="card-body">
-                  <div class="row form-row">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Patient ID <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" value="{{ patient.id }}" id="patient_id" readonly>
-                      </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Email <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    <input type="email" id="email" name="email" class="form-control" value="{{ patient.email }}"
+                      readonly>
                     </div>
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Email <span class="text-danger">*</span></label>
-                        <input type="email" id="email" name="email" class="form-control"
-                          value="{{ patient.email }}" readonly>
-                      </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label>Name</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input type="text" id="name" name="name" class="form-control" value="{{ patient.name }}">
                     </div>
-                    <div class="col-12 col-md-6">
-                      <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" id="name" name="name" class="form-control" value="{{ patient.name }}">
-                      </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label>Date of Birth</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                    <!-- <div> -->
+                      <input type="date" class="form-control" name="dob" id="dob" placeholder="Date" 
+                        value="{{ patient.dob }}">
+                    <!-- </div> -->
                     </div>
-                    <div class="col-12 col-md-6">
-                      <div class="form-group">
-                        <label>Date of Birth</label>
-                        
-                        <div>
-                          <input type="date" class="form-control" name="dob"  id="dob" placeholder="Date" required value="{{ patient.dob }}">
-                        </div>
-                      </div>
-                    </div>
-                    <!-- <div class="col-12 col-md-6">
+                  </div>
+                </div>
+                <!-- <div class="col-12 col-md-6">
                       <div class="form-group">
                         <label>Blood Group</label>
                         <select id="blood_group" name="blood_group" class="form-select form-control">
@@ -345,289 +346,286 @@
                         </select>
                       </div>
                     </div> -->
-                    <div class="col-12 col-md-6">
-                      <div class="form-group">
-                          <label>Blood Group</label>
-                          <select id="blood_group" name="blood_group" class="form-select form-control">
-                              <option value="Select">{{ patient.blood_group }}</option>
-                              <option value="A-">A-</option>
-                              <option value="A+">A+</option>
-                              <option value="B-">B-</option>
-                              <option value="B+">B+</option>
-                              <option value="AB-">AB-</option>
-                              <option value="AB+">AB+</option>
-                              <option value="O-">O-</option>
-                              <option value="O+">O+</option>
-                          </select>
-                      </div>
-                  </div>
-
-
-                    <div class="col-12 col-md-6">
-                      <div class="form-group">
-                        <label>Phone Number</label>
-                        <input type="text" id="phone" name="phone" class="form-control"
-                          value="{{ patient.phno }}">
-                      </div>
-                    </div>
-
-
-                    <div class="col-12 col-md-6">
-                      <div class="form-group">
-                        <label>Height</label>
-                        <input type="text" id="height" name="height" class="form-control"
-                          value="{{ patient.height }}">
-                      </div>
-                    </div>
-
-
-                    <div class="col-12 col-md-6">
-                      <div class="form-group">
-                        <label>Weight</label>
-                        <input type="text" id="weight" name="weight" class="form-control"
-                          value="{{ patient.weight }}">
-                      </div>
-                    </div>
-
-                    <div class="col-12 col-md-6">
-                      <div class="form-group">
-                        <label>City</label>
-                        <input type="text" id="city" name="city" class="form-control" value="{{ patient.city }}">
-                      </div>
-                    </div>
-
-                    <div class="col-12 col-md-6">
-                      <div class="form-group">
-                        <label>State</label>
-                        <input type="text" id="state" name="state" class="form-control"
-                          value="{{ patient.state }}">
-                      </div>
-                    </div>
-
-                    <div class="col-12 col-md-6">
-                      <div class="form-group">
-                        <label>Age</label>
-                        <input type="text" id="age" name="age" class="form-control"
-                          value="{{ patient.age }}">
-                      </div>
-                    </div>
-
-                    <div class="col-12 col-md-6">
-                      <div class="form-group">
-                        <label>Address</label>
-                        <input type="text" id="address" name="address" class="form-control"
-                          value="{{ patient.address }}">
-                      </div>
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label>Blood Group</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-tint"></i></span>
+                    <select id="blood_group" name="blood_group" class="form-select form-control">
+                      <option value="Select">{{ patient.blood_group }}</option>
+                      <option value="A-">A-</option>
+                      <option value="A+">A+</option>
+                      <option value="B-">B-</option>
+                      <option value="B+">B+</option>
+                      <option value="AB-">AB-</option>
+                      <option value="AB+">AB+</option>
+                      <option value="O-">O-</option>
+                      <option value="O+">O+</option>
+                    </select>
                     </div>
                   </div>
+                </div>
 
-                  <div class="submit-section text-center mb-5 submit-btn-bottom">
-                    <button type="submit" class="btn btn-primary prime-btn"><i class="fas fa-save me-2"></i>Save Changes</button>
+
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label>Phone Number</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                    <input type="text" id="phone" name="phone" class="form-control" value="{{ patient.phno }}">
+                    </div>
                   </div>
-                </form>
+                </div>
+
+
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label>Height</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-ruler-vertical"></i></span>
+                    <input type="text" id="height" name="height" class="form-control" value="{{ patient.height }}">
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label>Weight</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-weight"></i></span>
+                    <input type="text" id="weight" name="weight" class="form-control" value="{{ patient.weight }}">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label>City</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-city"></i></span>
+                    <input type="text" id="city" name="city" class="form-control" value="{{ patient.city }}">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label>State</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                    <input type="text" id="state" name="state" class="form-control" value="{{ patient.state }}">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label>Age</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-birthday-cake"></i></span>
+                    <input type="text" id="age" name="age" class="form-control" value="{{ patient.age }}">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label>Address</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-home"></i></span>
+                    <input type="text" id="address" name="address" class="form-control" value="{{ patient.address }}">
+                    </div>
+                  </div>
+                </div>
               </div>
+
+              <div class="submit-section text-center mb-5 submit-btn-bottom">
+                <button type="submit" class="btn btn-primary prime-btn"><i class="fas fa-save me-2"></i>Save
+                  Changes</button>
+              </div>
+              </form>
             </div>
-            <!-- /Basic Information Card -->
           </div>
+          <!-- /Basic Information Card -->
         </div>
       </div>
     </div>
-    {% comment %} <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> {% endcomment %}
-{% comment %} jquery confirm alert {% endcomment %}
-<script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
-<script>
-  $(document).ready(function () {
-    let patientId = $("#patient_id").val();
-    function showAlert(icon, message) {
-      $.alert({
-        title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
-        content: `<span style="font-size: 15px;">${message}</span>`,
-        type: "blue",
-        theme: "modern",
-        buttons: {
-          ok: {
-            text: "OK",
-            btnClass: "btn-blue",
-          },
-        },
-      });
-    }
+  </div>
 
-    // Function to Show Toastr Notifications
-    //function showToast(type, message) {
-     //   toastr.options = {
-     //       closeButton: true,
-      //      progressBar: true,
-      //      positionClass: "toast-top-right",
-      //      timeOut: "3000"
-      //  };
-        
-       // if (type === "success") {
-            //toastr.success(message);
-       // } else if (type === "error") {
-          //  toastr.error(message);
-       // } else if (type === "info") {
-        //    toastr.info(message);
-      //  } else {
-      //      toastr.warning(message);
-      //  }
-   // }
+  <script>
+    $(document).ready(function () {
+      let patientId = $("#patient_id").val();
 
-    // Load Patient Details
-    function loadPatientDetails() {
-        $.ajax({
-            url: `/get-patient/${patientId}/`,
-            type: "GET",
-            success: function (data) {
-                $("#name").val(data.name);
-                $("#email").val(data.email);
-                $("#phno").val(data.phno);
-                $("#address").val(data.address);
-                $("#city").val(data.city);
-                $("#state").val(data.state);
-                $("#blood_group").val(data.blood_group);
-                $("#age").val(data.age);
-                $("#height").val(data.height);
-                $("#weight").val(data.weight);
-                $("#dob").val(data.dob);
-
-                if (data.photo) {
-                    $(".profile-img img").attr("src", data.photo);
-                } else {
-                    $(".profile-img img").attr("src", "/static/assets/img/default_profile.png");
-                }
+      function showAlert(icon, message) {
+        $.alert({
+          title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+          content: `<span style="font-size: 15px;">${message}</span>`,
+          type: "blue",
+          theme: "modern",
+          buttons: {
+            ok: {
+              text: "OK",
+              btnClass: "btn-blue",
             },
-            error: function () {
-               // showToast("error", "Failed to load patient details.");
-               showAlert("fa-circle-xmark", "Failed to load patient details.");
-            }
+          },
         });
-    }
+      }
 
-    // Handle Profile Image Upload
-    $("#photo").change(function (event) {
-        var file = event.target.files[0];
+      function loadPatientDetails() {
+        $.ajax({
+          url: `/get-patient/${patientId}/`,
+          type: "GET",
+          success: function (data) {
+            $("#name").val(data.name);
+            $("#email").val(data.email);
+            $("#phno").val(data.phno);
+            $("#address").val(data.address);
+            $("#city").val(data.city);
+            $("#state").val(data.state);
+            $("#blood_group").val(data.blood_group);
+            $("#age").val(data.age);
+            $("#height").val(data.height);
+            $("#weight").val(data.weight);
+            $("#dob").val(data.dob);
+
+            let profileImg = data.photo ? data.photo : "/static/assets/img/default_profile.png";
+            $(".profile-img img").attr("src", profileImg);
+          },
+          error: function () {
+            showAlert("fa-circle-xmark", "Failed to load patient details.");
+          }
+        });
+      }
+
+      $("#photo").change(function (event) {
+        let file = event.target.files[0];
         if (!file) return;
 
-        var reader = new FileReader();
+        let reader = new FileReader();
         reader.onload = function () {
-            $(".profile-img img").attr("src", reader.result);
+          $(".profile-img img").attr("src", reader.result);
         };
         reader.readAsDataURL(file);
 
-        var formData = new FormData();
+        let formData = new FormData();
         formData.append("photo", file);
         formData.append("patient_id", patientId);
 
         $.ajax({
-            type: "POST",
-            url: "/upload-patient-profile/",
-            data: formData,
-            contentType: false,
-            processData: false,
-            headers: {
-                "X-CSRFToken": "{{ csrf_token }}"
-            },
-            success: function (response) {
-              if (response.status === "success") {
-               alert("Profile image updated successfully!");
-                //showAlert("fa-circle-check", "Profile image update successfully");
-                // Force reload profile image by appending a timestamp
-                let newImageUrl = response.photo_url + "?t=" + new Date().getTime();
-                $(".profile-img img").attr("src", newImageUrl);
-                $(".booking-doc-img img").attr("src", newImageUrl);
-                $(".user-img img").attr("src", newImageUrl);
-                $(".avatar-sm img").attr("src", newImageUrl);
-
-                // Also update the input field in the form
-                $("#photo").val("");
-
-                // Reload other details if needed
-                loadPatientDetails();
-              } else {
-                alert("Error: " + response.message);
-              }
-            },
-            error: function () {
-                //showToast("error", "Failed to upload image.");
-                showAlert("fa-circle-xmark", "Failed to upload pimage.");
-              }
+          type: "POST",
+          url: "/upload-patient-profile/",
+          data: formData,
+          contentType: false,
+          processData: false,
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}"
+          },
+          success: function (response) {
+            if (response.status === "success") {
+              showAlert("fa-circle-check", "Profile image updated successfully!");
+              let newImageUrl = response.photo_url + "?t=" + new Date().getTime();
+              $(".profile-img img, .booking-doc-img img, .user-img img, .avatar-sm img").attr("src", newImageUrl);
+              $("#photo").val("");
+              loadPatientDetails();
+            } else {
+              showAlert("fa-circle-xmark", "Error: " + response.message);
+            }
+          },
+          error: function () {
+            showAlert("fa-circle-xmark", "Failed to upload image.");
+          }
         });
-    });
+      });
 
-    // Submit Form via AJAX
-    $("#updatePatientForm").submit(function (e) {
+      $("#updatePatientForm").submit(function (e) {
         e.preventDefault();
 
         let formData = {
-            patient_id: patientId,
-            name: $("#name").val(),
-            email: $("#email").val(),
-            phno: $("#phno").val(),
-            address: $("#address").val(),
-            city: $("#city").val(),
-            state: $("#state").val(),
-            blood_group: $("#blood_group").val(),
-            age: $("#age").val(),
-            height: $("#height").val(),
-            weight: $("#weight").val(),
-            dob: $("#dob").val(),
+          patient_id: patientId,
+          name: $("#name").val(),
+          email: $("#email").val(),
+          phno: $("#phno").val(),
+          address: $("#address").val(),
+          city: $("#city").val(),
+          state: $("#state").val(),
+          blood_group: $("#blood_group").val(),
+          age: $("#age").val(),
+          height: $("#height").val(),
+          weight: $("#weight").val(),
+          dob: $("#dob").val(),
         };
 
         $.ajax({
-            type: "POST",
-            url: "/update-patient/",
-            data: JSON.stringify(formData),
-            contentType: "application/json",
-            headers: {
-                "X-CSRFToken": "{{ csrf_token }}"
-            },
-            success: function (response) {
-              if (response.status === "success") {
-                alert("Profile  updated successfully!");
-               // showAlert("fa-circle-check", "Profile updated successfully!");
-                // Get the current image element
-                let imgElement = $(".profile-img img");
-                let imgElement1 = $(".booking-doc-img img");
-                let imgElement2 = $(".user-img img");
-                let imgElement3 = $(".avatar-sm img");
-
-                // Create a new Image object to ensure proper cache bypass
-                let newImage = new Image();
-                newImage.onload = function () {
-                  imgElement.attr("src", response.photo_url + "?t=" + new Date().getTime());
-                  imgElement1.attr("src", response.photo_url + "?t=" + new Date().getTime());
-                  imgElement2.attr("src", response.photo_url + "?t=" + new Date().getTime());
-                  imgElement3.attr("src", response.photo_url + "?t=" + new Date().getTime());
-                };
-                newImage.src = response.photo_url + "?t=" + new Date().getTime();
-
-                // Clear file input
-                $("#photo").val("");
-
-                // Reload other details if needed
-                loadPatientDetails();
-              } else {
-                alert("Error: " + response.message);
+          type: "POST",
+          url: "/update-patient/",
+          data: JSON.stringify(formData),
+          contentType: "application/json",
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}"
+          },
+          success: function (response) {
+            if (response.status === "success") {
+              showAlert("fa-circle-check", "Profile details updated successfully!");
+              if (response.photo_url) {
+                let newImageUrl = response.photo_url + "?t=" + new Date().getTime();
+                $(".profile-img img, .booking-doc-img img, .user-img img, .avatar-sm img").each(function () {
+                  $(this).attr("src", newImageUrl);
+                  $(this).on("load", function () {
+                    console.log("Image updated successfully!");
+                  }).on("error", function () {
+                    console.log("Failed to load new image.");
+                  });
+                });
               }
-            },
-
-            error: function () {
-              $("#responseMessage").html("<p style='color:red;'>An error occurred while updating the profile.</p>");
+              $("#photo").val("");
+              loadPatientDetails();
+            } else {
+              showAlert("fa-circle-xmark", "Error: " + response.message);
             }
-          });
+          },
+          error: function () {
+            showAlert("fa-circle-xmark", "An error occurred while updating the profile.");
+          }
         });
-
-        loadPatientDetails(); // Load patient details on page load
       });
-</script>
 
+      loadPatientDetails();
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      function showAlert(icon, message) {
+        $.alert({
+          title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+          content: `<span style="font-size: 15px;">${message}</span>`,
+          type: "blue",
+          theme: "modern",
+          buttons: {
+            ok: {
+              text: "OK",
+              btnClass: "btn-blue",
+            },
+          },
+        });
+      }
+      let delay = 500; // Start with a small delay
+      {% for message in messages %}
+      setTimeout(function () {
+        showAlert(
+          "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
+          "{{ message|escape }}",
+          "{{ message.tags }}"
+        );
+      }, delay);
+      delay += 1000; // Increase delay for next message
+      {% endfor %}
+    })
 
-  {% comment %} for datetimepicker {% endcomment %}
-  
-  
+  </script>
+
+  <!-- {% comment %} for datetimepicker {% endcomment %} -->
+
   <script>
     $(document).ready(function () {
       $("#dobPicker").datepicker({
@@ -635,7 +633,7 @@
         autoclose: true, // Close picker when a date is selected
         todayHighlight: true, // Highlight today's date
       });
-  
+
       // Auto-fill existing date if available
       var dobValue = $("#dob").val();
       if (dobValue) {
@@ -643,10 +641,15 @@
       }
     });
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    {% include "footer.html" %}
-    {% endblock %}
+  {% include "footer.html" %}
+  {% endblock %}
+  <!-- jQuery library (required for jquery-confirm) -->
+  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

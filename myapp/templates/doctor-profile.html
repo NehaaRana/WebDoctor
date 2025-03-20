@@ -1,61 +1,35 @@
 {% load static %}
-<html lang="en" class="fontawesome-i2svg-active fontawesome-i2svg-complete"><head>
-<meta charset="utf-8">
-<title>{% block title %} webDocter {% endblock %}</title>
-
-<link
-      rel="shortcut icon"
-      href="{% static 'assets/img/favicon.png' %}"
-      type="image/x-icon"
-    />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-
-<!-- -------------------- social icons ----------------------- -->
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-
-<link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-/>
-
-<link
-rel="stylesheet"
-href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}"
-/>
-<link
-rel="stylesheet"
-href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}"
-/>
-
-<link rel="stylesheet" href="{% static 'assets/css/feather.css' %}" />
-
-<link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
-
-<!-- Theia Sticky Sidebar -->
-<style id="theia-sticky-sidebar-stylesheet-TSS">
-  .theiaStickySidebar:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
-
-  @font-face {
-    font-family: Roboto;
-    src: url("chrome-extension://mcgbeeipkmelnpldkobichboakdfaeon/css/Roboto-Regular.ttf");
-  }
-</style>
-</head>
+<html lang="en" class="fontawesome-i2svg-active fontawesome-i2svg-complete">
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %} webDocter {% endblock %}</title>
+        <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    
+        <!-- Stylesheets -->
+        <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+        <style id="theia-sticky-sidebar-stylesheet-TSS">
+            .theiaStickySidebar:after { content: ""; display: table; clear: both; }
+            @font-face { font-family: Roboto; src: url("chrome-extension://mcgbeeipkmelnpldkobichboakdfaeon/css/Roboto-Regular.ttf"); }
+    
+            #review_card:hover{
+                box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+            }
+        </style>
+    </head>
 <body>
+   
+        {% block content %}
+        <div class="main-wrapper">
 
-  {% block content %}
 
-
-<div class="main-wrapper">
 
   <header class="header header-fixed header-one">
     <div class="container">
@@ -147,233 +121,206 @@ href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}"
     </div>
   </header>
 
-<div class="content phone-new">
-<div class="container">
-
-<div class="card">
-<div class="card-body">
-<div class="doctor-widget">
-<div class="doc-info-left">
-<div class="doctor-img">
-  {% if doctor.profile_img %}
-  <img  src="{{ doctor.profile_img.url }}"  alt="profile" />
-  {% else %}
-    <img  src="/static/assets/default_profile.png"  alt="default profile" />
-  {% endif %}
-
-</div>
-<div class="doc-info-cont">
-<h4 class="doc-name">Dr. {{ doctor.name }}</h4>
-<p class="doc-speciality">{{ doctor.qualification }} &amp; {{ doctor.specialization }}</p>
-<!-- <p class="doc-department"><img src="assets/img/specialities/specialities-05.png" class="img-fluid" alt="Speciality">Dentist</p> -->
-
-<div class="clinic-details">
-<p class="doc-location"><svg class="svg-inline--fa fa-map-marker-alt fa-w-12 active" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="map-marker-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg="" style="width: 16px; height: 16px;"><path fill="currentColor" d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path></svg><!-- <i class="fas fa-map-marker-alt"></i> Font Awesome fontawesome.com --> {{ doctor.clinic_address }}, {{ doctor.state }} - <a href="javascript:void(0); ">Get Directions</a></p>
-
-</div>
-
-</div>
-</div>
-<div class="doc-info-right">
-
-
-<div class="clinic-booking">
-  <a class="proceed-btn" href="{% url 'book_appointment' doctor_id=doctor.id%}">Book Appointment</a>
-
-</div>
-
-
-</div>
-</div>
-</div>
-</div>
-
-<div class="container">
-  <h4 class="widget-title">Patient Reviews</h4>
-
-  {% if reviews %}
-      <div class="row">
-          {% for review in reviews %}
-              <div class="col-md-3 mb-4">
-                  <div class="card">
-                      <div class="card-body">
-                          <strong>{{ review.patient_id.name }}</strong>
-                          <p>Rating: 
-                              {% for star in "12345"|make_list %}
-                                  {% if forloop.counter <= review.rating %}
-                                      ⭐
-                                  {% else %}
-                                      ☆
-                                  {% endif %}
-                              {% endfor %}
-                          </p>
-                          <p>{{ review.review_text }}</p>
-                          <small class="text-muted">{{ review.review_date|date:"F d, Y" }}</small>
-                      </div>
+         <!-- Doctor Profile section -->
+         <div class="content phone-new">
+            <div class="container mt-5">
+                <div class="card">
+                    <div class="card-body shadow-sm">
+                        <div class="doctor-widget">
+                            <div class="doc-info-left">
+                                <div class="doctor-img">
+                                    {% if doctor.profile_img %}
+                                        <img src="{{ doctor.profile_img.url }}" alt="profile">
+                                    {% else %}
+                                        <img src="/static/assets/img/default_profile.png" alt="default profile">
+                                    {% endif %}
+                                </div>
+                                <div class="doc-info-cont">
+                                    <h4 class="doc-name">Dr. {{ doctor.name }}</h4>
+                                    <p class="doc-speciality">{{ doctor.qualification }} &amp; {{ doctor.specialization }}</p>
+                                    <div class="clinic-details">
+                                        <p class="doc-location">
+                                          <i class="fa-solid fa-location-dot fa-lg"></i>
+                                            {{ doctor.clinic_address }}, {{ doctor.state }} - <a href="javascript:void(0);">Get Directions</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="doc-info-right">
+                                <div class="clinic-booking">
+                                    <a class="proceed-btn" href="{% url 'book_appointment' doctor_id=doctor.id%}">Book Appointment</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                   </div>
-              </div>
+                  <!-- Doctor Profile section End -->
 
-              {% if forloop.counter|divisibleby:4 %}
-                  </div><div class="row">
-              {% endif %}
-          {% endfor %}
-      </div>
-  {% else %}
-      <p>No reviews yet.</p>
-  {% endif %}
-</div>
-
-
-<div class="card">
-<div class="card-body pt-0">
-
-<nav class="user-tabs mb-4">
-<ul class="nav nav-tabs nav-tabs-bottom nav-justified" role="tablist">
-<li class="nav-item" role="presentation">
-<a class="nav-link active" href="#doc_overview" data-bs-toggle="tab" aria-selected="true" role="tab">Overview</a>
-</li>
-<li class="nav-item" role="presentation">
-<a class="nav-link" href="#doc_locations" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">Locations</a>
-</li>
-
-<li class="nav-item" role="presentation">
-<a class="nav-link" href="#doc_business_hours" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">Business Hours</a>
-</li>
-</ul>
-</nav>
-
-
-<div class="tab-content pt-0">
-
-<div role="tabpanel" id="doc_overview" class="tab-pane fade active show">
-<div class="row">
-<div class="col-md-12 col-lg-9">
-
-<div class="widget about-widget">
-<h4 class="widget-title">About Me</h4>
-<p>{{ doctor.about_me }}</p>
-</div>
-</div>
-</div>
-</div>
+                <!-- Patient Reviews section -->
+                    <div class="card">
+                        <div class="card-body shadow-sm">
+                    <h4 class="widget-title">Patient Reviews</h4>
+                    {% if reviews %}
+                        <div class="row">
+                            {% for review in reviews %}
+                                <div class="col-md-3 mb-4">
+                                    <div class="card">
+                                        <div class="card-body" id="review_card">
+                                            <strong>{{ review.patient_id.name }}</strong>
+                                            <p>Rating: {% for star in "12345"|make_list %}{% if forloop.counter <= review.rating %}⭐{% else %}☆{% endif %}{% endfor %}</p>
+                                            <p>{{ review.review_text }}</p>
+                                            <small class="text-muted">{{ review.review_date|date:"F d, Y" }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if forloop.counter|divisibleby:4 %}</div><div class="row">{% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                    {% else %}
+                    
+                        <p>No reviews yet.</p>
+                    {% endif %}
+                <!-- Patient Reviews section End-->
 
 
-<div role="tabpanel" id="doc_locations" class="tab-pane fade">
+                <!-- Doctor Details and bussiness hours section -->
 
-<div class="location-list">
-<div class="row">
+                <div class="card shadow-sm">
+                    <div class="card-body pt-0">
+                        <nav class="user-tabs mb-4">
+                            <ul class="nav nav-tabs nav-tabs-bottom nav-justified" role="tablist">
+                                <li class="nav-item" role="presentation"><a class="nav-link active" href="#doc_overview" data-bs-toggle="tab" aria-selected="true" role="tab">Overview</a></li>
+                                <li class="nav-item" role="presentation"><a class="nav-link" href="#doc_locations" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">Locations</a></li>
+                                <li class="nav-item" role="presentation"><a class="nav-link" href="#doc_business_hours" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">Business Hours</a></li>
+                            </ul>
+                        </nav>
 
-<div class="col-md-6">
-<div class="clinic-content">
-<h4 class="clinic-name"><a href="#">{{ doctor.clinic_name }}</a></h4>
-<p class="doc-speciality">+91 {{ doctor.phno }} </p>
-<p class="doc-speciality">{{ doctor.email }}</p>
+                        <div class="tab-content pt-0">
+                            <div role="tabpanel" id="doc_overview" class="tab-pane fade active show">
+                                <div class="row">
+                                    <div class="col-md-12 col-lg-9">
+                                        <div class="widget about-widget">
+                                            <h4 class="widget-title">About Me</h4>
+                                            <p>{{ doctor.about_me }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-<div class="clinic-details mb-0">
-<h5 class="clinic-direction"> <svg class="svg-inline--fa fa-map-marker-alt fa-w-12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="map-marker-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg="" style="width: 16px; height: 16px;"><path fill="currentColor" d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path></svg><!-- <i class="fas fa-map-marker-alt"></i> Font Awesome fontawesome.com --> {{ doctor.clinic_address }}, {{ doctor.Address_Line1 }}, {{ doctor.city }}, {{ doctor.state }} <br></h5>
+                            <div role="tabpanel" id="doc_locations" class="tab-pane fade">
+                                <div class="location-list">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="clinic-content">
+                                                <h4 class="clinic-name"><a href="#">{{ doctor.clinic_name }}</a></h4>
+                                                <p class="doc-speciality">+91 {{ doctor.phno }}<br>{{ doctor.email }}</p>
+                                                <div class="clinic-details mb-0">
+                                                    <h5 class="clinic-direction">
+                                                      <i class="fa-solid fa-location-dot fa-lg"></i>
+                                                        {{ doctor.clinic_address }}, {{ doctor.Address_Line1 }}, {{ doctor.city }}, {{ doctor.state }}
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="clinic-timing">
+                                                <div>
+                                                    <p class="timings-days"><span> Mon - Sat </span></p>
+                                                    <p class="timings-times">
+                                                        <span>10:00 AM - 2:00 PM</span>
+                                                        <span>4:00 PM - 9:00 PM</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div>
+                                                <p class="timings-days"><span> Fees</span></p>
+                                            </div>
+                                            <div class="consult-price">₹{{ doctor.fee }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-</div>
-</div>
-</div>
-
-
-<div class="col-md-4">
-<div class="clinic-timing">
-<div>
-<p class="timings-days">
-<span> Mon - Sat </span>
-</p>
-<p class="timings-times">
-<span>10:00 AM - 2:00 PM</span>
-<span>4:00 PM - 9:00 PM</span>
-</p>
-</div>
-
-</div>
-</div>
-
-<div class="col-md-2">
-<div class="consult-price">
-₹{{ doctor.fee }}
-</div>
-</div>
-</div>
-</div>
-</div>
-<div role="tabpanel" id="doc_business_hours" class="tab-pane fade">
-<div class="row">
-<div class="col-md-6 offset-md-3">
-
-<div class="widget business-widget">
-<div class="widget-content">
-<div class="listing-hours">
-<div class="listing-day current">
-<div class="day">Today <span>{{today_date}}</div>
-
-<div class="time-items">
-<span class="open-status"><span class="badge bg-success-light">Open Now</span></span>
-<span class="time">07:00 AM - 09:00 PM</span>
-</div>
-</div>
-<div class="listing-day">
-<div class="day">Monday</div>
-<div class="time-items">
-<span class="time">07:00 AM - 09:00 PM</span>
-</div>
-</div>
-<div class="listing-day">
-<div class="day">Tuesday</div>
-<div class="time-items">
-<span class="time">07:00 AM - 09:00 PM</span>
-</div>
-</div>
-<div class="listing-day">
-<div class="day">Wednesday</div>
-<div class="time-items">
-<span class="time">07:00 AM - 09:00 PM</span>
-</div>
-</div>
-<div class="listing-day">
-<div class="day">Thursday</div>
-<div class="time-items">
-<span class="time">07:00 AM - 09:00 PM</span>
-</div>
-</div>
-<div class="listing-day">
-<div class="day">Friday</div>
-<div class="time-items">
-<span class="time">07:00 AM - 09:00 PM</span>
-</div>
-</div>
-<div class="listing-day">
-<div class="day">Saturday</div>
-<div class="time-items">
-<span class="time">07:00 AM - 09:00 PM</span>
-</div>
-</div>
-<div class="listing-day closed">
-<div class="day">Sunday</div>
-<div class="time-items">
-<span class="time"><span class="badge bg-danger-light">Closed</span></span>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-</div>
-</div>
-</div>
-
-</div>
-</div>
-</div>
-
-</div>
-</div>
-
-{% include "footer.html" %}  
-{% endblock %}
+                            <div role="tabpanel" id="doc_business_hours" class="tab-pane fade">
+                              <div class="row">
+                                  <div class="col-md-6 offset-md-3">
+                                      <div class="widget business-widget">
+                                          <div class="widget-content">
+                                              <div class="listing-hours">
+                                                  <div class="listing-day current">
+                                                      <div class="day">Today <span>{{today_date}}</span></div>
+                                                      <div class="time-items">
+                                                          <span class="open-status"><span class="badge bg-success-light">Open Now</span></span>
+                                                          <span class="time">07:00 AM - 09:00 PM</span>
+                                                      </div>
+                                                  </div>
+                                                  <div class="listing-day">
+                                                      <div class="day">Monday</div>
+                                                      <div class="time-items">
+                                                          <span class="time">07:00 AM - 09:00 PM</span>
+                                                      </div>
+                                                  </div>
+                                                  <div class="listing-day">
+                                                      <div class="day">Tuesday</div>
+                                                      <div class="time-items">
+                                                          <span class="time">07:00 AM - 09:00 PM</span>
+                                                      </div>
+                                                  </div>
+                                                  <div class="listing-day">
+                                                      <div class="day">Wednesday</div>
+                                                      <div class="time-items">
+                                                          <span class="time">07:00 AM - 09:00 PM</span>
+                                                      </div>
+                                                  </div>
+                                                  <div class="listing-day">
+                                                      <div class="day">Thursday</div>
+                                                      <div class="time-items">
+                                                          <span class="time">07:00 AM - 09:00 PM</span>
+                                                      </div>
+                                                  </div>
+                                                  <div class="listing-day">
+                                                      <div class="day">Friday</div>
+                                                      <div class="time-items">
+                                                          <span class="time">07:00 AM - 09:00 PM</span>
+                                                      </div>
+                                                  </div>
+                                                  <div class="listing-day">
+                                                      <div class="day">Saturday</div>
+                                                      <div class="time-items">
+                                                          <span class="time">07:00 AM - 09:00 PM</span>
+                                                      </div>
+                                                  </div>
+                                                  <div class="listing-day closed">
+                                                      <div class="day">Sunday</div>
+                                                      <div class="time-items">
+                                                          <span class="time"><span class="badge bg-danger-light">Closed</span></span>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                            </div>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- End of main-wrapper -->
+     <!-- Footer section - Now outside of the content block -->
+  {% include "footer.html" %}
+    <!-- External Resources -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    {% endblock %}
+ 
+  
+ 
 
 
 </body>

@@ -7,7 +7,7 @@
   <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
-  <!-- -------------------- social icons ----------------------- -->
+  <!-- Social icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 
@@ -25,6 +25,301 @@
     @font-face {
       font-family: Roboto;
       src: url("{% static 'assets/fonts/Roboto-Regular.ttf' %}") format("truetype");
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f8f9fa;
+    }
+
+    /* Enhanced Card Styling */
+    .card {
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s ease-in-out;
+      overflow: hidden;
+      height: 100%;
+      border: none;
+      margin-bottom: 20px;
+      background-color: #fff;
+      position: relative;
+    }
+
+
+
+    /* Improved image container for better aspect ratio handling */
+    .card-img-container {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 80%; /* 4:3 aspect ratio container */
+      overflow: hidden;
+      background-color: #f5f5f5;
+    }
+
+    .card-img-top {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Cover will ensure the image fills the container */
+      transition: transform 0.6s ease, filter 0.4s ease;
+    }
+
+    /* Optional image zoom effect on hover */
+    .card:hover .card-img-top {
+      transform: translate(-50%, -50%) scale(1.08);
+      filter: brightness(1.05);
+    }
+
+    /* Doctor image overlay for gradient effect */
+    .card-img-container:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 30%;
+      background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .card:hover .card-img-container:after {
+      opacity: 1;
+    }
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem;
+      height: calc(100% - 0px); /* Dynamic height based on content */
+      position: relative;
+      z-index: 2;
+    }
+
+    .card-title {
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 0.5rem;
+      font-size: 1.25rem;
+      transition: color 0.3s ease;
+    }
+
+    .card:hover .card-title {
+      color: #0E82FD;
+    }
+
+    .card-text {
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+
+    .specialization {
+      color: #0E82FD;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: inline-block;
+      background-color: rgba(14, 130, 253, 0.1);
+      padding: 5px 15px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover .specialization {
+      background-color: rgba(14, 130, 253, 0.15);
+      transform: translateX(3px);
+    }
+
+    .team {
+      background-color: #f8f9fa;
+      padding: 4rem 0;
+    }
+
+    .section-title {
+      font-weight: 700;
+      margin-bottom: 2rem;
+      color: #333;
+      position: relative;
+      display: inline-block;
+      padding-bottom: 10px;
+    }
+
+    .section-title:after {
+      content: '';
+      position: absolute;
+      width: 50%;
+      height: 3px;
+      background-color: #0E82FD;
+      bottom: 0;
+      left: 25%;
+    }
+
+    /* Enhanced Button Styling */
+    .btn_dr {
+      position: relative;
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0px 5px 15px rgba(14, 130, 253, 0.25);
+      padding: 0.7rem 1.5rem;
+      background-color: #0E82FD;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      outline: none;
+      overflow: hidden;
+      font-size: 15px;
+      width: 85%;
+      margin: 1rem auto 0;
+      text-decoration: none;
+    }
+
+    .btn_dr:hover {
+      transform: scale(1.05);
+      background-color: #0967cc !important;
+      box-shadow: 0px 8px 20px rgba(14, 130, 253, 0.35);
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .btn_dr::before {
+      content: "";
+      position: absolute;
+      width: 100px;
+      height: 100%;
+      background-image: linear-gradient(120deg,
+          rgba(255, 255, 255, 0) 30%,
+          rgba(255, 255, 255, 0.8),
+          rgba(255, 255, 255, 0) 70%);
+      top: 0;
+      left: -100px;
+      opacity: 0.6;
+    }
+
+    .btn_dr:hover::before {
+      animation: shine 1.5s ease-out infinite;
+    }
+
+    @keyframes shine {
+      0% {
+        left: -100px;
+      }
+      60% {
+        left: 100%;
+      }
+      to {
+        left: 100%;
+      }
+    }
+
+    /* Additional icon effect */
+    .btn_dr .fas {
+      transition: transform 0.3s ease;
+    }
+    
+    .btn_dr:hover .fas {
+      transform: translateX(4px);
+    }
+
+    /* Enhanced Search Bar */
+    .search-container {
+      position: relative;
+      margin-bottom: 2rem;
+      width: 60%;
+      margin: 0 auto 2rem;
+    }
+
+    .search-container input {
+      border-radius: 50px;
+      padding: 12px 20px;
+      border: 2px solid #e0e0e0;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+
+
+    #voice-search-btn {
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #0E82FD;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    #voice-search-btn:hover {
+      background-color: #0967cc;
+      transform: scale(1.05);
+    }
+
+    /* Enhanced Doctor Info Badge */
+    .doctor-info-wrapper {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    /* Doctor qualification styling */
+    .qualification {
+      font-size: 0.85rem;
+      color: #777;
+      margin-bottom: 15px;
+      line-height: 1.4;
+    }
+
+    /* No results message */
+    #no-results {
+      background-color: rgba(255, 0, 0, 0.1);
+      color: #dc3545;
+      padding: 15px;
+      border-radius: 10px;
+      font-weight: 600;
+      width: 80%;
+      margin: 2rem auto;
+      text-align: center;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 992px) {
+      .search-container {
+        width: 80%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .search-container {
+        width: 90%;
+      }
+      .card-img-container {
+        padding-bottom: 85%; /* Taller container on mobile */
+      }
+    }
+
+    @media (max-width: 576px) {
+      .search-container {
+        width: 100%;
+      }
+      .card {
+        margin-bottom: 20px;
+      }
+      .card-img-container {
+        padding-bottom: 75%;
+      }
     }
   </style>
 </head>
@@ -72,7 +367,6 @@
                     {% else %}
                         <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
                     {% endif %}
-                    {% comment %} <span class="user-name ms-2">{{ profile.name }}</span> <!-- Display Name Beside Image --> {% endcomment %}
                 </span>
             </a>
             <div class="dropdown-menu dropdown-menu-end">
@@ -121,90 +415,78 @@
           </nav>
       </div>
     </header>
-    <!-- Doctors listing static Section -->
-    <section id="team" class="team section py-5" style="padding-top:100px !important">
+
+
+    <!-- Doctors listing Section -->
+    <section id="team" class="team section py-5" style="padding-top:120px !important">
       <div class="container">
-        <div class="row g-4"> <!-- Bootstrap grid gap for spacing -->
+        <div class="row">
           <div class="col-md-12 aos" data-aos="fade-up">
             <div class="section-header-one text-center">
-              <h2 class="section-title" id="highlights">Our dedicated life savers</h2>
+              <h2 class="section-title" id="highlights">Our Dedicated Life Savers</h2>
+              <p class="text-muted mb-4">Find the right specialist for your health needs</p>
 
-              <!-- Search Input -->
-              <!-- <input type="text" id="search" class="form-control mt-3" placeholder="Search by Specialization..."
-                style="width: 50%; margin: auto;"> -->
-
-               <!-- Search Input with Microphone -->
-    <div class="row justify-content-center mb-4">
-      <div class="col-md-6 d-flex">
-        <input type="text" id="search" class="form-control" placeholder="Search by Name or Specialization">
-        <button id="voice-search-btn" class="btn btn-primary ms-2"><i class="fas fa-microphone"></i></button>
-      </div>
-    </div>
+              <!-- Search Input with Microphone -->
+              <div class="search-container">
+                <div class="input-group">
+                  <input type="text" id="search" class="form-control" placeholder="Search by Name or Specialization...">
+                  <button id="voice-search-btn" class="btn btn-primary ms-2">
+                    <i class="fas fa-microphone"></i>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+          
+        <div class="row g-4"> <!-- Bootstrap grid gap for spacing -->
           <!-- Card Start -->
           {% for doctor in doctors %}
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3 aos doctor-card" data-name="{{ doctor.name|lower }}"
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3 aos g-4" data-name="{{ doctor.name|lower }}"
             data-specialization="{{ doctor.specialization|lower }}" data-aos="fade-up">
             <div class="card h-100">
-              {% if doctor.profile_img %}
-              <img class="card-img-top" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
-              {% else %}
-              <img class="card-img-top" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
-              {% endif %}
-              <div class="card-body text-center d-flex flex-column justify-content-between">
-                <h5 class="card-title">{{doctor.name}}</h5>
-                <p class="card-text specialization">{{ doctor.specialization }}</p>
-                <p class="card-text">{{ doctor.qualification }}</p>
-                <a href="{% url 'doctor_profile' doctor.id %}" class="btn_dr mt-auto mx-auto">Show Profile</a>
-
+              
+              <div class="card-img-container h-75" >
+                {% if doctor.profile_img %}
+                <img class="card-img-top" src="{{ doctor.profile_img.url }}" alt="{{ doctor.name }}" />
+                {% else %}
+                <img class="card-img-top" src="/static/assets/img/default_profile.png" alt="default profile" />
+                {% endif %}
+              </div>
+              <div class="card-body">
+                <div>
+                  <h5 class="card-title">{{ doctor.name }}</h5>
+                  <span class="specialization">
+                    <i class="fas fa-stethoscope me-1"></i>{{ doctor.specialization }}
+                  </span>
+                  <p class="qualification">{{ doctor.qualification }}</p>
+                </div>
+                <a href="{% url 'doctor_profile' doctor.id %}" class="btn_dr">
+                  View Profile <i class="fas fa-arrow-right ms-2"></i>
+                </a>
               </div>
             </div>
           </div>
           {% endfor %}
           <!-- Card End -->
+          
           <!-- No doctors message -->
-          <p id="no-results" class="text-center mt-4"
-            style="display: none; font-size: 18px; font-weight: bold; color: red;">
-            No doctor available
-          </p>
+          <div id="no-results" style="display: none;">
+            <i class="fas fa-user-md me-2"></i> No doctors found matching your search
+          </div>
 
         </div>
       </div>
     </section>
+    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- <script>
-      $(document).ready(function () {
-        $("#search").on("keyup", function () {
-          var searchText = $(this).val().toLowerCase();
-          var matchFound = false;
-
-          $(".doctor-card").each(function () {
-            var specialization = $(this).data("specialization");
-
-            if (specialization.includes(searchText)) {
-              $(this).show();
-              matchFound = true;
-            } else {
-              $(this).hide();
-            }
-          });
-
-          // Show "No doctor available" if no matches found
-          if (matchFound) {
-            $("#no-results").hide();
-          } else {
-            $("#no-results").show();
-          }
-        });
-      });
-    </script> -->
 
     <script>
       $(document).ready(function () {
         // Function to filter doctors based on search input
         function filterDoctors(searchText) {
           var found = false;
+          searchText = searchText.toLowerCase().trim();
     
           $(".doctor-card").each(function () {
             var name = $(this).data("name");
@@ -218,22 +500,32 @@
             }
           });
     
-          // Show/hide "No doctor available" message
+          // Show/hide "No doctor available" message with animation
           if (found) {
-            $("#no-results").hide();
+            $("#no-results").fadeOut(300);
           } else {
-            $("#no-results").show();
+            $("#no-results").fadeIn(300);
           }
         }
     
-        // Live search
+        // Live search with debounce for better performance
+        var searchTimeout;
         $("#search").on("keyup", function () {
+          clearTimeout(searchTimeout);
           var searchText = $(this).val().toLowerCase();
-          filterDoctors(searchText);
+          
+          searchTimeout = setTimeout(function() {
+            filterDoctors(searchText);
+          }, 300);
         });
     
         // Voice Search Button Click
         $("#voice-search-btn").on("click", function () {
+          if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
+            alert("Voice search is not supported in your browser. Please try Chrome or Edge.");
+            return;
+          }
+          
           var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
           recognition.lang = "en-US";
     
@@ -246,127 +538,32 @@
             $("#voice-search-btn").html('<i class="fas fa-microphone"></i>'); // Reset icon
           };
     
+          recognition.onerror = function(event) {
+            $("#voice-search-btn").html('<i class="fas fa-microphone"></i>'); // Reset icon on error
+            console.log('Speech recognition error:', event.error);
+          };
+    
           recognition.onresult = function (event) {
             var transcript = event.results[0][0].transcript;
-            $("#search").val(transcript.toLowerCase()); // Set spoken text to input field
+            $("#search").val(transcript.toLowerCase()).focus(); // Set spoken text to input field
             filterDoctors(transcript.toLowerCase()); // Filter results
           };
     
           recognition.start();
         });
+        
+        // Add hover effect for better UX
+        $(".card").hover(
+          function() {
+            $(this).find(".btn_dr").addClass("active");
+          },
+          function() {
+            $(this).find(".btn_dr").removeClass("active");
+          }
+        );
       });
     </script>
     
-    <!-- Font Awesome for Microphone Icon -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
-    
-
-    <!-- CSS Styling for Cards and Button -->
-    <style>
-      .card {
-        border-radius: 15px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease-in-out;
-      }
-
-      .card:hover {
-        transform: translateY(-10px);
-      }
-
-      .card-img-top {
-        border-radius: 15px 15px 0 0;
-        height: 200px;
-        object-fit: cover;
-        /* Prevents image cropping */
-      }
-
-      .card-body {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .team {
-        background-color: #f5f5f5;
-      }
-
-      /* Button Styling */
-      .btn_dr {
-        position: relative;
-        transition: all 0.3s ease-in-out;
-        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-        padding-block: 0.5rem;
-        padding-inline: 1.25rem;
-        background-color: #0E82FD;
-        border-radius: 9999px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        color: #fff;
-        font-weight: bold;
-        border: 3px solid #ffffff4d;
-        outline: none;
-        overflow: hidden;
-        font-size: 15px;
-      }
-
-      .icon {
-        width: 24px;
-        height: 24px;
-        transition: all 0.3s ease-in-out;
-      }
-
-      .btn_dr:hover {
-        transform: scale(1.05);
-        border-color: #fff9;
-      }
-
-      .btn_dr:hover .icon {
-        transform: translate(4px);
-      }
-
-      .btn_dr:hover::before {
-        animation: shine 1.5s ease-out infinite;
-      }
-
-      .btn_dr::before {
-        content: "";
-        position: absolute;
-        width: 100px;
-        height: 100%;
-        background-image: linear-gradient(120deg,
-            rgba(255, 255, 255, 0) 30%,
-            rgba(255, 255, 255, 0.8),
-            rgba(255, 255, 255, 0) 70%);
-        top: 0;
-        left: -100px;
-        opacity: 0.6;
-      }
-
-      @keyframes shine {
-        0% {
-          left: -100px;
-        }
-
-        60% {
-          left: 100%;
-        }
-
-        to {
-          left: 100%;
-        }
-      }
-
-      /* Mobile Responsiveness */
-      @media (max-width: 576px) {
-        .card {
-          margin-bottom: 20px;
-        }
-      }
-    </style>
-
     {% include "footer.html" %}
     {% endblock %}
 </body>

@@ -154,25 +154,7 @@
           padding: 30px;
         }
       }
-      .toast-success {
-        background-color: rgba(84, 162, 102, 0.89) !important;
-        color: black !important;
-        border: 2px solid green !important;
-      }
-      .toast-error {
-        background-color: rgba(210, 93, 105, 0.88) !important;
-        color: black !important;
-        border: 2px solid red !important;
-      }
-      .toast-warning {
-        background-color: rgb(241, 216, 141) !important;
-        color: black !important;
-        border: 2px solid yellow !important;
-      }
-      .toast-info {
-        background-color: black !important;
-        color: #17a2b8 !important;
-      }
+      
     </style>
   </head>
 
@@ -289,12 +271,12 @@
             <h2 class="text-center fw-bolder">Sign in</h2>
             <p class="text-center">Caring for your health, every step.</p>
 
-             {% if error %}
+             {% comment %} {% if error %}
             <div class="alert alert-danger" role="alert">
               <i class="fas fa-exclamation-triangle fa-beat-fade"></i
               >&nbsp;&nbsp;<span>{{ error }}</span>
             </div>
-            {% endif %}
+            {% endif %} {% endcomment %}
             <form action="/login/" method="POST">
               {% csrf_token %}
               <div class="mb-3">
@@ -414,15 +396,17 @@
         }
 
         //backend error
-        {% if messages %}
+        let delay = 500; // Start with a small delay
         {% for message in messages %}
-            showAlert(
-                "{% if message.tags == 'success' %}fa-circle-check{% elif message.tags == 'warning' %}fa-exclamation-triangle{% else %}fa-circle-xmark{% endif %}",
-                "{{ message|escapejs }}",
-                "{{ message.tags }}"
-            );
-        {% endfor %}
-    {% endif %}
+  setTimeout(function () {
+    showAlert(
+      "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
+      "{{ message|escape }}",
+      "{{ message.tags }}"
+    );
+  }, delay);
+  delay += 1000; // Increase delay for next message
+{% endfor %}
 
         // Validate email field
         function validateEmail() {

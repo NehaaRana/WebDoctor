@@ -181,21 +181,7 @@
         </header>
         
 
-        {% comment %} alerts {% endcomment %}
-{% comment %} <script>
-    $(document).ready(function () {
-        {% if messages %}
-            {% for message in messages %}
-                toastr.options = {
-                    closeButton: true,
-                    progressBar: true,
-                    timeOut: 5000,  // 5 seconds
-                };
-                toastr["{{ message.tags }}"]("{{ message }}");
-            {% endfor %}
-        {% endif %}
-    });
-  </script> {% endcomment %}
+   
   
         <div class="register-container">
             <div class="register-box">
@@ -241,7 +227,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label>Email</label>
-                                <input type="email" name="email" class="form-control" id="email"
+                                <input type="text" name="email" class="form-control" id="email"
                                     placeholder="abc@gmail.com" />
                             </div>
                             <div class="col-md-6 mb-3">
@@ -249,10 +235,19 @@
                                 <input type="text" name="phno" class="form-control" id="phno"
                                     placeholder="Enter Phone Number" />
                             </div>
-                            <div class="col-md-12 mb-3">
+                            {% comment %} <div class="col-md-12 mb-3">
                                 <label>Create Password</label>
                                 <input type="password" name="password" class="form-control" id="password"
                                     placeholder="*************" />
+                            </div> {% endcomment %}
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <div class="input-group">
+                                    <input type="password" id="password" class="form-control" name="password" placeholder="*************" />
+                                        <span class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
+                                            <i id="toggleIcon" class="fa fa-eye"></i>
+                                        </span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-check mb-3">
@@ -361,7 +356,23 @@
         });
       </script>
 
-
+      <!-- JavaScript for Toggling Password Visibility -->
+    <script>
+        function togglePassword() {
+            var passwordInput = document.getElementById("password");
+            var toggleIcon = document.getElementById("toggleIcon");
+    
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleIcon.classList.remove("fa-eye");
+                toggleIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                toggleIcon.classList.remove("fa-eye-slash");
+                toggleIcon.classList.add("fa-eye");
+            }
+        }
+    </script>
         {% include 'footer.html' %}
     </div>
 </body>
