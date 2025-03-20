@@ -1900,7 +1900,9 @@ from django.core.exceptions import ValidationError
 import requests
 from django.conf import settings  # Ensure you add your API key in settings.py
 
-MAILBOXLAYER_API_KEY = "80eb99ae998257cf35ab2ed2dbca8239"  # Replace with your actual API key
+# MAILBOXLAYER_API_KEY = "80eb99ae998257cf35ab2ed2dbca8239"  # Replace with your actual API key
+MAILBOXLAYER_API_KEY="1ab1a848833c894f93292abfc74de78e"
+
 def validate_email_existence(email):
     """Check if an email exists using MailboxLayer API"""
     url = f"http://apilayer.net/api/check?access_key={MAILBOXLAYER_API_KEY}&email={email}&smtp=1&format=1"

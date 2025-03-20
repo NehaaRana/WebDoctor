@@ -12,21 +12,19 @@
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
 
     <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    {% comment %} <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" /> {% endcomment %}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Custom Styles -->
     <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
 
 
-     {% comment %} alerts {% endcomment %}
-
-    <!-- jQuery (Required for Toastr) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<!-- Toastr CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
+    <!-- jquery-confirm CSS -->
+   <link
+   rel="stylesheet"
+   href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css"
+ />
 
     <style>
         .custom-alert {
@@ -197,7 +195,7 @@
                     <p class="text-center">
                         Join us and connect with patients seamlessly.
                     </p>
-                    <form action="{% url 'doctor_register' %}" method="POST" enctype="multipart/form-data">
+                    <form action="{% url 'doctor_register' %}" method="POST" enctype="multipart/form-data" id="signup-form">
                         {% csrf_token %} 
                         
                         <div class="row">
@@ -267,9 +265,7 @@
             </div>
         </div>
 
-        <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+        
         <script>
         $(document).ready(function () {
           $("#signup-form").submit(function (e) {
@@ -297,15 +293,15 @@
             }
 
             //backend error
-        {% if messages %}
-        {% for message in messages %}
-            showAlert(
-                "{% if message.tags == 'success' %}fa-circle-check{% elif message.tags == 'warning' %}fa-exclamation-triangle{% else %}fa-circle-xmark{% endif %}",
-                "{{ message|escapejs }}",
-                "{{ message.tags }}"
-            );
-        {% endfor %}
-    {% endif %}
+            {% if messages %}
+            {% for message in messages %}
+                showAlert(
+                    "{% if message.tags == 'success' %}fa-circle-check{% elif message.tags == 'warning' %}fa-exclamation-triangle{% else %}fa-circle-xmark{% endif %}",
+                    "{{ message|escapejs }}",
+                    "{{ message.tags }}"
+                );
+            {% endfor %}
+          {% endif %}
 
 
             if (name === "") {
@@ -375,6 +371,10 @@
     </script>
         {% include 'footer.html' %}
     </div>
+
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
 </body>
 
 </html>
