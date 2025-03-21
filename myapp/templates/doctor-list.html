@@ -354,8 +354,22 @@
                   <ul class="main-nav">
                       <li><a href="{% if user_type == 'patient' or user_type == 'doctor' %}{% url 'index' %}{% else %}{% url 'home' %}{% endif %}">Home</a></li>
                       <li><a href="{% url 'doctor_list' %}">Doctors</a></li>
-                      <li><a href="{% url 'about_us' %}">About Us</a></li>
-                      <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+                      {% comment %} <li><a href="{% url 'about' %}">About Us</a></li> {% endcomment %}
+                      <li>
+                        {% if request.session.patient_id or request.session.doctor_id %}
+                            <a href="{% url 'about_us' %}">About Us</a>
+                        {% else %}
+                            <a href="{% url 'about' %}">About Us</a>
+                        {% endif %}
+                    </li>
+                    <li>
+                      {% if request.session.patient_id or request.session.doctor_id %}
+                          <a href="{% url 'contact_us' %}">Contact Us</a>
+                      {% else %}
+                          <a href="{% url 'contact' %}">Contact Us</a>
+                      {% endif %}
+                  </li>
+                      {% comment %} <li><a href="{% url 'contact' %}">Contact Us</a></li> {% endcomment %}
                       <ul class="nav header-navbar-rht pt-3">
     
                       {% if request.session.patient_id or request.session.doctor_id %}
@@ -442,7 +456,7 @@
         <div class="row g-4"> <!-- Bootstrap grid gap for spacing -->
           <!-- Card Start -->
           {% for doctor in doctors %}
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3 aos g-4" data-name="{{ doctor.name|lower }}"
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3 aos g-4 doctor-card" data-name="{{ doctor.name|lower }}"
             data-specialization="{{ doctor.specialization|lower }}" data-aos="fade-up">
             <div class="card h-100">
               
@@ -455,8 +469,8 @@
               </div>
               <div class="card-body">
                 <div>
-                  <h5 class="card-title">{{ doctor.name }}</h5>
-                  <span class="specialization">
+                  <h5 class="card-title"  data-name="{{ doctor.name|lower }}">{{ doctor.name }}</h5>
+                  <span class="specialization" data-specialization="{{ doctor.specialization|lower }}" >
                     <i class="fas fa-stethoscope me-1"></i>{{ doctor.specialization }}
                   </span>
                   <p class="qualification">{{ doctor.qualification }}</p>
