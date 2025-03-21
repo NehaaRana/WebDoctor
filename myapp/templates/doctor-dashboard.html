@@ -9,8 +9,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
 
   <!-- -------------------- social icons ----------------------- -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 
   <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
@@ -21,12 +21,11 @@
   <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}" />
 
   <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
+  <!-- Add DataTables CSS in your head section -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
 
   <!-- jquery-confirm CSS -->
-  <link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css"
-/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
 
   <!-- Theia Sticky Sidebar -->
   <style id="theia-sticky-sidebar-stylesheet-TSS">
@@ -41,12 +40,124 @@
       src: url("chrome-extension://mcgbeeipkmelnpldkobichboakdfaeon/css/Roboto-Regular.ttf");
     }
 
+    .modal-content {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+    }
+    
+    #savePrescription {
+      transition: all 0.3s ease;
+    }
+    
+    #savePrescription:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .spinner-grow {
+      animation-duration: 1.2s;
+    }
+
     * {
       filter: none !important;
       backdrop-filter: none !important;
-    }   
-    
-  
+    }
+
+    .dashboard-stats {
+      margin-bottom: 30px;
+    }
+
+    .dash-widget {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      height: 100%;
+    }
+
+    .dash-widget:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .widget-content {
+      display: flex;
+      align-items: center;
+    }
+
+    .widget-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+    }
+
+    .widget-icon i {
+      font-size: 24px;
+    }
+
+    .widget-details {
+      flex: 1;
+    }
+
+    .widget-details h3 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .widget-details h6 {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .progress-details {
+      margin-top: 10px;
+    }
+
+    .bg-soft-primary {
+      background-color: rgba(62, 100, 255, 0.15);
+    }
+
+    .bg-soft-success {
+      background-color: rgba(15, 183, 107, 0.15);
+    }
+
+    .bg-soft-warning {
+      background-color: rgba(255, 190, 61, 0.15);
+    }
+
+    .text-primary {
+      color: #3e64ff !important;
+    }
+
+    .text-success {
+      color: #0fb76b !important;
+    }
+
+    .text-warning {
+      color: #ffbe3d !important;
+    }
+
+    /* Add animation for counter */
+    .counter {
+      animation: countUp 2s ease-out;
+    }
+
+    @keyframes countUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 
@@ -146,7 +257,7 @@
     </header>
 
 
-    <div class="content" style="transform: none; min-height: 355.906px;">
+<div class="content" style="transform: none; min-height: 355.906px;">
       <div class="container-fluid" style="transform: none; padding-top:50px">
         <div class="row" style="transform: none;">
           <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar"
@@ -255,55 +366,79 @@
               <div class="col-md-12">
                 <div class="card dash-card">
                   <div class="card-body">
-                    <div class="row">
-                      <div class="col-md-12 col-lg-4">
-                        <div class="dash-widget dct-border-rht">
-                          <div class="circle-bar circle-bar1">
-                            <div class="circle-graph1" data-percent="75"><canvas width="400" height="400"></canvas>
-                              <img src="../static/assets/img/icon-01.png" class="img-fluid" alt="patient">
-                            </div>
-                          </div>
-                          <div class="dash-widget-info">
-                            <h6>Total Patient</h6>
-                            <h3>{{total_patient}}</h3>
-                            <p class="text-muted">Till Today</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-12 col-lg-4">
-                        <div class="dash-widget dct-border-rht">
-                          <div class="circle-bar circle-bar2">
-                            <div class="circle-graph2" data-percent="65"><canvas width="400" height="400"></canvas>
-                              <img src="../static/assets/img/icon-02.png" class="img-fluid" alt="Patient">
-                            </div>
-                          </div>
-                          <div class="dash-widget-info">
-                            <h6>Today Patient</h6>
-                            <h3>{{total_today_patients}}</h3>
-                            <p class="text-muted">{{today_date}}</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-12 col-lg-4">
-                        <div class="dash-widget">
-                          <div class="circle-bar circle-bar3">
-                            <div class="circle-graph3" data-percent="50"><canvas width="400" height="400"></canvas>
-                              <img src="{% static 'assets/img/icon-03.png' %}" class="img-fluid" alt="Patient">
 
+
+                    <div class="row dashboard-stats">
+                      <!-- Total Patients Widget -->
+                      <div class="col-md-12 col-lg-4">
+                        <div class="dash-widget shadow-sm rounded">
+                          <div class="widget-content">
+                            <div class="widget-icon bg-soft-primary">
+                              <i class="fas fa-user-injured text-primary fs-3"></i>
+                            </div>
+                            <div class="widget-details">
+                              <h3 class="counter">{{total_patient}}</h3>
+                              <h6 class="text-muted mb-1">Total Patients</h6>
+                              <div class="progress-details">
+                                <div class="progress" style="height: 5px;">
+                                  <div class="progress-bar bg-primary" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <small class="text-muted mt-1">Till Today</small>
+                              </div>
                             </div>
                           </div>
-                          <div class="dash-widget-info">
-                            <h6>Appointments </h6>
-                            <h3>{{total_upcoming_patients}}</h3>
-                            <p class="text-muted">Upcoming</p>
+                        </div>
+                      </div>
+                      
+                      <!-- Today's Patients Widget -->
+                      <div class="col-md-12 col-lg-4">
+                        <div class="dash-widget shadow-sm rounded">
+                          <div class="widget-content">
+                            <div class="widget-icon bg-soft-success">
+                              <i class="fas fa-calendar-check text-success fs-3"></i>
+                            </div>
+                            <div class="widget-details">
+                              <h3 class="counter">{{total_today_patients}}</h3>
+                              <h6 class="text-muted mb-1">Today's Patients</h6>
+                              <div class="progress-details">
+                                <div class="progress" style="height: 5px;">
+                                  <div class="progress-bar bg-success" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <small class="text-muted mt-1">{{today_date}}</small>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Upcoming Appointments Widget -->
+                      <div class="col-md-12 col-lg-4">
+                        <div class="dash-widget shadow-sm rounded">
+                          <div class="widget-content">
+                            <div class="widget-icon bg-soft-warning">
+                              <i class="fas fa-calendar-alt text-warning fs-3"></i>
+                            </div>
+                            <div class="widget-details">
+                              <h3 class="counter">{{total_upcoming_patients}}</h3>
+                              <h6 class="text-muted mb-1">Upcoming Appointments</h6>
+                              <div class="progress-details">
+                                <div class="progress" style="height: 5px;">
+                                  <div class="progress-bar bg-warning" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <small class="text-muted mt-1">Upcoming</small>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
+                    
                   </div>
                 </div>
               </div>
             </div>
+
+
             <div class="row">
               <div class="col-md-12">
                 <h4 class="mb-4">Patient Appointment</h4>
@@ -321,277 +456,179 @@
                   </ul>
 
                   <div class="tab-content">
-
+                    <!-- Upcoming Appointments Tab -->
                     <div class="tab-pane active show" id="upcoming-appointments" role="tabpanel">
                       <div class="card card-table mb-0">
                         <div class="card-body">
                           <div class="table-responsive">
-                            <table class="table table-hover table-center mb-0">
+                            <table class="table table-hover table-center mb-0 datatable">
                               <thead>
                                 <tr>
                                   <th>Patient Name</th>
                                   <th>Appt Date</th>
                                   <th>Reason</th>
                                   <th>Symptoms</th>
-                                  <th class="text-center">Doctor Fee</th>
+                                  <th>Doctor Fee</th>
                                   <th>Video Consultation</th>
-                                  <th>Appointment Status</th>
+                                  <th>Status</th>
                                   <th>Action</th>
-                                  <th>prescription Detail</th>
+                                  <th>Prescription</th>
                                 </tr>
                               </thead>
-
                               <tbody>
                                 {% for appointment in upcoming_patients %}
                                 <tr>
                                   <td>
                                     <h2 class="table-avatar">
                                       <a href="/coming-soon" class="avatar avatar-sm me-2">
-                                        {% comment %} <img
-                                          class="avatar-img rounded-circle"
-                                          src="{{ appointment.patient_id.profile_img.url }}"
-                                          alt="User Image"> {% endcomment %}
-                                          {% if appointment.patient_id.profile_img %}
-                                          <img class="rounded-circle" src="{{ appointment.patient_id.profile_img.url }}" width="31" alt="profile" />
-                                          {% else %}
-                                            <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
-                                          {% endif %}
-                                        </a>
+                                        {% if appointment.patient_id.profile_img %}
+                                        <img class="rounded-circle" src="{{ appointment.patient_id.profile_img.url }}" width="31" alt="profile" />
+                                        {% else %}
+                                        <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
+                                        {% endif %}
+                                      </a>
                                       <a href="/coming-soon">{{appointment.patient_id.name}}
-                                        <span>#{{appointment.patient_id.id}}</span></a>
+                                        <span class="text-muted">#{{appointment.patient_id.id}}</span>
+                                      </a>
                                     </h2>
                                   </td>
-                                  <td>{{appointment.appointment_date}} <span
-                                      class="d-block text-info">{{appointment.appointment_time}}</span></td>
-                                  {% comment %} <td>{{appointment.Symptoms.split(' ')[0]}}</td> {% endcomment %}
-                                  <td>{{appointment.reason }}</td>
-                                  <td class="text-center">{{appointment.symptoms}}</td>
+                                  <td>{{appointment.appointment_date}} <span class="d-block text-info">{{appointment.appointment_time}}</span></td>
+                                  <td>{{appointment.reason}}</td>
+                                  <td>{{appointment.symptoms}}</td>
                                   <td>{{appointment.doctor_id.fee}}</td>
                                   <td class="text-center">
-                                    <!-- Send Meeting Link Button -->
-                                    <a href="{% url 'send_meeting_link' appointment.id %}" class="btn btn-sm bg-success-light">
-                                      Send Meeting Link
-                                    </a>
-                                    <!-- Join Meeting Button -->
-                                    <a href="{{ appointment.meeting_link }}" target="_blank" class="btn btn-sm bg-primary-light">
-                                      Join Meeting
-                                    </a>
+                                    <div class="btn-group">
+                                      <a href="{% url 'send_meeting_link' appointment.id %}" class="btn btn-sm bg-success-light me-1">
+                                        <i class="fas fa-paper-plane me-1"></i>Send Link
+                                      </a>
+                                      <a href="{{ appointment.meeting_link }}" target="_blank" class="btn btn-sm bg-primary-light">
+                                        <i class="fas fa-video me-1"></i>Join
+                                      </a>
+                                    </div>
                                   </td>
-                                  {% comment %} <td>
-                                    
-                                    <a href="" class="btn btn-success">Confirm</a>
-                                    <a href="" class="btn btn-danger">Cancel</a>
-                                
-                            </td> {% endcomment %}
-                                 
-                            <td>
-                              {% if appointment.status == "Confirm" %}
-                                  <span class="text-success">Confirm</span>
-                              {% elif appointment.status == "Cancelled" %}
-                                  <span class="text-danger">Cancelled</span>
-                              {% else %}
-                                  <span class="text-warning">Pending</span>
-                              {% endif %}
-                          </td>
-
-
-                          <td>
-                            {% if appointment.status == "Pending" %}
-                                <a href="{% url 'update_appointment_status' appointment.id 'Confirm' %}" class="btn btn-success">
-                                    Confirm
-                                </a>
-                                <a href="{% url 'update_appointment_status' appointment.id 'Cancelled' %}" class="btn btn-danger">
-                                    Cancel
-                                </a>
-                            {% else %}
-                                <span class="text-muted">No Actions Available</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                          {% comment %} <a href="#" class="btn btn-primary add-prescription-btn"
-       data-url="{% url 'add_prescription' doctor.id appointment.patient_id.id %}">
-        Add Prescription
-    </a> {% endcomment %}
-    <button type="button" class="btn btn-primary add-prescription-btn" 
-        data-bs-toggle="modal" 
-        data-bs-target="#prescriptionModal" 
-        data-url="{% url 'add_prescription' doctor.id appointment.patient_id.id %}">
-  Add Prescription
-</button>
-
-                        {% comment %} <button type="button" class="btn btn-primary add-prescription-btn"
-        data-doctor-id="{{ doctor.id }}"
-        data-patient-id="{{ appointment.patient_id.id }}"
-        data-url="{% url 'add_prescription' doctor.id appointment.patient_id.id %}">
-    Add Prescription
-</button> {% endcomment %}
-                        </td>
-                        <td>
-                          {% comment %} to get patient id {% endcomment %}
-                          {% comment %} <input type="hidden" name="patient_id" value="{{ appointment.patient_id.id }}">
-                          <a href="{% url 'submit_report' %}" class="btn btn-primary">Submit Report</a> {% endcomment %}
-                          {% comment %} <a href="{% url 'submit_report' appointment.patient_id.id %}" class="btn btn-primary">
-                            Submit Report
-                        </a> {% endcomment %}
-                        </td>
-                          
-                            {% comment %} <td class="text-center">
-                                    <a href="javascript:void(0);" class="btn btn-sm bg-info-light">
-                                      <svg class="svg-inline--fa fa-eye fa-w-18" aria-hidden="true" focusable="false"
-                                        data-prefix="far" data-icon="eye" role="img" xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 576 512" data-fa-i2svg="">
-                                        <path fill="currentColor"
-                                          d="M288 144a110.94 110.94 0 0 0-31.24 5 55.4 55.4 0 0 1 7.24 27 56 56 0 0 1-56 56 55.4 55.4 0 0 1-27-7.24A111.71 111.71 0 1 0 288 144zm284.52 97.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400c-98.65 0-189.09-55-237.93-144C98.91 167 189.34 112 288 112s189.09 55 237.93 144C477.1 345 386.66 400 288 400z">
-                                        </path>
-                                      </svg><!-- <i class="far fa-eye"></i> Font Awesome fontawesome.com --> View
-                                    </a>
+                                  <td>
+                                    {% if appointment.status == "Confirm" %}
+                                    <span class="badge bg-success-light text-success">Confirmed</span>
+                                    {% elif appointment.status == "Cancelled" %}
+                                    <span class="badge bg-danger-light text-danger">Cancelled</span>
+                                    {% else %}
+                                    <span class="badge bg-warning-light text-warning">Pending</span>
+                                    {% endif %}
                                   </td>
-                                   {% endcomment %}
-
+                                  <td>
+                                    {% if appointment.status == "Pending" %}
+                                    <div class="btn-group">
+                                      <a href="{% url 'update_appointment_status' appointment.id 'Confirm' %}" class="btn btn-sm bg-success-light me-1">
+                                        <i class="fas fa-check me-1"></i>Confirm
+                                      </a>
+                                      <a href="{% url 'update_appointment_status' appointment.id 'Cancelled' %}" class="btn btn-sm bg-danger-light">
+                                        <i class="fas fa-times me-1"></i>Cancel
+                                      </a>
+                                    </div>
+                                    {% else %}
+                                    <span class="text-muted">No Actions</span>
+                                    {% endif %}
+                                  </td>
+                                  <td>
+                                    <button type="button" class="btn btn-sm bg-info-light add-prescription-btn" data-bs-toggle="modal" data-bs-target="#prescriptionModal" data-url="{% url 'add_prescription' doctor.id appointment.patient_id.id %}">
+                                      <i class="fas fa-prescription me-1"></i>Add
+                                    </button>
+                                  </td>
                                 </tr>
                                 {% endfor %}
                               </tbody>
-
                             </table>
                           </div>
                         </div>
                       </div>
                     </div>
-
-
+                  
+                    <!-- Today's Appointments Tab -->
                     <div class="tab-pane" id="today-appointments" role="tabpanel">
                       <div class="card card-table mb-0">
                         <div class="card-body">
                           <div class="table-responsive">
-                            <table class="table table-hover table-center mb-0">
+                            <table class="table table-hover table-center mb-0 datatable">
                               <thead>
                                 <tr>
                                   <th>Patient Name</th>
                                   <th>Appt Date</th>
-                                  <th>Reason</th>
+                                  <th>Purpose</th>
                                   <th>Symptoms</th>
-                                  <th class="text-center">Doctor Fee</th>
+                                  <th>Doctor Fee</th>
                                   <th>Video Consultation</th>
-                                  <th>Appointment Status</th>
+                                  <th>Status</th>
                                   <th>Action</th>
-                                  <th>prescription Detail</th>
-                                </tr>
+                                  <th>Prescription</th>
                                 </tr>
                               </thead>
-
-
                               <tbody>
                                 {% for appointment in today_patients %}
                                 <tr>
                                   <td>
                                     <h2 class="table-avatar">
-                                      <a href="/coming-soon" class="avatar avatar-sm me-2">{% if appointment.patient_id.profile_img %}
+                                      <a href="/coming-soon" class="avatar avatar-sm me-2">
+                                        {% if appointment.patient_id.profile_img %}
                                         <img class="rounded-circle" src="{{ appointment.patient_id.profile_img.url }}" width="31" alt="profile" />
                                         {% else %}
-                                          <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
+                                        <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
                                         {% endif %}
                                       </a>
                                       <a href="/coming-soon">{{appointment.patient_id.name}}
-                                        <span>#{{appointment.patient_id.id}}</span></a>
+                                        <span class="text-muted">#{{appointment.patient_id.id}}</span>
+                                      </a>
                                     </h2>
                                   </td>
-                                  <td>{{appointment.appointment_date}} <span
-                                      class="d-block text-info">{{appointment.appointment_time}}</span></td>
-                                  {% comment %} <td>{{appointment.Symptoms.split(' ')[0]}}</td> {% endcomment %}
-                                  <td>{{ appointment.reason  }}</td>
-
-                                  <td>{{appointment.symptoms }}</td>
-                                  <td class="text-center">{{appointment.doctor_id.fee }}</td>
+                                  <td>{{appointment.appointment_date}} <span class="d-block text-info">{{appointment.appointment_time}}</span></td>
+                                  <td>{{appointment.reason}}</td>
+                                  <td>{{appointment.symptoms}}</td>
+                                  <td>{{appointment.doctor_id.fee}}</td>
                                   <td class="text-center">
-                                    <!-- Send Meeting Link Button -->
-                                    <a href="{% url 'send_meeting_link' appointment.id %}" class="btn btn-sm bg-success-light">
-                                      Send Meeting Link
-                                    </a>
-                                    <!-- Join Meeting Button -->
-                                    <a href="{{ appointment.meeting_link }}" target="_blank" class="btn btn-sm bg-primary-light">
-                                      Join Meeting
-                                    </a>
+                                    <div class="btn-group">
+                                      <a href="{% url 'send_meeting_link' appointment.id %}" class="btn btn-sm bg-success-light me-1">
+                                        <i class="fas fa-paper-plane me-1"></i>Send Link
+                                      </a>
+                                      <a href="{{ appointment.meeting_link }}" target="_blank" class="btn btn-sm bg-primary-light">
+                                        <i class="fas fa-video me-1"></i>Join
+                                      </a>
+                                    </div>
                                   </td>
-                                  {% comment %} <td>
-                                    
-                                    <a href="" class="btn btn-success">Confirm</a>
-                                    <a href="" class="btn btn-danger">Cancel</a>
-                                
-                            </td> {% endcomment %}
-                                 
-                            <td>
-                              {% if appointment.status == "Confirm" %}
-                                  <span class="text-success">Confirm</span>
-                              {% elif appointment.status == "Cancelled" %}
-                                  <span class="text-danger">Cancelled</span>
-                              {% else %}
-                                  <span class="text-warning">Pending</span>
-                              {% endif %}
-                          </td>
-
-
-                          <td>
-                            {% if appointment.status == "Pending" %}
-                                <a href="{% url 'update_appointment_status' appointment.id 'Confirm' %}" class="btn btn-success">
-                                    Confirm
-                                </a>
-                                <a href="{% url 'update_appointment_status' appointment.id 'Cancelled' %}" class="btn btn-danger">
-                                    Cancel
-                                </a>
-                            {% else %}
-                                <span class="text-muted">No Actions Available</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                          {% comment %} <a href="#" class="btn btn-primary add-prescription-btn"
-       data-url="{% url 'add_prescription' doctor.id appointment.patient_id.id %}">
-        Add Prescription
-    </a> {% endcomment %}
-    <button type="button" class="btn btn-primary add-prescription-btn" 
-        data-bs-toggle="modal" 
-        data-bs-target="#prescriptionModal" 
-        data-url="{% url 'add_prescription' doctor.id appointment.patient_id.id %}">
-  Add Prescription
-</button>
-
-                        {% comment %} <button type="button" class="btn btn-primary add-prescription-btn"
-        data-doctor-id="{{ doctor.id }}"
-        data-patient-id="{{ appointment.patient_id.id }}"
-        data-url="{% url 'add_prescription' doctor.id appointment.patient_id.id %}">
-    Add Prescription
-</button> {% endcomment %}
-                        </td>
-                        <td>
-                          {% comment %} to get patient id {% endcomment %}
-                          {% comment %} <input type="hidden" name="patient_id" value="{{ appointment.patient_id.id }}">
-                          <a href="{% url 'submit_report' %}" class="btn btn-primary">Submit Report</a> {% endcomment %}
-                          {% comment %} <a href="{% url 'submit_report' appointment.patient_id.id %}" class="btn btn-primary">
-                            Submit Report
-                        </a> {% endcomment %}
-                        </td>
-                          
-                                  {% comment %} <td class="text-center">
-                                    <a href="javascript:void(0);" class="btn btn-sm bg-info-light">
-                                      <svg class="svg-inline--fa fa-eye fa-w-18" aria-hidden="true" focusable="false"
-                                        data-prefix="far" data-icon="eye" role="img" xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 576 512" data-fa-i2svg="">
-                                        <path fill="currentColor"
-                                          d="M288 144a110.94 110.94 0 0 0-31.24 5 55.4 55.4 0 0 1 7.24 27 56 56 0 0 1-56 56 55.4 55.4 0 0 1-27-7.24A111.71 111.71 0 1 0 288 144zm284.52 97.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400c-98.65 0-189.09-55-237.93-144C98.91 167 189.34 112 288 112s189.09 55 237.93 144C477.1 345 386.66 400 288 400z">
-                                        </path>
-                                      </svg><!-- <i class="far fa-eye"></i> Font Awesome fontawesome.com --> View
-                                    </a>
-                                  </td> {% endcomment %}
-
+                                  <td>
+                                    {% if appointment.status == "Confirm" %}
+                                    <span class="badge bg-success-light text-success">Confirmed</span>
+                                    {% elif appointment.status == "Cancelled" %}
+                                    <span class="badge bg-danger-light text-danger">Cancelled</span>
+                                    {% else %}
+                                    <span class="badge bg-warning-light text-warning">Pending</span>
+                                    {% endif %}
+                                  </td>
+                                  <td>
+                                    {% if appointment.status == "Pending" %}
+                                    <div class="btn-group">
+                                      <a href="{% url 'update_appointment_status' appointment.id 'Confirm' %}" class="btn btn-sm bg-success-light me-1">
+                                        <i class="fas fa-check me-1"></i>Confirm
+                                      </a>
+                                      <a href="{% url 'update_appointment_status' appointment.id 'Cancelled' %}" class="btn btn-sm bg-danger-light">
+                                        <i class="fas fa-times me-1"></i>Cancel
+                                      </a>
+                                    </div>
+                                    {% else %}
+                                    <span class="text-muted">No Actions</span>
+                                    {% endif %}
+                                  </td>
+                                  <td>
+                                    <button type="button" class="btn btn-sm bg-info-light add-prescription-btn" data-bs-toggle="modal" data-bs-target="#prescriptionModal" data-url="{% url 'add_prescription' doctor.id appointment.patient_id.id %}">
+                                      <i class="fas fa-prescription me-1"></i>Add
+                                    </button>
+                                  </td>
                                 </tr>
                                 {% endfor %}
                               </tbody>
-
                             </table>
                           </div>
                         </div>
                       </div>
                     </div>
-
                   </div>
                 </div>
               </div>
@@ -599,41 +636,77 @@
           </div>
         </div>
       </div>
-    </div>
-  
-<!-- Prescription Modal -->
-{% comment %} <div class="modal" id="prescriptionModal" tabindex="-1" aria-labelledby="prescriptionModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="prescriptionModalLabel">Create Prescription</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <div id="prescriptionFormContent"></div> <!-- Form will be loaded here -->
-          </div>
-      </div>
-  </div>
-</div> {% endcomment %}
-<!-- Prescription Modal -->
-<div class="modal fade" id="prescriptionModal" tabindex="-1" aria-labelledby="prescriptionModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="prescriptionModalLabel">Create Prescription</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <!-- AJAX loaded content will be inserted here -->
-              <div id="prescriptionFormContent"></div>
-          </div>
-      </div>
-  </div>
 </div>
+  
 
-<!-- ✅ Place this script before the closing </body> tag -->
+              <!-- Prescription Modal -->
+              <div class="modal fade" id="prescriptionModal" tabindex="-1" aria-labelledby="prescriptionModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content border-0 rounded-4 overflow-hidden">
+                    <!-- Gradient Header with Subtle Pattern -->
+                    <div class="modal-header border-0 py-3" style="background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);">
+                      <h5 class="modal-title text-white fw-bold" id="prescriptionModalLabel">
+                        <i class="bi bi-prescription2 me-2"></i>
+                        Create Prescription
+                      </h5>
+                      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    
+                    <!-- Content Area with Subtle Background -->
+                    <div class="modal-body p-4" style="background-color: #f8fafc;">
+                      <!-- Loading animation with modern spinner -->
+                      <div id="loadingSpinner" class="text-center py-5 d-none">
+                        <div class="spinner-grow text-primary" role="status" style="width: 3rem; height: 3rem;">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-3 text-secondary">Preparing prescription form...</p>
+                      </div>
+                      
+                      <!-- AJAX loaded content container with shadow -->
+                      <div id="prescriptionFormContent" class="bg-white p-4 rounded-3 shadow-sm"></div>
+                    </div>
+                    
+                    <!-- Footer with Modern Buttons -->
+                    <div class="modal-footer border-0 py-3 px-4">
+                      <button type="button" class="btn btn-light rounded-pill px-4 py-2" data-bs-dismiss="modal">
+                        Cancel
+                      </button>
+                      {% comment %} <button type="button" class="btn rounded-pill px-4 py-2 text-white" id="savePrescription" style="background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);">
+                        <i class="bi bi-check2 me-1"></i>
+                        Save Prescription
+                      </button> {% endcomment %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+          <!-- ✅ Place this script before the closing </body> tag -->
 
+<!-- Add DataTables JS before closing body tag -->
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 
+<!-- Initialize DataTables -->
+<script>
+  $(document).ready(function() {
+    $('.datatable').DataTable({
+      responsive: true,
+      pageLength: 10,
+      language: {
+        search: "<i class='fas fa-search'></i>",
+        searchPlaceholder: "Search records"
+      },
+      "order": [[1, "asc"]], // Sort by appointment date
+      "columnDefs": [
+        { "orderable": false, "targets": [5, 7, 8] } // Disable sorting for action columns
+      ]
+    });
+    
+    // Handle tab change to reinitialize tables
+    $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+      $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+    });
+  });
+</script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>    
 <script>
