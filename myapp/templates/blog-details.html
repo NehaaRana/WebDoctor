@@ -33,314 +33,194 @@
     <link rel="stylesheet" href="{% static 'assets/css/aos.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
 
-    <style>
-        /* Custom styles for the blog page */
-        .blog-hero {
-            background-color: #f8f9fa;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .blog-hero::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('{% static "assets/img/pattern-bg.png" %}') repeat;
-            opacity: 0.1;
-        }
-        
-        .blog-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #2c3e50;
-            position: relative;
-        }
-        
-        .blog-badge {
-            background-color: #0e82fd;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            margin-right: 10px;
-        }
-        
-        .author-info {
-            display: flex;
-            align-items: center;
-            margin: 25px 0;
-        }
-        
-        .author-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin-right: 15px;
-            border: 2px solid #0e82fd;
-        }
-        
-        .blog-content {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #495057;
-        }
-        
-        .blog-content p:first-of-type::first-letter {
-            font-size: 3.5rem;
-            font-weight: 700;
-            color: #0e82fd;
-            float: left;
-            line-height: 0.8;
-            padding-right: 10px;
-        }
-        
-        .quote-block {
-            border-left: 5px solid #0e82fd;
-            padding: 20px;
-            background-color: #f8f9fa;
-            margin: 30px 0;
-            font-style: italic;
-            position: relative;
-        }
-        
-        .quote-block::before {
-            content: '"';
-            font-size: 4rem;
-            color: rgba(32, 201, 151, 0.2);
-            position: absolute;
-            top: -20px;
-            left: 10px;
-        }
-        
-        .comment-area {
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            padding: 30px;
-            margin-top: 50px;
-        }
-        
-        .comment-box {
-            border-bottom: 1px solid #dee2e6;
-            margin-bottom: 25px;
-            padding-bottom: 25px;
-        }
-        
-        .comment-box:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-        
+<style>
+     /* Modern Design System */
+     :root {
+        --primary-color: #0e82fd;
+        --secondary-color: #059669;
+        --accent-color: #f59e0b;
+        --dark-text: #1e293b;
+        --light-bg: #f8fafc;
+        --card-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        color: var(--dark-text);
+    }
+
+    /* Enhanced Hero Section */
+    .blog-hero {
+        background: linear-gradient(to bottom, #9cecfb, #65c7f7, #0052d4); 
+        padding: 5rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .blog-hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('{% static "assets/img/pattern-bg.png" %}') repeat;
+        opacity: 0.15;
+    }
+
+    .blog-title {
+        font-size: 2.75rem;
+        font-weight: 700;
+        color: white;
+        line-height: 1.3;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .blog-badge {
+        background: white;
+        padding: 8px 20px;
+        border-radius: 30px;
+        font-size: 0.9rem;
+        margin: 0 8px 15px 0;
+        transition: all 0.3s ease;
+    }
+
+    .blog-badge:hover {
+        background: rgba(255,255,255,0.25);
+        transform: translateY(-1px);
+    }
+
+    /* Author Card */
+    .author-info {
+        background: rgba(255,255,255,0.9);
+        backdrop-filter: blur(8px);
+        padding: 1.25rem;
+        border-radius: 15px;
+        box-shadow: var(--card-shadow);
+        display: inline-flex;
+        align-items: center;
+        margin: 2rem 0;
+    }
+
+    .author-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        margin-right: 1rem;
+        border: 3px solid var(--primary-color);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    /* Content Cards */
+    .blog-card {
+        border: none;
+        border-radius: 12px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: white;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+    }
+
+    .blog-card::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        transition: height 0.3s ease;
+    }
+
+    .blog-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+    }
+
+    /* Comments Section */
+    .comment-box {
+        background: var(--light-bg);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        position: relative;
+        transition: transform 0.2s ease;
+        box-shadow: var(--card-shadow);
+    }
+
+    .comment-box:hover {
+        transform: translateX(5px);
+    }
+
+    .comment-box::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background: var(--primary-color);
+        border-radius: 4px 0 0 4px;
+    }
+
+        /* Enhanced Sidebar */
         .sidebar {
-            border-radius: 10px;
-            overflow: hidden;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
         }
-        
+    
         .widget-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark-text);
             position: relative;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-            font-weight: 600;
-            color: #2c3e50;
+            padding-bottom: 0.75rem;
         }
-        
+    
         .widget-title::after {
             content: "";
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 50px;
-            height: 3px;
-            background-color: #0e82fd;
-        }
-        
-        .post-recent {
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #f1f1f1;
-        }
-        
-        .post-recent:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-        
-        .post-recent-thumb img {
-            width: 70px;
-            height: 70px;
-            object-fit: cover;
-        }
-        
-        .post-recent-content {
-            padding-left: 15px;
-            width: calc(100% - 85px);
-        }
-        
-        .tagcloud a {
-            display: inline-block;
-            padding: 5px 15px;
-            margin: 5px 3px;
-            background-color: #f8f9fa;
-            border-radius: 25px;
-            color: #6c757d;
-            transition: all 0.3s;
-            font-size: 0.85rem;
-        }
-        
-        .tagcloud a:hover {
-            background-color: #0e82fd;
-            color: white;
-            text-decoration: none;
-        }
-        
-        .social-icon li {
-            margin-right: 10px;
-        }
-        
-        .social-icon a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
             width: 40px;
-            height: 40px;
-            background-color: #f8f9fa;
-            color: #6c757d;
-            transition: all 0.3s;
-        }
-        
-        .social-icon a:hover {
-            background-color: #0e82fd;
-            color: white;
-        }
-        
-        .related-posts-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 30px;
-            position: relative;
-            padding-bottom: 15px;
-        }
-        
-        .related-posts-title::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 50px;
             height: 3px;
-            background-color: #0e82fd;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+    
+
+
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .blog-title {
+            font-size: 2rem;
         }
         
-        .blog-card {
-            transition: transform 0.3s;
-            overflow: hidden;
-            height: 100%;
+        .author-info {
+            flex-direction: column;
+            text-align: center;
         }
         
-        .blog-card:hover {
-            transform: translateY(-5px);
+        .author-avatar {
+            margin-right: 0;
+            margin-bottom: 1rem;
         }
-        
-        .blog-card img {
-            height: 200px;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-        
-        .blog-card:hover img {
-            transform: scale(1.05);
-        }
-        
-        .blog-meta {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            font-size: 0.85rem;
-            color: #6c757d;
-        }
-        
-        .blog-meta > div {
-            margin-right: 15px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .blog-meta i {
-            margin-right: 5px;
-            color: #0e82fd;
-        }
-        
-        .cta-section {
-            background-color: #0e82fd;
-            color: white;
-            padding: 50px 0;
-            margin-top: 60px;
-            border-radius: 10px;
-        }
-        
-        .newsletter-form {
-            display: flex;
-            max-width: 500px;
-            margin: 20px auto 0;
-        }
-        
-        .newsletter-form input {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            border-radius: 5px 0 0 5px;
-        }
-        
-        .newsletter-form button {
-            padding: 15px 25px;
-            background-color: #2c3e50;
-            color: white;
-            border: none;
-            border-radius: 0 5px 5px 0;
-            transition: background-color 0.3s;
-        }
-        
-        .newsletter-form button:hover {
-            background-color: #1a252f;
-        }
-        
-        .health-categories {
-            margin-bottom: 30px;
-        }
-        
-        .category-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 15px;
-            background-color: #f8f9fa;
-            margin-bottom: 5px;
-            border-radius: 5px;
-            transition: all 0.3s;
-        }
-        
-        .category-item:hover {
-            background-color: #e9ecef;
-        }
-        
-        .category-count {
-            background-color: #0e82fd;
-            color: white;
-            border-radius: 15px;
-            padding: 2px 10px;
-            font-size: 0.8rem;
-        }
-    </style>
+    }
+
+    /* Animation Enhancements */
+    [data-aos] {
+        transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+</style>
 </head>
 
 <body>
     {% block content %}
     <div class="main-wrapper">
         <!-- Header -->
-        <header class="header header-fixed header-one header-space">
+        <header class="header header-fixed header-one">
             <div class="container">
               <nav class="navbar navbar-expand-lg header-nav">
                 <div class="navbar-header">
@@ -351,70 +231,96 @@
                       <span></span>
                     </span>
                   </a>
-                  <a href="{% url 'home' %}" class="navbar-brand logo">
-                    <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo" />
+                  <a href="/" class="navbar-brand logo">
+                    <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
                   </a>
                 </div>
                 <div class="main-menu-wrapper">
                   <div class="menu-header">
-                    <a href="{% url 'home' %}" class="menu-logo">
-                      <img src="{% static 'assets/img/logo.png' %}"class="img-fluid"alt="Logo"/>
+                    <a href="/index" class="menu-logo">
+                      <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
                     </a>
-                    
-                    <a
-                      id="menu_close"
-                      class="menu-close"
-                      href="javascript:void(0);"
-                    >
-                      <svg
-                        class="svg-inline--fa fa-times fa-w-11"
-                        aria-hidden="true"
-                        focusable="false"
-                        data-prefix="fas"
-                        data-icon="times"
-                        role="img"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 352 512"
-                        data-fa-i2svg=""
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                        ></path>
-                      </svg>
+                    <a id="menu_close" class="menu-close" href="javascript:void(0);">
+                      <i class="fas fa-times"></i>
                     </a>
                   </div>
                   <ul class="main-nav">
-                    <li class="active">
-                      <a href="{% url 'home' %}">Home</a>
+                    <li><a
+                        href="{% if user_type == 'patient' or user_type == 'doctor' %}{% url 'index' %}{% else %}{% url 'home' %}{% endif %}">Home</a>
                     </li>
+                    <li><a href="{% url 'doctor_list' %}">Doctors</a></li>
+                    {% comment %} <li><a href="{% url 'about' %}">About Us</a></li> {% endcomment %}
                     <li>
-                      <a href="{% url 'doctor_list' %}">Doctors</a>
-                    </li>
-                    <li>
+                      {% if request.session.patient_id or request.session.doctor_id %}
+                      <a href="{% url 'about_us' %}">About Us</a>
+                      {% else %}
                       <a href="{% url 'about' %}">About Us</a>
+                      {% endif %}
                     </li>
                     <li>
+                      {% if request.session.patient_id or request.session.doctor_id %}
+                      <a href="{% url 'contact_us' %}">Contact Us</a>
+                      {% else %}
                       <a href="{% url 'contact' %}">Contact Us</a>
+                      {% endif %}
                     </li>
-    
-                    <li class="phone_login">
-                      <a href="{% url 'register' %}">Register</a>
-                    </li>
-                    <li class="phone_login">
-                      <a href="{% url 'login' %}">Login</a>
-                    </li>
-    
-                    <li class="register-btn">
-                      <a href="{% url 'register' %}" class="btn reg-btn">
-                        <i class="feather-user"></i>Register
-                      </a>
-                    </li>
-                    <li class="register-btn">
-                      <a href="{% url 'login' %}" class="btn btn-primary log-btn">
-                        <i class="feather-lock"></i>Login
-                      </a>
-                    </li>
+                    {% comment %} <li><a href="{% url 'contact' %}">Contact Us</a></li> {% endcomment %}
+                    <ul class="nav header-navbar-rht pt-3">
+      
+                      {% if request.session.patient_id or request.session.doctor_id %}
+                      <li class="nav-item dropdown has-arrow logged-item">
+                        <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
+                          <span class="user-img">
+                            {% if profile and profile.profile_img %}
+                            <img class="rounded-circle" src="{{ profile.profile_img.url }}" width="31" alt="profile" />
+                            {% else %}
+                            <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
+                              alt="default profile" />
+                            {% endif %}
+                          </span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                          <div class="user-header d-flex align-items-center">
+                            <div class="avatar avatar-sm me-2">
+                              {% if profile and profile.profile_img %}
+                              <img class="rounded-circle" src="{{ profile.profile_img.url }}" width="31" alt="profile" />
+                              {% else %}
+                              <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
+                                alt="default profile" />
+                              {% endif %}
+                            </div>
+                            <div class="user-text">
+                              <h6 class="mb-0">{{ profile.name }}</h6>
+                            </div>
+                          </div>
+                          {% if user_type == "patient" %}
+                          <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
+                          <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
+                          {% elif user_type == "doctor" %}
+                          <a class="dropdown-item" href="{% url 'doctor_dashboard' %}">Dashboard</a>
+                          <a class="dropdown-item" href="{% url 'doctor_profile_settings' %}">Profile Settings</a>
+                          {% endif %}
+                          <a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a>
+                        </div>
+                      </li>
+      
+      
+                      {% else %}
+      
+      
+                      <li class="register-btn mb-3 mx-2">
+                        <a href="{% url 'register' %}" class="btn reg-btn btn-primary">
+                          <i class="feather-user"></i>Register
+                        </a>
+                      </li>
+                      <li class="register-btn mb-3 ">
+                        <a href="{% url 'login' %}" class="btn btn-primary log-btn">
+                          <i class="feather-lock"></i>Login
+                        </a>
+                      </li>
+      
+                      {% endif %}
+                    </ul>
                   </ul>
                 </div>
               </nav>
@@ -422,35 +328,46 @@
           </header>
 
         <!-- Blog Hero Section -->
-        <section class="blog-hero bg-half-150 d-table w-100 py-5">
+        <section class="blog-hero bg-half-150 d-table w-100">
             <div class="container">
                 <div class="row mt-5 justify-content-center">
                     <div class="col-lg-10 text-center">
-                        <span class="blog-badge fw-semibold">COVID-19</span>
-                        <span class="blog-badge fw-semibold">Public Health</span>
+                        <span class="blog-badge fw-semibold fs-6">COVID-19</span>
+                        <span class="blog-badge fw-semibold fs-6">Public Health</span>
                         <h1 class="blog-title mb-4">Lockdowns Lead to Fewer People Seeking Medical Care: What This Means for Public Health</h1>
                         
-                        <div class="author-info justify-content-center">
+                        <div class="author-info" data-aos="fade-up" data-aos-delay="200">
                             <img src="{% static 'assets/client/08.jpg' %}" alt="Dr. Calvin Carlo" class="author-avatar shadow">
                             <div class="text-start">
                                 <h6 class="mb-0">Dr. Tanay Shah</h6>
-                                <small class="text-muted">Chief Medical Officer, WebDoctor</small>
+                                <small class="text-muted">Cheif Medical Officer</small>
+                                <div class="mt-2">
+                                    <small class="text-primary">
+                                        <i class="fas fa-star"></i> 4.3 Rating 
+                                        <i class="fas fa-user-md"></i> 5+ Years Experience
+                                    </small>
+                                </div>
                             </div>
                         </div>
                         
-                        <div class="d-flex justify-content-center align-items-center mt-3">
-                            <div class="blog-meta">
-                                <div>
-                                    <i class="fas fa-calendar-alt"></i>
-                                    <span class="m-2">January 1, 2024</span>
+                        <!-- Stats Grid -->
+                        <div class="row g-4 mt-3 text-white" data-aos="fade-up" data-aos-delay="300">
+                            <div class="col-4 fs-3">
+                                <div class="text-center">
+                                    <h4 class="mb-0 fw-bold">1.8M+</h4>
+                                    <small>Views</small>
                                 </div>
-                                <div>
-                                    <i class="fas fa-clock"></i>
-                                    <span class="m-2">8 min read</span>
+                            </div>
+                            <div class="col-4 fs-3">
+                                <div class="text-center">
+                                    <h4 class="mb-0 fw-bold">2.4K</h4>
+                                    <small>Shares</small>
                                 </div>
-                                <div>
-                                    <i class="fas fa-eye"></i>
-                                    <span class="m-2">1.2K views</span>
+                            </div>
+                            <div class="col-4 fs-3">
+                                <div class="text-center">
+                                    <h4 class="mb-0 fw-bold">98%</h4>
+                                    <small>Helpful</small>
                                 </div>
                             </div>
                         </div>
@@ -542,36 +459,6 @@
             </div>
         </div>
         
-        <!-- Comment 2 -->
-        <div class="comment-box">
-            <div class="d-flex">
-                <img src="{% static 'assets/client/02.jpg' %}" class="img-fluid rounded-circle shadow" alt="Amit Kumar" style="width: 60px; height: 60px;">
-                <div class="ms-3 w-100">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h6 class="mb-0">Priya Sharma</h6>
-                        <span class="text-muted small">2 October 2023</span>
-                    </div>
-                    <p class="text-muted">As a pharmacist in Bihar, I saw many patients substitute prescribed medicines with local substitutes due to supply issues. Need better logistics for chronic medicines in rural areas.</p>
-                    <a href="#" class="btn btn-sm btn-outline-primary"><i class="fas fa-reply me-1"></i>Reply</a>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Comment 3 -->
-        <div class="comment-box">
-            <div class="d-flex">
-                <img src="{% static 'assets/client/03.jpg' %}" class="img-fluid rounded-circle shadow" alt="Deepika Reddy" style="width: 60px; height: 60px;">
-                <div class="ms-3 w-100">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h6 class="mb-0">Deepika Reddy</h6>
-                        <span class="text-muted small">12 January 2024</span>
-                    </div>
-                    <p class="text-muted">Postponed my thyroid checkups for 8 months. When I finally visited Apollo Hyderabad, they had excellent safety measures - temperature checks, staggered appointments. More awareness needed!</p>
-                    <a href="#" class="btn btn-sm btn-outline-primary"><i class="fas fa-reply me-1"></i>Reply</a>
-                </div>
-            </div>
-        </div>
-        
         <!-- Comment 4 -->
         <div class="comment-box">
             <div class="d-flex">
@@ -622,32 +509,18 @@
                                     </form>
                                 </div>
                                 
-                                <!-- Categories -->
+                                <!-- Categories Widget -->
                                 <div class="widget mb-4 pb-2">
                                     <h5 class="widget-title">Health Categories</h5>
-                                    <div class="mt-4 health-categories">
-                                        <a href="#" class="category-item">
-                                            <span>COVID-19</span>
-                                            <span class="category-count">24</span>
-                                        </a>
-                                        <a href="#" class="category-item">
-                                            <span>Mental Health</span>
-                                            <span class="category-count">18</span>
-                                        </a>
-                                        <a href="#" class="category-item">
-                                            <span>Preventive Care</span>
-                                            <span class="category-count">15</span>
-                                        </a>
-                                        <a href="#" class="category-item">
-                                            <span>Nutrition</span>
-                                            <span class="category-count">12</span>
-                                        </a>
-                                        <a href="#" class="category-item">
-                                            <span>Chronic Disease</span>
-                                            <span class="category-count">9</span>
-                                        </a>
-                                    </div>
+                                    <ul class="list-unstyled mt-4">
+                                        <li class="mb-2"><a href="#" class="text-dark"><i class="fas fa-angle-right me-2"></i> COVID-19</a></li>
+                                        <li class="mb-2"><a href="#" class="text-dark"><i class="fas fa-angle-right me-2"></i> Mental Health</a></li>
+                                        <li class="mb-2"><a href="#" class="text-dark"><i class="fas fa-angle-right me-2"></i> Preventive Care</a></li>
+                                        <li class="mb-2"><a href="#" class="text-dark"><i class="fas fa-angle-right me-2"></i> Nutrition</a></li>
+                                        <li><a href="#" class="text-dark"><i class="fas fa-angle-right me-2"></i> Chronic Disease</a></li>
+                                    </ul>
                                 </div>
+                                
                                 
                                 <!-- Recent Posts -->
                                 <div class="widget mb-4 pb-2">
@@ -741,6 +614,14 @@
        <!-- Main Js -->
        <script src="{% static 'assets/js/plugins.init.js' %}"></script>
        <script src="{% static 'assets/js/app.js' %}"></script>
+       <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script>
+            AOS.init({
+                duration: 800,
+                once: true,
+                easing: 'ease-out-quad'
+            });
+        </script>
         {%include "footer.html" %}
        {% endblock %}
    </body>

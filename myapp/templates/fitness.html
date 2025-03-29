@@ -1,0 +1,811 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Programs | WebDoctor</title>
+    <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #3b82f6;
+            --accent: #60a5fa;
+            --gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+        }
+
+        .fitness-hero {
+            background: linear-gradient(to bottom, #9cecfb, #65c7f7, #0052d4); 
+            color: white;
+            padding: 120px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fitness-hero:before {
+            content: '';
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            top: -50%;
+            right: -20%;
+        }
+
+        .program-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            background: white;
+            position: relative;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(229, 231, 235, 0.5);
+        }
+
+        .program-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .program-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.95);
+            color: var(--primary);
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(229, 231, 235, 0.5);
+        }
+
+        .exercise-item {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa; /* Light gray background */
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+    
+        .exercise-item:hover {
+            transform: scale(1.05);
+        }
+    
+        .exercise-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            border-radius: 50%;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+            margin-right: 15px;
+        }
+
+        .exercise-item h6 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+        }
+    
+        .exercise-item small {
+            display: block;
+            color: #666;
+        }
+
+        .benefits-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .benefits-list li {
+            padding: 12px 0;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+        }
+
+        .benefits-list li:last-child {
+            border-bottom: none;
+        }
+
+        .benefits-list li i {
+            color: var(--primary);
+            margin-right: 12px;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: rgba(37, 99, 235, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-pills .nav-link {
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 12px;
+            margin: 0 8px;
+            color: #64748b;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-pills .nav-link.active {
+            background: var(--gradient);
+            color: white !important;
+            border-color: transparent;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+        }
+
+        .fitness-stats {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(8px);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .program-tabs {
+            margin-top: -60px;
+            position: relative;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            .fitness-hero { padding: 80px 0; }
+            .program-tabs { margin-top: -30px; }
+            .nav-pills .nav-link { margin: 4px 0; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+
+        <!-- Header -->
+        <header class="header header-fixed header-one">
+            <div class="container">
+              <nav class="navbar navbar-expand-lg header-nav">
+                <div class="navbar-header">
+                  <a id="mobile_btn" href="javascript:void(0);">
+                    <span class="bar-icon">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </span>
+                  </a>
+                  <a href="/" class="navbar-brand logo">
+                    <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+                  </a>
+                </div>
+                <div class="main-menu-wrapper">
+                  <div class="menu-header">
+                    <a href="/index" class="menu-logo">
+                      <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+                    </a>
+                    <a id="menu_close" class="menu-close" href="javascript:void(0);">
+                      <i class="fas fa-times"></i>
+                    </a>
+                  </div>
+                  <ul class="main-nav">
+                    <li><a
+                        href="{% if user_type == 'patient' or user_type == 'doctor' %}{% url 'index' %}{% else %}{% url 'home' %}{% endif %}">Home</a>
+                    </li>
+                    <li><a href="{% url 'doctor_list' %}">Doctors</a></li>
+                    {% comment %} <li><a href="{% url 'about' %}">About Us</a></li> {% endcomment %}
+                    <li>
+                      {% if request.session.patient_id or request.session.doctor_id %}
+                      <a href="{% url 'about_us' %}">About Us</a>
+                      {% else %}
+                      <a href="{% url 'about' %}">About Us</a>
+                      {% endif %}
+                    </li>
+                    <li>
+                      {% if request.session.patient_id or request.session.doctor_id %}
+                      <a href="{% url 'contact_us' %}">Contact Us</a>
+                      {% else %}
+                      <a href="{% url 'contact' %}">Contact Us</a>
+                      {% endif %}
+                    </li>
+                    {% comment %} <li><a href="{% url 'contact' %}">Contact Us</a></li> {% endcomment %}
+                    <ul class="nav header-navbar-rht pt-3">
+      
+                      {% if request.session.patient_id or request.session.doctor_id %}
+                      <li class="nav-item dropdown has-arrow logged-item">
+                        <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
+                          <span class="user-img">
+                            {% if profile and profile.profile_img %}
+                            <img class="rounded-circle" src="{{ profile.profile_img.url }}" width="31" alt="profile" />
+                            {% else %}
+                            <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
+                              alt="default profile" />
+                            {% endif %}
+                          </span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                          <div class="user-header d-flex align-items-center">
+                            <div class="avatar avatar-sm me-2">
+                              {% if profile and profile.profile_img %}
+                              <img class="rounded-circle" src="{{ profile.profile_img.url }}" width="31" alt="profile" />
+                              {% else %}
+                              <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
+                                alt="default profile" />
+                              {% endif %}
+                            </div>
+                            <div class="user-text">
+                              <h6 class="mb-0">{{ profile.name }}</h6>
+                            </div>
+                          </div>
+                          {% if user_type == "patient" %}
+                          <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
+                          <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
+                          {% elif user_type == "doctor" %}
+                          <a class="dropdown-item" href="{% url 'doctor_dashboard' %}">Dashboard</a>
+                          <a class="dropdown-item" href="{% url 'doctor_profile_settings' %}">Profile Settings</a>
+                          {% endif %}
+                          <a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a>
+                        </div>
+                      </li>
+      
+      
+                      {% else %}
+      
+      
+                      <li class="register-btn mb-3 mx-2">
+                        <a href="{% url 'register' %}" class="btn reg-btn btn-primary">
+                          <i class="feather-user"></i>Register
+                        </a>
+                      </li>
+                      <li class="register-btn mb-3 ">
+                        <a href="{% url 'login' %}" class="btn btn-primary log-btn">
+                          <i class="feather-lock"></i>Login
+                        </a>
+                      </li>
+      
+                      {% endif %}
+                    </ul>
+                  </ul>
+                </div>
+              </nav>
+            </div>
+        </header>
+
+        <!-- Enhanced Hero Section -->
+        <section class="fitness-hero">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h1 class="display-3 fw-bold mb-4">Transform Your Fitness Journey</h1>
+                        <p class="lead mb-4 opacity-90">Expert-designed programs for every level and goal</p>
+                        <div class="d-flex gap-4 fitness-stats">
+                            <div class="text-center">
+                                <h3 class="fw-bold mb-0">50+</h3>
+                                <p class="mb-0 opacity-90">Exercises</p>
+                            </div>
+                            <div class="text-center">
+                                <h3 class="fw-bold mb-0">3</h3>
+                                <p class="mb-0 opacity-90">Programs</p>
+                            </div>
+                            <div class="text-center">
+                                <h3 class="fw-bold mb-0">All</h3>
+                                <p class="mb-0 opacity-90">Levels</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mt-5 mt-lg-0">
+                        <img src="{% static 'assets/img/fitness-hero.jpg' %}" alt="Fitness" class="img-fluid rounded-3 shadow-lg" height="300" width="600">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    <!-- Programs Navigation -->
+     <!-- Enhanced Programs Navigation -->
+     <section class="program-tabs mt-5">
+        <div class="container">
+            <ul class="nav nav-pills justify-content-center mb-5" id="fitness-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="cardio-tab" data-bs-toggle="pill" data-bs-target="#cardio" type="button">
+                        <i class="fas fa-heartbeat me-2"></i>Cardio
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="yoga-tab" data-bs-toggle="pill" data-bs-target="#yoga" type="button">
+                        <i class="fas fa-spa me-2"></i>Yoga
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="strength-tab" data-bs-toggle="pill" data-bs-target="#strength" type="button">
+                        <i class="fas fa-dumbbell me-2"></i>Strength
+                    </button>
+                </li>
+            </ul>
+            
+            <div class="tab-content" id="fitness-tabContent">
+                <!-- Cardio Exercises Tab -->
+                <div class="tab-pane fade show active" id="cardio" role="tabpanel">
+                    <div class="row">
+                        <div class="col-lg-4 mb-4">
+                            <div class="program-card h-100">
+                                <span class="program-badge">Beginner</span>
+                                <img src="{% static 'assets/img/cardio-beginner.jpg' %}" class="card-img-top" alt="Beginner Cardio">
+                                <div class="card-body">
+                                    <h5 class="card-title">30-Minute Beginner Cardio</h5>
+                                    <p class="card-text">Perfect for those starting their fitness journey or returning after a break.</p>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-walking fa-2x" style="color: #28a745;"></i>
+                                        </div>
+                                        <div>
+                                            <h6>Brisk Walking</h6>
+                                            <small>5 min warm-up + 20 min walk + 5 min cool down</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-shoe-prints fa-2x" style="color: #007bff;"></i>
+                                        </div>
+                                        <div>
+                                            <h6>Marching in Place</h6>
+                                            <small>3 sets of 1 minute with 30 sec rest</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-stairs fa-2x" style="color: #ff5733;"></i>
+                                        </div>
+                                        <div>
+                                            <h6>Stair Climbing</h6>
+                                            <small>5 minutes at comfortable pace</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <h6 class="mt-4">Benefits:</h6>
+                                    <ul class="benefits-list">
+                                        <li><i class="fas fa-heart me-2 fs-lg" style="color: red;"></i> Improves heart health</li>
+                                        <li><i class="fas fa-lungs me-2 fs-lg" style="color: blue;"></i> Increases lung capacity</li>
+                                        <li><i class="fas fa-burn me-2 fs-lg" style="color: orange;"></i> Burns 150-200 calories</li>
+                                    </ul>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4 mb-4">
+                            <div class="program-card h-100">
+                                <span class="program-badge">Intermediate</span>
+                                <img src="{% static 'assets/img/cardio-intermediate.jpg' %}" class="card-img-top" alt="Intermediate Cardio">
+                                <div class="card-body">
+                                    <h5 class="card-title">45-Minute Intermediate HIIT</h5>
+                                    <p class="card-text">High Intensity Interval Training for improved endurance and fat burning.</p>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-running fa-2x" style="color: #f39c12;"></i> <!-- Jump Rope -->
+                                        </div>
+                                        <div>
+                                            <h6>Jump Rope</h6>
+                                            <small>30 sec on, 30 sec off (8 rounds)</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-dumbbell fa-2x" style="color: #e74c3c;"></i> <!-- Burpees -->
+                                        </div>
+                                        <div>
+                                            <h6>Burpees</h6>
+                                            <small>45 sec on, 15 sec off (5 rounds)</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-biking fa-2x" style="color: #3498db;"></i> <!-- Cycling Sprints -->
+                                        </div>
+                                        <div>
+                                            <h6>Cycling Sprints</h6>
+                                            <small>1 min fast, 2 min recovery (5 rounds)</small>
+                                        </div>
+                                    </div>
+
+                                    
+                                    <h6 class="mt-4">Benefits:</h6>
+                                    <ul class="benefits-list">
+                                        <li><i class="fas fa-bolt me-2 fs-lg" style="color: gold;"></i> Boosts metabolism for hours</li>
+                                        <li><i class="fas fa-heartbeat me-2 fs-lg" style="color: red;"></i> Improves cardiovascular endurance</li>
+                                        <li><i class="fas fa-burn me-2 fs-lg" style="color: orange;"></i> Burns 300-400 calories</li>
+                                    </ul>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4 mb-4">
+                            <div class="program-card h-100">
+                                <span class="program-badge">Advanced</span>
+                                <img src="{% static 'assets/img/cardio-advanced.jpg' %}" class="card-img-top" alt="Advanced Cardio">
+                                <div class="card-body">
+                                    <h5 class="card-title">60-Minute Advanced Cardio Blast</h5>
+                                    <p class="card-text">Challenging workout for those with good fitness foundation.</p>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-running fa-2x" style="color: #e74c3c;"></i> <!-- Running Intervals -->
+                                        </div>
+                                        <div>
+                                            <h6>Running Intervals</h6>
+                                            <small>400m fast, 200m recovery (8 rounds)</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-swimmer fa-2x" style="color: #3498db;"></i> <!-- Swimming Laps -->
+                                        </div>
+                                        <div>
+                                            <h6>Swimming Laps</h6>
+                                            <small>10 x 50m freestyle with 30 sec rest</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-mountain fa-2x" style="color: #2ecc71;"></i> <!-- Hill Repeats -->
+                                        </div>
+                                        <div>
+                                            <h6>Hill Repeats</h6>
+                                            <small>8 x 30 sec uphill sprints with walk down</small>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <h6 class="mt-4">Benefits:</h6>
+                                    <ul class="benefits-list">
+                                        <li><i class="fas fa-tachometer-alt me-2 fs-lg" style="color: blue;"></i> Increases VO2 max</li>
+                                        <li><i class="fas fa-dumbbell me-2 fs-lg" style="color: gray;"></i> Enhances athletic performance</li>
+                                        <li><i class="fas fa-burn me-2 fs-lg" style="color: orange;"></i> Burns 500-700 calories</li>
+                                    </ul>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Yoga Routine Tab -->
+                <div class="tab-pane fade" id="yoga" role="tabpanel">
+                    <div class="row">
+                        <div class="col-lg-4 mb-4">
+                            <div class="program-card h-100">
+                                <span class="program-badge">Morning</span>
+                                <img src="{% static 'assets/img/yoga-morning.jpg' %}" class="card-img-top" alt="Morning Yoga">
+                                <div class="card-body">
+                                    <h5 class="card-title">Energizing Morning Flow</h5>
+                                    <p class="card-text">25-minute sequence to awaken your body and mind.</p>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-sun fa-2x" style="color: #f39c12;"></i> <!-- Surya Namaskar -->
+                                        </div>
+                                        <div>
+                                            <h6>Surya Namaskar</h6>
+                                            <small>5 rounds with breath synchronization</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-tree fa-2x" style="color: #27ae60;"></i> <!-- Vrikshasana (Tree Pose) -->
+                                        </div>
+                                        <div>
+                                            <h6>Vrikshasana (Tree Pose)</h6>
+                                            <small>30 sec each side</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-child fa-2x" style="color: #3498db;"></i> <!-- Balasana (Child's Pose) -->
+                                        </div>
+                                        <div>
+                                            <h6>Balasana (Child's Pose)</h6>
+                                            <small>1 minute with deep breathing</small>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <h6 class="mt-4">Benefits:</h6>
+                                    <ul class="benefits-list">
+                                        <li><i class="fas fa-brain me-2 fs-lg" style="color: blue;"></i> Improves focus and clarity</li>
+                                        <li><i class="fas fa-bolt me-2 fs-lg" style="color: gold;"></i> Boosts energy levels</li>
+                                        <li><i class="fas fa-spa me-2 fs-lg" style="color: green;"></i> Reduces morning stiffness</li>
+                                    </ul>                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4 mb-4">
+                            <div class="program-card h-100">
+                                <span class="program-badge">Midday</span>
+                                <img src="{% static 'assets/img/yoga-midday.jpg' %}" class="card-img-top" alt="Midday Yoga">
+                                <div class="card-body">
+                                    <h5 class="card-title">Office Yoga Break</h5>
+                                    <p class="card-text">15-minute desk-friendly poses to relieve tension.</p>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-chair fa-2x" style="color: #8e44ad;"></i> <!-- Seated Cat-Cow -->
+                                        </div>
+                                        <div>
+                                            <h6>Seated Cat-Cow</h6>
+                                            <small>2 minutes flowing movement</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-hands fa-2x" style="color: #e67e22;"></i> <!-- Garudasana Arms -->
+                                        </div>
+                                        <div>
+                                            <h6>Garudasana Arms</h6>
+                                            <small>30 sec each side</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-undo-alt fa-2x" style="color: #2ecc71;"></i> <!-- Seated Spinal Twist -->
+                                        </div>
+                                        <div>
+                                            <h6>Seated Spinal Twist</h6>
+                                            <small>1 minute each side</small>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <h6 class="mt-4">Benefits:</h6>
+                                    <ul class="benefits-list">
+                                        <li><i class="fas fa-user-md me-2 fs-lg" style="color: #e74c3c;"></i> Relieves back and neck pain</li>
+                                        <li><i class="fas fa-heartbeat me-2 fs-lg" style="color: #ff4757;"></i> Improves circulation</li>
+                                        <li><i class="fas fa-lightbulb me-2 fs-lg" style="color: #f1c40f;"></i> Enhances productivity</li>
+                                    </ul>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4 mb-4">
+                            <div class="program-card h-100">
+                                <span class="program-badge">Evening</span>
+                                <img src="{% static 'assets/img/yoga-evening.jpg' %}" class="card-img-top" alt="Evening Yoga">
+                                <div class="card-body">
+                                    <h5 class="card-title">Relaxing Evening Sequence</h5>
+                                    <p class="card-text">30-minute wind-down routine for better sleep.</p>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-moon fa-2x" style="color: #8e44ad;"></i> <!-- Supta Baddha Konasana -->
+                                        </div>
+                                        <div>
+                                            <h6>Supta Baddha Konasana</h6>
+                                            <small>5 minutes with bolster support</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-water fa-2x" style="color: #3498db;"></i> <!-- Viparita Karani (Legs Up the Wall) -->
+                                        </div>
+                                        <div>
+                                            <h6>Viparita Karani</h6>
+                                            <small>Legs-up-the-wall for 5-7 minutes</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-bed fa-2x" style="color: #2ecc71;"></i> <!-- Yoga Nidra -->
+                                        </div>
+                                        <div>
+                                            <h6>Yoga Nidra</h6>
+                                            <small>10 minute guided relaxation</small>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <h6 class="mt-4">Benefits:</h6>
+                                    <ul class="benefits-list">
+                                        <li><i class="fas fa-moon me-2 fs-lg" style="color: #8e44ad;"></i> Promotes deep relaxation</li>
+                                        <li><i class="fas fa-heart me-2 fs-lg" style="color: #e74c3c;"></i> Lowers cortisol levels</li>
+                                        <li><i class="fas fa-bed me-2 fs-lg" style="color: #3498db;"></i> Improves sleep quality</li>
+                                    </ul>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Strength Training Tab -->
+                <div class="tab-pane fade" id="strength" role="tabpanel">
+                    <div class="row">
+                        <div class="col-lg-4 mb-4">
+                            <div class="program-card h-100">
+                                <span class="program-badge">Beginner</span>
+                                <img src="{% static 'assets/img/strength-beginner.jpg' %}" class="card-img-top" alt="Beginner Strength">
+                                <div class="card-body">
+                                    <h5 class="card-title">Full Body Fundamentals</h5>
+                                    <p class="card-text">Bodyweight exercises to build foundational strength.</p>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-hand-rock fa-2x" style="color: #e67e22;"></i> <!-- Wall Push-ups -->
+                                        </div>
+                                        <div>
+                                            <h6>Wall Push-ups</h6>
+                                            <small>3 sets of 10-12 reps</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-chair fa-2x" style="color: #3498db;"></i> <!-- Chair Squats -->
+                                        </div>
+                                        <div>
+                                            <h6>Chair Squats</h6>
+                                            <small>3 sets of 12-15 reps</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-expand-arrows-alt fa-2x" style="color: #2ecc71;"></i> <!-- Standing Rows with Band -->
+                                        </div>
+                                        <div>
+                                            <h6>Standing Rows with Band</h6>
+                                            <small>3 sets of 12 reps</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <h6 class="mt-4">Benefits:</h6>
+                                    <ul class="benefits-list">
+                                        <li><i class="fas fa-bone me-2 fs-lg" style="color: #f39c12;"></i> Builds joint stability</li>
+                                        <li><i class="fas fa-user-alt me-2 fs-lg" style="color: #8e44ad;"></i> Improves posture</li>
+                                        <li><i class="fas fa-fire me-2 fs-lg" style="color: #e74c3c;"></i> Activates major muscle groups</li>
+                                    </ul>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4 mb-4">
+                            <div class="program-card h-100">
+                                <span class="program-badge">Intermediate</span>
+                                <img src="{% static 'assets/img/strength-intermediate.jpg' %}" class="card-img-top" alt="Intermediate Strength">
+                                <div class="card-body">
+                                    <h5 class="card-title">Dumbbell Strength Circuit</h5>
+                                    <p class="card-text">Total body workout with moderate weights and dumbells.</p>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-dumbbell fa-2x" style="color: #e67e22;"></i> <!-- Goblet Squats -->
+                                        </div>
+                                        <div>
+                                            <h6>Goblet Squats</h6>
+                                            <small>4 sets of 10 reps</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-hand-rock fa-2x" style="color: #3498db;"></i> <!-- Bent-over Rows -->
+                                        </div>
+                                        <div>
+                                            <h6>Bent-over Rows</h6>
+                                            <small>3 sets of 12 reps</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-arrow-up fa-2x" style="color: #2ecc71;"></i> <!-- Overhead Press -->
+                                        </div>
+                                        <div>
+                                            <h6>Overhead Press</h6>
+                                            <small>3 sets of 10 reps</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <h6 class="mt-4">Benefits:</h6>
+                                    <ul class="benefits-list">
+                                        <li><i class="fas fa-dumbbell me-2 fs-lg" style="color: #e74c3c;"></i> Increases lean muscle mass</li>
+                                        <li><i class="fas fa-fire me-2 fs-lg" style="color: #f39c12;"></i> Boosts metabolism</li>
+                                        <li><i class="fas fa-shield-alt me-2 fs-lg" style="color: #8e44ad;"></i> Strengthens bones</li>
+                                    </ul>                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4 mb-4">
+                            <div class="program-card h-100">
+                                <span class="program-badge">Advanced</span>
+                                <img src="{% static 'assets/img/strength-advanced.jpg' %}" class="card-img-top" alt="Advanced Strength">
+                                <div class="card-body">
+                                    <h5 class="card-title">Powerlifting Program</h5>
+                                    <p class="card-text">Focus on the big three lifts for maximum strength.</p>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-dumbbell fa-2x" style="color: #e67e22;"></i> <!-- Barbell Squats -->
+                                        </div>
+                                        <div>
+                                            <h6>Barbell Squats</h6>
+                                            <small>5 sets of 5 reps (heavy)</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-dumbbell fa-2x" style="color: #3498db;"></i> <!-- Bench Press -->
+                                        </div>
+                                        <div>
+                                            <h6>Bench Press</h6>
+                                            <small>5 sets of 5 reps</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="exercise-item">
+                                        <div class="exercise-icon">
+                                            <i class="fas fa-weight-hanging fa-2x" style="color: #2ecc71;"></i> <!-- Deadlifts -->
+                                        </div>
+                                        <div>
+                                            <h6>Deadlifts</h6>
+                                            <small>3 sets of 3 reps</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <h6 class="mt-4">Benefits:</h6>
+                                    <ul class="benefits-list">
+                                        <li><i class="fas fa-bolt me-2 fs-lg" style="color: #f39c12;"></i> Develops explosive power</li>
+                                        <li><i class="fas fa-trophy me-2 fs-lg" style="color: #e74c3c;"></i> Increases 1-rep max</li>
+                                        <li><i class="fas fa-mountain me-2 fs-lg" style="color: #8e44ad;"></i> Builds core stability</li>
+                                    </ul>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+    {% include 'footer.html' %}
+
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+        // Initialize tab functionality
+        var tabElms = document.querySelectorAll('button[data-bs-toggle="pill"]');
+        tabElms.forEach(function(tabEl) {
+            tabEl.addEventListener('shown.bs.tab', function (event) {
+                window.scrollTo(0, 400); // Scroll to content after tab change
+            })
+        });
+    </script>
+</body>
+</html>

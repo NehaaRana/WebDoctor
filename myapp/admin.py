@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import patientRegister
 from .models import adminLogin
 # from .models import doctorRegister,appointment,review
-from .models import doctorRegister,appointment,review,Payment,HealthRecord,Prescription
+from .models import doctorRegister,appointment,review,Payment,HealthRecord,Prescription,EmergencyRequest ,Medicine
 # from .models import doctorRegister,appointment,review,payment
 # Register your models here.
 
@@ -15,6 +15,8 @@ admin.site.register(adminLogin)
 admin.site.register(HealthRecord)
 # admin.site.register(MedicalInfo)
 admin.site.register(Prescription)
+admin.site.register(EmergencyRequest)
+admin.site.register(Medicine)
 
 
 

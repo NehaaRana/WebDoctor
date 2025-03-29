@@ -14,19 +14,218 @@
     <link href="{%static 'assets/admin_libs/jsvectormap/css/jsvectormap.min.css'%}" rel="stylesheet" type="text/css" />
 
     <!-- Bootstrap Css -->
-    <link href="{%static 'assets/admin_css/bootstrap.min.css' %}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <link href="{%static 'assets/admin_css/bootstrap.min.css' %}" id="bootstrap-style" rel="stylesheet"
+        type="text/css" />
     <!-- Icons Css -->
     <link href="{%static 'assets/admin_css/icons.min.css' %}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.0/css/boxicons.min.css" />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js" integrity="sha512-b+nQTCdtTBIRIbraqNEwsjB6UvL3UEMkXnhzd8awtCYh0Kcsjl9uEgwVFVbhoj3uu1DO1ZMacNvLoyJJiNfcvg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- jquery-confirm CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
     <!-- App Css-->
     <link href="{%static 'assets/admin_css/app.min.css' %}" id="app-style" rel="stylesheet" type="text/css" />
     <style>
         * {
             font-family: poppins !important;
         }
+
+    /* Modern Notification Styles */
+.notification-container {
+    position: relative;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+
+}
+
+.notification-icon {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: rgba(59, 130, 246, 0.1);
+    transition: all 0.3s ease;
+}
+
+.notification-icon:hover {
+    background-color: rgba(59, 130, 246, 0.2);
+}
+
+.notification-icon i {
+    color: #3b82f6;
+    font-size: 24px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background-color: #ef4444;
+    color: white;
+    border-radius: 50%;
+    min-width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 0 5px;
+    border: 2px solid white;
+}
+
+.notifications-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    left: auto !important; /* Force right alignment */
+    width: 350px;
+    max-height: 450px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05);
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.notifications-dropdown.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notifications-dropdown .notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    background-color: #f9fafb;
+}
+
+.notifications-dropdown .notification-header h4 {
+    margin: 0;
+    font-size: 16px;
+    color: #374151;
+}
+
+.notifications-dropdown .notification-item {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+}
+
+.notifications-dropdown .notification-item:hover {
+    background-color: #f3f4f6;
+}
+
+.notifications-dropdown .notification-item .notification-content {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.notifications-dropdown .notification-item .notification-content p {
+    margin: 0;
+    color: #374151;
+    font-size: 14px;
+}
+
+.notifications-dropdown .notification-item .notification-content small {
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.notifications-dropdown .btn-pending {
+    background-color: #fbbf24;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.notifications-dropdown .btn-pending:hover {
+    background-color: #f59e0b;
+}
+
+.notifications-dropdown .empty-state {
+    text-align: center;
+    padding: 30px;
+    color: #6b7280;
+}
+
+/* Scrollbar styling for notifications dropdown */
+.notifications-dropdown::-webkit-scrollbar {
+    width: 8px;
+}
+
+.notifications-dropdown::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 10px;
+}
+
+.notifications-dropdown::-webkit-scrollbar-thumb {
+    background: #9ca3af;
+    border-radius: 10px;
+}
+
+.notifications-dropdown::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
+}
+
+.notification__icon {
+    position: absolute;
+    right: 30px;
+    top: 20px;
+    z-index: 1000;
+}
+
+/* 1. Mobile (Small Screens) - up to 480px */
+@media (max-width: 480px) {
+    .notification__icon {
+        right: 15px;
+        top: 15px;
+    }
+}
+
+/* 2. Tablet - 481px to 768px */
+@media (min-width: 481px) and (max-width: 768px) {
+    .notification__icon {
+        right: 25px;
+        top: 18px;
+    }
+}
+
+/* 3. Laptop - 769px to 1024px */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .notification__icon {
+        right: 30px;
+        top: 20px;
+    }
+}
+
+/* 4. Desktop - 1025px and above */
+@media (min-width: 1025px) {
+    .notification__icon {
+        right: 50px;
+        top: 25px;
+    }
+}
+
     </style>
 
 </head>
@@ -59,6 +258,24 @@
                         <h4 class="page-title mb-0">Dashboard</h4>
                     </div>
                     <!-- end page title -->
+
+                    <div class="d-flex align-items-center notification__icon">
+                        <div class="notification-container position-relative">
+                            <div class="notification-icon" onclick="toggleNotifications(event)">
+                                <i class="fa-solid fa-bell fa-shake fa-2xl" style="color: #f0dd0a;"></i>
+                                <span id="notification-badge" class="notification-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
+                            </div>
+                            <div id="notifications" class="notifications-dropdown end-0 position-absolute start-auto mt-1">
+                                <div class="notification-header">
+                                    <h4>Pending Registrations</h4>
+                                    <button onclick="clearAllNotifications()" class="btn btn-primary btn-sm">Clear All</button>
+                                </div>
+                                <div id="notification-list">
+                                    <!-- Pending doctors list will appear here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -100,52 +317,63 @@
 
                         <li>
                             <a href="{% url 'admin_dashboard' %}">
-                                <i class="bx bxs-dashboard icon nav-icon"></i>
+                                <i class="fa-solid fa-chart-simple icon nav-icon"></i>
                                 <span class="menu-item" data-key="t-dashboard">Dashboard</span>
                             </a>
                         </li>
 
                         <li>
                             <a href="{% url 'admin_manage_doctors' %}">
-                                <i class="bx bx-user-plus icon nav-icon"></i>
+                                <i class="fa-solid fa-user-doctor icon nav-icon"></i>
                                 <span class="menu-item" data-key="t-email">Doctors</span>
                             </a>
                         </li>
 
                         <li>
                             <a href="{% url 'admin_manage_patients' %}">
-                                <i class="bx bx-calendar-event icon nav-icon"></i>
+                                <i class="fa-solid fa-users-line icon nav-icon" ></i>
                                 <span class="menu-item" data-key="t-calendar">Patients</span>
                             </a>
                         </li>
 
                         <li>
                             <a href="{% url 'admin_manage_appointments' %}">
-                                <i class="bx bxs-calendar icon nav-icon"></i>
+                                <i class="fa-solid fa-calendar-plus icon nav-icon"></i>
                                 <span class="menu-item" data-key="t-todo">Appointments</span>
                             </a>
                         </li>
 
                         <li>
                             <a href="{% url 'admin_manage_review' %}">
-                                <i class="bx bxs-star icon nav-icon"></i>
+                                <i class="fa-solid fa-comments icon nav-icon"></i>
                                 <span class="menu-item" data-key="t-filemanager">Reviews</span>
                             </a>
                         </li>
                         <li>
                             <a href="{% url 'admin_manage_payment' %}">
-                                <i class="bx bxs-credit-card-alt icon nav-icon"></i>
+                                <i class="fa-solid fa-credit-card icon nav-icon"></i>
                                 <span class="menu-item" data-key="t-filemanager">Payments</span>
                             </a>
                         </li>
+                        {% comment %} medicine {% endcomment %}
+                        <li>
+                            <a href="{% url 'admin_add_medicine' %}">
+                                  <i class="fas fa-pills icon nav-icon">
+                                   
+                                  </i>
+                                  <span class="menu-item" data-key="t-Medicine">Medicines</span>
+                              </a>
+                            </li>
+
                         <li>
                             <a href="{% url 'admin_logout' %}">
-                                <i class="bx bx-log-out icon nav-icon"></i>
+                                <i class="fa-solid fa-right-from-bracket icon nav-icon"></i>
                                 <span class="menu-item" data-key="t-filemanager">Logout</span>
                             </a>
                         </li>
                     </ul>
                 </div>
+
                 <!-- Sidebar -->
             </div>
         </div>
@@ -195,26 +423,23 @@
                 <div class="container-fluid mt-3">
 
                     <div class="row">
-
                         <div class="col-xl-12">
                             <div class="row">
-                                <div class="col-xl-6">
-                                    <div class="card">
-                                        <div class="card-body">
+                                
+                                <div class="col-md-3">
+                                    <div class="card shadow-sm">
+                                        <div class="card-body ">
                                             <div>
                                                 <div class="d-flex align-items-center">
                                                     <div class="avatar">
                                                         <div class="avatar-title rounded bg-primary-subtle ">
-                                                            <i
-                                                                class="bx bx-check-shield font-size-24 mb-0 text-primary"></i>
+                                                            <i class="fas fa-user-doctor font-size-24 mb-0 text-primary"></i>
                                                         </div>
                                                     </div>
-
                                                     <div class="flex-grow-1 ms-3">
                                                         <h6 class="mb-0 font-size-15">Total Doctors</h6>
                                                     </div>
                                                 </div>
-
                                                 <div>
                                                     <h4 class="mt-4 pt-1 mb-0 font-size-22">{{ total_doctors }}</h4>
                                                     <div class="d-flex mt-1 align-items-end overflow-hidden">
@@ -222,10 +447,6 @@
                                                             <p class="text-muted mb-0 text-truncate">Total Doctors World
                                                                 Wide</p>
                                                         </div>
-                                                        <div class="flex-shrink-0">
-                                                            <div id="mini-1" data-colors='["#1f58c7"]'
-                                                                class="apex-charts"></div>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -233,33 +454,26 @@
                                     </div>
                                 </div>
 
-                                <div class="col-xl-6">
-                                    <div class="card">
+                                <div class="col-md-3">
+                                    <div class="card shadow-sm">
                                         <div class="card-body">
                                             <div>
                                                 <div class="d-flex align-items-center">
                                                     <div class="avatar">
                                                         <div class="avatar-title rounded bg-primary-subtle ">
-                                                            <i
-                                                                class="bx bx-cart-alt font-size-24 mb-0 text-primary"></i>
+                                                            <i class="fas fa-users-line font-size-24 mb-0 text-info"></i>
                                                         </div>
                                                     </div>
-
                                                     <div class="flex-grow-1 ms-3">
                                                         <h6 class="mb-0 font-size-15">Total Patients</h6>
                                                     </div>
                                                 </div>
-
                                                 <div>
                                                     <h4 class="mt-4 pt-1 mb-0 font-size-22">{{ total_patients }}</h4>
                                                     <div class="d-flex mt-1 align-items-end overflow-hidden">
                                                         <div class="flex-grow-1">
                                                             <p class="text-muted mb-0 text-truncate">Total Patients World
-                                                                Wide</p>
-                                                        </div>
-                                                        <div class="flex-shrink-0">
-                                                            <div id="mini-2" data-colors='["#1f58c7"]'
-                                                                class="apex-charts"></div>
+                                                            Wide</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -267,16 +481,15 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xl-6">
-                                    <div class="card">
+
+                                <div class="col-md-3">
+                                    <div class="card shadow-sm">
                                         <div class="card-body">
                                             <div>
                                                 <div class="d-flex align-items-center">
                                                     <div class="avatar">
                                                         <div class="avatar-title rounded bg-primary-subtle ">
-                                                            <i class="bx bx-package font-size-24 mb-0 text-primary"></i>
+                                                            <i class="fas fa-calendar-plus font-size-24 mb-0 text-success"></i>
                                                         </div>
                                                     </div>
 
@@ -286,15 +499,13 @@
                                                 </div>
 
                                                 <div>
-                                                    <h4 class="mt-4 pt-1 mb-0 font-size-22">{{ total_appointments }}</h4>
+                                                    <h4 class="mt-4 pt-1 mb-0 font-size-22">{{ total_appointments }}
+                                                    </h4>
                                                     <div class="d-flex mt-1 align-items-end overflow-hidden">
                                                         <div class="flex-grow-1">
-                                                            <p class="text-muted mb-0 text-truncate">Total Appointments World
+                                                            <p class="text-muted mb-0 text-truncate">Total Appointments
+                                                                World
                                                                 Wide</p>
-                                                        </div>
-                                                        <div class="flex-shrink-0">
-                                                            <div id="mini-3" data-colors='["#1f58c7"]'
-                                                                class="apex-charts"></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -303,14 +514,14 @@
                                     </div>
                                 </div>
 
-                                <div class="col-xl-6">
-                                    <div class="card">
+                                <div class="col-md-3">
+                                    <div class="card shadow-sm">
                                         <div class="card-body">
                                             <div>
                                                 <div class="d-flex align-items-center">
                                                     <div class="avatar">
                                                         <div class="avatar-title rounded bg-primary-subtle ">
-                                                            <i class="bx bx-rocket font-size-24 mb-0 text-primary"></i>
+                                                            <i class="fas fa-rocket font-size-24 mb-0 text-danger"></i>
                                                         </div>
                                                     </div>
 
@@ -323,12 +534,9 @@
                                                     <h4 class="mt-4 pt-1 mb-0 font-size-22">{{ total_revenue }}</h4>
                                                     <div class="d-flex mt-1 align-items-end overflow-hidden">
                                                         <div class="flex-grow-1">
-                                                            <p class="text-muted mb-0 text-truncate">Total Revenue generated World
+                                                            <p class="text-muted mb-0 text-truncate">Total Revenue
+                                                                generated World
                                                                 Wide</p>
-                                                        </div>
-                                                        <div class="flex-shrink-0">
-                                                            <div id="mini-4" data-colors='["#1f58c7"]'
-                                                                class="apex-charts"></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -336,8 +544,8 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
+
                         <div class="col-xl-12">
                             <div class="card">
                                 <div class="card-body pb-0">
@@ -386,7 +594,7 @@
     <script src="{%static 'assets/admin_libs/simplebar/simplebar.min.js' %}"></script>
     <script src="{%static 'assets/admin_libs/eva-icons/eva.min.js' %}"></script>
 
-     <script>
+    <script>
         document.addEventListener("DOMContentLoaded", function () {
             var options = {
                 chart: {
@@ -396,24 +604,25 @@
                 series: [
                     {
                         name: "Appointments",
-                        data: {{ appointments|safe }} // Django will insert data here
+                        data: {{ appointments| safe }
+        } // Django will insert data here
                     },
-                    {
-                        name: "Revenue",
-                        data: {{ revenue|safe }} // Django will insert data here
+            {
+                name: "Revenue",
+                data: {{ revenue| safe }} // Django will insert data here
                     }
                 ],
-                xaxis: {
-                    categories: {{ months|safe }} // Months will be displayed
+            xaxis: {
+            categories: {{ months| safe }} // Months will be displayed
                 },
-                colors: ["#1f58c7", "#ff5733"] // Blue for Appointments, Red for Revenue
+            colors: ["#1f58c7", "#ff5733"] // Blue for Appointments, Red for Revenue
             };
-    
-            var chart = new ApexCharts(document.querySelector("#overview"), options);
-            chart.render();
+
+        var chart = new ApexCharts(document.querySelector("#overview"), options);
+        chart.render();
         });
     </script>
-    
+
 
     <!-- apexcharts -->
     <script src="{%static 'assets/admin_libs/apexcharts/apexcharts.min.js' %}"></script>
@@ -428,37 +637,126 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
 
-<script>
-    $(document).ready(function () {
-  function showAlert(icon, message) {
-       $.alert({
-         title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
-         content: `<span style="font-size: 15px;">${message}</span>`,
-         type: "blue",
-         theme: "modern",
-         buttons: {
-           ok: {
-             text: "OK",
-             btnClass: "btn-blue",
-           },
-         },
-       });
-     }
-     let delay = 500; // Start with a small delay
-     {% for message in messages %}
-     setTimeout(function () {
-       showAlert(
-         "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
-         "{{ message|escape }}",
-         "{{ message.tags }}"
-       );
-     }, delay);
-     delay += 1000; // Increase delay for next message
-     {% endfor %}
-    })
-    
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            function showAlert(icon, message) {
+                $.alert({
+                    title: <i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>,
+                    content: <span style="font-size: 15px;">${message}</span>,
+                    type: "blue",
+                    theme: "modern",
+                    buttons: {
+                        ok: {
+                            text: "OK",
+                            btnClass: "btn-blue",
+                        },
+                    },
+                });
+            }
+        }
+            let delay = 500; // Start with a small delay
+            {% for message in messages %}
+            setTimeout(function () {
+                showAlert(
+                    "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
+                    "{{ message|escape }}",
+                    "{{ message.tags }}"
+                );
+            }, delay);
+            delay += 1000; // Increase delay for next message
+            {% endfor %}
+        })
+
+    </script>
+
+
+    <script>
+        async function fetchPendingDoctors() {
+            try {
+                const response = await fetch("/doctors/pending/");
+                const doctors = await response.json();
+                const notificationList = document.getElementById("notification-list");
+                const badge = document.getElementById("notification-badge");
+        
+                // Update badge
+                badge.textContent = doctors.length > 0 ? doctors.length : '';
+                badge.style.display = doctors.length > 0 ? 'flex' : 'none';
+        
+                // Clear previous notifications
+                notificationList.innerHTML = '';
+        
+                if (doctors.length > 0) {
+                    doctors.forEach((doctor) => {
+                        const notificationItem = document.createElement('div');
+                        notificationItem.classList.add('notification-item');
+                        notificationItem.innerHTML = `
+                            <div class="notification-content">
+                                <p>Dr. ${doctor.name} has registered</p>
+                                <small>Pending verification</small>
+                            </div>
+                            <button class="btn-pending" onclick="handleDoctorAction('${doctor.id}')">Pending</button>
+                        `;
+                        notificationList.appendChild(notificationItem);
+                    });
+                } else {
+                    notificationList.innerHTML = `
+                        <div class="empty-state">
+                            <p>No new doctor registrations</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error fetching pending doctors:', error);
+            }
+        }
+        
+        function toggleNotifications(event) {
+            event.stopPropagation();
+            const notificationBox = document.getElementById("notifications");
+            notificationBox.classList.toggle('show');
+            
+            if (notificationBox.classList.contains('show')) {
+                fetchPendingDoctors();
+            }
+        }
+        
+        function clearAllNotifications() {
+            const notificationList = document.getElementById("notification-list");
+            notificationList.innerHTML = `
+                <div class="empty-state">
+                    <p>No new doctor registrations</p>
+                </div>
+            `;
+            document.getElementById("notification-badge").style.display = 'none';
+        }
+        
+        function handleDoctorAction(doctorId) {
+            // Implement your action for handling doctor registration
+            console.log(`Handling doctor with ID: ${doctorId}`);
+            // You might want to open a modal, navigate to a details page, etc.
+        }
+        
+        // Close notifications when clicking outside
+        document.addEventListener('click', function() {
+            const notificationBox = document.getElementById("notifications");
+            notificationBox.classList.remove('show');
+        });
+        
+        // Prevent closing when clicking inside the dropdown
+        document.getElementById("notifications").addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+        
+        // Update badge periodically
+        function updateBadge() {
+            fetchPendingDoctors();
+        }
+        
+        // Initial badge update and periodic refresh
+        updateBadge();
+        setInterval(updateBadge, 30000); // Refresh every 30 seconds
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

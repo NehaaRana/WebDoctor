@@ -1,0 +1,691 @@
+{% load static %}
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Arthritis Management | WebDoctor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Comprehensive guide to modern arthritis management including Ayurvedic integration, dietary interventions, and new biologic treatments available in India">
+    <meta name="Version" content="v1.4.0" />
+    <!-- favicon -->
+    <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}">
+
+    <!-- Css -->
+    <link href="{% static 'assets/libs/tiny-slider/tiny-slider.css' %}" rel="stylesheet">
+    <!-- Bootstrap Css -->
+    <link href="{% static 'assets/libs/bootstrap.min.css' %}" class="theme-opt" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="{% static 'assets/libs/icons.min.css' %}" rel="stylesheet" type="text/css" />
+    <!-- Style Css-->
+    <link href="{% static 'assets/libs/style.min.css' %}" class="theme-opt" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Add in head -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
+    <style>
+        /* Enhanced Color Scheme */
+        :root {
+            --primary-color: #0e82fd; 
+            --secondary-color: #059669; 
+            --accent-color: #f59e0b;
+            --dark-text: #1e293b;
+            --light-bg: #f8fafc;
+        }
+    
+        /* Modern Typography */
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    
+        .blog-hero {
+            background: linear-gradient(to bottom, #9cecfb, #65c7f7, #0052d4); 
+            padding: 5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+    
+        .blog-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('{% static "assets/img/pattern-bg.png" %}') repeat;
+            opacity: 0.15;
+        }
+    
+        .blog-title {
+            font-size: 2.75rem;
+            font-weight: 700;
+            color: white;
+            line-height: 1.3;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    
+        .blog-badge {
+            background: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            margin: 0 8px 15px 0;
+            transition: all 0.3s ease;
+        }
+    
+        .blog-badge:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-1px);
+        }
+    
+        .author-info {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(8px);
+            padding: 1.25rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: inline-flex;
+            align-items: center;
+            margin: 2rem 0;
+        }
+    
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            border: 3px solid var(--primary-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    
+        /* Modern Card Design */
+        .arthritis-benefit-card {
+            border: none;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+    
+        .arthritis-benefit-card::before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            transition: height 0.3s ease;
+        }
+    
+        .arthritis-benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+    
+        .arthritis-benefit-card:hover::before {
+            height: 6px;
+        }
+    
+        /* Enhanced Table Design */
+        .arthritis-table {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+    
+        .arthritis-table th {
+            background: var(--primary-color);
+            font-weight: 600;
+            padding: 1rem;
+        }
+    
+        .arthritis-table td {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+    
+        /* Modern Comment Section */
+        .comment-box {
+            background: var(--light-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            transition: transform 0.2s ease;
+        }
+    
+        .comment-box:hover {
+            transform: translateX(5px);
+        }
+    
+        .comment-box::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--primary-color);
+            border-radius: 4px 0 0 4px;
+        }
+    
+        /* Enhanced Sidebar */
+        .sidebar {
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+    
+        .widget-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            position: relative;
+            padding-bottom: 0.75rem;
+        }
+    
+        .widget-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+    
+        /* Interactive Tags */
+        .tagcloud a {
+            background: var(--light-bg);
+            border-radius: 8px;
+            padding: 8px 16px;
+            margin: 4px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+    
+        .tagcloud a:hover {
+            background: var(--primary-color) !important;
+            color: white !important;
+            transform: translateY(-1px);
+        }
+    
+        /* Modern Form Elements */
+        .form-control {
+            border-radius: 8px;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            transition: border-color 0.3s ease;
+        }
+    
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: none;
+        }
+    
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .blog-title {
+                font-size: 2rem;
+            }
+            
+            .author-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .author-avatar {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+    
+    
+</head>
+
+<body>
+    {% block content %}
+    <div class="main-wrapper">
+        <!-- Header -->
+        <header class="header header-fixed header-one">
+            <div class="container">
+              <nav class="navbar navbar-expand-lg header-nav">
+                <div class="navbar-header">
+                  <a id="mobile_btn" href="javascript:void(0);">
+                    <span class="bar-icon">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </span>
+                  </a>
+                  <a href="/" class="navbar-brand logo">
+                    <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+                  </a>
+                </div>
+                <div class="main-menu-wrapper">
+                  <div class="menu-header">
+                    <a href="/index" class="menu-logo">
+                      <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+                    </a>
+                    <a id="menu_close" class="menu-close" href="javascript:void(0);">
+                      <i class="fas fa-times"></i>
+                    </a>
+                  </div>
+                  <ul class="main-nav">
+                    <li><a
+                        href="{% if user_type == 'patient' or user_type == 'doctor' %}{% url 'index' %}{% else %}{% url 'home' %}{% endif %}">Home</a>
+                    </li>
+                    <li><a href="{% url 'doctor_list' %}">Doctors</a></li>
+                    {% comment %} <li><a href="{% url 'about' %}">About Us</a></li> {% endcomment %}
+                    <li>
+                      {% if request.session.patient_id or request.session.doctor_id %}
+                      <a href="{% url 'about_us' %}">About Us</a>
+                      {% else %}
+                      <a href="{% url 'about' %}">About Us</a>
+                      {% endif %}
+                    </li>
+                    <li>
+                      {% if request.session.patient_id or request.session.doctor_id %}
+                      <a href="{% url 'contact_us' %}">Contact Us</a>
+                      {% else %}
+                      <a href="{% url 'contact' %}">Contact Us</a>
+                      {% endif %}
+                    </li>
+                    {% comment %} <li><a href="{% url 'contact' %}">Contact Us</a></li> {% endcomment %}
+                    <ul class="nav header-navbar-rht pt-3">
+      
+                      {% if request.session.patient_id or request.session.doctor_id %}
+                      <li class="nav-item dropdown has-arrow logged-item">
+                        <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
+                          <span class="user-img">
+                            {% if profile and profile.profile_img %}
+                            <img class="rounded-circle" src="{{ profile.profile_img.url }}" width="31" alt="profile" />
+                            {% else %}
+                            <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
+                              alt="default profile" />
+                            {% endif %}
+                          </span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                          <div class="user-header d-flex align-items-center">
+                            <div class="avatar avatar-sm me-2">
+                              {% if profile and profile.profile_img %}
+                              <img class="rounded-circle" src="{{ profile.profile_img.url }}" width="31" alt="profile" />
+                              {% else %}
+                              <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
+                                alt="default profile" />
+                              {% endif %}
+                            </div>
+                            <div class="user-text">
+                              <h6 class="mb-0">{{ profile.name }}</h6>
+                            </div>
+                          </div>
+                          {% if user_type == "patient" %}
+                          <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
+                          <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
+                          {% elif user_type == "doctor" %}
+                          <a class="dropdown-item" href="{% url 'doctor_dashboard' %}">Dashboard</a>
+                          <a class="dropdown-item" href="{% url 'doctor_profile_settings' %}">Profile Settings</a>
+                          {% endif %}
+                          <a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a>
+                        </div>
+                      </li>
+      
+      
+                      {% else %}
+      
+      
+                      <li class="register-btn mb-3 mx-2">
+                        <a href="{% url 'register' %}" class="btn reg-btn btn-primary">
+                          <i class="feather-user"></i>Register
+                        </a>
+                      </li>
+                      <li class="register-btn mb-3 ">
+                        <a href="{% url 'login' %}" class="btn btn-primary log-btn">
+                          <i class="feather-lock"></i>Login
+                        </a>
+                      </li>
+      
+                      {% endif %}
+                    </ul>
+                  </ul>
+                </div>
+              </nav>
+            </div>
+          </header>
+      
+        <!-- Blog Hero Section -->
+        <section class="blog-hero bg-half-150 d-table w-100">
+            <div class="container">
+                <div class="row mt-5 justify-content-center">
+                    <div class="col-lg-10 text-center">
+                        <span class="blog-badge fw-semibold fs-6">ARTHRITIS</span>
+                        <span class="blog-badge fw-semibold fs-6">JOINT HEALTH</span>
+                        <h1 class="blog-title mb-4">Breaking the Pain Cycle: Modern Arthritis Management in India</h1>
+
+                        <div class="author-info" data-aos="fade-up" data-aos-delay="200">
+                            <img src="{% static 'assets/img/way-img.png' %}" alt="Dr. Nandini Desai"
+                                class="author-avatar shadow-sm">
+                            <div class="text-start">
+                                <h6 class="mb-0">Dr. Nandini Desai</h6>
+                                <small class="text-muted">Rheumatology Specialist</small>
+                                <div class="mt-2">
+                                    <small class="text-primary">
+                                        <i class="fas fa-star"></i> 4.9 Rating •
+                                        <i class="fas fa-user-md"></i> 15+ Years Experience
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stats Grid -->
+                        <div class="row g-4 mt-3 text-white" data-aos="fade-up" data-aos-delay="300">
+                            <div class="col-4 fs-3">
+                                <div class="text-center">
+                                    <h4 class="mb-0 fw-bold">1.8M+</h4>
+                                    <small>Views</small>
+                                </div>
+                            </div>
+                            <div class="col-4 fs-3">
+                                <div class="text-center">
+                                    <h4 class="mb-0 fw-bold">2.4K</h4>
+                                    <small>Shares</small>
+                                </div>
+                            </div>
+                            <div class="col-4 fs-3">
+                                <div class="text-center">
+                                    <h4 class="mb-0 fw-bold">98%</h4>
+                                    <small>Helpful</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="position-relative">
+            <div class="shape overflow-hidden text-color-white">
+                <svg viewBox="0 0 2880 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 48H1437.5H2880V0H2160C1442.5 52 720 0 720 0H0V48Z" fill="currentColor"></path>
+                </svg>
+            </div>
+        </div>
+        
+        <!-- Blog Content Section -->
+        <section class="section">
+            <div class="container">
+                <div class="row">
+                    <!-- Main Content -->
+                    <div class="col-lg-8 col-md-7">
+                        <!-- Featured Image -->
+                        <img src="{% static 'assets/img/arthritis.jpg' %}"  width="700" class="img-fluid rounded shadow" alt="Arthritis Treatment in India">
+                        
+                        <!-- Blog Content -->
+                        <div class="blog-content mt-4">
+                            <p>India has over 180 million arthritis patients, yet 60% remain undiagnosed until significant joint damage occurs. The Indian Rheumatology Association's new guidelines emphasize early intervention, especially for the unique challenges faced in tropical climates.</p>
+                            
+                            <h3 class="mt-4 mb-3">Monsoon Woes</h3>
+                            <p>Humidity changes dramatically affect joint symptoms. Mumbai clinics report 40% increased flare-ups during monsoon. Key management strategies:</p>
+                            
+                            <div class="quote-block">
+                                <p class="mb-0">"Many patients believe arthritis is inevitable with aging. But with modern treatments, 80% can maintain full function if diagnosed early." - Dr. Amit Patel, President, Indian Rheumatology Association</p>
+                            </div>
+                            
+                            <h3 class="mt-4 mb-3">Ayurveda-Meets-Modern Protocols</h3>
+                            <p>Evidence-based integration approaches:</p>
+                            
+                            <div class="row mt-4 mb-4">
+                                <div class="col-md-6">
+                                    <div class="card arthritis-benefit-card h-100">
+                                        <div class="card-body">
+                                            <h5><i class="fas fa-leaf text-success me-2"></i> Boswellia Serrata</h5>
+                                            <p>Shown to reduce inflammation markers by 35% when combined with NSAIDs</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card arthritis-benefit-card h-100">
+                                        <div class="card-body">
+                                            <h5><i class="fas fa-water text-primary me-2"></i> Panchakarma</h5>
+                                            <p>Supervised detox programs may enhance DMARD effectiveness</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h3 class="mt-4 mb-3">Dietary Interventions</h3>
+                            <p>Traditional Indian foods with proven benefits:</p>
+                            <table class="table table-bordered arthritis-table table-light table-striped table-hover">
+                                <thead class="text-dark">
+                                    <tr>
+                                        <th>Food</th>
+                                        <th>Benefit</th>
+                                        <th>Serving Suggestion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Turmeric Milk</td>
+                                        <td>Curcumin reduces CRP levels</td>
+                                        <td>1 cup with black pepper at night</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Moringa Leaves</td>
+                                        <td>High in anti-inflammatory compounds</td>
+                                        <td>1 tbsp powder in meals</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ginger Tea</td>
+                                        <td>Reduces morning stiffness</td>
+                                        <td>2 cups daily with lemon</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <h3 class="mt-4 mb-3">New Biologics Access Program</h3>
+                            <p>Indian-made biosimilars have reduced costs by 70%. Key developments:</p>
+                            <ul class="list-group list-group-flush mb-4">
+                                <li class="list-group-item"><strong>Patient Assistance:</strong> Many manufacturers offer income-based pricing</li>
+                                <li class="list-group-item"><strong>Tele-rheumatology:</strong> Rural patients can access specialists</li>
+                                <li class="list-group-item"><strong>Home Infusion:</strong> Trained nurses administer biologics at home</li>
+                            </ul>
+                            
+                            <h3 class="mt-4 mb-3">Joint-Friendly Yoga</h3>
+                            <p>Modified poses for arthritis patients:</p>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="card arthritis-benefit-card h-100">
+                                        <div class="card-body">
+                                            <h5><i class="fas fa-spa text-info me-2"></i> Sukhasana</h5>
+                                            <p>With knee support, improves circulation</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card arthritis-benefit-card h-100">
+                                        <div class="card-body">
+                                            <h5><i class="fas fa-spa text-info me-2"></i> Marjariasana</h5>
+                                            <p>Gentle spinal flexibility</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card arthritis-benefit-card h-100">
+                                        <div class="card-body">
+                                            <h5><i class="fas fa-spa text-info me-2"></i> Viparita Karani</h5>
+                                            <p>Legs-up-the-wall reduces swelling</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Author Bio -->
+                        <div class="card border-0 shadow-sm rounded p-4 mt-5">
+                            <div class="d-flex">
+                                <img src="{% static 'assets/img/way-img.png' %}" alt="Dr. Nandini Desai" class="rounded-circle shadow" style="width: 80px; height: 80px;">
+                                <div class="ms-3">
+                                    <h5>About Dr. Nandini Desai, DM (Rheumatology)</h5>
+                                    <p class="text-muted mb-0">Head of Rheumatology at Jaslok Hospital, Dr. Desai developed India's first arthritis risk score for early detection. Her work integrating traditional and modern therapies has been featured in Lancet Rheumatology.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Comments Section -->
+                        <div class="comment-area mt-5">
+                            <h4 class="mb-4">7 Comments</h4>
+                            
+                            <!-- Comment 1 -->
+                            <div class="comment-box">
+                                <div class="d-flex">
+                                    <img src="{% static 'assets\img\doctors\doctor-05.jpg' %}" class="img-fluid rounded-circle shadow" alt="Ramesh Iyer" style="width: 60px; height: 60px;">
+                                    <div class="ms-3 w-100">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="mb-0">Ramesh Iyer</h6>
+                                            <span class="text-muted small">30 January 2024</span>
+                                        </div>
+                                        <p class="text-muted">The ginger tea suggestion reduced my morning stiffness by 50% in 3 weeks. Any specific brands of Indian-made biologics you recommend?</p>
+                                        <a href="#" class="btn btn-sm btn-outline-primary"><i class="fas fa-reply me-1"></i>Reply</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Comment 2 -->
+                            <div class="comment-box">
+                                <div class="d-flex">
+                                    <img src="{% static 'assets\img\doctors\doctor-01.jpg' %}" class="img-fluid rounded-circle shadow" alt="Dr. Anjali Mehta" style="width: 60px; height: 60px;">
+                                    <div class="ms-3 w-100">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="mb-0">Dr. Anjali Mehta</h6>
+                                            <span class="text-muted small">28 January 2024</span>
+                                        </div>
+                                        <p class="text-muted">Excellent article. We've found adding aquatic therapy in our Bangalore clinic improves outcomes by 30% compared to land exercises alone.</p>
+                                        <a href="#" class="btn btn-sm btn-outline-primary"><i class="fas fa-reply me-1"></i>Reply</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Comment Form -->
+                            <div class="mt-5">
+                                <h5>Leave a Comment</h5>
+                                <form class="mt-3">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <input type="text" class="form-control" placeholder="Your Name">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <input type="email" class="form-control" placeholder="Your Email">
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <textarea class="form-control" rows="5" placeholder="Your Comment"></textarea>
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary">Submit Comment</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sidebar -->
+                    <div class="col-lg-4 col-md-5 mt-4 mt-md-0">
+                        <div class="card sidebar sticky-bar rounded shadow">
+                            <div class="card-body">
+                                <!-- Search Widget -->
+                                <div class="widget mb-4 pb-2">
+                                    <h5 class="widget-title">Search</h5>
+                                    <form class="position-relative">
+                                        <input type="text" class="form-control rounded" placeholder="Search arthritis topics...">
+                                        <button type="submit" class="btn btn-primary rounded-circle position-absolute top-50 end-0 translate-middle-y me-2"><i class="fas fa-search"></i></button>
+                                    </form>
+                                </div>
+                                
+                                <!-- Categories Widget -->
+                                <div class="widget mb-4 pb-2">
+                                    <h5 class="widget-title">Arthritis Types</h5>
+                                    <ul class="list-unstyled mt-4">
+                                        <li class="mb-2"><a href="#" class="text-dark"><i class="fas fa-angle-right me-2"></i> Osteoarthritis</a></li>
+                                        <li class="mb-2"><a href="#" class="text-dark"><i class="fas fa-angle-right me-2"></i> Rheumatoid Arthritis</a></li>
+                                        <li class="mb-2"><a href="#" class="text-dark"><i class="fas fa-angle-right me-2"></i> Psoriatic Arthritis</a></li>
+                                        <li class="mb-2"><a href="#" class="text-dark"><i class="fas fa-angle-right me-2"></i> Gout</a></li>
+                                        <li><a href="#" class="text-dark"><i class="fas fa-angle-right me-2"></i> Juvenile Arthritis</a></li>
+                                    </ul>
+                                </div>
+                                
+                                <!-- Recent Posts Widget -->
+                                <div class="widget mb-4 pb-2">
+                                    <h5 class="widget-title">Recent Articles</h5>
+                                    <div class="mt-4">
+                                        <div class="clearfix post-recent">
+                                            <div class="post-recent-thumb float-start">
+                                                <a href="#">
+                                                    <img alt="img" src="{% static 'assets/img/arthritis-recent1.jpg' %}" class="img-fluid rounded">
+                                                </a>
+                                            </div>
+                                            <div class="post-recent-content float-start">
+                                                <a href="#" class="text-dark fw-medium">New Advances in RA Treatment</a>
+                                                <span class="text-muted mt-2 d-block">15 January 2024</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="clearfix post-recent mt-3">
+                                            <div class="post-recent-thumb float-start">
+                                                <a href="#">
+                                                    <img alt="img" src="{% static 'assets/img/arthritis-recent2.jpg' %}" class="img-fluid rounded">
+                                                </a>
+                                            </div>
+                                            <div class="post-recent-content float-start">
+                                                <a href="#" class="text-dark fw-medium">Yoga for Joint Pain Relief</a>
+                                                <span class="text-muted mt-2 d-block">5 January 2024</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Tags Widget -->
+                                <div class="widget">
+                                    <h5 class="widget-title">Tags</h5>
+                                    <div class="tagcloud mt-4">
+                                        <a href="#" class="rounded">Joint Pain</a>
+                                        <a href="#" class="rounded">Inflammation</a>
+                                        <a href="#" class="rounded">Ayurveda</a>
+                                        <a href="#" class="rounded">Biologics</a>
+                                        <a href="#" class="rounded">Physiotherapy</a>
+                                        <a href="#" class="rounded">Diet</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {% include 'footer.html' %}
+    </div>
+    {% endblock %}
+
+    <!-- JavaScript -->
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/libs/tiny-slider/min/tiny-slider.js' %}"></script>
+    <script src="{% static 'assets/libs/feather-icons/feather.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins.init.js' %}"></script>
+    <script src="{% static 'assets/js/app.js' %}"></script>
+    <!-- Add AOS Animation Initialization at end of body -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 800,
+        once: true,
+        easing: 'ease-out-quad'
+    });
+</script>
+
+</body>
+</html>

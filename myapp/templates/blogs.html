@@ -1,0 +1,444 @@
+{% load static %}
+<html lang="en" class="fontawesome-i2svg-active fontawesome-i2svg-complete">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
+  <title>{% block title %} webDoctor {% endblock %}</title>
+  <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon" />
+
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/aos.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
+  
+
+  <style type="text/css">
+    @font-face {
+      font-family: Roboto;
+      src: url("{% static 'assets/fonts/Roboto-Regular.ttf' %}") format("truetype");
+    }
+  </style>
+
+</head>
+
+<body>
+  {% block content %}
+  <div class="main-wrapper">
+    <header class="header header-fixed header-one header-space">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg header-nav">
+          <div class="navbar-header">
+            <a id="mobile_btn" href="javascript:void(0);">
+              <span class="bar-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </a>
+            <a href="{% url 'home' %}" class="navbar-brand logo">
+              <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo" />
+            </a>
+          </div>
+          <div class="main-menu-wrapper">
+            <div class="menu-header">
+              <a href="{% url 'home' %}" class="menu-logo">
+                <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo" />
+              </a>
+
+              <a id="menu_close" class="menu-close" href="javascript:void(0);">
+                <svg class="svg-inline--fa fa-times fa-w-11" aria-hidden="true" focusable="false" data-prefix="fas"
+                  data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"
+                  data-fa-i2svg="">
+                  <path fill="currentColor"
+                    d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z">
+                  </path>
+                </svg>
+              </a>
+            </div>
+            <ul class="main-nav">
+              <li class="active">
+                <a href="{% url 'home' %}">Home</a>
+              </li>
+              <li>
+                <a href="{% url 'doctor_list' %}">Doctors</a>
+              </li>
+              <li>
+                <a href="{% url 'about' %}">About Us</a>
+              </li>
+              <li>
+                <a href="{% url 'contact' %}">Contact Us</a>
+              </li>
+
+              <li class="phone_login">
+                <a href="{% url 'register' %}">Register</a>
+              </li>
+              <li class="phone_login">
+                <a href="{% url 'login' %}">Login</a>
+              </li>
+
+              <li class="register-btn">
+                <a href="{% url 'register' %}" class="btn reg-btn">
+                  <i class="feather-user"></i>Register
+                </a>
+              </li>
+              <li class="register-btn">
+                <a href="{% url 'login' %}" class="btn btn-primary log-btn">
+                  <i class="feather-lock"></i>Login
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+  
+    <!-- Blog Section -->
+    <section class="news-blog section py-5">
+      <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-header-one text-center"5>
+                    <h2 class="section-title">Latest News & Health Guides</h2>
+                    <p class="text-muted mx-auto para-desc pt-3">Comprehensive health information including disease guides, exercise routines, and diet plans to help you maintain optimal health.</p>
+                </div>
+            </div>
+        </div>
+    
+
+                <!-- Diet Plans Section -->
+                <div class="row mt-5">
+                    <div class="col-md-12">
+                        <h3 class="section-subtitle">
+                            <i class="fa-solid fa-apple-whole me-2" style="color: #f31212;"></i>Healthy Diet Plans
+                        </h3>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                        <div class="card blog blog-primary border-0 shadow rounded overflow-hidden">
+                            <img src="{% static 'assets/img/mediterranean.jpg' %}" class="img-fluid blog-img" alt="Mediterranean Diet">
+                            <div class="card-body p-4">
+                                <ul class="list-unstyled mb-2">
+                                    <li class="list-inline-item text-muted small me-3">
+                                        <i class="fas fa-utensils text-dark h6 me-1"></i>Heart Healthy
+                                    </li>
+                                    <li class="list-inline-item text-muted small">
+                                        <i class="fas fa-apple-alt text-dark h6 me-1"></i>Balanced
+                                    </li>
+                                </ul>
+                                <a href="{% url 'diets_comparison' %}" class="text-dark title h5">
+                                    Mediterranean Diet for Heart Health
+                                </a>
+                                <p class="text-muted mt-2">Discover the benefits of this scientifically proven eating pattern.</p>
+                                <div class="post-meta d-flex justify-content-between mt-3">
+                                    <a href="{% url 'diets_comparison' %}" class="link text-primary">View Plan <i class="fa-solid fa-chevron-right align-middle"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                        <div class="card blog blog-primary border-0 shadow rounded overflow-hidden">
+                            <img src="{% static 'assets/img/keto.jpg' %}" class="img-fluid blog-img" alt="Keto Diet">
+                            <div class="card-body p-4">
+                                <ul class="list-unstyled mb-2">
+                                    <li class="list-inline-item text-muted small me-3">
+                                        <i class="fas fa-bacon text-dark h6 me-1"></i>Low-Carb
+                                    </li>
+                                    <li class="list-inline-item text-muted small">
+                                        <i class="fas fa-weight text-dark h6 me-1"></i>Weight Loss
+                                    </li>
+                                </ul>
+                                <a href="{% url 'diets_comparison' %}" class="text-dark title h5">
+                                    Keto Diet: What You Need to Know
+                                </a>
+                                <p class="text-muted mt-2">Understanding the ketogenic diet and its potential benefits.</p>
+                                <div class="post-meta d-flex justify-content-between mt-3">
+                                    <a href="{% url 'diets_comparison' %}" class="link text-primary">View Plan <i class="fa-solid fa-chevron-right align-middle"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                        <div class="card blog blog-primary border-0 shadow rounded overflow-hidden">
+                            <img src="{% static 'assets/img/plant-based.jpg' %}" class="img-fluid blog-img" alt="Plant-Based Diet">
+                            <div class="card-body p-4">
+                                <ul class="list-unstyled mb-2">
+                                    <li class="list-inline-item text-muted small me-3">
+                                        <i class="fas fa-leaf text-dark h6 me-1"></i>Vegan
+                                    </li>
+                                    <li class="list-inline-item text-muted small">
+                                        <i class="fas fa-seedling text-dark h6 me-1"></i>Sustainable
+                                    </li>
+                                </ul>
+                                <a href="{% url 'diets_comparison' %}" class="text-dark title h5">
+                                    Plant-Based Eating for Beginners
+                                </a>
+                                <p class="text-muted mt-2">Transition to a plant-based diet with these simple tips and recipes.</p>
+                                <div class="post-meta d-flex justify-content-between mt-3">
+                                    <a href="{% url 'diets_comparison' %}" class="link text-primary">View Plan <i class="fa-solid fa-chevron-right align-middle"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Original Blog Section -->
+                <div class="row mt-5">
+                    <div class="col-md-12">
+                        <h3 class="section-subtitle">
+                            <i class="fa-solid fa-newspaper me-2" style="color:violet;"></i>Latest Health News
+                        </h3>
+                    </div>
+                    
+                    
+                    <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                        <div class="card blog blog-primary border-0 shadow rounded overflow-hidden">
+                            <img src="{% static 'assets/blog/01.jpg' %}" class="img-fluid blog-img" alt="">
+                            <div class="card-body p-4">
+                                <ul class="list-unstyled mb-2">
+                                    <li class="list-inline-item text-muted small me-3">
+                                        <i class="fa-solid fa-calendar-days text-dark h6 me-2"></i>05th November, 2023
+                                    </li>
+                                    <li class="list-inline-item text-muted small me-3">
+                                        <i class="fa-solid fa-clock text-dark h6 me-2"></i>5 min read
+                                    </li>
+                                </ul>
+                                <a href="blog-detail.html" class="text-dark title h5">
+                                    You can easily connect to doctor and make a treatment
+                                </a>
+                                <div class="post-meta d-flex justify-content-between mt-3">
+                                    <a href="{% url 'blog-details' %}" class="link text-primary">Read More <i class="fa-solid fa-chevron-right align-middle"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                        <div class="card blog blog-primary border-0 shadow rounded overflow-hidden">
+                            <img src="{% static 'assets/blog/02.jpg' %}" class="img-fluid" alt="">
+                            <div class="card-body p-4">
+                                <ul class="list-unstyled mb-2">
+                                    <li class="list-inline-item text-muted small me-3">
+                                        <i class="fa-solid fa-calendar-days text-dark h6 me-1"></i>20th January, 2024
+                                    </li>
+                                    <li class="list-inline-item text-muted small">
+                                        <i class="fa-solid fa-clock text-dark h6 me-1"></i>5 min read
+                                    </li>
+                                </ul>
+                                <a href="{% url 'blog-details' %}" class="text-dark title h5">
+                                    Lockdowns lead to fewer people seeking medical care
+                                </a>
+                                <div class="post-meta d-flex justify-content-between mt-3">
+                                    <a href="{% url 'blog-details' %}" class="link text-primary">Read More <i class="fa-solid fa-chevron-right align-middle"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                        <div class="card blog blog-primary border-0 shadow rounded overflow-hidden">
+                            <img src="{% static 'assets/blog/03.jpg' %}" class="img-fluid" alt="">
+                            <div class="card-body p-4">
+                                <ul class="list-unstyled mb-2">
+                                    <li class="list-inline-item text-muted small me-3">
+                                        <i class="fa-solid fa-calendar-days text-dark h6 me-1"></i>29th March, 2025
+                                    </li>
+                                    <li class="list-inline-item text-muted small">
+                                        <i class="fa-solid fa-clock text-dark h6 me-1"></i>5 min read
+                                    </li>
+                                </ul>
+                                <a href="{% url 'blog-details' %}" class="text-dark title h5">
+                                    Emergency medicine research course for the doctors
+                                </a>
+                                <div class="post-meta d-flex justify-content-between mt-3">
+                                    <a href="{% url 'blog-details' %}" class="link text-primary">Read More <i class="fa-solid fa-chevron-right align-middle"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+        <!-- Diseases Section -->
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <h3 class="section-subtitle">
+                    <i class="fa-solid fa-notes-medical me-2" style="color: #f31212;"></i>Common Diseases
+                </h3>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                <div class="card blog blog-primary border-0 shadow rounded overflow-hidden">
+                    <img src="{% static 'assets/img/diabetes.jpg' %}" class="img-fluid blog-img" alt="Diabetes">
+                    <div class="card-body p-4">
+                        <ul class="list-unstyled mb-2">
+                            <li class="list-inline-item text-muted small me-3">
+                                <i class="fas fa-stethoscope text-dark h6 me-1"></i>Endocrine Disorder
+                            </li>
+                            <li class="list-inline-item text-muted small">
+                                <i class="fas fa-exclamation-triangle text-dark h6 me-1"></i>Chronic
+                            </li>
+                        </ul>
+                        <a href="{% url 'diseases' %}" class="text-dark title h5">
+                            Understanding Diabetes: Types and Management
+                        </a>
+                        <p class="text-muted mt-2">Learn about type 1 and type 2 diabetes, symptoms, and treatment options.</p>
+                        <div class="post-meta d-flex justify-content-between mt-3">
+                            <a href="{% url 'diseases' %}" class="link text-primary">Read More <i class="fa-solid fa-chevron-right align-middle"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                <div class="card blog blog-primary border-0 shadow rounded overflow-hidden">
+                    <img src="{% static 'assets/img/hypertension.jpg' %}" class="img-fluid blog-img" alt="Hypertension">
+                    <div class="card-body p-4">
+                        <ul class="list-unstyled mb-2">
+                            <li class="list-inline-item text-muted small me-3">
+                                <i class="fas fa-stethoscope text-dark h6 me-1"></i>Cardiovascular
+                            </li>
+                            <li class="list-inline-item text-muted small">
+                                <i class="fas fa-exclamation-triangle text-dark h6 me-1"></i>Silent Killer
+                            </li>
+                        </ul>
+                        <a href="{% url 'diseases' %}" class="text-dark title h5">
+                            Hypertension: The Silent Threat to Your Health
+                        </a>
+                        <p class="text-muted mt-2">Discover how to monitor and control high blood pressure effectively.</p>
+                        <div class="post-meta d-flex justify-content-between mt-3">
+                            <a href="{% url 'diseases' %}" class="link text-primary">Read More <i class="fa-solid fa-chevron-right align-middle"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                <div class="card blog blog-primary border-0 shadow rounded overflow-hidden">
+                    <img src="{% static 'assets/img/arthritis.jpg' %}" class="img-fluid blog-img" alt="Arthritis">
+                    <div class="card-body p-4">
+                        <ul class="list-unstyled mb-2">
+                            <li class="list-inline-item text-muted small me-3">
+                                <i class="fas fa-stethoscope text-dark h6 me-1"></i>Musculoskeletal
+                            </li>
+                            <li class="list-inline-item text-muted small">
+                                <i class="fas fa-exclamation-triangle text-dark h6 me-1"></i>Degenerative
+                            </li>
+                        </ul>
+                        <a href="{% url 'diseases' %}" class="text-dark title h5">
+                            Arthritis: Managing Joint Pain and Inflammation
+                        </a>
+                        <p class="text-muted mt-2">Explore treatment options and lifestyle changes for arthritis sufferers.</p>
+                        <div class="post-meta d-flex justify-content-between mt-3">
+                            <a href="{% url 'diseases' %}" class="link text-primary">Read More <i class="fa-solid fa-chevron-right align-middle"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Exercises Section -->
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <h3 class="section-subtitle" >
+                    <i class="fa-solid fa-person-walking me-2" style="color:#f3e22b;"></i>Exercise Guides
+                </h3>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                <div class="card blog blog-primary border-0 shadow rounded overflow-hidden">
+                    <img src="{% static 'assets/img/cardio.jpg' %}" class="img-fluid blog-img" alt="Cardio Exercises">
+                    <div class="card-body p-4">
+                        <ul class="list-unstyled mb-2">
+                            <li class="list-inline-item text-muted small me-3">
+                                <i class="fas fa-heartbeat text-dark h6 me-1"></i>Cardiovascular
+                            </li>
+                            <li class="list-inline-item text-muted small">
+                                <i class="fas fa-clock text-dark h6 me-1"></i>30 min/day
+                            </li>
+                        </ul>
+                        <a href="{% url 'fitness' %}" class="text-dark title h5">
+                            Cardio Workouts for Heart Health
+                        </a>
+                        <p class="text-muted mt-2">Boost your cardiovascular fitness with these effective exercises.</p>
+                        <div class="post-meta d-flex justify-content-between mt-3">
+                            <a href="{% url 'fitness' %}" class="link text-primary">View Exercises <i class="fa-solid fa-chevron-right align-middle"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                <div class="card blog blog-primary border-0 shadow rounded overflow-hidden">
+                    <img src="{% static 'assets/img/yoga.jpg' %}" class="img-fluid blog-img" alt="Yoga">
+                    <div class="card-body p-4">
+                        <ul class="list-unstyled mb-2">
+                            <li class="list-inline-item text-muted small me-3">
+                                <i class="fas fa-spa text-dark h6 me-1"></i>Flexibility
+                            </li>
+                            <li class="list-inline-item text-muted small">
+                                <i class="fas fa-clock text-dark h6 me-1"></i>20 min/day
+                            </li>
+                        </ul>
+                        <a href="{% url 'fitness' %}" class="text-dark title h5">
+                            Yoga for Stress Relief and Flexibility
+                        </a>
+                        <p class="text-muted mt-2">Simple yoga poses to improve flexibility and reduce stress.</p>
+                        <div class="post-meta d-flex justify-content-between mt-3">
+                            <a href="{% url 'fitness' %}" class="link text-primary">View Routine <i class="fa-solid fa-chevron-right align-middle"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                <div class="card blog blog-primary border-0 shadow rounded overflow-hidden">
+                    <img src="{% static 'assets/img/strength.jpg' %}" class="img-fluid blog-img" alt="Strength Training">
+                    <div class="card-body p-4">
+                        <ul class="list-unstyled mb-2">
+                            <li class="list-inline-item text-muted small me-3">
+                                <i class="fas fa-dumbbell text-dark h6 me-1"></i>Strength
+                            </li>
+                            <li class="list-inline-item text-muted small">
+                                <i class="fas fa-clock text-dark h6 me-1"></i>3x/week
+                            </li>
+                        </ul>
+                        <a href="{% url 'fitness' %}" class="text-dark title h5">
+                            Strength Training for Beginners
+                        </a>
+                        <p class="text-muted mt-2">Build muscle and improve metabolism with these basic exercises.</p>
+                        <div class="post-meta d-flex justify-content-between mt-3">
+                            <a href="{% url 'fitness' %}" class="link text-primary">View Program <i class="fa-solid fa-chevron-right align-middle"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+
+    
+
+      </div>
+    </section>
+    <!-- /Blog Section -->
+    
+
+
+
+
+
+    {% include "footer.html" %}
+
+
+    {% endblock %}
+    <!-- Add this BEFORE Fancybox scripts -->
+</body>
+
+</html>

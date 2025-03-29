@@ -1,5 +1,6 @@
 {% load static %}
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,8 +13,6 @@
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
 
     <!-- FontAwesome Icons -->
-    {% comment %} <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" /> {% endcomment %}
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Custom Styles -->
@@ -21,10 +20,7 @@
 
 
     <!-- jquery-confirm CSS -->
-   <link
-   rel="stylesheet"
-   href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css"
- />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
 
     <style>
         .custom-alert {
@@ -128,8 +124,6 @@
                 left: 100%;
             }
         }
-
-      
     </style>
 </head>
 
@@ -166,21 +160,23 @@
                             <li><a href="{% url 'home' %}">Home</a></li>
                             <li>
                                 <a href="{% url 'doctor_list' %}">Doctors</a>
-                              </li>
-                            <li ><a href="{% url 'about' %}">About Us</a></li>
-                            <li ><a href="{% url 'contact' %}">Contact Us</a></li>
-        
-                            <li class="register-btn"><a href="{% url 'register' %}" class="btn reg-btn"><i class="feather-user"></i>Register</a></li>
-                            <li class="register-btn"><a href="{% url 'login' %}" class="btn btn-primary log-btn"><i class="feather-lock"></i>Login</a></li>
+                            </li>
+                            <li><a href="{% url 'about' %}">About Us</a></li>
+                            <li><a href="{% url 'contact' %}">Contact Us</a></li>
+
+                            <li class="register-btn"><a href="{% url 'register' %}" class="btn reg-btn"><i
+                                        class="feather-user"></i>Register</a></li>
+                            <li class="register-btn"><a href="{% url 'login' %}" class="btn btn-primary log-btn"><i
+                                        class="feather-lock"></i>Login</a></li>
                         </ul>
                     </div>
                 </nav>
             </div>
         </header>
-        
 
-   
-  
+
+
+
         <div class="register-container">
             <div class="register-box">
                 <div class="svg-container">
@@ -195,9 +191,10 @@
                     <p class="text-center">
                         Join us and connect with patients seamlessly.
                     </p>
-                    <form action="{% url 'doctor_register' %}" method="POST" enctype="multipart/form-data" id="signup-form">
-                        {% csrf_token %} 
-                        
+                    <form action="{% url 'doctor_register' %}" method="POST" enctype="multipart/form-data"
+                        id="signup-form">
+                        {% csrf_token %}
+
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label>Full Name</label>
@@ -241,10 +238,11 @@
                             <div class="form-group">
                                 <label for="password">Password</label>
                                 <div class="input-group">
-                                    <input type="password" id="password" class="form-control" name="password" placeholder="*************" />
-                                        <span class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
-                                            <i id="toggleIcon" class="fa fa-eye"></i>
-                                        </span>
+                                    <input type="password" id="password" class="form-control" name="password"
+                                        placeholder="*************" />
+                                    <span class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
+                                        <i id="toggleIcon" class="fa fa-eye"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -265,116 +263,165 @@
             </div>
         </div>
 
-        
+        <!-- JavaScript for Toggling Password Visibility -->
         <script>
-        $(document).ready(function () {
-          $("#signup-form").submit(function (e) {
-            e.preventDefault();
-      
-            let name = $("#name").val().trim();
-            let gender = $("#gender").val();
-            let clinic_name = $("#clinic_name").val().trim();
-            let clinic_address = $("#clinic_address").val().trim();
-            let email = $("#email").val().trim();
-            let phno = $("#phno").val().trim();
-            let password = $("#password").val().trim();
-            let terms = $("#terms").is(":checked");
-      
-            let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            let phonePattern = /^[0-9]{10}$/;
-      
-            function showAlert(icon, message) {
-              $.alert({
-                title: `<i class='fa-solid ${icon} fa-2x fa-beat-fade'></i>`,
-                content: `<span style="font-size: 15px;">${message}</span>`,
-                type: "blue",
-                theme: "modern",
-              });
-            }
+            function togglePassword() {
+                var passwordInput = document.getElementById("password");
+                var toggleIcon = document.getElementById("toggleIcon");
 
-            //backend error
-            {% if messages %}
-            {% for message in messages %}
-                showAlert(
-                    "{% if message.tags == 'success' %}fa-circle-check{% elif message.tags == 'warning' %}fa-exclamation-triangle{% else %}fa-circle-xmark{% endif %}",
-                    "{{ message|escapejs }}",
-                    "{{ message.tags }}"
-                );
-            {% endfor %}
-          {% endif %}
-
-
-            if (name === "") {
-              showAlert("fa-user", "Full Name is required");
-              return;
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    toggleIcon.classList.remove("fa-eye");
+                    toggleIcon.classList.add("fa-eye-slash");
+                } else {
+                    passwordInput.type = "password";
+                    toggleIcon.classList.remove("fa-eye-slash");
+                    toggleIcon.classList.add("fa-eye");
+                }
             }
-            if (gender === "") {
-              showAlert("fa-venus-mars", "Please select your gender");
-              return;
-            }
-            if (clinic_name === "") {
-              showAlert("fa-hospital", "Clinic Name is required");
-              return;
-            }
-            if (clinic_address === "") {
-              showAlert("fa-map-marker-alt", "Clinic Address is required");
-              return;
-            }
-            if (email === "" || !emailPattern.test(email)) {
-              showAlert("fa-envelope", "Enter a valid email address");
-              return;
-            }
-            if (phno === "" || !phonePattern.test(phno)) {
-              showAlert("fa-phone", "Enter a valid 10-digit phone number");
-              return;
-            }
-            if (password.length < 6) {
-              showAlert("fa-lock", "Password must be at least 6 characters long");
-              return;
-            }
-            if (!terms) {
-              showAlert("fa-file-contract", "You must agree to the Terms of Service");
-              return;
-            }
-      
-            // If all validations pass, show success message and submit the form
-            $.alert({
-              title: `<i class="fa-solid fa-circle-check fa-2x fa-beat-fade"></i>`,
-              content: `<span style="font-size: 15px;">Registration Successful! Redirecting...</span>`,
-              type: "green",
-              theme: "modern",
-              animation: "news",
-              onClose: function () {
-                $("#signup-form")[0].submit(); // Submit the form after the success alert
-              },
-            });
-          });
-        });
-      </script>
-
-      <!-- JavaScript for Toggling Password Visibility -->
-    <script>
-        function togglePassword() {
-            var passwordInput = document.getElementById("password");
-            var toggleIcon = document.getElementById("toggleIcon");
-    
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                toggleIcon.classList.remove("fa-eye");
-                toggleIcon.classList.add("fa-eye-slash");
-            } else {
-                passwordInput.type = "password";
-                toggleIcon.classList.remove("fa-eye-slash");
-                toggleIcon.classList.add("fa-eye");
-            }
-        }
-    </script>
+        </script>
         {% include 'footer.html' %}
     </div>
 
     <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Function to show an alert with an animated icon
+            function showAlert(icon, message) {
+                $.alert({
+                    title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+                    content: `<span style="font-size: 15px;">${message}</span>`,
+                    type: "blue",
+                    theme: "modern",
+                    buttons: {
+                        ok: {
+                            text: "OK",
+                            btnClass: "btn-blue",
+                        },
+                    },
+                });
+            }
+
+            //backend error
+            let delay = 500; // Start with a small delay
+            {% for message in messages %}
+            setTimeout(function () {
+                showAlert(
+                    "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
+                    "{{ message|escape }}",
+                    "{{ message.tags }}"
+                );
+            }, delay);
+            delay += 1000; // Increase delay for next message
+            {% endfor %}
+
+            // Validate email field
+            function validateEmail() {
+                let email = $("#email").val().trim();
+                let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    showAlert("fa-envelope", "Please enter a valid email address.");
+                    return false;
+                }
+                return true;
+            }
+
+            // Validate user type field
+
+            // Validate password field
+            function validatePassword() {
+                let password = $("#password").val().trim();
+                if (password.length < 6) {
+                    showAlert(
+                        "fa-lock",
+                        "Password must be at least 6 characters long."
+                    );
+                    return false;
+                }
+                return true;
+            }
+
+            // On form submission, validate each field one at a time
+            $("form").submit(function (e) {
+                e.preventDefault(); // Prevent the default form submission
+
+                let password = $("#password").val().trim();
+                let name = $("#name").val().trim();
+                let gender = $("#gender").val().trim();
+                let qualification = $("#qualification").val().trim();
+                let specialization = $("#specialization").val().trim();
+                let phno = $("#phno").val().trim();
+                let terms = $("#terms").is(":checked");
+                let email = $("#email").val().trim();
+                let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                let phonePattern = /^[0-9]{10}$/;
+
+                if (name === "") {
+                    showAlert("fa-user", "Please Enter your name!!");
+                    return;
+                }
+                if (gender === "") {
+                    showAlert("fa-restroom", "Please Select your gender!!");
+                    return;
+                }
+                if (qualification === "") {
+                    showAlert("fa-graduation-cap", "Please Enter your qualification!!");
+                    return;
+                }
+                if (specialization === "") {
+                    showAlert("fa-award", "Please Enter your specialization!!");
+                    return;
+                }
+
+                if (email === "") {
+                    showAlert("fa-envelope", "Please Enter your email!!");
+                    return;
+                }
+                if (!emailPattern.test(email)) {
+                    showAlert("fa-envelope", "Please Enter valid email!!");
+                    return;
+                }
+                if (phno === "") {
+                    showAlert("fa-phone", "Please Enter your Phone No!!");
+                    return;
+                }
+                if (!phonePattern.test(phno)) {
+                    showAlert("fa-phone", "Enter a valid 10-digit phone number");
+                    return;
+                }
+
+
+                if (password === "") {
+                    showAlert("fa-lock", "Please Enter your password!!");
+                    return;
+                }
+
+                if (password.length < 6) {
+                    showAlert("fa-lock", "Password must be at least 6 characters long");
+                    return;
+                }
+                if (!terms) {
+                    showAlert("fa-file-contract", "You must agree to the Terms of Service");
+                    return;
+                }
+
+
+                if (!validateEmail()) {
+                    return; // Stop if email is invalid
+                }
+                if (!validatePassword()) {
+                    return; // Stop if password is invalid
+                }
+
+                // If all validations pass, submit the form
+                e.target.submit();
+            });
+        });
+    </script>
+
 </body>
 
 </html>

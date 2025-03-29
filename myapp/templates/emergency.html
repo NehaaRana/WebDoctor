@@ -1,0 +1,658 @@
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Emergency Video Consultation | webDocter</title>
+  <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+  <!-- Social icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}" />
+
+  <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}" />
+
+  <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
+
+  <style type="text/css">
+    @font-face {
+      font-family: Roboto;
+      src: url("{% static 'assets/fonts/Roboto-Regular.ttf' %}") format("truetype");
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f8f9fa;
+    }
+
+    /* Emergency Section Styling */
+    .emergency-section {
+      padding: 4rem 0;
+      background-color: #f8f9fa;
+    }
+
+    .emergency-header {
+      background-color: #ffebee;
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+      border-left: 5px solid #f44336;
+    }
+
+    .emergency-title {
+      color: #d32f2f;
+      font-weight: 700;
+    }
+
+    .emergency-subtitle {
+      color: #5c5c5c;
+      font-size: 1.1rem;
+    }
+
+    /* Emergency Card Styling */
+    .emergency-card {
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s ease-in-out;
+      overflow: hidden;
+      height: 100%;
+      border: none;
+      margin-bottom: 20px;
+      background-color: #fff;
+      position: relative;
+      border-top: 4px solid #f44336;
+    }
+
+    .emergency-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(244, 67, 54, 0.15);
+    }
+
+    .emergency-img-container {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 80%;
+      overflow: hidden;
+      background-color: #f5f5f5;
+    }
+
+    .emergency-img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .emergency-card:hover .emergency-img {
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    .emergency-card-body {
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .emergency-card-title {
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 0.5rem;
+      font-size: 1.25rem;
+    }
+
+    .emergency-specialization {
+      color: #f44336;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: inline-block;
+      background-color: rgba(244, 67, 54, 0.1);
+      padding: 5px 15px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+
+    .emergency-status {
+      color: #4CAF50;
+      font-weight: 600;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .emergency-status i {
+      margin-right: 5px;
+    }
+
+    /* Emergency Button Styling */
+    .emergency-btn {
+      position: relative;
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0px 5px 15px rgba(244, 67, 54, 0.25);
+      padding: 0.7rem 1.5rem;
+      background-color: #f44336;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      outline: none;
+      overflow: hidden;
+      font-size: 15px;
+      width: 100%;
+      margin-top: 10px;
+      text-decoration: none;
+    }
+
+    .emergency-btn:hover {
+      transform: scale(1.05);
+      background-color: #d32f2f !important;
+      box-shadow: 0px 8px 20px rgba(244, 67, 54, 0.35);
+      color: #fff;
+    }
+
+    .emergency-btn::before {
+      content: "";
+      position: absolute;
+      width: 100px;
+      height: 100%;
+      background-image: linear-gradient(120deg,
+          rgba(255, 255, 255, 0) 30%,
+          rgba(255, 255, 255, 0.8),
+          rgba(255, 255, 255, 0) 70%);
+      top: 0;
+      left: -100px;
+      opacity: 0.6;
+    }
+
+    .emergency-btn:hover::before {
+      animation: shine 1.5s ease-out infinite;
+    }
+
+    .call-btn {
+        background-color: green;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    .call-btn i {
+        margin-right: 5px;
+    }
+    
+
+    @keyframes shine {
+      0% {
+        left: -100px;
+      }
+
+      60% {
+        left: 100%;
+      }
+
+      to {
+        left: 100%;
+      }
+    }
+
+    /* Modal Styling */
+    .emergency-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1050;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-title {
+      color: #f44336;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+
+    .modal-input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+    }
+
+    .modal-btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      margin-right: 10px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .modal-primary {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .modal-primary:hover {
+      background-color: #d32f2f;
+    }
+
+    .modal-secondary {
+      background-color: #e0e0e0;
+      color: #333;
+    }
+
+    .modal-secondary:hover {
+      background-color: #bdbdbd;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .emergency-img-container {
+        padding-bottom: 70%;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .emergency-header {
+        padding: 1rem;
+      }
+      
+      .emergency-title {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main-wrapper">
+    <header class="header header-fixed header-one">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg header-nav">
+          <div class="navbar-header">
+            <a id="mobile_btn" href="javascript:void(0);">
+              <span class="bar-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </a>
+            <a href="/" class="navbar-brand logo">
+              <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+            </a>
+          </div>
+          <div class="main-menu-wrapper">
+            <div class="menu-header">
+              <a href="/index" class="menu-logo">
+                <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+              </a>
+              <a id="menu_close" class="menu-close" href="javascript:void(0);">
+                <i class="fas fa-times"></i>
+              </a>
+            </div>
+            <ul class="main-nav">
+              <li><a
+                  href="{% if user_type == 'patient' or user_type == 'doctor' %}{% url 'index' %}{% else %}{% url 'home' %}{% endif %}">Home</a>
+              </li>
+              <li><a href="{% url 'doctor_list' %}">Doctors</a></li>
+              <li>
+                {% if request.session.patient_id or request.session.doctor_id %}
+                <a href="{% url 'about_us' %}">About Us</a>
+                {% else %}
+                <a href="{% url 'about' %}">About Us</a>
+                {% endif %}
+              </li>
+              <li>
+                {% if request.session.patient_id or request.session.doctor_id %}
+                <a href="{% url 'contact_us' %}">Contact Us</a>
+                {% else %}
+                <a href="{% url 'contact' %}">Contact Us</a>
+                {% endif %}
+              </li>
+              <ul class="nav header-navbar-rht pt-3">
+                {% if request.session.patient_id or request.session.doctor_id %}
+                <li class="nav-item dropdown has-arrow logged-item">
+                  <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="user-img">
+                      {% if profile and profile.profile_img %}
+                      <img class="rounded-circle" src="{{ profile.profile_img.url }}" width="31" alt="profile" />
+                      {% else %}
+                      <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
+                        alt="default profile" />
+                      {% endif %}
+                    </span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end">
+                    <div class="user-header d-flex align-items-center">
+                      <div class="avatar avatar-sm me-2">
+                        {% if profile and profile.profile_img %}
+                        <img class="rounded-circle" src="{{ profile.profile_img.url }}" width="31" alt="profile" />
+                        {% else %}
+                        <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
+                          alt="default profile" />
+                        {% endif %}
+                      </div>
+                      <div class="user-text">
+                        <h6 class="mb-0">{{ profile.name }}</h6>
+                      </div>
+                    </div>
+                    {% if user_type == "patient" %}
+                    <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
+                    <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
+                    {% elif user_type == "doctor" %}
+                    <a class="dropdown-item" href="{% url 'doctor_dashboard' %}">Dashboard</a>
+                    <a class="dropdown-item" href="{% url 'doctor_profile_settings' %}">Profile Settings</a>
+                    {% endif %}
+                    <a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a>
+                  </div>
+                </li>
+                {% else %}
+                <li class="register-btn mb-3 mx-2">
+                  <a href="{% url 'register' %}" class="btn reg-btn btn-primary">
+                    <i class="feather-user"></i>Register
+                  </a>
+                </li>
+                <li class="register-btn mb-3 ">
+                  <a href="{% url 'login' %}" class="btn btn-primary log-btn">
+                    <i class="feather-lock"></i>Login
+                  </a>
+                </li>
+                {% endif %}
+              </ul>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Emergency Consultation Section -->
+    <section class="emergency-section" style="padding-top:120px !important">
+      <div class="container">
+        <div class="emergency-header">
+          <h1 class="emergency-title"><i class="fas fa-ambulance me-2"></i>Emergency Video Consultation</h1>
+          <p class="emergency-subtitle">Connect immediately with available doctors for urgent medical assistance</p>
+        </div>
+
+        <div class="row g-4">
+          {% for doctor in doctors %}
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="emergency-card">
+              <div class="emergency-img-container">
+                {% if doctor.profile_img %}
+                <img class="emergency-img" src="{{ doctor.profile_img.url }}" alt="{{ doctor.name }}" onerror="this.src='{% static 'assets/img/default_profile.png' %}'" />
+                {% else %}
+                <img class="emergency-img" src="{% static 'assets/img/default_profile.png' %}" alt="default profile" />
+                {% endif %}
+              </div>
+              <div class="emergency-card-body">
+                <h5 class="emergency-card-title">{{ doctor.name }}</h5>
+                <span class="emergency-specialization">
+                  <i class="fas fa-stethoscope me-1"></i>{{ doctor.specialization }}
+                </span>
+                <p class="emergency-status">
+                  <i class="fas fa-circle-check"></i> Available Now
+                </p>
+                <button class="emergency-btn consult-btn" 
+                        data-doctor-id="{{ doctor.id }}" 
+                        data-is-authenticated="{{ request.user.is_authenticated|yesno:'true,false' }}">
+                  <i class="fas fa-video me-2"></i>Consult Now
+                </button>
+                {% comment %} call now  {% endcomment %}
+                <button class="emergency-btn call-btn" 
+        data-doctor-id="{{ doctor.id }}" 
+        data-is-authenticated="{{ request.user.is_authenticated|yesno:'true,false' }}"
+        onclick="callDoctor('{{ doctor.phno }}')">
+    <i class="fas fa-phone me-2"></i>Call Now
+</button>
+
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- Guest User Modal -->
+    <div class="emergency-modal" id="guest-modal">
+      <div class="modal-content">
+        <h3 class="modal-title"><i class="fas fa-user-clock me-2"></i>Quick Consultation</h3>
+        <p>Please enter your name to start the emergency consultation:</p>
+        <input type="text" id="guest-name" class="modal-input" placeholder="Your name" required>
+        <div class="text-end">
+          <button class="modal-btn modal-secondary" onclick="closeModal()">Cancel</button>
+          <button class="modal-btn modal-primary" id="start-guest-consult">Start Consultation</button>
+        </div>
+      </div>
+    </div>
+
+
+    {% comment %} call now  {% endcomment %}
+    <script>
+       // Add confirmation before calling
+function callDoctor(phoneNumber) {
+  if(confirm("Are you sure you want to call this doctor now?")) {
+      if (phoneNumber) {
+          window.location.href = `tel:${phoneNumber}`;
+      } else {
+          alert("Doctor's phone number is not available.");
+      }
+  }
+  }
+        
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $(".consult-btn").click(function () {
+          let doctorId = $(this).data("doctor-id");
+          let isAuthenticated = $(this).data("is-authenticated") === "true";
+
+          if (isAuthenticated) {
+            // Logged-in user - Start consultation directly
+            startConsultation(doctorId, "{{ request.user.id }}", "");
+          } else {
+            // Guest user - Show modal to enter name
+            $("#guest-modal").css("display", "flex");
+            $("#start-guest-consult").off("click").on("click", function () {
+              let guestName = $("#guest-name").val();
+              if (guestName.trim() === "") {
+                alert("Please enter your name.");
+                return;
+              }
+              startConsultation(doctorId, "guest", guestName);
+            });
+          }
+        });
+      });
+
+      function startConsultation(doctorId, patientId, guestName) {
+        $.post("{% url 'start_emergency' %}", {
+          doctor_id: doctorId,
+          patient_id: patientId,
+          guest_name: guestName,
+          csrfmiddlewaretoken: "{{ csrf_token }}"
+        }, function (data) {
+          if (data.status === "success") {
+            window.location.href = data.redirect_url;
+          } else {
+            alert(data.message);
+          }
+        });
+      }
+
+      function closeModal() {
+        $("#guest-modal").hide();
+        $("#guest-name").val("");
+      }
+
+      // Close modal when clicking outside
+      $(document).mouseup(function(e) {
+        var modal = $("#guest-modal");
+        if (!modal.is(e.target) && modal.has(e.target).length === 0) {
+          closeModal();
+        }
+      });
+    </script>
+
+    {% include "footer.html" %}
+  </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

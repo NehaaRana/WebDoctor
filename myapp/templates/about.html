@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>{% block title %}PMS - About Us{% endblock %}</title>
+    <title>{% block title %}WebDoctor{% endblock %}</title>
     <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
@@ -82,9 +82,9 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="about-inner-img">
-                                    <div class="about-box">
-                                        <h4>Founder & CEO Nikhil Yadav</h4>
-                                    </div>
+                                    {% comment %} <div class="about-box">
+                                        <h4>Founder & CEO </h4>
+                                    </div> {% endcomment %}
                                     <div class="about-img">
                                         <img src="{% static 'assets/img/about-img3.jpg' %}" class="img-fluid" alt="">
                                     </div>
@@ -100,8 +100,8 @@
                     </div>
                     <div class="about-content">
                         <div class="about-content-details">
-                            <p>Pranik Medical Services (PMS) is a leading healthcare company dedicated to delivering top-quality medical services and solutions. With a team of skilled professionals, PMS offers diagnostic testing, consultations, home healthcare, and specialized treatments. </p>
-                            <p>Patient care is our priority, with personalized treatment plans and a focus on medical excellence. PMS utilizes advanced technologies for patient comfort and convenience. We collaborate with healthcare providers to offer comprehensive solutions and improve outcomes. </p>
+                            <p>WebDoctor is a leading healthcare company dedicated to delivering top-quality medical services and solutions. With a team of skilled professionals, WebDoctor offers diagnostic testing, consultations, home healthcare, and specialized treatments. </p>
+                            <p>Patient care is our priority, with personalized treatment plans and a focus on medical excellence. WebDoctor utilizes advanced technologies for patient comfort and convenience. We collaborate with healthcare providers to offer comprehensive solutions and improve outcomes. </p>
                         </div>
                         <div class="about-contact">
                             <div class="about-contact-icon">
@@ -200,9 +200,9 @@
                 <div class="row align-items-end">
                     <div class="col-lg-7 col-md-12">
                         <div class="section-inner-header way-inner-header mb-0">
-                            <h2>Connect with PMS for Seamless Healthcare Services</h2>
+                            <h2>Connect with WebDocter for Seamless Healthcare Services</h2>
                             <p>Experience hassle-free access to comprehensive healthcare services through our platform.</p>
-                            <a href="/contact-us" class="btn btn-primary">Contact With Us</a>
+                            <a href="{% url 'contact' %}" class="btn btn-primary">Contact With Us</a>
                         </div>
                     </div>
                     <div class="col-lg-5 col-md-12">

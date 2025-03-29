@@ -216,9 +216,9 @@
                       aria-valuenow="{{ completion_percentage }}" aria-valuemin="0" aria-valuemax="100">
                     </div>
                   </div>
-                  {% if completion_percentage < 100 %} <p class="text-danger mt-2">Your profile is incomplete! Please
-                    update it.</p>
-                    {% endif %}
+                  <p class="{% if completion_percentage < 100 %}text-danger{% else %}text-success{% endif %} mt-2">
+                    {% if completion_percentage < 100 %}Your profile is incomplete!!!! Please update it.{% else %}Your
+                      profile is complete!{% endif %} </p>
                 </div>
               </div>
 
@@ -248,18 +248,7 @@
                                 {% endif %}
                               </div>
 
-                              {% comment %} <div class="upload-img">
-                                <div class="change-photo-btn">
-                                  <span>
-                                    <i class="fa fa-upload"></i>
-                                  </span>
-                                  Upload Photo
-
-                                  <input type="file" id="photo" name="photo" accept="image/*" class="upload"
-                                    onchange="handleImageUpload(event)">
-                                </div>
-                                <small class="form-text text-muted">Allowed JPG or PNG. Max size of 2MB</small>
-                              </div> {% endcomment %}
+                              
                               <div class="upload-img">
                                 <div class="change-photo-btn">
                                   <span>
@@ -439,6 +428,33 @@
                         </div>
                       </div>
 
+                      {% comment %} <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                          <label class="form-label fw-semibold mb-2">Availability Status</label>
+                          <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-check-circle"></i></span>
+                            <select id="is_available" name="is_available" class="form-select form-control">
+                              {% comment %} <option value="">Select</option>  <!-- Default option --> {% endcomment %}
+                              {% comment %} <option value="True" {% if doctor.is_available == "True" %}selected{% endif %}>Available</option>
+                              <option value="False" {% if doctor.is_available == "False" %}selected{% endif %}>Not Available</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div> {% endcomment %}
+                      <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                          <label class="form-label fw-semibold mb-2">Availability Status</label>
+                          <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-check-circle"></i></span>
+                            <select id="is_available" name="is_available" class="form-select form-control">
+                              <option value="">Select</option>  <!-- Default option -->
+                              <option value="True" {% if doctor.is_available == True %}selected{% endif %}>Available</option>
+                              <option value="False" {% if doctor.is_available == False %}selected{% endif %}>Not Available</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                                            
                     </div>
                   </div>
                 </div>
@@ -494,18 +510,15 @@
         <script>
           $(document).ready(function () {
             let doctorId = $("#doctor_id").val();
-
+            let completionPercentage = parseInt("{{ completion_percentage }}"); // Get the value from the template
+            updateProgressBar(completionPercentage);
 
             // Function to update progress bar dynamically
             function updateProgressBar(percentage) {
               $(".progress-bar").css("width", percentage + "%").attr("aria-valuenow", percentage);
-              $("label[for='progress']").text(`Profile Completion: ${percentage}%`);
-
-              if (percentage < 100) {
-                $(".profile-status p.text-danger").text("Your profile is incomplete! Please update it.");
-              } else {
-                $(".profile-status p.text-danger").text("Your profile is complete!");
-              }
+              let profileStatusText = percentage < 100
+              ? "<p class='text-danger mt-2'>Your profile is incomplete! Please update it.</p>"
+              : "<p class='text-warning mt-2'>Your profile is complete!</p>";
             }
 
             // Function to Show jQuery Alert Messages
@@ -545,6 +558,7 @@
                   $("#mci_no").val(data.mci_no);
                   $("#fee").val(data.fee);
                   $("#about_me").val(data.about_me);
+                  $("#is_available").val(data.is_available);
                   // Update profile completion progress
                   updateProgressBar(data.completion_percentage);
 
@@ -588,6 +602,8 @@
                 success: function (response) {
                   if (response.status === "success") {
                     showAlert("fa-circle-check", "Profile image updated successfully!");
+                    // Immediately update progress bar without reloading
+                    updateProgressBar(response.completion_percentage);
                     let newImageUrl = response.photo_url + "?t=" + new Date().getTime();
                     $(".profile-img img, .booking-doc-img img, .user-img img, .avatar-sm img").attr("src", newImageUrl);
                     $("#photo").val("");
@@ -623,6 +639,7 @@
                 mci_no: $("#mci_no").val(),
                 fee: $("#fee").val(),
                 about_me: $("#about_me").val(),
+                is_available: $("#is_available").val(),
               };
 
               $.ajax({

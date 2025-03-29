@@ -1,587 +1,584 @@
 {% load static %}
-<html lang="en"style="transform: none"class="fontawesome-i2svg-active fontawesome-i2svg-complete">
-  <head>
-    <meta charset="utf-8" />
-    <title>{% block title %} webDocter {% endblock %}</title>
-    <link rel="shortcut icon"
-      href="{% static 'assets/img/favicon.png' %}"
-      type="image/x-icon"
-    />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=0"
-    />
+<html lang="en" style="transform: none" class="fontawesome-i2svg-active fontawesome-i2svg-complete">
 
-    <!-- -------------------- social icons ----------------------- -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+<head>
+  <meta charset="utf-8" />
+  <title>{% block title %} webDocter {% endblock %}</title>
+  <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
 
-    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
+  <!-- -------------------- social icons ----------------------- -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 
-    <link
-      rel="stylesheet"
-      href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}"
-    />
-    <link
-      rel="stylesheet"
-      href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}"
-    />
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
 
-    <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}" />
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css" />
 
-     <!-- jquery-confirm CSS -->
-   <link
-   rel="stylesheet"
-   href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css"
- />
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}" />
 
-    <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}" />
 
-    <!-- Theia Sticky Sidebar -->
-    <style id="theia-sticky-sidebar-stylesheet-TSS">
-      .theiaStickySidebar:after {
-        content: "";
-        display: table;
-        clear: both;
+  <!-- jquery-confirm CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
+
+  <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
+
+  <!-- Additional custom styles for the table -->
+  <style>
+    .appointment-table thead th {
+      background-color: #f8f9fa;
+      color: #20c0f3;
+      font-weight: 600;
+      border-bottom: 2px solid #e0e0e0;
+    }
+
+    .appointment-table tbody tr:hover {
+      background-color: #f1f8fb;
+      transition: all 0.3s ease;
+    }
+
+    .appointment-status {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status-confirmed {
+      background-color: #d4edda;
+      color: #28a745;
+    }
+
+    .status-pending {
+      background-color: #fff3cd;
+      color: #ffc107;
+    }
+
+    .status-cancelled {
+      background-color: #f8d7da;
+      color: #dc3545;
+    }
+
+    .status-completed {
+      background-color: #cff4fc;
+      color: #0dcaf0;
+    }
+
+    .doctor-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .doctor-info img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+      object-fit: cover;
+      border: 2px solid #e0e0e0;
+    }
+
+    .doctor-info .doctor-name {
+      font-weight: 600;
+      margin-bottom: 2px;
+      color: #272b41;
+    }
+
+    .doctor-info .doctor-specialty {
+      font-size: 12px;
+      color: #757575;
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 5px 10px;
+      margin-left: 10px;
+    }
+
+    .dataTables_wrapper .dataTables_length select {
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 5px 10px;
+    }
+
+    .appointment-time {
+      font-weight: 600;
+      color: #20c0f3;
+    }
+
+    .card-header {
+      background-color: white;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 15px 20px;
+    }
+
+    .card-header h4 {
+      margin-bottom: 0;
+      color: #272b41;
+    }
+
+    div.dataTables_wrapper div.dataTables_length select {
+      margin-top: 5px;
+      width: 60px;
+      display: inline-block;
+    }
+
+    .pagination-outer {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .pagination {
+      font-family: 'Poppins', sans-serif;
+      display: inline-flex;
+      position: relative;
+    }
+
+    .pagination li a.page-link {
+      color: #fff;
+      background-color: #333;
+      font-size: 17px;
+      font-weight: 500;
+      line-height: 35px;
+      height: 35px;
+      width: 35px;
+      padding: 0;
+      margin: 0 5px;
+      border: none;
+      border-radius: 0;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+      transition: all 0.4s ease 0s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pagination li:first-child a.page-link,
+    .pagination li:last-child a.page-link {
+      font-size: 25px;
+      line-height: 34px;
+      font-weight: 500;
+    }
+
+    .pagination li a.page-link:hover,
+    .pagination li a.page-link:focus,
+    .pagination li.active a.page-link {
+      color: #fff;
+      background-color: #ace0ff;
+    }
+
+    .pagination li a.page-link:before,
+    .pagination li a.page-link:after {
+      content: '';
+      background-color: #2d98da;
+      width: 0;
+      height: 60%;
+      border-radius: 0 50px 50px 0;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: -1;
+      transition: all 0.4s ease 0s;
+    }
+
+    .pagination li a.page-link:after {
+      border-radius: 50% 0 0 50%;
+      left: auto;
+      right: 0;
+      top: auto;
+      bottom: 0;
+    }
+
+    .pagination li a.page-link:hover:before,
+    .pagination li a.page-link:focus:before,
+    .pagination li.active a.page-link:hover:before,
+    .pagination li.active a.page-link:before,
+    .pagination li a.page-link:hover:after,
+    .pagination li a.page-link:focus:after,
+    .pagination li.active a.page-link:hover:after,
+    .pagination li.active a.page-link:after {
+      width: 80%;
+    }
+
+    @media only screen and (max-width: 480px) {
+      .pagination {
+        font-size: 0;
+        display: inline-block;
       }
-      @font-face {
-        font-family: Roboto;
-        src: url("chrome-extension://mcgbeeipkmelnpldkobichboakdfaeon/css/Roboto-Regular.ttf");
+
+      .pagination li {
+        display: inline-block;
+        vertical-align: top;
+        margin: 10px 0;
       }
-    </style>
-  </head>
-  <body style="transform: none">
-    {% block content %}
-    <div class="main-wrapper" style="transform: none">
-      <header class="header header-fixed header-one header-space">
-        <div class="container">
+    }
+
+    /* Restore default DataTables wrapper spacing */
+    .dataTables_wrapper .row {
+      margin: 0.5rem 0;
+      align-items: center;
+    }
+
+    /* Optional: Adjust search input width */
+    .dataTables_filter input {
+      width: auto !important;
+      margin-left: 0.5rem;
+    }
+  </style>
+
+  <!-- Theia Sticky Sidebar -->
+  <style id="theia-sticky-sidebar-stylesheet-TSS">
+    .theiaStickySidebar:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    @font-face {
+      font-family: Roboto;
+      src: url("chrome-extension://mcgbeeipkmelnpldkobichboakdfaeon/css/Roboto-Regular.ttf");
+    }
+  </style>
+</head>
+
+<body style="transform: none">
+  {% block content %}
+  <div class="main-wrapper" style="transform: none">
+
+
+    <header class="header header-fixed header-one header-space">
+      <div class="container">
         <nav class="navbar navbar-expand-lg header-nav">
-        <div class="navbar-header">
-        <a id="mobile_btn" href="javascript:void(0);">
-        <span class="bar-icon">
-        <span></span>
-        <span></span>
-        <span></span>
-        </span>
-        </a>
-        <a href="{% url 'index' %}" class="navbar-brand logo">
-          <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
-        </a>
-        </a>
-        </div>
-        <div class="main-menu-wrapper">
-        <div class="menu-header">
-          <a href="{% url 'index' %}" class="menu-logo">
-            <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
-          </a>
-        <a id="menu_close" class="menu-close" href="javascript:void(0);">
-        <svg class="svg-inline--fa fa-times fa-w-11" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" data-fa-i2svg=""><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg><!-- <i class="fas fa-times"></i> Font Awesome fontawesome.com -->
-        </a>
-        </div>
-        <ul class="main-nav">
-          <li>
-            <a href="{% url 'index' %}">Home</a>
-          </li>
-          
-          <li>
-            <a href="{% url 'doctor_list' %}">Doctors</a>
-          </li>
-          <li>
-            <a href="{% url 'about_us' %}">About Us</a>
-          </li>
-          
-          <li>
-            <a href="{% url 'contact_us' %}">Contact Us</a>
-          </li>
-        
-        
-        <ul class="nav header-navbar-rht" style="padding-top: 20px;">
-        
-        <li class="nav-item dropdown has-arrow logged-item">
-        <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
-        <span class="user-img">
-       
-          {% if patient.profile_img %}
-    <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
-    {% else %}
-      <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
-    {% endif %}
-    </span>
-        </span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-end">
-        <div class="user-header">
-        <div class="avatar avatar-sm">
-   
-          {% if patient.profile_img %}
-          <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
-          {% else %}
-          <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
-          {% endif %}
+          <div class="navbar-header">
+            <a id="mobile_btn" href="javascript:void(0);">
+              <span class="bar-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </a>
+            <a href="{% url 'index' %}" class="navbar-brand logo">
+              <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+            </a>
+          </div>
+          <div class="main-menu-wrapper">
+            <div class="menu-header">
+              <a href="{% url 'index' %}" class="menu-logo">
+                <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+              </a>
+              <a id="menu_close" class="menu-close" href="javascript:void(0);">
+                <svg class="svg-inline--fa fa-times fa-w-11" aria-hidden="true" focusable="false" data-prefix="fas"
+                  data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"
+                  data-fa-i2svg="">
+                  <path fill="currentColor"
+                    d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z">
+                  </path>
+                </svg>
+              </a>
+            </div>
+            <ul class="main-nav">
+              <li>
+                <a href="{% url 'index' %}">Home</a>
+              </li>
 
-        </div>
-        <div class="user-text">
-        <h6>{{patient.name}}</h6>
-        <p class="text-muted mb-0">{{patient.user}}</p>
-        </div>
-        </div>
-        <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
-        <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
-        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>       
-       </div>
-        </li>
-        </ul>
-        </ul>
-        </div>
+              <li>
+                <a href="{% url 'doctor_list' %}">Doctors</a>
+              </li>
+              <li>
+                <a href="{% url 'about_us' %}">About Us</a>
+              </li>
+
+              <li>
+                <a href="{% url 'contact_us' %}">Contact Us</a>
+              </li>
+
+              <ul class="nav header-navbar-rht" style="padding-top: 20px;">
+
+                <li class="nav-item dropdown has-arrow logged-item">
+                  <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="user-img">
+
+                      {% if patient.profile_img %}
+                      <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
+                      {% else %}
+                      <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
+                        alt="default profile" />
+                      {% endif %}
+                    </span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end">
+                    <div class="user-header">
+                      <div class="avatar avatar-sm">
+
+                        {% if patient.profile_img %}
+                        <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
+                        {% else %}
+                        <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
+                          alt="default profile" />
+                        {% endif %}
+
+                      </div>
+                      <div class="user-text">
+                        <h6>{{patient.name}}</h6>
+                        <p class="text-muted mb-0">{{patient.user}}</p>
+                      </div>
+                    </div>
+                    <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
+                    <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
+                    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                  </div>
+                </li>
+              </ul>
+            </ul>
+          </div>
         </nav>
-        </div>
-        </header>
-      <div class="content" style="transform: none; min-height: 385.906px">
-        <div class="container" style="transform: none; padding-top: 50px">
-          <div class="row" style="transform: none">
-            <div
-              class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar"
-              style="
+      </div>
+    </header>
+
+    <div class="content" style="transform: none; min-height: 385.906px">
+      <div class="container-fluid" style="transform: none; padding-top: 50px">
+        <div class="row" style="transform: none">
+          <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar" style="
                 position: relative;
                 overflow: visible;
                 box-sizing: border-box;
                 min-height: 1px;
-              "
-            >
-              <div
-                class="theiaStickySidebar"
-                style="
+              ">
+            <div class="theiaStickySidebar" style="
                   padding-top: 0px;
                   padding-bottom: 1px;
                   position: static;
                   transform: none;
-                "
-              >
-                <div class="profile-sidebar">
-                  <div class="widget-profile pro-widget-content">
-                    <div class="profile-info-widget">
-                      <a href="#" class="booking-doc-img">
-                        {% if patient.profile_img %}
-                        <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
-                        {% else %}
-                          <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
-                        {% endif %}
-                      </a>
-                      <div class="profile-det-info">
-                        <h3>{{ patient.name }}</h3>
-                        <div class="patient-details">
-                          <h5>
-                            <svg
-                              class="svg-inline--fa fa-birthday-cake fa-w-14"
-                              aria-hidden="true"
-                              focusable="false"
-                              data-prefix="fas"
-                              data-icon="birthday-cake"
-                              role="img"
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 448 512"
-                              data-fa-i2svg=""
-                              style="width: 16px; height: 16px"
-                            >
-                              <path
-                                fill="currentColor"
-                                d="M448 384c-28.02 0-31.26-32-74.5-32-43.43 0-46.825 32-74.75 32-27.695 0-31.454-32-74.75-32-42.842 0-47.218 32-74.5 32-28.148 0-31.202-32-74.75-32-43.547 0-46.653 32-74.75 32v-80c0-26.5 21.5-48 48-48h16V112h64v144h64V112h64v144h64V112h64v144h16c26.5 0 48 21.5 48 48v80zm0 128H0v-96c43.356 0 46.767-32 74.75-32 27.951 0 31.253 32 74.75 32 42.843 0 47.217-32 74.5-32 28.148 0 31.201 32 74.75 32 43.357 0 46.767-32 74.75-32 27.488 0 31.252 32 74.5 32v96zM96 96c-17.75 0-32-14.25-32-32 0-31 32-23 32-64 12 0 32 29.5 32 56s-14.25 40-32 40zm128 0c-17.75 0-32-14.25-32-32 0-31 32-23 32-64 12 0 32 29.5 32 56s-14.25 40-32 40zm128 0c-17.75 0-32-14.25-32-32 0-31 32-23 32-64 12 0 32 29.5 32 56s-14.25 40-32 40z"
-                              ></path>
-                            </svg>
-
-                            <!-- <i class="fas fa-birthday-cake"></i> Font Awesome fontawesome.com -->
-                            {{ patient.dob }}
-                          </h5>
-                          <h5 class="mb-0">
-                            <svg
-                              class="svg-inline--fa fa-map-marker-alt fa-w-12"
-                              aria-hidden="true"
-                              focusable="false"
-                              data-prefix="fas"
-                              data-icon="map-marker-alt"
-                              role="img"
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 384 512"
-                              data-fa-i2svg=""
-                              style="width: 16px; height: 16px"
-                            >
-                              <path
-                                fill="currentColor"
-                                d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path>
-                                
-                            </svg>
-                            <!-- <i class="fas fa-map-marker-alt"></i> Font Awesome fontawesome.com -->
-                            {{ patient.city }}, {{ patient.state }}
-                          </h5>
-                        </div>
+                ">
+              <div class="profile-sidebar">
+                <div class="widget-profile pro-widget-content">
+                  <div class="profile-info-widget">
+                    <a href="#" class="booking-doc-img">
+                      {% if patient.profile_img %}
+                      <img class="rounded-circle" src="{{ patient.profile_img.url }}" width="31" alt="profile" />
+                      {% else %}
+                      <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
+                        alt="default profile" />
+                      {% endif %}
+                    </a>
+                    <div class="profile-det-info">
+                      <h3>{{ patient.name }}</h3>
+                      <div class="patient-details">
+                        <h5>
+                          <i class="fas fa-birthday-cake me-2"></i>{{ patient.dob }}
+                        </h5>
+                        <h5 class="mb-0">
+                          <i class="fas fa-map-marker-alt me-2"></i>{{ patient.city }}, {{ patient.state }}
+                        </h5>
                       </div>
                     </div>
                   </div>
-                  <div class="dashboard-widget">
-                    <nav class="dashboard-menu">
-                      <ul>
-                        <li class="active">
-                          <a href="{% url 'patient_dashboard' %}">
-                            <svg
-                              class="svg-inline--fa fa-columns fa-w-16"
-                              aria-hidden="true"
-                              focusable="false"
-                              data-prefix="fas"
-                              data-icon="columns"
-                              role="img"
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 512 512"
-                              data-fa-i2svg=""
-                              style="width: 16px; height: 16px"
-                            >
-                              <path
-                                fill="currentColor"
-                                d="M464 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V80c0-26.51-21.49-48-48-48zM224 416H64V160h160v256zm224 0H288V160h160v256z"
-                              ></path>
-                            </svg>
-                            <!-- <i class="fas fa-columns"></i> Font Awesome fontawesome.com -->
-                            <span>Dashboard</span>
-                          </a>
-                        </li>
-
-                        <li>
-                          <a href="{% url 'patient_profile_settings' %}">
-                            <svg
-                              class="svg-inline--fa fa-user-cog fa-w-20"
-                              aria-hidden="true"
-                              focusable="false"
-                              data-prefix="fas"
-                              data-icon="user-cog"
-                              role="img"
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 640 512"
-                              data-fa-i2svg=""
-                              style="width: 16px; height: 16px"
-                            >
-                              <path
-                                fill="currentColor"
-                                d="M610.5 373.3c2.6-14.1 2.6-28.5 0-42.6l25.8-14.9c3-1.7 4.3-5.2 3.3-8.5-6.7-21.6-18.2-41.2-33.2-57.4-2.3-2.5-6-3.1-9-1.4l-25.8 14.9c-10.9-9.3-23.4-16.5-36.9-21.3v-29.8c0-3.4-2.4-6.4-5.7-7.1-22.3-5-45-4.8-66.2 0-3.3.7-5.7 3.7-5.7 7.1v29.8c-13.5 4.8-26 12-36.9 21.3l-25.8-14.9c-2.9-1.7-6.7-1.1-9 1.4-15 16.2-26.5 35.8-33.2 57.4-1 3.3.4 6.8 3.3 8.5l25.8 14.9c-2.6 14.1-2.6 28.5 0 42.6l-25.8 14.9c-3 1.7-4.3 5.2-3.3 8.5 6.7 21.6 18.2 41.1 33.2 57.4 2.3 2.5 6 3.1 9 1.4l25.8-14.9c10.9 9.3 23.4 16.5 36.9 21.3v29.8c0 3.4 2.4 6.4 5.7 7.1 22.3 5 45 4.8 66.2 0 3.3-.7 5.7-3.7 5.7-7.1v-29.8c13.5-4.8 26-12 36.9-21.3l25.8 14.9c2.9 1.7 6.7 1.1 9-1.4 15-16.2 26.5-35.8 33.2-57.4 1-3.3-.4-6.8-3.3-8.5l-25.8-14.9zM496 400.5c-26.8 0-48.5-21.8-48.5-48.5s21.8-48.5 48.5-48.5 48.5 21.8 48.5 48.5-21.7 48.5-48.5 48.5zM224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm201.2 226.5c-2.3-1.2-4.6-2.6-6.8-3.9l-7.9 4.6c-6 3.4-12.8 5.3-19.6 5.3-10.9 0-21.4-4.6-28.9-12.6-18.3-19.8-32.3-43.9-40.2-69.6-5.5-17.7 1.9-36.4 17.9-45.7l7.9-4.6c-.1-2.6-.1-5.2 0-7.8l-7.9-4.6c-16-9.2-23.4-28-17.9-45.7.9-2.9 2.2-5.8 3.2-8.7-3.8-.3-7.5-1.2-11.4-1.2h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c10.1 0 19.5-3.2 27.2-8.5-1.2-3.8-2-7.7-2-11.8v-9.2z"
-                              ></path>
-                            </svg>
-                            <!-- <i class="fas fa-user-cog"></i> Font Awesome fontawesome.com -->
-                            <span>Profile Settings</span>
-                          </a>
-                        </li>
-
-                        <li>
-                          <a href="{% url 'patient_change_password' %}">
-                            <svg
-                              class="svg-inline--fa fa-lock fa-w-14"
-                              aria-hidden="true"
-                              focusable="false"
-                              data-prefix="fas"
-                              data-icon="lock"
-                              role="img"
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 448 512"
-                              data-fa-i2svg=""
-                              style="width: 16px; height: 16px"
-                            >
-                              <path
-                                fill="currentColor"
-                                d="M400 224h-24v-72C376 68.2 307.8 0 224 0S72 68.2 72 152v72H48c-26.5 0-48 21.5-48 48v192c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V272c0-26.5-21.5-48-48-48zm-104 0H152v-72c0-39.7 32.3-72 72-72s72 32.3 72 72v72z"
-                              ></path>
-                            </svg>
-                            <!-- <i class="fas fa-lock"></i> Font Awesome fontawesome.com -->
-                            <span>Change Password</span>
-                          </a>
-                        </li>
-
-                        {% comment %} <li>
-                          <a href="{% url 'add_health_record' %}">
-                            <svg
-                              class="svg-inline--fa fa-lock fa-w-14"
-                              aria-hidden="true"
-                              focusable="false"
-                              data-prefix="fas"
-                              data-icon="lock"
-                              role="img"
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 448 512"
-                              data-fa-i2svg=""
-                              style="width: 16px; height: 16px"
-                            >
-                              <path
-                                fill="currentColor"
-                                d="M400 224h-24v-72C376 68.2 307.8 0 224 0S72 68.2 72 152v72H48c-26.5 0-48 21.5-48 48v192c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V272c0-26.5-21.5-48-48-48zm-104 0H152v-72c0-39.7 32.3-72 72-72s72 32.3 72 72v72z"
-                              ></path>
-                            </svg>
-                            <!-- <i class="fas fa-lock"></i> Font Awesome fontawesome.com -->
-                            <span>Add Health Record</span>
-                          </a>
-                        </li> {% endcomment %}
-                        <li>
-                          <a href="{% url 'health_dashboard' %}">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 448 512"
-                              width="16"
-                              height="16"
-                              fill="currentColor"
-                            >
-                              <path
-                                d="M224 32c-35.3 0-64 28.7-64 64H72c-13.3 0-24 10.7-24 24v352c0 13.3 10.7 24 24 24h304c13.3 0 24-10.7 24-24V120c0-13.3-10.7-24-24-24h-88c0-35.3-28.7-64-64-64zm-80 64c0-44.2 35.8-80 80-80s80 35.8 80 80h80c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48H72c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h72zm72 72c-8.8 0-16 7.2-16 16v56h-56c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h56v56c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16v-56h56c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16h-56v-56c0-8.8-7.2-16-16-16h-32z"
-                              ></path>
-                            </svg>
-                            <span>Health Dashboard</span>
-                          </a>
-                        </li>
-                        
-                        <li>
-                          <a href="{% url 'logout' %}">
-                            <svg
-                              class="svg-inline--fa fa-sign-out-alt fa-w-16"
-                              aria-hidden="true"
-                              focusable="false"
-                              data-prefix="fas"
-                              data-icon="sign-out-alt"
-                              role="img"
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 512 512"
-                              data-fa-i2svg=""
-                              style="width: 16px; height: 16px"
-                            >
-                              <path
-                                fill="currentColor"
-                                d="M497 273L329 441c-15 15-41 4.5-41-17v-96H152c-13.3 0-24-10.7-24-24v-96c0-13.3 10.7-24 24-24h136V88c0-21.4 25.9-32 41-17l168 168c9.3 9.4 9.3 24.6 0 34zM192 436v-40c0-6.6-5.4-12-12-12H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h84c6.6 0 12-5.4 12-12V76c0-6.6-5.4-12-12-12H96c-53 0-96 43-96 96v192c0 53 43 96 96 96h84c6.6 0 12-5.4 12-12z"
-                              ></path>
-                            </svg>
-                            <!-- <i class="fas fa-sign-out-alt"></i> Font Awesome fontawesome.com -->
-                            <span>Logout</span>
-                          </a>
-                        </li>
-                      </ul>
-                    </nav>
-                  </div>
                 </div>
-                <div
-                  class="resize-sensor"
-                  style="
-                    position: absolute;
-                    inset: 0px;
-                    overflow: hidden;
-                    z-index: -1;
-                    visibility: hidden;
-                  "
-                >
-                  <div
-                    class="resize-sensor-expand"
-                    style="
-                      position: absolute;
-                      left: 0;
-                      top: 0;
-                      right: 0;
-                      bottom: 0;
-                      overflow: hidden;
-                      z-index: -1;
-                      visibility: hidden;
-                    "
-                  >
-                    <div
-                      style="
-                        position: absolute;
-                        left: 0px;
-                        top: 0px;
-                        transition: all 0s ease 0s;
-                        width: 295px;
-                        height: 937px;
-                      "
-                    ></div>
-                  </div>
-                  <div
-                    class="resize-sensor-shrink"
-                    style="
-                      position: absolute;
-                      left: 0;
-                      top: 0;
-                      right: 0;
-                      bottom: 0;
-                      overflow: hidden;
-                      z-index: -1;
-                      visibility: hidden;
-                    "
-                  >
-                    <div
-                      style="
-                        position: absolute;
-                        left: 0;
-                        top: 0;
-                        transition: 0s;
-                        width: 200%;
-                        height: 200%;
-                      "
-                    ></div>
-                  </div>
+                <div class="dashboard-widget">
+                  <nav class="dashboard-menu">
+                    <ul>
+                      <li class="active">
+                        <a href="{% url 'patient_dashboard' %}">
+                          <i class="fas fa-columns"></i>
+                          <span>Dashboard</span>
+                        </a>
+                      </li>
+
+                      <li>
+                        <a href="{% url 'patient_profile_settings' %}">
+                          <i class="fas fa-user-cog"></i>
+                          <span>Profile Settings</span>
+                        </a>
+                      </li>
+
+                      <li>
+                        <a href="{% url 'patient_change_password' %}">
+                          <i class="fas fa-lock"></i>
+                          <span>Change Password</span>
+                        </a>
+                      </li>
+
+                      <li>
+                        <a href="{% url 'health_dashboard' %}">
+                          <i class="fas fa-notes-medical"></i>
+                          <span>Health Dashboard</span>
+                        </a>
+                      </li>
+
+                      <li>
+                        <a href="{% url 'logout' %}">
+                          <i class="fas fa-sign-out-alt"></i>
+                          <span>Logout</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
                 </div>
               </div>
             </div>
-            <div class="col-md-7 col-lg-8 col-xl-9">
-              <div class="">
-                <div class="card-body pt-0">
-                  <div class="tab-content pt-0">
-                    <div
-                      id="pat_appointments"
-                      class="tab-pane fade show active"
-                      role="tabpanel"
-                    >
-                      <div class="card card-table mb-0">
-                        <div class="card-body">
-                          <div class="table-responsive">
-                            <table class="table table-hover table-center mb-0">
-                              <thead>
-                                <tr>
-                                  <th>Doctor</th>
-                                  <th>Appt Date</th>
-                                  <th>Booking Date</th>
-                                  <th>Amount</th>
+          </div>
 
-                                  <th>Status</th>
-                                  {% comment %} <th>Report</th> {% endcomment %}
-                                  {% comment %} <th>Cancle Appointment</th> {% endcomment %}
-                                  {% comment %} <th>Name</th> {% endcomment %}
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {% for appointment in appointment_data_list %}
-                                <tr>
-                                  <td>
-                                    <h2 class="table-avatar">
-                                      <a
-                                        href="{% url 'doctor_profile_cancel_appointment' doctor_id=appointment.doctor_id.id %}"
-                                        class="avatar avatar-sm me-2"
-                                      >
+          <div class="col-md-7 col-lg-8 col-xl-9">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h4><i class="fas fa-calendar-check me-2"></i>My Appointments</h4>
+                <div>
+                  <a href="{% url 'doctor_list' %}" class="btn prime-btn btn-primary">
+                    <i class="fas fa-plus-circle me-1"></i> Book New Appointment
+                  </a>
+                </div>
+              </div>
 
-                                        {% if appointment.doctor_id.profile_img %}
-                                          <img class="rounded-circle" src="{{ appointment.doctor_id.profile_img.url }}" width="31" alt="profile" />
-                                          {% else %}
-                                            <img class="rounded-circle" src="/static/assets/default_profile.png" width="31" alt="default profile" />
-                                          {% endif %}
-                                      </a>
-                                      <a href="{% url 'doctor_profile_cancel_appointment' doctor_id=appointment.doctor_id.id %}">
-                                        Dr. {{ appointment.doctor_id.name }}
-                                        <span>{{ appointment.doctor_id.specialization }}</span>
-                                      </a>
-                                    </h2>
-                                  </td>
-                                  <td>
-                                    {{appointment.appointment_date}}<span
-                                      class="d-block text-info"
-                                      >{{appointment.appointment_time}}</span
-                                    >
-                                  </td>
-                                  <td>{{appointment.booking_date}}</td>
-                                  <td>{{appointment.doctor_id.fee}}</td>
-
-                                  <td>
-                                    <span
-                                      class="badge rounded-pill bg-success-light"
-                                      >{{appointment.status}}</span
-                                    >
-                                  </td>
-                                  {% comment %} <td>
-                                    {% for report in reports %}
-    <p>Consultation on {{ report.created_at }}</p>
-    <a href="{% url 'generate_report_pdf' report.id %}" class="btn btn-primary">Download Report</a>
-{% endfor %}
-
-                                  </td> {% endcomment %}
-                                  {% comment %} <td>
-                                    <a class="btn btn-danger text-white" href="{% url 'cancel_appointment' appointment.id %}">cancel</a> 
-                                  </td> {% endcomment %}
-                                  <td class="text-end">
-                                    <div class="table-action">
-                                      <a
-                                        href="javascript:void(0);"
-                                        class="btn btn-sm bg-info-light"
-                                      >
-                                        <svg
-                                          class="svg-inline--fa fa-eye fa-w-18"
-                                          aria-hidden="true"
-                                          focusable="false"
-                                          data-prefix="far"
-                                          data-icon="eye"
-                                          role="img"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          viewBox="0 0 576 512"
-                                          data-fa-i2svg=""
-                                        >
-                                          <path
-                                            fill="currentColor"
-                                            d="M288 144a110.94 110.94 0 0 0-31.24 5 55.4 55.4 0 0 1 7.24 27 56 56 0 0 1-56 56 55.4 55.4 0 0 1-27-7.24A111.71 111.71 0 1 0 288 144zm284.52 97.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400c-98.65 0-189.09-55-237.93-144C98.91 167 189.34 112 288 112s189.09 55 237.93 144C477.1 345 386.66 400 288 400z"
-                                          ></path></svg>
-
-                                        <!-- <i class="far fa-eye"></i> Font Awesome fontawesome.com -->
-                                        View
-                                      </a>
-                                    </div>
-                                  </td>
-                                </tr>
-                                {% endfor %}
-                              </tbody>
-                            </table>
+              
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-hover table-center mb-0 appointment-table" id="appointmentTable">
+                    <thead class="h-100">
+                      <tr>
+                        <th>Doctor</th>
+                        <th>Appointment</th>
+                        <th>Booking Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for appointment in appointment_data_list %}
+                      <tr>
+                        <td>
+                          <div class="doctor-info">
+                            {% if appointment.doctor_id.profile_img %}
+                            <img src="{{ appointment.doctor_id.profile_img.url }}" alt="Doctor">
+                            {% else %}
+                            <img src="/static/assets/img/default_profile.png" alt="Doctor">
+                            {% endif %}
+                            <div>
+                              <h2 class="doctor-name">Dr. {{ appointment.doctor_id.name }}</h2>
+                              <span class="doctor-specialty">{{ appointment.doctor_id.specialization }}</span>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                        </td>
+                        <td>
+                          <div>
+                            <span class="d-block">{{appointment.appointment_date|date:"d M Y"}}</span>
+                            <span class="appointment-time">{{appointment.appointment_time}}</span>
+                          </div>
+                        </td>
+                        <td>{{appointment.booking_date|date:"d M Y"}}</td>
+                        <td>{{appointment.doctor_id.fee}}</td>
+                        <td>
+                          {% if appointment.status == 'Confirm' %}
+                          <span class="appointment-status status-confirmed">{{appointment.status}}</span>
+                          {% elif appointment.status == 'Pending' %}
+                          <span class="appointment-status status-pending">{{appointment.status}}</span>
+                          {% elif appointment.status == 'Cancelled' %}
+                          <span class="appointment-status status-cancelled">{{appointment.status}}</span>
+                          {% else %}
+                          <span class="appointment-status">{{appointment.status}}</span>
+                          {% endif %}
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      {% include "footer.html" %}  
-      {% endblock %}
+    {% include "footer.html" %}
+    {% endblock %}
 
-      <!-- jQuery library (required for jquery-confirm) -->
-    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+ <!-- jQuery library -->
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+ 
+ <!-- DataTables JS -->
+ <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+ <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+ <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+ <script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-      <script>
-        $(document).ready(function () {
-          function showAlert(icon, message) {
-            $.alert({
-              title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
-              content: `<span style="font-size: 15px;">${message}</span>`,
-              type: "blue",
-              theme: "modern",
-              buttons: {
-                ok: {
-                  text: "OK",
-                  btnClass: "btn-blue",
-                },
-              },
-            });
-          }
-          let delay = 500; // Start with a small delay
-          {% for message in messages %}
-          setTimeout(function () {
-            showAlert(
-              "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
-              "{{ message|escape }}",
-              "{{ message.tags }}"
-            );
-          }, delay);
-          delay += 1000; // Increase delay for next message
-          {% endfor %}
-        })
-      
-      </script>
-           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+ <!-- jQuery Confirm JS -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+
+ <script>
+   $(document).ready(function () {
+     // Initialize DataTable
+     $('#appointmentTable').DataTable({
+       responsive: true,
+       ordering: true,
+       language: {
+         search: "_INPUT_",
+         searchPlaceholder: "Search appointments...",
+         lengthMenu: "Show _MENU_ appointments",
+         info: "Showing _START_ to _END_ of _TOTAL_ appointments",
+         paginate: {
+           next: '»',
+           previous: '«'
+         }
+       },
+       columnDefs: [
+         { orderable: false, targets: [0] }
+       ],
+       order: [[1, 'desc']], // Sort by appointment date by default
+       pageLength: 10,
+       lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+       dom: '<"top"lf>rt<"bottom"ip><"clear">'
+     });
+     
+    
+     // Initialize tooltips
+     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+       return new bootstrap.Tooltip(tooltipTriggerEl)
+     });
+     
+     // Alert Function
+     function showAlert(icon, message) {
+       $.alert({
+         title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+         content: `<span style="font-size: 15px;">${message}</span>`,
+         type: "blue",
+         theme: "modern",
+         buttons: {
+           ok: {
+             text: "OK",
+             btnClass: "btn-blue",
+           },
+         },
+       });
+     }
+    
+    
+     
+     // Display Messages
+     let delay = 500; // Start with a small delay
+     {% for message in messages %}
+     setTimeout(function () {
+       showAlert(
+         "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
+         "{{ message|escape }}",
+         "{{ message.tags }}"
+       );
+     }, delay);
+     delay += 1000; // Increase delay for next message
+     {% endfor %}
+     });
+  
+  
+ </script>
+</body>
 
 </html>

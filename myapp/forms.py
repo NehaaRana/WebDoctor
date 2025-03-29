@@ -3,9 +3,10 @@ from . models import patientRegister,doctorRegister,appointment,Payment,review
 from django.core.exceptions import ValidationError
 from datetime import datetime, time, timedelta
 from .models import adminLogin
-from . models import patientRegister,doctorRegister,appointment,Payment,HealthRecord,Prescription
+from . models import patientRegister,doctorRegister,appointment,Payment,HealthRecord,Prescription ,Medicine
 from django.core.exceptions import ValidationError
 from datetime import datetime, time, timedelta
+from .models import Medicine
 
 class patientForm(forms.ModelForm):
   class Meta:
@@ -136,10 +137,6 @@ class PaymentForm(forms.ModelForm):
         model = Payment
         fields = ['amount', 'payment_status', 'payment_method']
 
-# class HealthRecordForm(forms.ModelForm):
-#     class Meta:
-#         model = HealthRecord
-#         fields = ['bp_systolic', 'bp_diastolic', 'sugar_level', 'weight']
 
 
 class HealthRecordForm(forms.ModelForm):
@@ -150,12 +147,12 @@ class HealthRecordForm(forms.ModelForm):
             'steps_walked', 'sleep_hours'
         ]
         widgets = {
-            'bp_systolic': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Systolic BP (e.g., 120 mmHg)'}),
-            'bp_diastolic': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Diastolic BP(e.g., 80 mmHg)'}),
-            'heart_rate': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Heart Rate(e.g., 75 BPM)'}),
-            'sugar_level': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Sugar Level(e.g., 90 mg/dL)'}),
-            'steps_walked': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Steps Walked(e.g., 8000 steps)'}),
-            'sleep_hours': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Sleep Hours(e.g., 8 hours)'}),
+            'bp_systolic': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Systolic BP (e.g., 120 mmHg)',  'required': 'required'}),
+            'bp_diastolic': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Diastolic BP(e.g., 80 mmHg)',  'required': 'required'}),
+            'heart_rate': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Heart Rate(e.g., 75 BPM)',  'required': 'required'}),
+            'sugar_level': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Sugar Level(e.g., 90 mg/dL)',  'required': 'required'}),
+            'steps_walked': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Steps Walked(e.g., 8000 steps)',  'required': 'required'}),
+            'sleep_hours': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Sleep Hours(e.g., 8 hours)' ,  'required': 'required'}),
         }
 
 # prescription form
@@ -168,9 +165,31 @@ class PrescriptionForm(forms.ModelForm):
             'diagnosis': forms.Textarea(attrs={'rows': 2}),
             'instructions': forms.Textarea(attrs={'rows': 3}),
         }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['medicines'].required = False  # Remove required
+        self.fields['diagnosis'].required = False  # Remove required
+        self.fields['instructions'].required = False  # Remove required
+    def clean(self):
+            cleaned_data = super().clean()
+            medicines = cleaned_data.get("medicines")
+            diagnosis = cleaned_data.get("diagnosis")
+            instructions = cleaned_data.get("instructions")
 
-# Auto-generated Report
-# class ConsultationReportForm(forms.ModelForm):
-#     class Meta:
-#         model = ConsultationReport
-#         fields = ['diagnosis', 'prescription', 'notes']
+            if not medicines or not diagnosis or not instructions:
+                raise forms.ValidationError("All fields are required.")
+
+            return cleaned_data# Auto-generated Report
+
+
+class MedicineForm(forms.ModelForm):
+    expiry_date = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date'})
+    )
+
+    class Meta:
+        model = Medicine
+        fields = ['name', 'description', 'manufacturer', 'price', 'quantity', 'expiry_date', 'status','img']
+        widgets = {
+            'status': forms.Select(choices=Medicine.STATUS_CHOICES),
+        }

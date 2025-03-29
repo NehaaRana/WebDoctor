@@ -1,516 +1,963 @@
 {% load static %}
 <html lang="en" class="fontawesome-i2svg-active fontawesome-i2svg-complete">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, user-scalable=0"
-    />
-    <title>{% block title %} webDocter {% endblock %}</title>
-    <link
-      rel="shortcut icon"
-      href="{% static 'assets/img/favicon.png' %}"
-      type="image/x-icon"
-    />
 
-    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
+  <title>{% block title %} webDoctor {% endblock %}</title>
+  <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon" />
 
-    <link
-      rel="stylesheet"
-      href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}"
-    />
-    <link
-      rel="stylesheet"
-      href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}"
-    />
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}" />
-    <link rel="stylesheet"href="{% static 'assets/css/bootstrap-datetimepicker.min.css' %}"/>
-    <link rel="stylesheet" href="{% static 'assets/css/owl.carousel.min.css' %}"/>
-    <link rel="stylesheet" href="{% static 'assets/css/aos.css' %}" />
-    <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
-
-    <style type="text/css">@font-face { font-family: Roboto; src: url("{% static 'assets/fonts/Roboto-Regular.ttf' %}")  format("truetype"); }</style>
-
-    <script type="text/javascript">
-      (function(d, m){
-          var kommunicateSettings = 
-              {"appId":"280f11fbfa5374e0e2d1713fe2ee7c21c","popupWidget":true,"automaticChatOpenOnNavigation":true};
-          var s = document.createElement("script"); s.type = "text/javascript"; s.async = true;
-          s.src = "https://widget.kommunicate.io/v2/kommunicate.app";
-          var h = document.getElementsByTagName("head")[0]; h.appendChild(s);
-          window.kommunicate = m; m._globals = kommunicateSettings;
-      })(document, window.kommunicate || {});
-    /* NOTE : Use web server to view HTML files as real-time update will not work if you directly open the HTML file in the browser. */
-    </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap-datetimepicker.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/owl.carousel.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/aos.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
   
-  </head>
-  <body data-aos-easing="ease" data-aos-duration="1200" data-aos-delay="0">
-    {% block content %}
-    <div class="main-wrapper">
-      <header class="header header-fixed header-one header-space">
-        <div class="container">
-          <nav class="navbar navbar-expand-lg header-nav">
-            <div class="navbar-header">
-              <a id="mobile_btn" href="javascript:void(0);">
-                <span class="bar-icon">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </span>
-              </a>
-              <a href="{% url 'home' %}" class="navbar-brand logo">
+
+  <style type="text/css">
+    @font-face {
+      font-family: Roboto;
+      src: url("{% static 'assets/fonts/Roboto-Regular.ttf' %}") format("truetype");
+    }
+
+    .emergency-button {
+      position: fixed;
+      bottom: 100px;
+      right: 20px;
+      z-index: 9999;
+      filter: drop-shadow(0 0 20px rgba(220, 53, 69, 0.6));
+    }
+
+    .btn-circle {
+      position: relative;
+      width: 60px;
+      height: 60px;
+      background-color: #c82333;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-decoration: none;
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* Floating animation */
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    /* Pulsing ring effect */
+    .btn-circle::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 2px solid #dc3545;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+      box-sizing: border-box;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    /* Enhanced sun pulse effect */
+    .sun {
+      width: 90px;
+      height: 90px;
+      background: linear-gradient(45deg, #ff6b6b, #ff8787);
+      border-radius: 45px;
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      z-index: -1;
+      mix-blend-mode: screen;
+    }
+
+    .sunshine {
+      animation: sunshines 2s infinite;
+    }
+
+    @keyframes sunshines {
+      0% {
+        transform: scale(0.8);
+        opacity: 0.8;
+      }
+
+      50% {
+        transform: scale(1);
+        opacity: 0.4;
+      }
+
+      100% {
+        transform: scale(1.2);
+        opacity: 0;
+      }
+    }
+
+
+    .btn-circle:hover::after {
+      animation-duration: 1s;
+    }
+
+    .search-box-one {
+      max-width: 850px;
+      background: #ffffff;
+      border: 1px solid #F0F0F0;
+      box-shadow: 0px 3px 20px rgba(197, 197, 197, 0.2);
+      border-radius: 10px;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .search-container {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      gap: 10px;
+    }
+
+    .search-input {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      border-radius: 5px;
+      padding: 5px 10px;
+      background: #fff;
+    }
+
+    .search-input i {
+      margin-right: 8px;
+      color: #8894AE;
+      font-size: 18px;
+    }
+
+    .search-input input {
+      border: none;
+      outline: none;
+      width: 100%;
+      padding: 8px;
+    }
+
+    .form-search-btn {
+      display: flex;
+      align-items: center;
+    }
+
+    .form-search-btn .btn {
+      font-size: 16px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 8px;
+      background-color: #0E82FD;
+      border: none;
+      color: #ffffff;
+      transition: 0.3s ease-in-out;
+    }
+
+    .form-search-btn .btn:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 767px) {
+      .search-container {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .search-input {
+        width: 100%;
+      }
+
+      .form-search-btn {
+        justify-content: center;
+      }
+    }
+  </style>
+
+  <script type="text/javascript">
+    (function (d, m) {
+      var kommunicateSettings =
+        { "appId": "280f11fbfa5374e0e2d1713fe2ee7c21c", "popupWidget": true, "automaticChatOpenOnNavigation": true };
+      var s = document.createElement("script"); s.type = "text/javascript"; s.async = true;
+      s.src = "https://widget.kommunicate.io/v2/kommunicate.app";
+      var h = document.getElementsByTagName("head")[0]; h.appendChild(s);
+      window.kommunicate = m; m._globals = kommunicateSettings;
+    })(document, window.kommunicate || {});
+    /* NOTE : Use web server to view HTML files as real-time update will not work if you directly open the HTML file in the browser. */
+  </script>
+
+</head>
+
+<body data-aos-easing="ease" data-aos-duration="1200" data-aos-delay="0">
+  {% block content %}
+  <div class="main-wrapper">
+    <header class="header header-fixed header-one header-space">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg header-nav">
+          <div class="navbar-header">
+            <a id="mobile_btn" href="javascript:void(0);">
+              <span class="bar-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </a>
+            <a href="{% url 'home' %}" class="navbar-brand logo">
+              <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo" />
+            </a>
+          </div>
+          <div class="main-menu-wrapper">
+            <div class="menu-header">
+              <a href="{% url 'home' %}" class="menu-logo">
                 <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo" />
               </a>
+
+              <a id="menu_close" class="menu-close" href="javascript:void(0);">
+                <svg class="svg-inline--fa fa-times fa-w-11" aria-hidden="true" focusable="false" data-prefix="fas"
+                  data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"
+                  data-fa-i2svg="">
+                  <path fill="currentColor"
+                    d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z">
+                  </path>
+                </svg>
+              </a>
             </div>
-            <div class="main-menu-wrapper">
-              <div class="menu-header">
-                <a href="{% url 'home' %}" class="menu-logo">
-                  <img src="{% static 'assets/img/logo.png' %}"class="img-fluid"alt="Logo"/>
+            <ul class="main-nav">
+              <li class="active">
+                <a href="{% url 'home' %}">Home</a>
+              </li>
+              <li>
+                <a href="{% url 'doctor_list' %}">Doctors</a>
+              </li>
+              <li>
+                <a href="{% url 'about' %}">About Us</a>
+              </li>
+              <li>
+                <a href="{% url 'contact' %}">Contact Us</a>
+              </li>
+
+              <li class="phone_login">
+                <a href="{% url 'register' %}">Register</a>
+              </li>
+              <li class="phone_login">
+                <a href="{% url 'login' %}">Login</a>
+              </li>
+
+              <li class="register-btn">
+                <a href="{% url 'register' %}" class="btn reg-btn">
+                  <i class="feather-user"></i>Register
                 </a>
-                
-                <a
-                  id="menu_close"
-                  class="menu-close"
-                  href="javascript:void(0);"
-                >
-                  <svg
-                    class="svg-inline--fa fa-times fa-w-11"
-                    aria-hidden="true"
-                    focusable="false"
-                    data-prefix="fas"
-                    data-icon="times"
-                    role="img"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 352 512"
-                    data-fa-i2svg=""
-                  >
-                    <path
-                      fill="currentColor"
-                      d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                    ></path>
-                  </svg>
+              </li>
+              <li class="register-btn">
+                <a href="{% url 'login' %}" class="btn btn-primary log-btn">
+                  <i class="feather-lock"></i>Login
                 </a>
-              </div>
-              <ul class="main-nav">
-                <li class="active">
-                  <a href="{% url 'home' %}">Home</a>
-                </li>
-                <li>
-                  <a href="{% url 'doctor_list' %}">Doctors</a>
-                </li>
-                <li>
-                  <a href="{% url 'about' %}">About Us</a>
-                </li>
-                <li>
-                  <a href="{% url 'contact' %}">Contact Us</a>
-                </li>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </header>
 
-                <li class="phone_login">
-                  <a href="{% url 'register' %}">Register</a>
-                </li>
-                <li class="phone_login">
-                  <a href="{% url 'login' %}">Login</a>
-                </li>
-
-                <li class="register-btn">
-                  <a href="{% url 'register' %}" class="btn reg-btn">
-                    <i class="feather-user"></i>Register
-                  </a>
-                </li>
-                <li class="register-btn">
-                  <a href="{% url 'login' %}" class="btn btn-primary log-btn">
-                    <i class="feather-lock"></i>Login
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </nav>
-        </div>
-      </header>
-
-      {% load static %}
-<section class="banner-section">
-    <div class="container">
+    {% load static %}
+    <section class="banner-section">
+      <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-6">
-                <div class="banner-content aos" data-aos="fade-up">
-                    <h1>Consult <span>Best Doctors</span> in Your Local Area.</h1>
-                    <img src="{% static 'assets/img/icons/header-icon.svg' %}" class="header-icon" alt="header-icon">
-                    <p>Effortlessly Book Appointments with Top Doctors Nearby.</p>
-                    <a href="#find" id="find" class="btn">Find Doctors</a>
-                    <div class="banner-arrow-img">
-                        <img src="{% static 'assets/img/down-arrow-img.png' %}" class="img-fluid" alt="">
-                    </div>
-                </div>
-                <div class="search-box-one aos" data-aos="fade-up">
-                    <form method="POST" action="/search-doctors-pms">
-                        <div class="search-input search-line">
-                            <i class="feather-search bficon"></i>
-                            <div class="form-group mb-0">
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Search doctors, clinics, hospitals, etc">
-                            </div>
-                        </div>
-                        <div class="search-input search-map-line">
-                            <i class="feather-map-pin"></i>
-                            <div class="form-group mb-0">
-                                <input type="text" class="form-control" id="location" name="location" placeholder="Location" required>
-                                <a class="current-loc-icon current_location" href="javascript:void(0);">
-                                    <i class="feather-crosshair"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="search-input search-calendar-line">
-                            <i class="feather-calendar"></i>
-                            <div class="form-group mb-0">
-                                <input type="text" class="form-control" id="doctor_id" name="doctor_id" placeholder="Doctor ID">
-                            </div>
-                        </div>
-                        <div class="form-search-btn">
-                            <button class="btn" type="submit">Search</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-lg-6" style="padding-left:100px">
-                <div class="banner-img aos" data-aos="fade-up">
-                    <img src="{% static 'assets/img/banner-img.png' %}" class="img-fluid" alt="">
-                    <div class="banner-img1">
-                        <img src="{% static 'assets/img/banner-img1.png' %}" class="img-fluid" alt="">
-                    </div>
-                    <div class="banner-img2">
-                        <img src="{% static 'assets/img/banner-img2.png' %}" class="img-fluid" alt="">
-                    </div>
-                    <div class="banner-img2" style="padding-top:250px">
-                        <img src="{% static 'assets/img/banner-img3.png' %}" class="img-fluid" alt="">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+          <div class="col-lg-6">
+            <div class="banner-content aos" data-aos="fade-up">
+              <h1>Consult <span>Best Doctors</span> in Your Local Area.</h1>
+              <img src="{% static 'assets/img/icons/header-icon.svg' %}" class="header-icon" alt="header-icon">
+              <p>Effortlessly Book Appointments with Top Doctors Nearby.</p>
 
-<section class="work-section">
-  <div class="container">
-      <div class="row">
-          <div class="col-lg-4 col-md-12 work-img-info aos" data-aos="fade-up">
-              <div class="work-img">
-                  <img src="{% static 'assets/img/work-img.png' %}" class="img-fluid" alt="">
+              <div class="d-sm-flex align-items-center">
+                <div class="aboutus-companyimg">
+                    <a href="#">
+                        <img src="{% static 'assets/img/banner-fifteen-vd.jpg' %}" alt="image" class="img-fluid">
+                    </a>
+                    <a href="{% static 'assets/img/banner-video.mp4' %}" data-fancybox="video">
+                      <div class="playicon">
+                            <span>
+                                <i class="fa-solid fa-play"></i>
+                            </span>
+                        </div>
+                    </a>
+                </div>
+                <div class="support-consult-main">
+                    <div class="support-consult">
+                        <div class="support-consult-img">
+                            <img src="{% static 'assets/img/customer-service-2.svg' %}" alt="Service">
+                        </div>
+                        <div class="support-consult-right">
+                            <h6>24/7 Support</h6>
+                            <div class="rating rating-fifteen">
+                                <i class="fa-solid fa-star fa-sm" style="color: #FFD43B;"></i>
+                                <i class="fa-solid fa-star fa-sm" style="color: #FFD43B;"></i>
+                                <i class="fa-solid fa-star fa-sm" style="color: #FFD43B;"></i>
+                                <i class="fa-solid fa-star fa-sm" style="color: #FFD43B;"></i>
+                                <i class="fa-solid fa-star fa-sm" style="color: #FFD43B;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="support-consult">
+                        <div class="support-consult-img">
+                            <img src="{% static 'assets/img/customer-service-1.svg' %}" alt="Service">
+                        </div>
+                        <div class="support-consult-right">
+                            <h6>Online Consultation</h6>
+                            <span>Just 60 Secs</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+              <script>
+                Fancybox.bind("[data-fancybox='video']", {
+                    Youtube: {
+                        controls: 1,
+                        autoplay: 1
+                    }
+                });
+            </script>
+
+              <a href="#find" id="find" class="btn">Find Doctors</a>
+              <div class="banner-arrow-img">
+                <img src="{% static 'assets/img/down-arrow-img.png' %}" class="img-fluid" alt="">
               </div>
+            </div>
+
+
+            <div class="search-box-one aos" data-aos="fade-up">
+              <form method="GET" action="{% url 'doctor_list' %}">
+                  <div class="search-container mt-2">
+                      <div class="search-input">
+                          <i class="feather-search"></i>
+                          <input type="text" class="form-control" id="name" name="name" placeholder="Search doctor Name">
+                      </div>
+                      <div class="search-input">
+                          <i class="feather-briefcase"></i>
+                          <input type="text" class="form-control" id="specialization" name="specialization" placeholder="Specialization">
+                      </div>
+                      <div class="search-input">
+                          <i class="feather-map-pin"></i>
+                          <input type="text" class="form-control" id="city" name="city" placeholder="City"  >
+                      </div>
+                      <div class="form-search-btn">
+                          <button class="btn" type="submit">Search</button>
+                      </div>
+                  </div>
+              </form>
+          </div>
+          
+
+          </div>
+          <div class="col-lg-6" style="padding-left:100px">
+            <div class="banner-img aos" data-aos="fade-up">
+              <img src="{% static 'assets/img/banner-img.png' %}" class="img-fluid" alt="">
+              <div class="banner-img1">
+                <img src="{% static 'assets/img/banner-img1.png' %}" class="img-fluid" alt="">
+              </div>
+              <div class="banner-img2">
+                <img src="{% static 'assets/img/banner-img2.png' %}" class="img-fluid" alt="">
+              </div>
+              <div class="banner-img2" style="padding-top:250px">
+                <img src="{% static 'assets/img/banner-img3.png' %}" class="img-fluid" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="work-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 col-md-12 work-img-info aos" data-aos="fade-up">
+            <div class="work-img">
+              <img src="{% static 'assets/img/work-img.png' %}" class="img-fluid" alt="">
+            </div>
           </div>
           <div class="col-lg-8 col-md-12 work-details">
-              <div class="section-header-one aos" data-aos="fade-up">
-                  <h5>How it Works</h5>
-                  <h2 class="section-title">4 easy steps to get your solution</h2>
+            <div class="section-header-one aos" data-aos="fade-up">
+              <h5>How it Works</h5>
+              <h2 class="section-title">4 easy steps to get your solution</h2>
+            </div>
+            <div class="row">
+              <div class="col-lg-6 col-md-6 aos" data-aos="fade-up">
+                <div class="work-info">
+                  <div class="work-icon">
+                    <span><img src="{% static 'assets/img/icons/work-01.svg' %}" alt=""></span>
+                  </div>
+                  <div class="work-content">
+                    <h5>Search Doctor</h5>
+                    <p>Easily find and connect with the right doctor for you with a simple click. Discover a wide range
+                      of qualified healthcare professionals at your fingertips.</p>
+                  </div>
+                </div>
               </div>
-              <div class="row">
-                  <div class="col-lg-6 col-md-6 aos" data-aos="fade-up">
-                      <div class="work-info">
-                          <div class="work-icon">
-                              <span><img src="{% static 'assets/img/icons/work-01.svg' %}" alt=""></span>
-                          </div>
-                          <div class="work-content">
-                              <h5>Search Doctor</h5>
-                              <p>Easily find and connect with the right doctor for you with a simple click. Discover a wide range of qualified healthcare professionals at your fingertips.</p>
-                          </div>
-                      </div>
+              <div class="col-lg-6 col-md-6 aos" data-aos="fade-up">
+                <div class="work-info">
+                  <div class="work-icon">
+                    <span><img src="{% static 'assets/img/icons/work-02.svg' %}" alt=""></span>
                   </div>
-                  <div class="col-lg-6 col-md-6 aos" data-aos="fade-up">
-                      <div class="work-info">
-                          <div class="work-icon">
-                              <span><img src="{% static 'assets/img/icons/work-02.svg' %}" alt=""></span>
-                          </div>
-                          <div class="work-content">
-                              <h5>Check Doctor Profile</h5>
-                              <p>Explore doctor profiles for comprehensive information on qualifications, specialties, and patient feedback to make informed decisions for personalized healthcare.</p>
-                          </div>
-                      </div>
+                  <div class="work-content">
+                    <h5>Check Doctor Profile</h5>
+                    <p>Explore doctor profiles for comprehensive information on qualifications, specialties, and patient
+                      feedback to make informed decisions for personalized healthcare.</p>
                   </div>
-                  <div class="col-lg-6 col-md-6 aos" data-aos="fade-up">
-                      <div class="work-info">
-                          <div class="work-icon">
-                              <span><img src="{% static 'assets/img/icons/work-03.svg' %}" alt=""></span>
-                          </div>
-                          <div class="work-content">
-                              <h5>Schedule Appointment</h5>
-                              <p>Secure your appointment with a click, ensuring a hassle-free and timely consultation with your preferred doctor.</p>
-                          </div>
-                      </div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6 aos" data-aos="fade-up">
+                <div class="work-info">
+                  <div class="work-icon">
+                    <span><img src="{% static 'assets/img/icons/work-03.svg' %}" alt=""></span>
                   </div>
-                  <div class="col-lg-6 col-md-6 aos" data-aos="fade-up">
-                      <div class="work-info">
-                          <div class="work-icon">
-                              <span><img src="{% static 'assets/img/icons/work-04.svg' %}" alt=""></span>
-                          </div>
-                          <div class="work-content">
-                              <h5>Get Your Solution</h5>
-                              <p>Get personalized solutions for your healthcare needs through expert consultations and tailored treatment plans, ensuring optimal care and well-being.</p>
-                          </div>
-                      </div>
+                  <div class="work-content">
+                    <h5>Schedule Appointment</h5>
+                    <p>Secure your appointment with a click, ensuring a hassle-free and timely consultation with your
+                      preferred doctor.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6 aos" data-aos="fade-up">
+                <div class="work-info">
+                  <div class="work-icon">
+                    <span><img src="{% static 'assets/img/icons/work-04.svg' %}" alt=""></span>
+                  </div>
+                  <div class="work-content">
+                    <h5>Get Your Solution</h5>
+                    <p>Get personalized solutions for your healthcare needs through expert consultations and tailored
+                      treatment plans, ensuring optimal care and well-being.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Articles Section-->
+    <section class="articles-section">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-12 aos" data-aos="fade-up">
+                  <div class="section-header-one text-center">
+                      <h2 class="section-title" id="highlights">Highlights</h2>
                   </div>
               </div>
           </div>
+          <div class="row">
+              <div class="col-lg-6 col-md-6 d-flex aos" data-aos="fade-up">
+                  <div class="articles-grid w-100">
+                      <div class="articles-info">
+                          <div class="articles-left">
+                              <a href="#highlights">
+                                  <div class="articles-img">
+                                      <img src="{% static 'assets/img/blog/blog-11.jpg' %}" class="img-fluid" alt="">
+                                  </div>
+                              </a>
+                          </div>
+                          <div class="articles-right">
+                              <div class="articles-content">
+                                  <h4>
+                                      <a href="#highlights">webDocter - Making your clinic painless visit?</a>
+                                  </h4>
+                                  <p>Making your clinic visits stress-free, effortless and enhancing your clinic experience with a painless appointment process.</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-lg-6 col-md-6 d-flex aos" data-aos="fade-up">
+                  <div class="articles-grid w-100">
+                      <div class="articles-info">
+                          <div class="articles-left">
+                              <a href="#highlights">
+                                  <div class="articles-img">
+                                      <img src="{% static 'assets/img/blog/blog-12.jpg' %}" class="img-fluid" alt="">
+                                  </div>
+                              </a>
+                          </div>
+                          <div class="articles-right">
+                              <div class="articles-content">
+                                  <h4>
+                                      <a href="#highlights">What are the benefits of Online Doctor Booking?</a>
+                                  </h4>
+                                  <p>Easily book appointments from anywhere, at any time, without the need to visit or call a clinic.</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-lg-6 col-md-6 d-flex aos" data-aos="fade-up">
+                  <div class="articles-grid w-100">
+                      <div class="articles-info">
+                          <div class="articles-left">
+                              <a href="#highlights">
+                                  <div class="articles-img">
+                                      <img src="{% static 'assets/img/blog/blog-13.jpg' %}" class="img-fluid" alt="">
+                                  </div>
+                              </a>
+                          </div>
+                          <div class="articles-right">
+                              <div class="articles-content">
+                                  <h4>
+                                      <a href="#highlights">Benefits of consulting with an Online Doctor</a>
+                                  </h4>
+                                  <p>Online consultations may be more affordable compared to in-person visits, as they eliminate travel expenses and reduce overhead costs.</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-lg-6 col-md-6 d-flex aos" data-aos="fade-up">
+                  <div class="articles-grid w-100">
+                      <div class="articles-info">
+                          <div class="articles-left">
+                              <a href="#highlights">
+                                  <div class="articles-img">
+                                      <img src="{% static 'assets/img/blog/blog-14.jpg' %}" class="img-fluid" alt="">
+                                  </div>
+                              </a>
+                          </div>
+                          <div class="articles-right">
+                              <div class="articles-content">
+                                  <h4>
+                                      <a href="#highlights">Benefits of Using an AI Chatbot in Healthcare</a>
+                                  </h4>
+                                  <p>Improving patient care, AI chatbots analyse patient data to generate personalised recommendations.</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+                <!-- Emergency Floating Button -->
+          <div class="emergency-button ">
+            <a href="{% url 'emergency_consultation_page' %}" class="btn-circle ms-auto">
+              <i class="fas fa-ambulance"></i>
+              <span class="sun sunshine"></span>
+            </a>
+          </div>
+
       </div>
-  </div>
-</section>
-<section class="articles-section">
-    <div class="container">
+    </section>
+    <!-- /Articles Section-->
+  
+    <!-- Blog Section -->
+    <section class="news-blog section">
+      <div class="container mt-3">
         <div class="row">
-            <div class="col-md-12 aos" data-aos="fade-up">
-                <div class="section-header-one text-center">
-                    <h2 class="section-title" id="highlights">Highlights</h2>
+            <div class="col-md-12">
+                <div class="section-header-one text-center" data-aos="fade-up">
+                    <h5>Health Resources</h5>
+                    <h2 class="section-title">Latest News & Health Guides</h2>
+                    <p class="text-muted mx-auto para-desc pt-3">Comprehensive health information including disease guides, exercise routines, and diet plans to help you maintain optimal health.</p>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-6 col-md-6 d-flex aos" data-aos="fade-up">
-                <div class="articles-grid w-100">
-                    <div class="articles-info">
-                        <div class="articles-left">
-                            <a href="#highlights">
-                                <div class="articles-img">
-                                    <img src="{% static 'assets/img/blog/blog-11.jpg' %}" class="img-fluid" alt="">
-                                </div>
-                            </a>
-                        </div>
-                        <div class="articles-right">
-                            <div class="articles-content">
-                                <h4>
-                                    <a href="#highlights">webDocter – Making your clinic painless visit?</a>
-                                </h4>
-                                <p>Making your clinic visits stress-free, effortless and enhancing your clinic experience with a painless appointment process.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 d-flex aos" data-aos="fade-up">
-                <div class="articles-grid w-100">
-                    <div class="articles-info">
-                        <div class="articles-left">
-                            <a href="#highlights">
-                                <div class="articles-img">
-                                    <img src="{% static 'assets/img/blog/blog-12.jpg' %}" class="img-fluid" alt="">
-                                </div>
-                            </a>
-                        </div>
-                        <div class="articles-right">
-                            <div class="articles-content">
-                                <h4>
-                                    <a href="#highlights">What are the benefits of Online Doctor Booking?</a>
-                                </h4>
-                                <p>Easily book appointments from anywhere, at any time, without the need to visit or call a clinic.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 d-flex aos" data-aos="fade-up">
-                <div class="articles-grid w-100">
-                    <div class="articles-info">
-                        <div class="articles-left">
-                            <a href="#highlights">
-                                <div class="articles-img">
-                                    <img src="{% static 'assets/img/blog/blog-13.jpg' %}" class="img-fluid" alt="">
-                                </div>
-                            </a>
-                        </div>
-                        <div class="articles-right">
-                            <div class="articles-content">
-                                <h4>
-                                    <a href="#highlights">Benefits of consulting with an Online Doctor</a>
-                                </h4>
-                                <p>Online consultations may be more affordable compared to in-person visits, as they eliminate travel expenses and reduce overhead costs.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 d-flex aos" data-aos="fade-up">
-                <div class="articles-grid w-100">
-                    <div class="articles-info">
-                        <div class="articles-left">
-                            <a href="#highlights">
-                                <div class="articles-img">
-                                    <img src="{% static 'assets/img/blog/blog-14.jpg' %}" class="img-fluid" alt="">
-                                </div>
-                            </a>
-                        </div>
-                        <div class="articles-right">
-                            <div class="articles-content">
-                                <h4>
-                                    <a href="#highlights">Benefits of Using an AI Chatbot in Healthcare</a>
-                                </h4>
-                                <p>Improving patient care, AI chatbots analyse patient data to generate personalised recommendations.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+    
 
-<section class="news-blog section">
-  <div class="container mt-3">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="section-header-one text-center" data-aos="fade-up">
-                <h5>Read News</h5>
-                <h2 class="section-title">Latest News & Blogs</h2>
-                <p class="text-muted mx-auto para-desc pt-3">Great doctor if you need your family member to get effective immediate assistance, emergency treatment or a simple consultation.</p>
-            </div>
-        </div>
-    </div>
+                <!-- Original Blog Section -->
+                <div class="row mt-5">
+                  <div class="col-md-12">
+                      <h3 class="section-subtitle" data-aos="fade-right"><i class="fa-solid fa-newspaper me-2" style="color: violet;"></i>Latest Health News</h3>
+                  </div>
+                  
+                  <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2" data-aos="fade-up" data-aos-delay="200">
+                      <div class="card blog blog-primary border-0 shadow rounded overflow-hidden">
+                          <img src="{% static 'assets/blog/01.jpg' %}" class="img-fluid blog-img" alt="">
+                          <div class="card-body p-4">
+                            <ul class="list-unstyled mb-2">
+                              <li class="list-inline-item text-muted small me-3">
+                                  <i class="fa-solid fa-calendar-days text-dark h6 me-1"></i>17th June, 2024
+                              </li>
+                              <li class="list-inline-item text-muted small">
+                                  <i class="fa-solid fa-clock text-dark h6 me-1"></i>5 min read
+                              </li>
+                          </ul>
+                              <a href="blog-detail.html" class="text-dark title h5">
+                                  You can easily connect to doctor and make a treatment
+                              </a>
+                              <div class="post-meta d-flex justify-content-between mt-3">
+                                  <a href="{% url 'blog-details' %}" class="link text-primary">Read More <i class="fa-solid fa-chevron-right align-middle"></i></a>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+          
+                  <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2" data-aos="fade-up" data-aos-delay="300">
+                      <div class="card blog blog-primary border-0 shadow rounded overflow-hidden">
+                          <img src="{% static 'assets/blog/02.jpg' %}" class="img-fluid" alt="">
+                          <div class="card-body p-4">
+                              <ul class="list-unstyled mb-2">
+                                  <li class="list-inline-item text-muted small me-3">
+                                      <i class="fa-solid fa-calendar-days text-dark h6 me-1"></i>20th January, 2024
+                                  </li>
+                                  <li class="list-inline-item text-muted small">
+                                      <i class="fa-solid fa-clock text-dark h6 me-1"></i>5 min read
+                                  </li>
+                              </ul>
+                              <a href="{% url 'blog-details' %}" class="text-dark title h5">
+                                  Lockdowns lead to fewer people seeking medical care
+                              </a>
+                              <div class="post-meta d-flex justify-content-between mt-3">
+                                  <a href="{% url 'blog-details' %}" class="link text-primary">Read More <i class="fa-solid fa-chevron-right align-middle"></i></a>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+          
+                  <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2" data-aos="fade-up" data-aos-delay="400">
+                      <div class="card blog blog-primary border-0 shadow rounded overflow-hidden">
+                          <img src="{% static 'assets/blog/03.jpg' %}" class="img-fluid" alt="">
+                          <div class="card-body p-4">
+                              <ul class="list-unstyled mb-2">
+                                  <li class="list-inline-item text-muted small me-3">
+                                      <i class="fa-solid fa-calendar-days text-dark h6 me-1"></i>29th March, 2025
+                                  </li>
+                                  <li class="list-inline-item text-muted small">
+                                      <i class="fa-solid fa-clock text-dark h6 me-1"></i>5 min read
+                                  </li>
+                              </ul>
+                              <a href="{% url 'blog-details' %}" class="text-dark title h5">
+                                  Emergency medicine research course for the doctors
+                              </a>
+                              <div class="post-meta d-flex justify-content-between mt-3">
+                                  <a href="{% url 'blog-details' %}" class="link text-primary">Read More <i class="fa-solid fa-chevron-right align-middle"></i></a>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
 
-    <div class="row">
-        <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2" data-aos="fade-up" data-aos-delay="200">
-            <div class="card blog blog-primary border-0 shadow rounded overflow-hidden">
-                <img src="{% static 'assets/blog/01.jpg' %}" class="img-fluid blog-img" alt="">
-                <div class="card-body p-4">
-                    <ul class="list-unstyled mb-2">
-                        <li class="list-inline-item text-muted small me-3">
-                            <i class="fa-solid fa-calendar-days text-dark h6 me-1"></i>05th November, 2023
-                        </li>
-                        <li class="list-inline-item text-muted small">
-                            <i class="fa-solid fa-clock text-dark h6 me-1"></i>5 min read
-                        </li>
-                    </ul>
-                    <a href="blog-detail.html" class="text-dark title h5">
-                        You can easily connect to doctor and make a treatment
-                    </a>
-                    <div class="post-meta d-flex justify-content-between mt-3">
-                        <ul class="list-unstyled mb-0">
-                            <li class="list-inline-item me-2 mb-0">
-                                <a href="#" class="text-muted like"><i class="fa-regular fa-heart me-1"></i>33</a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#" class="text-muted comments"><i class="fa-regular fa-comment me-1"></i>08</a>
-                            </li>
-                        </ul>
-                        <a href="{% url 'blog-details' %}" class="link text-primary">Read More <i class="fa-solid fa-chevron-right align-middle"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div><!--end col-->
-
-        <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2" data-aos="fade-up" data-aos-delay="200">
-            <div class="card blog blog-primary border-0 shadow rounded overflow-hidden">
-                <img src="{% static 'assets/blog/02.jpg' %}" class="img-fluid" alt="">
-                <div class="card-body p-4">
-                    <ul class="list-unstyled mb-2">
-                        <li class="list-inline-item text-muted small me-3">
-                            <i class="fa-solid fa-calendar-days text-dark h6 me-1"></i>20th January, 2024
-                        </li>
-                        <li class="list-inline-item text-muted small">
-                            <i class="fa-solid fa-clock text-dark h6 me-1"></i>5 min read
-                        </li>
-                    </ul>
-                    <a href="{% url 'blog-details' %}" class="text-dark title h5">
-                        Lockdowns lead to fewer people seeking medical care
-                    </a>
-                    <div class="post-meta d-flex justify-content-between mt-3">
-                        <ul class="list-unstyled mb-0">
-                            <li class="list-inline-item me-2 mb-0">
-                                <a href="#" class="text-muted like"><i class="fa-regular fa-heart me-1"></i>33</a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#" class="text-muted comments"><i class="fa-regular fa-comment me-1"></i>08</a>
-                            </li>
-                        </ul>
-                        <a href="{% url 'blog-details' %}" class="link text-primary">Read More <i class="fa-solid fa-chevron-right align-middle"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div><!--end col-->
-
-        <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2" data-aos="fade-up" data-aos-delay="200">
-            <div class="card blog blog-primary border-0 shadow rounded overflow-hidden">
-                <img src="{% static 'assets/blog/03.jpg' %}" class="img-fluid" alt="">
-                <div class="card-body p-4">
-                    <ul class="list-unstyled mb-2">
-                        <li class="list-inline-item text-muted small me-3">
-                            <i class="fa-solid fa-calendar-days text-dark h6 me-1"></i>29th March, 2025
-                        </li>
-                        <li class="list-inline-item text-muted small">
-                            <i class="fa-solid fa-clock text-dark h6 me-1"></i>5 min read
-                        </li>
-                    </ul>
-                    <a href="{% url 'blog-details' %}" class="text-dark title h5">
-                        Emergency medicine research course for the doctors
-                    </a>
-                    <div class="post-meta d-flex justify-content-between mt-3">
-                        <ul class="list-unstyled mb-0">
-                            <li class="list-inline-item me-2 mb-0">
-                                <a href="#" class="text-muted like"><i class="fa-regular fa-heart me-1"></i>33</a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#" class="text-muted comments"><i class="fa-regular fa-comment me-1"></i>08</a>
-                            </li>
-                        </ul>
-                        <a href="{% url 'blog-details' %}" class="link text-primary">Read More <i class="fa-solid fa-chevron-right align-middle"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div><!--end col-->
-    </div><!--end row-->
-  </div><!--end container-->
-</section>
-
-<section class="faq-section">
-  <div class="container">
-      <div class="row">
-          <div class="col-md-12">
               <div class="section-header-one text-center" data-aos="fade-up">
-                  <h5>Get Your Answer</h5>
-                  <h2 class="section-title">Frequently Asked Questions</h2>
-              </div>
-          </div>
+                <button class="btn prime-btn btn-lg rounded-5"><a href="/blogs/" class="me-2 fs-6">Read More Blogs</a><i class="fas fa-forward fa-beat-fade"></i></button>
+            </div>
+
       </div>
-      <div class="row align-items-center">
-          <div class="col-lg-6 col-md-12" data-aos="fade-up">
-              <div class="faq-img">
-                  <img src="{% static 'assets/img/faq-img.png' %}" class="img-fluid" alt="img">
-                  <div class="faq-patients-count">
-                      <div class="faq-smile-img">
-                          <img src="{% static 'assets/img/icons/smiling-icon.svg' %}" alt="icon">
-                      </div>
-                      <div class="faq-patients-content">
-                          <h4><span class="count-digit">85</span>k+</h4>
-                          <p>Happy Patients</p>
-                      </div>
-                  </div>
+    </section>
+    
+    <!-- /Blog Section -->
+    
+		<!-- Patient About us -->
+    <section class="about-us-section-fifteen">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="section-header-one text-center" data-aos="fade-up">
+              <h2 class="section-title">Our Patients Says</h2>
+              <p>What our Patients say about us</p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="aboutus-img-main" data-aos="fade-up" data-aos-delay="150">
+              <img src="{% static 'assets/img/aboutus-fift-1.jpg' %}" alt="image" class="img-fluid" style="border-radius: 10px;">
+              <div class="aboutus-img-one">
+                <img src="{% static 'assets/img/aboutus-icon1.svg' %}" alt="Icon">
               </div>
+            </div>
+          </div>
+          {% comment %} <div class="col-lg-6 position-relative" data-aos="fade-up" data-aos-delay="150">
+            <div class="slider vertical-slider">
+              
+              <div class="aboutus-fifteen-main">
+                <div class="aboutus-profile-left">
+                  <div class="aboutus-image">
+                    <img src="{% static 'assets/img/clients/client-01.jpg' %}" alt="Client" class="img-fluid">
+                  </div>
+                  <div class="aboutus-contents">
+                    <h6>Madeleine Jennifer</h6>
+                    <span>Chennai, Tamilnadu</span>
+                  </div>
+                </div>
+                <p> The team's commitment to finding the best solutions impact on my life</p>
+              </div>
+              <div class="aboutus-fifteen-main">
+                <div class="aboutus-profile-left">
+                  <div class="aboutus-image">
+                    <img src="{% static 'assets/img/clients/client-01.jpg' %}" alt="Client" class="img-fluid">
+                  </div>
+                  <div class="aboutus-contents">
+                    <h6>Madeleine Jennifer</h6>
+                    <span>Chennai, Tamilnadu</span>
+                  </div>
+                </div>
+                <p>After struggling with chronic sinus problems, I found relief at Doccure. 
+                  The ENT specialists here are not only highly skilled but also genuinely caring. 
+                  They took the time to understand my concerns, provided a detailed diagnosis, 
+                  and guided me through a treatment plan that has greatly improved my quality of life.</p>
+              </div>
+              <div class="aboutus-fifteen-main">
+                <div class="aboutus-profile-left">
+                  <div class="aboutus-image">
+                    <img src="{% static 'assets/img/clients/client-02.jpg' %}" alt="Client" class="img-fluid">
+                  </div>
+                  <div class="aboutus-contents">
+                    <h6>Madeleine Jennifer</h6>
+                    <span>Chennai, Tamilnadu</span>
+                  </div>
+                </div>
+                <p>The staff was friendly and attentive, and Doctor performed well</p>
+              </div>
+              <div class="aboutus-fifteen-main">
+                <div class="aboutus-profile-left">
+                  <div class="aboutus-image">
+                    <img src="{% static 'assets/img/clients/client-03.jpg' %}" alt="Client" class="img-fluid">
+                  </div>
+                  <div class="aboutus-contents">
+                    <h6>Madeleine Jennifer</h6>
+                    <span>Chennai, Tamilnadu</span>
+                  </div>
+                </div>
+                <p>The staff was friendly and attentive, and Doctor performed well</p>
+              </div>
+            </div>
+          </div> {% endcomment %}
+          <div class="col-lg-6 position-relative" data-aos="fade-up" data-aos-delay="150">
+            <div class="slider vertical-slider">
+              {% for review in reviews %}
+              <div class="aboutus-fifteen-main">
+                <div class="aboutus-profile-left">
+                  <div class="aboutus-image">
+                    {% if review.patient_id.profile_img %}
+                    <img src="{{ review.patient_id.profile_img.url }}" alt="Client" class="img-fluid">
+                    {% else %}
+                    <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
+                    {% endif %}
+                  </div>
+                  <div class="aboutus-contents">
+                    <h6>{{ review.patient_id.name }}</h6>
+                    <p class="d-flex align-items-center ms-auto">
+                      {% for star in "12345"|make_list %}
+                      {% if forloop.counter <= review.rating %}⭐{% else %}☆{% endif %}
+                      {% endfor %}
+                    </p>
+                    <span>{{ review.patient_id.city }}</span>
+                  </div>
+                </div>
+                <p>{{ review.review_text }}</p>
+              </div>
+              {% empty %}
+              <p>No reviews available.</p>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+		<!-- /Patient About us -->
+
+
+    	<!-- Bookus Section -->
+			<section class="bookus-section">
+				<div class="container">
+					<div class="row align-items-center row-gap-4">
+						<div class="col-lg-6">
+							<div class="bookus-img">
+								<div class="row g-3">
+									<div class="col-md-12 aos" data-aos="fade-up">
+										<img src="{% static 'assets/img/book-01.jpg' %}" alt="img" class="img-fluid">
+									</div>
+									<div class="col-sm-6 aos" data-aos="fade-up">
+										<img src="{% static 'assets/img/book-02.jpg' %}" alt="img" class="img-fluid">
+									</div>
+									<div class="col-sm-6 aos" data-aos="fade-up">
+										<img src="{% static 'assets/img/book-03.jpg' %}" alt="img" class="img-fluid">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="section-header sec-header-one mb-2 aos" data-aos="fade-up">
+                <div class="section-header-one text-center">
+                  <h2 class="section-title">Why Book With Us ?</h2>
+                </div>
+								<h2 class="mb-3">We are committed to understanding your <span class="text-primary">unique needs and delivering care.</span></h2>
+							</div>
+							<p class="mb-4" data-aos="fade-up">As a trusted healthAs a trusted healthcare provider in our community, we are passionate about promoting health and wellness beyond the clinic. We actively engage in community outreach programs, health fairs, and educational workshop.</p>
+							<div class="faq-info aos" data-aos="fade-up">
+								<div class="accordion" id="faq-details">
+
+                  <!-- FAQ Item -->
+									<div class="accordion-item">
+										<h2 class="accordion-header" id="headingOne">
+											<a href="javascript:void(0);" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+												01 . Our Vision
+											</a>
+										</h2>
+										<div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faq-details">
+											<div class="accordion-body">
+												<div class="accordion-content">
+													<p class="text-dark">We envision a community where everyone has access to high-quality healthcare and the resources they need to lead healthy, fulfilling lives.</p>
+												</div> 
+											</div>
+										</div>
+									</div>
+									<!-- /FAQ Item -->
+
+									<!-- FAQ Item -->
+									<div class="accordion-item">
+										<h2 class="accordion-header" id="headingTwo">
+											<a href="javascript:void(0);" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-controls="collapseTwo">
+												02 . Our Mission
+											</a>
+										</h2>
+										<div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faq-details">
+											<div class="accordion-body">
+												<div class="accordion-content">
+													<p class="text-dark">We envision a community where everyone has access to high-quality healthcare and the resources they need to lead healthy, fulfilling lives.</p>
+												</div> 
+											</div>
+										</div>
+									</div>
+									<!-- /FAQ Item -->
+
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="bookus-sec mt-5">
+						<div class="row g-4 " data-aos="fade-right" data-aos-delay="250">
+							<div class="col-lg-3" >
+								<div class="book-item">
+									<div class="book-icon bg-primary">
+										<i class="fa-solid fa-magnifying-glass"></i>
+									</div>
+									<div class="book-info">
+										<h6 class="mb-2">Search For Doctors</h6>
+										<p class="fs-14">Search for a doctor based on specialization, location, or availability for your Treatements</p>
+									</div>
+									<div class="way-icon">
+										<img src="{% static 'assets/img/way-icon.svg' %}" alt="img">
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-3">
+								<div class="book-item">
+									<div class="book-icon bg-warning">
+										<i class="fas fa-user"></i>
+									</div>
+									<div class="book-info">
+										<h6 class="mb-2">Check Doctor Profile</h6>
+										<p class="fs-14">Explore detailed doctor profiles on our platform to make informed healthcare decisions.</p>
+									</div>
+									<div class="way-icon">
+										<img src="{% static 'assets/img/way-icon.svg' %}" alt="img">
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-3">
+								<div class="book-item">
+									<div class="book-icon bg-info">
+										<i class="fas fa-calendar"></i>
+									</div>
+									<div class="book-info">
+										<h6 class="mb-2">Schedule Appointment</h6>
+										<p class="fs-14">After choose your preferred doctor, select a convenient time slot, & confirm your appointment.</p>
+									</div>
+									<div class="way-icon">
+										<img src="{% static 'assets/img/way-icon.svg' %}" alt="img">
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-3">
+								<div class="book-item">
+									<div class="book-icon bg-success">
+										<i class="fa-solid fa-people-arrows"></i>
+									</div>
+									<div class="book-info">
+										<h6 class="mb-2">Get Your Solution</h6>
+										<p class="fs-14">Discuss your health concerns with the doctor and receive the personalized advice & with solution.</p>
+									</div>
+								</div>
+							</div>
+						</div>		
+					</div>		
+				</div>
+			</section>
+			<!-- /Bookus Section -->
+
+    <!-- FAQ Section -->
+    <section class="faq-section mt-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="section-header-one text-center" data-aos="fade-up">
+              <h5>Get Your Answer</h5>
+              <h2 class="section-title">Frequently Asked Questions</h2>
+            </div>
+          </div>
+        </div>
+        <div class="row align-items-center">
+          <div class="col-lg-6 col-md-12" data-aos="fade-up">
+            <div class="faq-img">
+              <img src="{% static 'assets/img/faq-img.png' %}" class="img-fluid" alt="img">
+              <div class="faq-patients-count">
+                <div class="faq-smile-img">
+                  <img src="{% static 'assets/img/icons/smiling-icon.svg' %}" alt="icon">
+                </div>
+                <div class="faq-patients-content">
+                  <h4><span class="count-digit">85</span>k+</h4>
+                  <p>Happy Patients</p>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="col-lg-6 col-md-12">
             <div class="faq-info" data-aos="fade-up">
               <div class="accordion" id="faq-details">
                 <div class="accordion-item">
                   <h2 class="accordion-header" id="headingOne">
-                    <a
-                      href="javascript:void(0);"
-                      class="accordion-button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapseOne"
-                      aria-expanded="true"
-                    >
-                      What services does Pranik Medical Services (webDocter) offer?
-                      How do I access webDocter?
+                    <a href="javascript:void(0);" class="accordion-button" data-bs-toggle="collapse"
+                      data-bs-target="#collapseOne" aria-expanded="true">
+                      What services does webDoctor offer?
+                      How do I access webDoctor?
                     </a>
                   </h2>
-                  <div
-                    id="collapseOne"
-                    class="accordion-collapse collapse show"
-                    aria-labelledby="headingOne"
-                  >
+                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne">
                     <div class="accordion-body">
                       <p>
-                        You can access webDocter through our website. webDocter offers a
+                        You can access webDoctor through our website. webDoctor offers a
                         wide range of healthcare services, including online
                         appointments, medical advice, prescription management,
                         and health monitoring.
@@ -521,22 +968,13 @@
 
                 <div class="accordion-item">
                   <h2 class="accordion-header" id="headingTwo">
-                    <a
-                      href="javascript:void(0);"
-                      class="accordion-button collapsed"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapseTwo"
-                      aria-expanded="false"
-                    >
+                    <a href="javascript:void(0);" class="accordion-button collapsed" data-bs-toggle="collapse"
+                      data-bs-target="#collapseTwo" aria-expanded="false">
                       Can I book appointments with Local Clinic doctors
-                      through webDocter?
+                      through webDoctor?
                     </a>
                   </h2>
-                  <div
-                    id="collapseTwo"
-                    class="accordion-collapse collapse"
-                    aria-labelledby="headingTwo"
-                  >
+                  <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo">
                     <div class="accordion-body">
                       <p>
                         Yes, you can easily book appointments with doctors of
@@ -551,24 +989,15 @@
 
                 <div class="accordion-item">
                   <h2 class="accordion-header" id="headingThree">
-                    <a
-                      href="javascript:void(0);"
-                      class="accordion-button collapsed"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapseThree"
-                      aria-expanded="false"
-                    >
-                      Are there any fees associated with using webDocter?
+                    <a href="javascript:void(0);" class="accordion-button collapsed" data-bs-toggle="collapse"
+                      data-bs-target="#collapseThree" aria-expanded="false">
+                      Are there any fees associated with using webDoctor?
                     </a>
                   </h2>
-                  <div
-                    id="collapseThree"
-                    class="accordion-collapse collapse"
-                    aria-labelledby="headingThree"
-                  >
+                  <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree">
                     <div class="accordion-body">
                       <p>
-                        The fees for using webDocter are only 2 Rs per appointment,
+                        The fees for using webDoctor are only 2 Rs per appointment,
                         and other services such as our AI chatbot for meal and
                         medicine recommendations are completely free.
                       </p>
@@ -578,21 +1007,12 @@
 
                 <div class="accordion-item">
                   <h2 class="accordion-header" id="headingFour">
-                    <a
-                      href="javascript:void(0);"
-                      class="accordion-button collapsed"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapseFour"
-                      aria-expanded="false"
-                    >
-                      Is my data safe? Are there any webDocter age limits?
+                    <a href="javascript:void(0);" class="accordion-button collapsed" data-bs-toggle="collapse"
+                      data-bs-target="#collapseFour" aria-expanded="false">
+                      Is my data safe? Are there any webDoctor age limits?
                     </a>
                   </h2>
-                  <div
-                    id="collapseFour"
-                    class="accordion-collapse collapse"
-                    aria-labelledby="headingFour"
-                  >
+                  <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour">
                     <div class="accordion-body">
                       <p>
                         Yes, we prioritize the security of your personal
@@ -607,22 +1027,13 @@
 
                 <div class="accordion-item">
                   <h2 class="accordion-header" id="headingFive">
-                    <a
-                      href="javascript:void(0);"
-                      class="accordion-button collapsed"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapseFive"
-                      aria-expanded="false"
-                    >
+                    <a href="javascript:void(0);" class="accordion-button collapsed" data-bs-toggle="collapse"
+                      data-bs-target="#collapseFive" aria-expanded="false">
                       What should I do if I experience technical difficulties
-                      on webDocter?
+                      on webDoctor?
                     </a>
                   </h2>
-                  <div
-                    id="collapseFive"
-                    class="accordion-collapse collapse"
-                    aria-labelledby="headingFive"
-                  >
+                  <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive">
                     <div class="accordion-body">
                       <p>
                         If you encounter any technical issues, please reach
@@ -637,9 +1048,12 @@
         </div>
       </div>
     </section>
-      {% include "footer.html" %} 
+    <!-- /FAQ Section -->
+    {% include "footer.html" %}
 
 
     {% endblock %}
-  </body>
+    <!-- Add this BEFORE Fancybox scripts -->
+</body>
+
 </html>

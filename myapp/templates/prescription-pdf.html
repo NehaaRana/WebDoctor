@@ -86,26 +86,10 @@
         <p><strong>Medicines:</strong> {{ prescription.medicines }}</p>
     </div>
 
-    {% comment %} <!-- Medicines Table -->
-    <h2>Medicines</h2>
-    <table>
-        <tr>
-            <th>Medicine Name</th>
-            <th>Dosage</th>
-            <th>Frequency</th>
-        </tr>
-        {% for medicine in prescription.medicines %}
-        <tr>
-            <td>{{ medicine.name }}</td>
-            <td>{{ medicine.dosage }}</td>
-            <td>{{ medicine.frequency }}</td>
-        </tr>
-        {% endfor %}
-    </table> {% endcomment %}
 
     <!-- Instructions -->
-    <h2>Instructions</h2>
-    <p>{{ prescription.instructions }}</p>
+    <h2 class="prescription-box">Instructions</h2>
+    <p class="prescription-box">{{ prescription.instructions }}</p>
 
     <!-- Footer -->
     <div class="footer">

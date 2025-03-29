@@ -21,8 +21,14 @@
   <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}" />
 
   <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
-  <!-- Add DataTables CSS in your head section -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+
+    <!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
 
   <!-- jquery-confirm CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
@@ -44,16 +50,16 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
       transition: all 0.3s ease;
     }
-    
+
     #savePrescription {
       transition: all 0.3s ease;
     }
-    
+
     #savePrescription:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-    
+
     .spinner-grow {
       animation-duration: 1.2s;
     }
@@ -158,6 +164,77 @@
         transform: translateY(0);
       }
     }
+     /* DataTables Custom Styling */
+.dataTables_wrapper {
+  padding: 15px 0;
+}
+
+.dataTables_filter input {
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 5px 10px;
+  margin-left: 10px;
+}
+
+.dataTables_length select {
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.dataTables_paginate .paginate_button {
+  padding: 5px 10px;
+  margin: 0 2px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+}
+
+.dataTables_paginate .paginate_button.current {
+  background: #3e64ff;
+  color: white !important;
+  border-color: #3e64ff;
+}
+
+.dataTables_paginate .paginate_button:hover {
+  background: #f8f9fa;
+  color: #3e64ff !important;
+}
+
+.dataTables_info {
+  padding-top: 10px !important;
+  color: #6c757d;
+}
+
+/* Status badge styling for DataTables */
+.badge {
+  padding: 5px 10px;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.bg-success-light {
+  background-color: rgba(15, 183, 107, 0.15);
+}
+
+.bg-danger-light {
+  background-color: rgba(255, 71, 87, 0.15);
+}
+
+.bg-warning-light {
+  background-color: rgba(255, 190, 61, 0.15);
+}
+
+.text-success {
+  color: #0fb76b !important;
+}
+
+.text-danger {
+  color: #ff4757 !important;
+}
+
+.text-warning {
+  color: #ffbe3d !important;
+}
   </style>
 </head>
 
@@ -202,7 +279,7 @@
                 <a href="{% url 'index' %}">Home</a>
               </li>
 
-              
+
               <li>
                 <a href="{% url 'doctor_list' %}">Doctors</a>
               </li>
@@ -257,7 +334,7 @@
     </header>
 
 
-<div class="content" style="transform: none; min-height: 355.906px;">
+    <div class="content" style="transform: none; min-height: 355.906px;">
       <div class="container-fluid" style="transform: none; padding-top:50px">
         <div class="row" style="transform: none;">
           <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar"
@@ -377,11 +454,15 @@
                               <i class="fas fa-user-injured text-primary fs-3"></i>
                             </div>
                             <div class="widget-details">
-                              <h3 class="counter">{{total_patient}}</h3>
+                              <h3 class="counter">{{total_patients}}</h3>
                               <h6 class="text-muted mb-1">Total Patients</h6>
                               <div class="progress-details">
                                 <div class="progress" style="height: 5px;">
-                                  <div class="progress-bar bg-primary" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                  <!-- <div class="progress-bar bg-primary" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div> -->
+                                  <div class="progress-bar bg-primary" role="progressbar"
+                                    style="width: {{ total_progress }}%;" aria-valuenow="{{ total_progress }}"
+                                    aria-valuemin="0" aria-valuemax="100">
+                                  </div>
                                 </div>
                                 <small class="text-muted mt-1">Till Today</small>
                               </div>
@@ -389,7 +470,7 @@
                           </div>
                         </div>
                       </div>
-                      
+
                       <!-- Today's Patients Widget -->
                       <div class="col-md-12 col-lg-4">
                         <div class="dash-widget shadow-sm rounded">
@@ -402,7 +483,11 @@
                               <h6 class="text-muted mb-1">Today's Patients</h6>
                               <div class="progress-details">
                                 <div class="progress" style="height: 5px;">
-                                  <div class="progress-bar bg-success" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                  <!-- <div class="progress-bar bg-success" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div> -->
+                                  <div class="progress-bar bg-success" role="progressbar"
+                                    style="width: {{ today_progress }}%;" aria-valuenow="{{ today_progress }}"
+                                    aria-valuemin="0" aria-valuemax="100">
+                                  </div>
                                 </div>
                                 <small class="text-muted mt-1">{{today_date}}</small>
                               </div>
@@ -410,7 +495,7 @@
                           </div>
                         </div>
                       </div>
-                      
+
                       <!-- Upcoming Appointments Widget -->
                       <div class="col-md-12 col-lg-4">
                         <div class="dash-widget shadow-sm rounded">
@@ -423,7 +508,11 @@
                               <h6 class="text-muted mb-1">Upcoming Appointments</h6>
                               <div class="progress-details">
                                 <div class="progress" style="height: 5px;">
-                                  <div class="progress-bar bg-warning" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                  <!-- <div class="progress-bar bg-warning" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div> -->
+                                  <div class="progress-bar bg-warning" role="progressbar"
+                                    style="width: {{ upcoming_progress }}%;" aria-valuenow="{{ upcoming_progress }}"
+                                    aria-valuemin="0" aria-valuemax="100">
+                                  </div>
                                 </div>
                                 <small class="text-muted mt-1">Upcoming</small>
                               </div>
@@ -432,7 +521,7 @@
                         </div>
                       </div>
                     </div>
-                    
+
                   </div>
                 </div>
               </div>
@@ -482,9 +571,11 @@
                                     <h2 class="table-avatar">
                                       <a href="/coming-soon" class="avatar avatar-sm me-2">
                                         {% if appointment.patient_id.profile_img %}
-                                        <img class="rounded-circle" src="{{ appointment.patient_id.profile_img.url }}" width="31" alt="profile" />
+                                        <img class="rounded-circle" src="{{ appointment.patient_id.profile_img.url }}"
+                                          width="31" alt="profile" />
                                         {% else %}
-                                        <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
+                                        <img class="rounded-circle" src="/static/assets/img/default_profile.png"
+                                          width="31" alt="default profile" />
                                         {% endif %}
                                       </a>
                                       <a href="/coming-soon">{{appointment.patient_id.name}}
@@ -492,16 +583,19 @@
                                       </a>
                                     </h2>
                                   </td>
-                                  <td>{{appointment.appointment_date}} <span class="d-block text-info">{{appointment.appointment_time}}</span></td>
+                                  <td>{{appointment.appointment_date}} <span
+                                      class="d-block text-info">{{appointment.appointment_time}}</span></td>
                                   <td>{{appointment.reason}}</td>
                                   <td>{{appointment.symptoms}}</td>
                                   <td>{{appointment.doctor_id.fee}}</td>
                                   <td class="text-center">
                                     <div class="btn-group">
-                                      <a href="{% url 'send_meeting_link' appointment.id %}" class="btn btn-sm bg-success-light me-1">
+                                      <a href="{% url 'send_meeting_link' appointment.id %}"
+                                        class="btn btn-sm bg-success-light me-1">
                                         <i class="fas fa-paper-plane me-1"></i>Send Link
                                       </a>
-                                      <a href="{{ appointment.meeting_link }}" target="_blank" class="btn btn-sm bg-primary-light">
+                                      <a href="{{ appointment.meeting_link }}" target="_blank"
+                                        class="btn btn-sm bg-primary-light">
                                         <i class="fas fa-video me-1"></i>Join
                                       </a>
                                     </div>
@@ -518,10 +612,12 @@
                                   <td>
                                     {% if appointment.status == "Pending" %}
                                     <div class="btn-group">
-                                      <a href="{% url 'update_appointment_status' appointment.id 'Confirm' %}" class="btn btn-sm bg-success-light me-1">
+                                      <a href="{% url 'update_appointment_status' appointment.id 'Confirm' %}"
+                                        class="btn btn-sm bg-success-light me-1">
                                         <i class="fas fa-check me-1"></i>Confirm
                                       </a>
-                                      <a href="{% url 'update_appointment_status' appointment.id 'Cancelled' %}" class="btn btn-sm bg-danger-light">
+                                      <a href="{% url 'update_appointment_status' appointment.id 'Cancelled' %}"
+                                        class="btn btn-sm bg-danger-light">
                                         <i class="fas fa-times me-1"></i>Cancel
                                       </a>
                                     </div>
@@ -530,7 +626,9 @@
                                     {% endif %}
                                   </td>
                                   <td>
-                                    <button type="button" class="btn btn-sm bg-info-light add-prescription-btn" data-bs-toggle="modal" data-bs-target="#prescriptionModal" data-url="{% url 'add_prescription' doctor.id appointment.patient_id.id %}">
+                                    <button type="button" class="btn btn-sm bg-info-light add-prescription-btn"
+                                      data-bs-toggle="modal" data-bs-target="#prescriptionModal"
+                                      data-url="{% url 'add_prescription' doctor.id appointment.patient_id.id %}">
                                       <i class="fas fa-prescription me-1"></i>Add
                                     </button>
                                   </td>
@@ -542,7 +640,7 @@
                         </div>
                       </div>
                     </div>
-                  
+
                     <!-- Today's Appointments Tab -->
                     <div class="tab-pane" id="today-appointments" role="tabpanel">
                       <div class="card card-table mb-0">
@@ -569,9 +667,11 @@
                                     <h2 class="table-avatar">
                                       <a href="/coming-soon" class="avatar avatar-sm me-2">
                                         {% if appointment.patient_id.profile_img %}
-                                        <img class="rounded-circle" src="{{ appointment.patient_id.profile_img.url }}" width="31" alt="profile" />
+                                        <img class="rounded-circle" src="{{ appointment.patient_id.profile_img.url }}"
+                                          width="31" alt="profile" />
                                         {% else %}
-                                        <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31" alt="default profile" />
+                                        <img class="rounded-circle" src="/static/assets/img/default_profile.png"
+                                          width="31" alt="default profile" />
                                         {% endif %}
                                       </a>
                                       <a href="/coming-soon">{{appointment.patient_id.name}}
@@ -579,16 +679,19 @@
                                       </a>
                                     </h2>
                                   </td>
-                                  <td>{{appointment.appointment_date}} <span class="d-block text-info">{{appointment.appointment_time}}</span></td>
+                                  <td>{{appointment.appointment_date}} <span
+                                      class="d-block text-info">{{appointment.appointment_time}}</span></td>
                                   <td>{{appointment.reason}}</td>
                                   <td>{{appointment.symptoms}}</td>
                                   <td>{{appointment.doctor_id.fee}}</td>
                                   <td class="text-center">
                                     <div class="btn-group">
-                                      <a href="{% url 'send_meeting_link' appointment.id %}" class="btn btn-sm bg-success-light me-1">
+                                      <a href="{% url 'send_meeting_link' appointment.id %}"
+                                        class="btn btn-sm bg-success-light me-1">
                                         <i class="fas fa-paper-plane me-1"></i>Send Link
                                       </a>
-                                      <a href="{{ appointment.meeting_link }}" target="_blank" class="btn btn-sm bg-primary-light">
+                                      <a href="{{ appointment.meeting_link }}" target="_blank"
+                                        class="btn btn-sm bg-primary-light">
                                         <i class="fas fa-video me-1"></i>Join
                                       </a>
                                     </div>
@@ -605,10 +708,12 @@
                                   <td>
                                     {% if appointment.status == "Pending" %}
                                     <div class="btn-group">
-                                      <a href="{% url 'update_appointment_status' appointment.id 'Confirm' %}" class="btn btn-sm bg-success-light me-1">
+                                      <a href="{% url 'update_appointment_status' appointment.id 'Confirm' %}"
+                                        class="btn btn-sm bg-success-light me-1">
                                         <i class="fas fa-check me-1"></i>Confirm
                                       </a>
-                                      <a href="{% url 'update_appointment_status' appointment.id 'Cancelled' %}" class="btn btn-sm bg-danger-light">
+                                      <a href="{% url 'update_appointment_status' appointment.id 'Cancelled' %}"
+                                        class="btn btn-sm bg-danger-light">
                                         <i class="fas fa-times me-1"></i>Cancel
                                       </a>
                                     </div>
@@ -617,7 +722,9 @@
                                     {% endif %}
                                   </td>
                                   <td>
-                                    <button type="button" class="btn btn-sm bg-info-light add-prescription-btn" data-bs-toggle="modal" data-bs-target="#prescriptionModal" data-url="{% url 'add_prescription' doctor.id appointment.patient_id.id %}">
+                                    <button type="button" class="btn btn-sm bg-info-light add-prescription-btn"
+                                      data-bs-toggle="modal" data-bs-target="#prescriptionModal"
+                                      data-url="{% url 'add_prescription' doctor.id appointment.patient_id.id %}">
                                       <i class="fas fa-prescription me-1"></i>Add
                                     </button>
                                   </td>
@@ -636,208 +743,362 @@
           </div>
         </div>
       </div>
-</div>
-  
+    </div>
 
-              <!-- Prescription Modal -->
-              <div class="modal fade" id="prescriptionModal" tabindex="-1" aria-labelledby="prescriptionModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content border-0 rounded-4 overflow-hidden">
-                    <!-- Gradient Header with Subtle Pattern -->
-                    <div class="modal-header border-0 py-3" style="background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);">
-                      <h5 class="modal-title text-white fw-bold" id="prescriptionModalLabel">
-                        <i class="bi bi-prescription2 me-2"></i>
-                        Create Prescription
-                      </h5>
-                      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    
-                    <!-- Content Area with Subtle Background -->
-                    <div class="modal-body p-4" style="background-color: #f8fafc;">
-                      <!-- Loading animation with modern spinner -->
-                      <div id="loadingSpinner" class="text-center py-5 d-none">
-                        <div class="spinner-grow text-primary" role="status" style="width: 3rem; height: 3rem;">
-                          <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <p class="mt-3 text-secondary">Preparing prescription form...</p>
-                      </div>
-                      
-                      <!-- AJAX loaded content container with shadow -->
-                      <div id="prescriptionFormContent" class="bg-white p-4 rounded-3 shadow-sm"></div>
-                    </div>
-                    
-                    <!-- Footer with Modern Buttons -->
-                    <div class="modal-footer border-0 py-3 px-4">
-                      <button type="button" class="btn btn-light rounded-pill px-4 py-2" data-bs-dismiss="modal">
-                        Cancel
-                      </button>
-                      {% comment %} <button type="button" class="btn rounded-pill px-4 py-2 text-white" id="savePrescription" style="background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);">
-                        <i class="bi bi-check2 me-1"></i>
-                        Save Prescription
-                      </button> {% endcomment %}
-                    </div>
-                  </div>
-                </div>
+
+    <!-- Prescription Modal -->
+    <div class="modal fade" id="prescriptionModal" tabindex="-1" aria-labelledby="prescriptionModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 overflow-hidden">
+          <!-- Gradient Header with Subtle Pattern -->
+          <div class="modal-header border-0 py-3"
+            style="background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);">
+            <h5 class="modal-title text-white fw-bold" id="prescriptionModalLabel">
+              <i class="bi bi-prescription2 me-2"></i>
+              Create Prescription
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <!-- Content Area with Subtle Background -->
+          <div class="modal-body p-4" style="background-color: #f8fafc;">
+            <!-- Loading animation with modern spinner -->
+            <div id="loadingSpinner" class="text-center py-5 d-none">
+              <div class="spinner-grow text-primary" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Loading...</span>
               </div>
-          <!-- ✅ Place this script before the closing </body> tag -->
+              <p class="mt-3 text-secondary">Preparing prescription form...</p>
+            </div>
 
-<!-- Add DataTables JS before closing body tag -->
-<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+            <!-- AJAX loaded content container with shadow -->
+            <div id="prescriptionFormContent" class="bg-white p-4 rounded-3 shadow-sm"></div>
+          </div>
 
-<!-- Initialize DataTables -->
+          <!-- Footer with Modern Buttons -->
+          <div class="modal-footer border-0 py-3 px-4">
+            <button type="button" class="btn btn-light rounded-pill px-4 py-2" data-bs-dismiss="modal">
+              Cancel
+            </button>
+          
+          </div>
+        </div>
+      </div>
+    </div>
+   
+  {% comment %} datatable {% endcomment %}
 <script>
-  $(document).ready(function() {
-    $('.datatable').DataTable({
-      responsive: true,
-      pageLength: 10,
-      language: {
-        search: "<i class='fas fa-search'></i>",
-        searchPlaceholder: "Search records"
-      },
-      "order": [[1, "asc"]], // Sort by appointment date
-      "columnDefs": [
-        { "orderable": false, "targets": [5, 7, 8] } // Disable sorting for action columns
-      ]
-    });
-    
-    // Handle tab change to reinitialize tables
-    $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
-      $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
-    });
-  });
-</script>
+  $(document).ready(function () {
+    // Ensure jQuery and DataTables are properly loaded
+    if (!$.fn.DataTable) {
+        console.error("DataTables library is not loaded.");
+        return;
+    }
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>    
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-      // Load the prescription form inside the modal via AJAX
-      document.querySelectorAll(".add-prescription-btn").forEach(button => {
-        button.addEventListener("click", function (event) {
-            event.preventDefault();
-            let url = this.getAttribute("data-url");
-    
-            fetch(url)
-                .then(response => {
-                    console.log("Response status:", response.status);
-                    return response.text();  // Log raw response
-                })
-                .then(html => {
-                    console.log("HTML Response:", html);
-                    document.getElementById("prescriptionFormContent").innerHTML = html;
-                    attachSubmitEvent();  // Attach form submit event after loading
-                })
-                .catch(error => console.error("Error loading form:", error));
-        });
+    // DataTable Configuration
+    var dataTableConfig = {
+        responsive: true,
+        ordering: true,
+        language: {
+            search: "_INPUT_",
+            searchPlaceholder: "Search appointments...",
+            lengthMenu: "Show _MENU_ appointments",
+            info: "Showing _START_ to _END_ of _TOTAL_ appointments",
+            paginate: {
+                next: '»',
+                previous: '«'
+            }
+        },
+        columnDefs: [
+            { orderable: false, targets: [5, 6, 7, 8] } // Adjusted column indexes
+        ],
+        order: [[1, 'desc']], // Sort by appointment date
+        pageLength: 10,
+        lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+        dom: '<"top"lf>rt<"bottom"ip><"clear">'
+    };
+
+    // Apply DataTable to both tables (Upcoming & Today Patients)
+    $('.datatable').each(function() {
+        if (!$.fn.DataTable.isDataTable(this)) {
+            $(this).DataTable(dataTableConfig);
+        }
     });
-      // Function to attach submit event dynamically after form loads
-      
-      function attachSubmitEvent() {
-        let form = document.querySelector("#prescriptionForm"); // Select dynamically loaded form
-        if (!form) return;  
-    
-        form.addEventListener("submit", function (event) {
-            event.preventDefault();  
-    
-            let formData = new FormData(form);
-    
-            fetch(form.action, {
-                method: "POST",
-                body: formData,
-                headers: { "X-Requested-With": "XMLHttpRequest" }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert("Prescription added successfully!");
-                    generateAndSendPDF(data.prescription_id);  
-                } else {
-                    alert("Error submitting prescription.");
-                }
-            })
-            .catch(error => console.log("Error:", error));
+
+    // Apply DataTable when switching tabs (if applicable)
+    $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function(e) {
+        var target = $(e.target).attr("href");
+        var table = $(`${target} .datatable`);
+
+        if (table.length > 0 && !$.fn.DataTable.isDataTable(table[0])) {
+            table.DataTable(dataTableConfig);
+        }
+
+        table.DataTable().columns.adjust().responsive.recalc();
+    });
+
+    // Initialize Bootstrap tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function(tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    // Alert Function
+    function showAlert(icon, message) {
+        $.alert({
+            title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+            content: `<span style="font-size: 15px;">${message}</span>`,
+            type: "blue",
+            theme: "modern",
+            buttons: {
+                ok: {
+                    text: "OK",
+                    btnClass: "btn-blue",
+                },
+            },
         });
     }
-    
 
-      // Function to generate PDF and send via email
-      function generateAndSendPDF(prescriptionId) {
-          fetch(`/generate-prescription-pdf/${prescriptionId}/`)  // Replace with actual Django URL
+    // Display Django messages
+    let delay = 500;
+    {% for message in messages %}
+    setTimeout(function() {
+        showAlert(
+            "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
+            "{{ message|escape }}"
+        );
+    }, delay);
+    delay += 1000;
+    {% endfor %}
+});
+
+</script>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Load the prescription form inside the modal via AJAX
+        document.querySelectorAll(".add-prescription-btn").forEach(button => {
+          button.addEventListener("click", function (event) {
+            event.preventDefault();
+            let url = this.getAttribute("data-url");
+
+            fetch(url)
               .then(response => {
-                  if (!response.ok) throw new Error("Error generating PDF");
-                  return response.blob();
+                console.log("Response status:", response.status);
+                return response.text();  // Log raw response
               })
-              .then(blob => {
-                  let a = document.createElement("a");
-                  a.href = window.URL.createObjectURL(blob);
-                  a.download = `prescription_${prescriptionId}.pdf`;
-                  a.click();
-  
-                  // Now send the email
-                  sendPrescriptionEmail(prescriptionId);
+              .then(html => {
+                console.log("HTML Response:", html);
+                document.getElementById("prescriptionFormContent").innerHTML = html;
+                attachSubmitEvent();  // Attach form submit event after loading
               })
-              .catch(error => console.log("Error:", error));
-      }
-  
-      // Function to send email with prescription PDF
-      function sendPrescriptionEmail(prescriptionId) {
-          fetch(`/send-prescription-email/${prescriptionId}/`)  // Replace with actual Django URL
+              .catch(error => console.error("Error loading form:", error));
+          });
+        });
+        // Function to attach submit event dynamically after form loads
+
+        function attachSubmitEvent() {
+          let form = document.querySelector("#prescriptionForm"); // Select dynamically loaded form
+          if (!form) return;
+
+          form.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            let formData = new FormData(form);
+
+            fetch(form.action, {
+              method: "POST",
+              body: formData,
+              headers: { "X-Requested-With": "XMLHttpRequest" }
+            })
               .then(response => response.json())
               .then(data => {
-                  if (data.success) {
-                      alert("Prescription sent to patient successfully!");
-                      location.reload();
-                  } else {
-                      alert("Error sending prescription email.");
-                  }
+                if (data.success) {
+                  // alert("Prescription added successfully!");
+                  generateAndSendPDF(data.prescription_id);
+                } else {
+                  // alert("Error submitting prescription.");
+                }
               })
               .catch(error => console.log("Error:", error));
-      }
-  });
-  </script>
+          });
+        }
+
+
+        // Function to generate PDF and send via email
+        function generateAndSendPDF(prescriptionId) {
+          fetch(`/generate-prescription-pdf/${prescriptionId}/`)  // Replace with actual Django URL
+            .then(response => {
+              if (!response.ok) throw new Error("Error generating PDF");
+              return response.blob();
+            })
+            .then(blob => {
+              let a = document.createElement("a");
+              a.href = window.URL.createObjectURL(blob);
+              a.download = `prescription_${prescriptionId}.pdf`;
+              a.click();
+
+              // Now send the email
+              sendPrescriptionEmail(prescriptionId);
+            })
+            .catch(error => console.log("Error:", error));
+        }
+
+        // Function to send email with prescription PDF
+        function sendPrescriptionEmail(prescriptionId) {
+          fetch(`/send-prescription-email/${prescriptionId}/`)  // Replace with actual Django URL
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                // alert("Prescription sent to patient successfully!");
+                location.reload();
+              } else {
+                alert("Error sending prescription email.");
+              }
+            })
+            .catch(error => console.log("Error:", error));
+        }
+      });
+    </script>
 
 
 
-  
+
     {% include "footer.html" %}
     {% endblock %}
     <!-- jQuery library (required for jquery-confirm) -->
-    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+    {% comment %} <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script> {% endcomment %}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
 
-      <script>
-        $(document).ready(function () {
-          function showAlert(icon, message) {
-            $.alert({
-              title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
-              content: `<span style="font-size: 15px;">${message}</span>`,
-              type: "blue",
-              theme: "modern",
-              buttons: {
-                ok: {
-                  text: "OK",
-                  btnClass: "btn-blue",
-                },
+    <script>
+      $(document).ready(function () {
+        function showAlert(icon, message) {
+          $.alert({
+            title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+            content: `<span style="font-size: 15px;">${message}</span>`,
+            type: "blue",
+            theme: "modern",
+            buttons: {
+              ok: {
+                text: "OK",
+                btnClass: "btn-blue",
               },
-            });
-          }
-          let delay = 500; // Start with a small delay
-          {% for message in messages %}
-          setTimeout(function () {
-            showAlert(
-              "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
-              "{{ message|escape }}",
-              "{{ message.tags }}"
-            );
-          }, delay);
-          delay += 1000; // Increase delay for next message
-          {% endfor %}
-        })
-      
-      </script>
+            },
+          });
+        }
+        let delay = 500; // Start with a small delay
+        {% for message in messages %}
+        setTimeout(function () {
+          showAlert(
+            "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
+            "{{ message|escape }}",
+            "{{ message.tags }}"
+          );
+        }, delay);
+        delay += 1000; // Increase delay for next message
+        {% endfor %}
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+      })
+
+    </script>
+    <script>
+      $(document).ready(function () {
+        function showAlert(icon, message) {
+          $.alert({
+            title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+            content: `<span style="font-size: 15px;">${message}</span>`,
+            type: "blue",
+            theme: "modern",
+            buttons: {
+              ok: {
+                text: "OK",
+                btnClass: "btn-blue",
+              },
+            },
+          });
+        }
+
+        $(document).on("submit", "#prescriptionForm", function (event) {
+          event.preventDefault(); // Prevent default form submission
+          let medicines = $("#id_medicines").val().trim();
+          let diagnosis = $("#id_diagnosis").val().trim();
+          let instructions = $("#id_instructions").val().trim();
+
+          if (medicines === "") {
+            showAlert("fa-pills", "Medicine field is required!");
+            return;
+          }
+          if (diagnosis === "") {
+            showAlert("fa-stethoscope", "Diagnosis field is required!");
+            return;
+          }
+          if (instructions === "") {
+            showAlert("fa-notes-medical", "Instruction field is required!");
+            return;
+          }
+          let formData = new FormData(this);
+          let csrfToken = $("input[name=csrfmiddlewaretoken]").val();
+
+          fetch(this.action, {
+            method: "POST",
+            body: formData,
+            headers: {
+              "X-Requested-With": "XMLHttpRequest",
+              "X-CSRFToken": csrfToken,
+            },
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                showAlert("fa-circle-check", "Prescription added successfully!");
+
+                if (!data.prescription_id) {
+                  showAlert("fa-circle-xmark", "Error: Missing prescription ID.");
+                  return;
+                }
+
+                fetch(`/send-prescription-email/${data.prescription_id}/`, { method: "GET" })
+                  .then(response => response.json())
+                  .then(emailData => {
+                    if (emailData.success) {
+                      showAlert("fa-envelope", "Prescription sent to the patient!");
+                    } else {
+                      showAlert("fa-exclamation-triangle", "Email Error: " + emailData.error);
+                    }
+
+                    // Ensure the PDF is generated ONLY when data exists
+                    return fetch(`/generate-prescription-pdf/${data.prescription_id}/`, { method: "GET" })
+                      .then(response => response.json())
+                      .then(pdfData => {
+                        if (pdfData.success && pdfData.pdf_url) {
+                          window.open(pdfData.pdf_url, "_blank"); // Open PDF in a new tab
+                        } else {
+                          showAlert("fa-exclamation-triangle", "PDF Error: " + (pdfData.error || "Unknown issue"));
+                        }
+                      });
+                  });
+              } else {
+                showAlert("fa-circle-xmark", "Error: " + JSON.stringify(data.errors));
+              }
+            })
+            .catch(error => {
+              console.error("Fetch Error:", error);
+              showAlert("fa-circle-xmark", "Something went wrong. Please try again.");
+            });
+        });
+      });
+    </script>
+
+    
+      <!-- jQuery and DataTables JS before closing body tag -->
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

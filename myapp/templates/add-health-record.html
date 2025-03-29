@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,9 +8,8 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- Toastr.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
+     <!-- jquery-confirm CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -108,16 +107,7 @@
             }
         }
         
-        .toast-success { 
-            background-color: rgba(84, 162, 102, 0.95) !important; 
-            color: white !important; 
-            border-radius: 8px !important;
-        }
-        .toast-error { 
-            background-color: rgba(210, 93, 105, 0.95) !important; 
-            color: white !important; 
-            border-radius: 8px !important; 
-        }
+       
     </style>
 </head>
 <body>
@@ -209,7 +199,10 @@
     </div>
 </div>   
 
-<script>
+{% endblock %}
+
+
+{% comment %} <script>
     $(document).ready(function() {
         // Add Bootstrap classes to all form inputs if not already there
         $(".health-form input").addClass("form-control");
@@ -268,8 +261,144 @@
             submitBtn.disabled = false;
         });
     });
+</script>  {% endcomment %}
+
+{% comment %} <script>
+    $(document).ready(function() {
+        // Add Bootstrap classes to all form inputs if not already there
+        $(".health-form input").addClass("form-control");
+    
+        function showAlert(icon, message) {
+            $.alert({
+                title: `<i class='fa-solid ${icon} fa-2x fa-beat-fade'></i>`,
+                content: `<span style="font-size: 15px;">${message}</span>`,
+                type: "blue",
+                theme: "modern",
+            });
+        }
+    
+        $("#healthRecordForm").submit(function (e) {
+            e.preventDefault();
+            
+            let valid = true;
+            let fieldNames = {
+                "bp_systolic": "Systolic BP",
+                "bp_diastolic": "Diastolic BP",
+                "heart_rate": "Heart Rate",
+                "sugar_level": "Sugar Level",
+                "steps_walked": "Steps Walked",
+                "sleep_hours": "Sleep Hours"
+            };
+            
+            $(this).find("input, select, textarea").each(function() {
+                let fieldName = fieldNames[$(this).attr("name")] || $(this).attr("name");
+                let value = $(this).val().trim();
+                if (value === "" || value.toLowerCase() === "none") {
+                    showAlert("fa-exclamation-circle", `${fieldName} is required.`);
+                    $(this).focus();
+                    valid = false;
+                    return false; // Break loop
+                }
+            });
+            
+            if (!valid) return;
+            
+            // If all validations pass, show success message and submit the form
+            $.alert({
+                title: `<i class="fa-solid fa-circle-check fa-2x fa-beat-fade"></i>`,
+                content: `<span style="font-size: 15px;">Your health record has been saved successfully!</span>`,
+                type: "green",
+                theme: "modern",
+                animation: "news",
+                onClose: function () {
+                    $("#healthRecordForm")[0].submit(); // Submit the form after the success alert
+                }
+            });
+        });
+    });
+    
+</script> {% endcomment %}
+
+<script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $(".health-form input").addClass("form-control");
+
+        function showAlert(icon, message) {
+            $.alert({
+                title: `<i class='fa-solid ${icon} fa-2x fa-beat-fade'></i>`,
+                content: `<span style="font-size: 15px;">${message}</span>`,
+                type: "blue",
+                theme: "modern",
+            });
+        }
+
+        $("#healthRecordForm").submit(function (e) {
+            e.preventDefault();
+            
+            let valid = true;
+            let fieldNames = {
+                "bp_systolic": "Systolic BP",
+                "bp_diastolic": "Diastolic BP",
+                "heart_rate": "Heart Rate",
+                "sugar_level": "Sugar Level",
+                "steps_walked": "Steps Walked",
+                "sleep_hours": "Sleep Hours"
+            };
+            
+            // Frontend Validation (Before Sending AJAX Request)
+            $(this).find("input, select, textarea").each(function() {
+                let fieldName = fieldNames[$(this).attr("name")] || $(this).attr("name");
+                let value = $(this).val().trim();
+                if (value === "" || value.toLowerCase() === "none") {
+                    showAlert("fa-exclamation-circle", `${fieldName} is required.`);
+                    $(this).focus();
+                    valid = false;
+                    return false; // Break loop
+                }
+            });
+
+            if (!valid) return; // Stop submission if validation fails
+
+            // Backend Validation via AJAX
+            $.ajax({
+                type: "POST",
+                url: "{% url 'add_health_record' %}",  // Replace with your actual view URL
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(response) {
+                    if (response.success) {
+                        $.alert({
+                            title: `<i class="fa-solid fa-circle-check fa-2x fa-beat-fade"></i>`,
+                            content: `<span style="font-size: 15px;">${response.message}</span>`,
+                            type: "green",
+                            theme: "modern",
+                            animation: "news",
+                            onClose: function () {
+                                window.location.reload(); // Reload after success
+                            }
+                        });
+                    } else {
+                        // Display Django Validation Errors
+                        let errors = JSON.parse(response.errors);
+                        for (let field in errors) {
+                            showAlert("fa-exclamation-circle", `${errors[field][0].message}`);
+                            break; // Show only first error
+                        }
+                    }
+                },
+                error: function() {
+                    showAlert("fa-exclamation-triangle", "Something went wrong. Please try again.");
+                }
+            });
+        });
+    });
 </script>
-{% endblock %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
 </body>
 </html>

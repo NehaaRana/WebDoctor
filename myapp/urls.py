@@ -1,4 +1,5 @@
-from django.urls import path
+from django.urls import path,include
+from paypal.standard.ipn import views as paypal_views
 from . import views
 
 urlpatterns =[
@@ -14,11 +15,10 @@ urlpatterns =[
   path('patient_dashboard/', views.patient_dashboard, name='patient_dashboard'),
   path('doctor_dashboard/', views.doctor_dashboard, name='doctor_dashboard'),
   path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
-  path('contact_us/', views.contact_us, name='contact_us'),
   path('logout/', views.logout_view, name='logout'), 
   path('coming-soon/', views.coming_soon, name='coming-soon'),
   path('subscribe/', views.subscribe, name='subscribe'),
-  path('terms-condition/', views.terms_condition, name='terms-condition'),
+  
   path('doctor_register/', views.doctor_register, name='doctor_register'),
   path('patient_register/', views.patient_register, name='patient_register'),
   path('terms_condition/', views.terms_condition, name='terms_condition'),
@@ -97,9 +97,24 @@ urlpatterns =[
      path("generate-prescription-pdf/<int:prescription_id>/", views.generate_prescription_pdf, name="generate_prescription_pdf"),
     path("send-prescription-email/<int:prescription_id>/", views.send_prescription_email, name="send_prescription_email"),
 
-  #  path('submit_report/<int:patient_id>/', views.submit_report, name='submit_report'),
-  #  path('generate_report_pdf/<int:report_id>/', views.generate_report_pdf, name='generate_report_pdf'),
+ 
    path("blog-details/", views.blog_details, name="blog-details"),
     path("search-specialization/", views.search_specialization, name="search-specialization"),
+    path("start_emergency/", views.start_emergency_consultation, name="start_emergency"),
+    path("emergency_consultation/", views.emergency_consultation_page, name="emergency_consultation_page"),
+    path("admin_manage_medicines/",views.admin_manage_medicines,name="admin_manage_medicines"),
+    path('admin_add_medicine/', views.admin_add_medicine, name='admin_add_medicine'),
+    path('medicines/', views.medicines, name='medicines'),
+    path('admin_edit_medicine/<int:medicine_id>/', views.admin_edit_medicine, name='admin_edit_medicine'),
+    path('admin_delete_medicine/<int:medicine_id>/', views.delete_medicine, name='admin_delete_medicine'),
+    path("doctors/pending/", views.get_pending_doctors, name="pending_doctors"),
+    path("doctors/approve/<int:doctor_id>/", views.approve_doctor, name="approve_doctor"),
+    path("doctors/reject/<int:doctor_id>/", views.reject_doctor, name="reject_doctor"),
+    path("diseases/", views.diseases, name="diseases"),
+  path("fitness/", views.fitness, name="fitness"),
+  path("diets_comparison/", views.diets_comparison, name="diets_comparison"),
+  path('blogs/', views.blogs, name='blogs'),
+  path('process-payment/', views.process_payment, name='process_payment'),
+  path('paypal/', include('paypal.standard.ipn.urls')),
 ]
 

@@ -256,17 +256,27 @@
 <script>
 
   var options = {
-    "key": "{{ api_key }}", // Razorpay Key
+    "key": "{{ api_key |default:'' }}", // Razorpay Key
     "name": "{{ user_name }}", 
+    "amount": parseInt("{{ total_amount|default:'0' }}") * 100,  // Ensure correct integer format
+    "currency": "INR",
     "description": "Test Transaction",
     "image": "https://example.com/your_logo",
-    "order_id": "{{ order_id }}", // Order ID from backend
+    "order_id": "{{ order_id  | default:'' }}", // Order ID from backend
     "callback_url": "/payment_success/", // Direct callback URL
     "prefill": {
         "name": "{{ user_name }}",
         "email": "{{ user_email }}",
         "contact": "{{ user_phno }}"  // Ensure this is correctly formatted
     },
+
+    "method": {
+        "card": true,       // Enable card payments
+        "netbanking": true, // Enable net banking
+        "upi": true,        // Enable UPI
+        "wallet": true      // Enable wallets like Paytm, Mobikwik, etc.
+    },
+
     "theme": {
         "color": "#3399cc"
     },
@@ -317,10 +327,12 @@
   };
   
   // Razorpay instance
-  var rzp1 = new Razorpay(options);
+  //var rzp1 = new Razorpay(options);
   document.getElementById('rzp-button1').onclick = function(e) {
-    rzp1.open();
+    //rzp1.open();
     e.preventDefault();
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
   };
   
   // Function to get CSRF token
@@ -339,7 +351,7 @@
     return cookieValue;
   }
   
-  // 🎤 Function to Play Voice Message
+  // Function to Play Voice Message
   function speakMessage(message) {
     const speech = new SpeechSynthesisUtterance(message);
     speech.lang = "en-US";  // Set language

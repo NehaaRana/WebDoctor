@@ -1,0 +1,664 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diet Plans Comparison | WebDoctor</title>
+    <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        .diet-hero {
+            /* background: linear-gradient(135deg, #0d6efd 0%, #20c997 100%);
+            color: white; */
+            padding: 120px 50px;
+            margin-bottom: 50px;
+        }
+        .diet-tab {
+            margin-top: -50px;
+            position: relative;
+            z-index: 10;
+        }
+        .nav-pills .nav-link {
+            font-size: 1.1rem;
+            font-weight: 500;
+            padding: 15px 25px;
+            margin: 0 5px;
+            border-radius: 50px !important;
+        }
+        .nav-pills .nav-link.active {
+            background-color: white;
+            color: #0d6efd;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .diet-card {
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s;
+            margin-bottom: 30px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .diet-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        .macro-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin: 0 auto 20px;
+            color: white;
+            font-weight: bold;
+        }
+        .food-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .food-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        .food-list li:last-child {
+            border-bottom: none;
+        }
+        .food-list i {
+            margin-right: 10px;
+            width: 25px;
+            text-align: center;
+        }
+        .tab-content {
+            padding: 30px 0;
+        }
+        .comparison-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        .badge-diet {
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+
+        <!-- Header -->
+        <header class="header header-fixed header-one">
+            <div class="container">
+              <nav class="navbar navbar-expand-lg header-nav">
+                <div class="navbar-header">
+                  <a id="mobile_btn" href="javascript:void(0);">
+                    <span class="bar-icon">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </span>
+                  </a>
+                  <a href="/" class="navbar-brand logo">
+                    <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+                  </a>
+                </div>
+                <div class="main-menu-wrapper">
+                  <div class="menu-header">
+                    <a href="/index" class="menu-logo">
+                      <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+                    </a>
+                    <a id="menu_close" class="menu-close" href="javascript:void(0);">
+                      <i class="fas fa-times"></i>
+                    </a>
+                  </div>
+                  <ul class="main-nav">
+                    <li><a
+                        href="{% if user_type == 'patient' or user_type == 'doctor' %}{% url 'index' %}{% else %}{% url 'home' %}{% endif %}">Home</a>
+                    </li>
+                    <li><a href="{% url 'doctor_list' %}">Doctors</a></li>
+                    {% comment %} <li><a href="{% url 'about' %}">About Us</a></li> {% endcomment %}
+                    <li>
+                      {% if request.session.patient_id or request.session.doctor_id %}
+                      <a href="{% url 'about_us' %}">About Us</a>
+                      {% else %}
+                      <a href="{% url 'about' %}">About Us</a>
+                      {% endif %}
+                    </li>
+                    <li>
+                      {% if request.session.patient_id or request.session.doctor_id %}
+                      <a href="{% url 'contact_us' %}">Contact Us</a>
+                      {% else %}
+                      <a href="{% url 'contact' %}">Contact Us</a>
+                      {% endif %}
+                    </li>
+                    {% comment %} <li><a href="{% url 'contact' %}">Contact Us</a></li> {% endcomment %}
+                    <ul class="nav header-navbar-rht pt-3">
+      
+                      {% if request.session.patient_id or request.session.doctor_id %}
+                      <li class="nav-item dropdown has-arrow logged-item">
+                        <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
+                          <span class="user-img">
+                            {% if profile and profile.profile_img %}
+                            <img class="rounded-circle" src="{{ profile.profile_img.url }}" width="31" alt="profile" />
+                            {% else %}
+                            <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
+                              alt="default profile" />
+                            {% endif %}
+                          </span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                          <div class="user-header d-flex align-items-center">
+                            <div class="avatar avatar-sm me-2">
+                              {% if profile and profile.profile_img %}
+                              <img class="rounded-circle" src="{{ profile.profile_img.url }}" width="31" alt="profile" />
+                              {% else %}
+                              <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
+                                alt="default profile" />
+                              {% endif %}
+                            </div>
+                            <div class="user-text">
+                              <h6 class="mb-0">{{ profile.name }}</h6>
+                            </div>
+                          </div>
+                          {% if user_type == "patient" %}
+                          <a class="dropdown-item" href="{% url 'patient_dashboard' %}">Dashboard</a>
+                          <a class="dropdown-item" href="{% url 'patient_profile_settings' %}">Profile Settings</a>
+                          {% elif user_type == "doctor" %}
+                          <a class="dropdown-item" href="{% url 'doctor_dashboard' %}">Dashboard</a>
+                          <a class="dropdown-item" href="{% url 'doctor_profile_settings' %}">Profile Settings</a>
+                          {% endif %}
+                          <a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a>
+                        </div>
+                      </li>
+      
+      
+                      {% else %}
+      
+      
+                      <li class="register-btn mb-3 mx-2">
+                        <a href="{% url 'register' %}" class="btn reg-btn btn-primary">
+                          <i class="feather-user"></i>Register
+                        </a>
+                      </li>
+                      <li class="register-btn mb-3 ">
+                        <a href="{% url 'login' %}" class="btn btn-primary log-btn">
+                          <i class="feather-lock"></i>Login
+                        </a>
+                      </li>
+      
+                      {% endif %}
+                    </ul>
+                  </ul>
+                </div>
+              </nav>
+            </div>
+          </header>
+      
+    <!-- Hero Section -->
+    <section class="diet-hero ">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">Diet Plans Comparison</h1>
+                    <p class="lead">Explore three evidence-based dietary approaches for different health goals</p>
+                    <div class="d-flex flex-wrap mt-4">
+                        <span class="badge bg-primary me-2 mb-2"><i class="fas fa-heartbeat me-1"></i> Heart Health</span>
+                        <span class="badge bg-warning me-2 mb-2"><i class="fas fa-weight me-1"></i> Weight Loss</span>
+                        <span class="badge bg-danger me-2 mb-2"><i class="fas fa-brain me-1"></i> Brain Function</span>
+                        <span class="badge bg-success me-2 mb-2"><i class="fas fa-seedling me-1"></i> Plant-Based</span>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <img src="{% static 'assets/img/diet-comparison.png' %}" alt="Diet Comparison" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Diet Tabs Navigation -->
+    <div class="container diet-tab">
+        <ul class="nav nav-pills justify-content-center" id="diet-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="mediterranean-tab" data-bs-toggle="pill" data-bs-target="#mediterranean" type="button" role="tab">
+                    <i class="fas fa-umbrella-beach me-2"></i> Mediterranean
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="keto-tab" data-bs-toggle="pill" data-bs-target="#keto" type="button" role="tab">
+                    <i class="fas fa-bacon me-2"></i> Keto
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="plantbased-tab" data-bs-toggle="pill" data-bs-target="#plantbased" type="button" role="tab">
+                    <i class="fas fa-leaf me-2"></i> Plant-Based
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="container">
+        <div class="tab-content" id="diet-tabContent">
+            <!-- Mediterranean Diet Tab -->
+            <div class="tab-pane fade show active" id="mediterranean" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card diet-card">
+                            <div class="card-body">
+                                <h2 class="mb-4"><i class="fas fa-umbrella-beach text-primary me-2"></i> Mediterranean Diet</h2>
+                                <p class="lead">The traditional eating pattern of Mediterranean countries, emphasizing plant-based foods, healthy fats, and moderate animal products.</p>
+                                
+                                <div class="row mt-5">
+                                    <div class="col-md-4 text-center">
+                                        <div class="macro-circle bg-success">
+                                            <span>55-60%</span>
+                                            <small>Carbs</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <div class="macro-circle bg-warning">
+                                            <span>15-20%</span>
+                                            <small>Protein</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <div class="macro-circle bg-danger">
+                                            <span>25-30%</span>
+                                            <small>Fat</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h3 class="mt-5">Key Principles</h3>
+                                <div class="row mt-4">
+                                    <div class="col-md-6">
+                                        <ul class="food-list">
+                                            <li><i class="fas fa-check-circle text-success me-2 fa-lg"></i> Abundant plant foods (fruits, vegetables)</li>
+                                            <li><i class="fas fa-check-circle text-success me-2 fa-lg"></i> Olive oil as primary fat source</li>
+                                            <li><i class="fas fa-check-circle text-success me-2 fa-lg"></i> Moderate fish and poultry</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul class="food-list">
+                                            <li><i class="fas fa-check-circle text-success me-2 fa-lg"></i> Limited red meat</li>
+                                            <li><i class="fas fa-check-circle text-success me-2 fa-lg"></i> Moderate wine with meals</li>
+                                            <li><i class="fas fa-check-circle text-success me-2 fa-lg"></i> Regular physical activity</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <h3 class="mt-5">Sample Meal Plan</h3>
+                                <div class="row mt-4">
+                                    <div class="col-md-4 mb-4">
+                                        <div class="card h-100 shadow-sm">
+                                            <img src="{% static 'assets/img/med-breakfast.jpg' %}" class="card-img-top" alt="Breakfast">
+                                            <div class="card-body">
+                                                <h5>Breakfast</h5>
+                                                <p>Greek yogurt with honey, walnuts, and fresh berries</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-4">
+                                        <div class="card h-100 shadow-sm">
+                                            <img src="{% static 'assets/img/med-lunch.jpg' %}" class="card-img-top" alt="Lunch">
+                                            <div class="card-body">
+                                                <h5>Lunch</h5>
+                                                <p>Grilled vegetable and hummus wrap with side salad</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-4">
+                                        <div class="card h-100 shadow-sm">
+                                            <img src="{% static 'assets/img/med-dinner.jpg' %}" class="card-img-top" alt="Dinner">
+                                            <div class="card-body">
+                                                <h5>Dinner</h5>
+                                                <p>Baked salmon with quinoa and roasted vegetables</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="card diet-card sticky-top" style="top: 20px;">
+                            <div class="card-body">
+                                <h4 class="mb-4">Benefits</h4>
+                                <ul class="food-list">
+                                    <li><i class="fas fa-heartbeat me-2 text-danger"></i> Reduces heart disease risk by 30%</li>
+                                    <li><i class="fas fa-brain me-2 text-info"></i> Supports brain health and cognition</li>
+                                    <li><i class="fas fa-weight me-2 text-primary"></i> Promotes sustainable weight management</li>
+                                    <li><i class="fas fa-long-arrow-alt-down me-2 text-success"></i> Lowers blood pressure</li>
+                                    <li><i class="fas fa-clock me-2 text-warning"></i> Associated with longevity</li>
+                                </ul>
+                                
+                                <h4 class="mt-5 mb-3">Best For</h4>
+                                <div class="d-flex flex-wrap">
+                                    <span class="badge-diet bg-primary-light me-2 mb-2">Heart health</span>
+                                    <span class="badge-diet bg-primary-light me-2 mb-2">Long-term wellness</span>
+                                    <span class="badge-diet bg-primary-light me-2 mb-2">Diabetes prevention</span>
+                                    <span class="badge-diet bg-primary-light me-2 mb-2">Family eating</span>
+                                </div>
+                                
+                                <h4 class="mt-5 mb-3">Considerations</h4>
+                                <ul class="food-list">
+                                    <li><i class="fas fa-exclamation-circle text-danger me-2"></i> May require adjustment for weight loss</li>
+                                    <li><i class="fas fa-exclamation-circle text-danger me-2"></i> Olive oil can be expensive</li>
+                                    <li><i class="fas fa-exclamation-circle text-danger me-2"></i> Social drinking component may not suit all</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Keto Diet Tab -->
+            <div class="tab-pane fade" id="keto" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card diet-card">
+                            <div class="card-body">
+                                <h2 class="mb-4"><i class="fas fa-bacon text-danger me-2"></i> Ketogenic Diet</h2>
+                                <p class="lead">A high-fat, very low-carb diet that shifts your metabolism to burn fat for energy through ketosis.</p>
+                                
+                                <div class="row mt-5">
+                                    <div class="col-md-4 text-center">
+                                        <div class="macro-circle bg-danger">
+                                            <span>70-80%</span>
+                                            <small>Fat</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <div class="macro-circle bg-warning">
+                                            <span>20-25%</span>
+                                            <small>Protein</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <div class="macro-circle bg-success">
+                                            <span>5-10%</span>
+                                            <small>Carbs</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h3 class="mt-5">Key Principles</h3>
+                                <div class="row mt-4">
+                                    <div class="col-md-6">
+                                        <ul class="food-list">
+                                            <li><i class="fas fa-check-circle text-success me-2 fa-lg"></i> Very low carbohydrate intake (<50g/day)</li>
+                                            <li><i class="fas fa-check-circle text-success me-2 fa-lg"></i> Moderate protein</li>
+                                            <li><i class="fas fa-check-circle text-success me-2 fa-lg"></i> High healthy fat intake</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul class="food-list">
+                                            <li><i class="fas fa-check-circle text-success me-2 fa-lg"></i> Focus on whole, unprocessed foods</li>
+                                            <li><i class="fas fa-check-circle text-success me-2 fa-lg"></i> Strict avoidance of sugars and grains</li>
+                                            <li><i class="fas fa-check-circle text-success me-2 fa-lg"></i> Monitoring ketone levels</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <h3 class="mt-5">Sample Meal Plan</h3>
+                                <div class="row mt-4">
+                                    <div class="col-md-4 mb-4">
+                                        <div class="card h-100 shadow-sm">
+                                            <img src="{% static 'assets/img/keto-breakfast.jpg' %}" class="card-img-top" alt="Breakfast">
+                                            <div class="card-body">
+                                                <h5>Breakfast</h5>
+                                                <p>Avocado and eggs with bacon</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-4">
+                                        <div class="card h-100 shadow-sm">
+                                            <img src="{% static 'assets/img/keto-lunch.jpg' %}" class="card-img-top" alt="Lunch">
+                                            <div class="card-body">
+                                                <h5>Lunch</h5>
+                                                <p>Bunless burger with cheese and side salad</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-4">
+                                        <div class="card h-100 shadow-sm">
+                                            <img src="{% static 'assets/img/keto-dinner.jpg' %}" class="card-img-top" alt="Dinner">
+                                            <div class="card-body">
+                                                <h5>Dinner</h5>
+                                                <p>Salmon with roasted asparagus and hollandaise</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="card diet-card sticky-top" style="top: 20px;">
+                            <div class="card-body">
+                                <h4 class="mb-4">Benefits</h4>
+                                <ul class="food-list">
+                                    <li><i class="fas fa-burn text-danger me-2"></i> Rapid initial weight loss</li>
+                                    <li><i class="fas fa-long-arrow-alt-down text-success me-2"></i> Reduces blood sugar and insulin levels</li>
+                                    <li><i class="fas fa-brain text-info me-2"></i> May improve mental clarity</li>
+                                    <li><i class="fas fa-heartbeat text-primary me-2"></i> Can improve cholesterol markers</li>
+                                    <li><i class="fas fa-brain text-warning me-2"></i> Potential benefits for epilepsy</li>
+                                </ul>
+                                
+                                <h4 class="mt-5 mb-3">Best For</h4>
+                                <div class="d-flex flex-wrap">
+                                    <span class="badge-diet bg-info-light me-2 mb-2">Rapid weight loss</span>
+                                    <span class="badge-diet bg-info-light me-2 mb-2">Type 2 diabetes</span>
+                                    <span class="badge-diet bg-info-light me-2 mb-2">Metabolic health</span>
+                                    <span class="badge-diet bg-info-light me-2 mb-2">Epilepsy management</span>
+                                </div>
+                                
+                                <h4 class="mt-5 mb-3">Considerations</h4>
+                                <ul class="food-list">
+                                    <li><i class="fas fa-exclamation-circle text-danger me-2"></i> "Keto flu" during adaptation</li>
+                                    <li><i class="fas fa-exclamation-circle text-danger me-2"></i> Difficult to maintain long-term</li>
+                                    <li><i class="fas fa-exclamation-circle text-danger me-2"></i> Potential nutrient deficiencies</li>
+                                    <li><i class="fas fa-exclamation-circle text-danger me-2"></i> Not suitable for everyone</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Plant-Based Diet Tab -->
+            <div class="tab-pane fade" id="plantbased" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card diet-card">
+                            <div class="card-body">
+                                <h2 class="mb-4"><i class="fas fa-leaf text-success me-2"></i> Plant-Based Diet</h2>
+                                <p class="lead">A diet focused on foods derived from plants, with limited or no animal products.</p>
+                                
+                                <div class="row mt-5">
+                                    <div class="col-md-4 text-center">
+                                        <div class="macro-circle bg-success">
+                                            <span>60-70%</span>
+                                            <small>Carbs</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <div class="macro-circle bg-warning">
+                                            <span>15-20%</span>
+                                            <small>Protein</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <div class="macro-circle bg-primary">
+                                            <span>15-25%</span>
+                                            <small>Fat</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h3 class="mt-5">Key Principles</h3>
+                                <div class="row mt-4">
+                                    <div class="col-md-6">
+                                        <ul class="food-list">
+                                            <li><i class="fas fa-check-circle text-success me-2 fa-lg"></i> Fruits and vegetables as foundation</li>
+                                            <li><i class="fas fa-check-circle text-success me-2 fa-lg"></i> Whole grains and legumes</li>
+                                            <li><i class="fas fa-check-circle text-success me-2 fa-lg"></i> Nuts and seeds</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul class="food-list">
+                                            <li><i class="fas fa-check-circle text-success me-2 fa-lg"></i> Minimal processed foods</li>
+                                            <li><i class="fas fa-check-circle text-success me-2 fa-lg"></i> Limited or no animal products</li>
+                                            <li><i class="fas fa-check-circle text-success me-2 fa-lg"></i> Emphasis on food quality</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <h3 class="mt-5">Sample Meal Plan</h3>
+                                <div class="row mt-4">
+                                    <div class="col-md-4 mb-4">
+                                        <div class="card h-100 shadow-sm">
+                                            <img src="{% static 'assets/img/pb-breakfast.jpg' %}" class="card-img-top" alt="Breakfast">
+                                            <div class="card-body">
+                                                <h5>Breakfast</h5>
+                                                <p>Oatmeal with chia seeds, berries, and almond butter</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-4">
+                                        <div class="card h-100 shadow-sm">
+                                            <img src="{% static 'assets/img/pb-lunch.jpg' %}" class="card-img-top" alt="Lunch">
+                                            <div class="card-body">
+                                                <h5>Lunch</h5>
+                                                <p>Buddha bowl with quinoa, roasted veggies, and tahini</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-4">
+                                        <div class="card h-100 shadow-sm">
+                                            <img src="{% static 'assets/img/pb-dinner.jpg' %}" class="card-img-top" alt="Dinner">
+                                            <div class="card-body">
+                                                <h5>Dinner</h5>
+                                                <p>Lentil curry with brown rice and sautéed greens</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="card diet-card sticky-top" style="top: 20px;">
+                            <div class="card-body">
+                                <h4 class="mb-4">Benefits</h4>
+                                <ul class="food-list">
+                                    <li><i class="fas fa-heartbeat text-danger me-2"></i> Lower risk of heart disease</li>
+                                    <li><i class="fas fa-weight text-primary me-2"></i> Healthy weight management</li>
+                                    <li><i class="fas fa-long-arrow-alt-down text-success me-2"></i> Reduced inflammation</li>
+                                    <li><i class="fas fa-seedling text-success me-2"></i> Higher nutrient density</li>
+                                    <li><i class="fas fa-globe-americas text-info me-2"></i> Lower environmental impact</li>
+                                </ul>
+                                
+                                <h4 class="mt-5 mb-3">Best For</h4>
+                                <div class="d-flex flex-wrap">
+                                    <span class="badge-diet bg-success-light me-2 mb-2">Heart health</span>
+                                    <span class="badge-diet bg-success-light me-2 mb-2">Weight loss</span>
+                                    <span class="badge-diet bg-success-light me-2 mb-2">Diabetes prevention</span>
+                                    <span class="badge-diet bg-success-light me-2 mb-2">Sustainability</span>
+                                </div>
+                                
+                                <h4 class="mt-5 mb-3">Considerations</h4>
+                                <ul class="food-list">
+                                    <li><i class="fas fa-exclamation-circle text-danger me-2"></i> Need to plan for complete proteins</li>
+                                    <li><i class="fas fa-exclamation-circle text-danger me-2"></i> Potential B12 deficiency</li>
+                                    <li><i class="fas fa-exclamation-circle text-danger me-2"></i> May require more meal prep</li>
+                                    <li><i class="fas fa-exclamation-circle text-danger me-2"></i> Social situations can be challenging</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Comparison Section -->
+        <div class="card diet-card mt-5">
+            <div class="card-body">
+                <h2 class="mb-4 text-center"><i class="fas fa-balance-scale me-2"></i> Diet Comparison</h2>
+                
+                <div class="table-responsive">
+                    <table class="table table-bordered comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Mediterranean</th>
+                                <th>Keto</th>
+                                <th>Plant-Based</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Primary Goal</td>
+                                <td>Overall health & longevity</td>
+                                <td>Weight loss & metabolic health</td>
+                                <td>Disease prevention & ethics</td>
+                            </tr>
+                            <tr>
+                                <td>Carbohydrates</td>
+                                <td>Moderate (55-60%)</td>
+                                <td>Very low (5-10%)</td>
+                                <td>High (60-70%)</td>
+                            </tr>
+                            <tr>
+                                <td>Protein Sources</td>
+                                <td>Fish, poultry, legumes</td>
+                                <td>Meat, fish, eggs</td>
+                                <td>Legumes, tofu, tempeh</td>
+                            </tr>
+                            <tr>
+                                <td>Fat Sources</td>
+                                <td>Olive oil, nuts, fish</td>
+                                <td>Animal fats, oils, dairy</td>
+                                <td>Nuts, seeds, avocados</td>
+                            </tr>
+                            <tr>
+                                <td>Scientific Support</td>
+                                <td>Extensive long-term studies</td>
+                                <td>Short-term metabolic benefits</td>
+                                <td>Growing body of evidence</td>
+                            </tr>
+                            <tr>
+                                <td>Sustainability</td>
+                                <td>Moderate</td>
+                                <td>Low (high meat consumption)</td>
+                                <td>High</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    {% include 'footer.html' %}
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+        // Smooth scroll when tabs are changed
+        var dietTabElms = document.querySelectorAll('#diet-tab button');
+        dietTabElms.forEach(function(tabEl) {
+            tabEl.addEventListener('shown.bs.tab', function (event) {
+                window.scrollTo({
+                    top: document.querySelector('.diet-tab').offsetTop - 20,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

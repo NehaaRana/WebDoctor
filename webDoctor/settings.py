@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "myapp"
+    "myapp",
+    'paypal.standard.ipn',
 ]
 
 MIDDLEWARE = [
@@ -185,6 +186,15 @@ OPENAI_API_KEY="sk-proj-c5heylpDI5VA1KTd6JMh-qN1iLRF7LIn1-4FqprrkaHW5K81goWFJkVk
 
 #vaishnavi OPENAI_API_KEY="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"
 
+# settings.py
+# PAYPAL = {
+#     'CLIENT_ID': 'ATb-2N3wWxqZVpu_9KLtF9kkXRhigqeo3v0v8l1ImT2fE9JTfE0QAvPP16V7yZWjV3pdxXcAdH5g1mbL',  # For frontend SDK
+#     'SECRET_KEY': 'EIJm334MOiVxll6kl3Oan-g11XYXCHEg69EnQ6j9pv1AOFh62Mfv1mU4LybN9TqkzB-5fSaYNzhGxRV6',  # For backend API calls
+#     'MODE': 'sandbox',  # Change to 'live' in production
+# }
 
+
+PAYPAL_RECEIVER_EMAIL = 'sb-ljdbe39419521@business.example.com'  # Use your PayPal email
+PAYPAL_TEST = True  # Set to False for production
 
 

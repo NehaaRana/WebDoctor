@@ -68,6 +68,7 @@ class doctorRegister(models.Model):
     about_me=models.TextField(null=True)
     is_approved = models.BooleanField(default=False)
     is_rejected = models.BooleanField(default=False)
+    is_available = models.BooleanField(default=False)  # Doctor is available for emergency
 
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
@@ -82,9 +83,6 @@ class doctorRegister(models.Model):
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
 
-    # class Meta:
-    #     db_table = 'myapp_doctorregister'  # Explicitly link to the existing table
-    #     managed = True  # 🚨 Change this to True so Django can manage the table
     def __str__(self):
             return f"{self.name} | {self.gender} |{self.email} | {self.password} | {self.qualification} |{self.specialization} | {self.phno} | "
     
@@ -177,10 +175,6 @@ class adminLogin(models.Model):
         return self.username
         
 
-
-
-
-
 class HealthRecord(models.Model):
     patient = models.ForeignKey(patientRegister, on_delete=models.CASCADE)
     bp_systolic = models.IntegerField(null=True, blank=True)
@@ -196,16 +190,6 @@ class HealthRecord(models.Model):
     
 
 
-# for chatbot
-# class MedicalInfo(models.Model):
-#     symptom = models.CharField(max_length=255, unique=True)  # e.g., "fever"
-#     condition = models.TextField()  # e.g., "Possible viral infection"
-#     treatment = models.TextField()  # e.g., "Drink fluids, rest, take paracetamol"
-    
-#     def __str__(self):
-#         return self.symptom
-
-
 from datetime import date
 class Prescription(models.Model):
     doctor = models.ForeignKey(doctorRegister, on_delete=models.CASCADE, related_name="doctor_prescriptions")
@@ -219,4 +203,63 @@ class Prescription(models.Model):
         return f"Prescription {self.id} - {self.patient.username}"
     
 
+class EmergencyRequest(models.Model):
+    patient = models.ForeignKey(
+        patientRegister, on_delete=models.CASCADE, related_name="emergencies",null=True, blank=True
+    )
+    doctor = models.ForeignKey(
+        doctorRegister, on_delete=models.SET_NULL, null=True, blank=True, related_name="emergency_cases"
+    )  # Doctor assigned for emergency consultation
+ 
+    meeting_link = models.URLField(max_length=500, null=True, blank=True)  # Store video call link
+    guest_name = models.CharField(max_length=255, null=True, blank=True)  # Store guest name
+   
+    created_at = models.DateTimeField(auto_now_add=True)  # When request was made
+    updated_at = models.DateTimeField(auto_now=True)  # Track last update
 
+    # def __str__(self):
+    #     # return f"Emergency by {self.patient.name} - {self.status}"
+    #     f"Emergency request with {self.doctor.name} by {self.patient.name if self.patient else self.guest_name}"
+
+    def __str__(self):
+        doctor_name = self.doctor.name if self.doctor else "Unknown Doctor"
+        patient_name = self.patient.name if self.patient else (self.guest_name if self.guest_name else "Unknown Patient")
+        
+        return f"Emergency request with {doctor_name} by {patient_name}"  # Always returns a string
+
+
+class Medicine(models.Model):
+    STATUS_CHOICES = (
+        ('Active', 'Active'),
+        ('Inactive', 'Inactive'),
+        ('Discontinued', 'Discontinued'),
+    )
+    
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    manufacturer = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    quantity = models.PositiveIntegerField()
+    expiry_date = models.DateField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Active')
+    created_at = models.DateTimeField(default=now) 
+    img = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+    def _str_(self):
+        return self.name
+    
+
+class Order(models.Model):
+    medicine = models.ForeignKey(Medicine, on_delete=models.CASCADE)
+    patient_id = models.ForeignKey(patientRegister, on_delete=models.CASCADE)
+    transaction_id = models.CharField(max_length=255)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payer_email = models.EmailField()
+    status = models.CharField(max_length=20, choices=[
+        ('Pending', 'Pending'),
+        ('Completed', 'Completed'),
+        ('Failed', 'Failed')
+    ])
+    created_at = models.DateTimeField(auto_now_add=True)

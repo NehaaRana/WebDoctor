@@ -36,9 +36,9 @@
     <!-- jQuery Confirm JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
-    <!-- Add Font Awesome CDN in head section -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+<!-- Add Font Awesome CDN in head section -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
     
@@ -229,47 +229,57 @@
 
                         <li>
                             <a href="{% url 'admin_dashboard' %}">
-                                <i class="bx bxs-dashboard icon nav-icon"></i>
+                                <i class="fa-solid fa-chart-simple icon nav-icon"></i>
                                 <span class="menu-item" data-key="t-dashboard">Dashboard</span>
                             </a>
                         </li>
 
                         <li>
                             <a href="{% url 'admin_manage_doctors' %}">
-                                <i class="bx bx-user-plus icon nav-icon"></i>
+                                <i class="fa-solid fa-user-doctor icon nav-icon"></i>
                                 <span class="menu-item" data-key="t-email">Doctors</span>
                             </a>
                         </li>
 
                         <li>
                             <a href="{% url 'admin_manage_patients' %}">
-                                <i class="bx bx-calendar-event icon nav-icon"></i>
+                                <i class="fa-solid fa-users-line icon nav-icon" ></i>
                                 <span class="menu-item" data-key="t-calendar">Patients</span>
                             </a>
                         </li>
 
                         <li>
                             <a href="{% url 'admin_manage_appointments' %}">
-                                <i class="bx bxs-calendar icon nav-icon"></i>
+                                <i class="fa-solid fa-calendar-plus icon nav-icon"></i>
                                 <span class="menu-item" data-key="t-todo">Appointments</span>
                             </a>
                         </li>
 
                         <li>
                             <a href="{% url 'admin_manage_review' %}">
-                                <i class="bx bxs-star icon nav-icon"></i>
+                                <i class="fa-solid fa-comments icon nav-icon"></i>
                                 <span class="menu-item" data-key="t-filemanager">Reviews</span>
                             </a>
                         </li>
                         <li>
                             <a href="{% url 'admin_manage_payment' %}">
-                                <i class="bx bxs-credit-card-alt icon nav-icon"></i>
+                                <i class="fa-solid fa-credit-card icon nav-icon"></i>
                                 <span class="menu-item" data-key="t-filemanager">Payments</span>
                             </a>
                         </li>
+                        {% comment %} medicine {% endcomment %}
+                        <li>
+                            <a href="{% url 'admin_add_medicine' %}">
+                                  <i class="fas fa-pills icon nav-icon">
+                                   
+                                  </i>
+                                  <span class="menu-item" data-key="t-Medicine">Medicines</span>
+                              </a>
+                            </li>
+
                         <li>
                             <a href="{% url 'admin_logout' %}">
-                                <i class="bx bx-log-out icon nav-icon"></i>
+                                <i class="fa-solid fa-right-from-bracket icon nav-icon"></i>
                                 <span class="menu-item" data-key="t-filemanager">Logout</span>
                             </a>
                         </li>
