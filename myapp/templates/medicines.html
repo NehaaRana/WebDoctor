@@ -21,6 +21,8 @@
 
   <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
 
+  <!-- jquery-confirm CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
 
 
   <style type="text/css">
@@ -638,7 +640,7 @@
 
 
     {% comment %} paypal script {% endcomment %}
-    <script>
+    {% comment %} <script>
       $(document).ready(function () {
         $(".purchase-now").on("click", function() {
             const medicineId = $(this).data("medicine-id");
@@ -738,10 +740,131 @@
         }
     });
     
-    </script>
+    </script> {% endcomment %}
+
+    {% comment %} <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script> {% endcomment %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+    <script>
+      $(document).ready(function () {
+          function showAlert(icon, message) {
+              $.alert({
+                  title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+                  content: `<span style="font-size: 15px;">${message}</span>`,
+                  type: "blue",
+                  theme: "modern",
+                  buttons: {
+                      ok: {
+                          text: "OK",
+                          btnClass: "btn-blue",
+                      },
+                  },
+              });
+          }
+      
+          $(".purchase-now").on("click", function () {
+              const medicineId = $(this).data("medicine-id");
+              const card = $(this).closest(".medicine-card");
+      
+              // Extract medicine details
+              const medicineName = card.find(".card-title").data("medicine");
+              const rawPrice = card.find(".medicinePrice").text().trim();
+              console.log("Extracted Raw Price:", rawPrice);
+      
+              // Convert price to float
+              const medicinePrice = parseFloat(rawPrice.replace('$', ''));
+              if (isNaN(medicinePrice) || medicinePrice <= 0) {
+                  console.error("Invalid price detected for medicine:", medicineName);
+                  showAlert("fa-circle-xmark", "Error: Invalid price detected. Please try again.");
+                  return;
+              }
+      
+              console.log("Medicine Selected:", medicineName, "Price:", medicinePrice);
+      
+              // Show PayPal container
+              const paypalContainer = $("#paypal-button-container-" + medicineId);
+              paypalContainer.show();
+      
+              // Prevent duplicate PayPal button initialization
+              if (!paypalContainer.data("paypal-initialized")) {
+                  console.log("Initializing PayPal for:", medicineName);
+      
+                  paypal.Buttons({
+                      createOrder: function (data, actions) {
+                          console.log("Creating PayPal Order...");
+                          return actions.order.create({
+                              purchase_units: [{
+                                  description: medicineName,
+                                  amount: {
+                                      value: medicinePrice.toFixed(2), // Ensure 2 decimal places
+                                      currency_code: "USD"
+                                  }
+                              }]
+                          }).catch(function (err) {
+                              console.error("Create Order Error:", err);
+                              showAlert("fa-circle-xmark", "Order Creation Failed. Please try again.");
+                          });
+                      },
+                      onApprove: function (data, actions) {
+                          console.log("Payment Approved! Capturing payment...");
+      
+                          return actions.order.capture().then(function (details) {
+                              console.log("Payment Captured:", details);
+      
+                              // Send payment details to backend
+                              processPayment(medicineId, details, medicinePrice);
+                          }).catch(function (err) {
+                              console.error("Payment Capture Error:", err);
+                              showAlert("fa-circle-xmark", "Payment Capture Failed. Your payment could not be completed.");
+                          });
+                      },
+                      onError: function (err) {
+                          console.error("PayPal Error:", err);
+                          showAlert("fa-circle-xmark", "Payment Failed. An error occurred. Please try again.");
+                      }
+                  }).render("#paypal-button-container-" + medicineId);
+      
+                  paypalContainer.data("paypal-initialized", true);
+              }
+          });
+      
+          function getCSRFToken() {
+              return document.cookie.split('; ')
+                  .find(row => row.startsWith('csrftoken'))
+                  ?.split('=')[1] || "";
+          }
+      
+          function processPayment(medicineId, details, medicinePrice) {
+              $.ajax({
+                  url: '/process-payment/',
+                  method: 'POST',
+                  contentType: 'application/json',
+                  headers: { "X-CSRFToken": getCSRFToken() },  // Include CSRF token
+                  data: JSON.stringify({
+                      medicine_id: medicineId,
+                      transaction_id: details.id,
+                      amount: medicinePrice,
+                      payer_email: details.payer.email_address
+                  }),
+                  success: function (response) {
+                      console.log("Payment Processed Successfully:", response);
+                      showAlert("fa-circle-check", "Payment Successful! Your order has been placed.");
+                  },
+                  error: function (xhr) {
+                      console.error("Payment Processing Error:", xhr.responseText);
+                      showAlert("fa-circle-xmark", "Error: Failed to process order.");
+                  }
+              });
+          }
+      });
+      </script>
+      
+      
+
   {% endblock %}
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://www.paypal.com/sdk/js?client-id=AaSbATIpi0Pcu7L95cb8DC-XBGfOqny62iGXLH5kYiPeRJYfYyAnw102tjF6x2A506rrzsUtX2OUeiXP&currency=USD"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
