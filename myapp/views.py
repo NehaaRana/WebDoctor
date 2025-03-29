@@ -2673,8 +2673,18 @@ def process_payment(request):
             except Medicine.DoesNotExist:
                 return JsonResponse({"error": "Medicine not found"}, status=404)
 
-            # Assuming the logged-in patient is making the purchase
-            patient = patientRegister.objects.first()  # Update logic to get the correct patient
+            # # Assuming the logged-in patient is making the purchase
+            # patient = patientRegister.objects.first()  # Update logic to get the correct patient
+            patient_id = request.session.get("patient_id")
+
+            if not patient_id:
+                return JsonResponse({"error": "Patient not logged in"}, status=401)
+
+            # Fetch the patient
+            try:
+                patient = patientRegister.objects.get(id=patient_id)
+            except patientRegister.DoesNotExist:
+                return JsonResponse({"error": "Patient not found"}, status=404)
 
             # Save order in the database
             Order.objects.create(
