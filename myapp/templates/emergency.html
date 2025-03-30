@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Emergency Video Consultation | webDocter</title>
+  <title> webDocter</title>
   <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
@@ -432,12 +432,12 @@
                   <i class="fas fa-video me-2"></i>Consult Now
                 </button>
                 {% comment %} call now  {% endcomment %}
-                <button class="emergency-btn call-btn" 
+                {% comment %} <button class="emergency-btn call-btn" 
         data-doctor-id="{{ doctor.id }}" 
         data-is-authenticated="{{ request.user.is_authenticated|yesno:'true,false' }}"
         onclick="callDoctor('{{ doctor.phno }}')">
     <i class="fas fa-phone me-2"></i>Call Now
-</button>
+</button> {% endcomment %}
 
               </div>
             </div>
