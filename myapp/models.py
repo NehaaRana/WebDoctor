@@ -48,6 +48,12 @@ class doctorRegister(models.Model):
         ('F', 'Female'),
         ('O', 'Other'),
     ]
+
+    AVAILABILITY_CHOICES = [
+        ('Available', 'Available'),
+        ('Not Available', 'Not Available'),
+   
+    ]
     
     name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
@@ -68,7 +74,8 @@ class doctorRegister(models.Model):
     about_me=models.TextField(null=True)
     is_approved = models.BooleanField(default=False)
     is_rejected = models.BooleanField(default=False)
-    is_available = models.BooleanField(default=False)  # Doctor is available for emergency
+    is_available = models.CharField(max_length=20, choices=AVAILABILITY_CHOICES)  # Updated field
+
 
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
@@ -205,27 +212,23 @@ class Prescription(models.Model):
 
 class EmergencyRequest(models.Model):
     patient = models.ForeignKey(
-        patientRegister, on_delete=models.CASCADE, related_name="emergencies",null=True, blank=True
+        patientRegister, on_delete=models.CASCADE, related_name="emergencies", null=True, blank=True
     )
     doctor = models.ForeignKey(
         doctorRegister, on_delete=models.SET_NULL, null=True, blank=True, related_name="emergency_cases"
     )  # Doctor assigned for emergency consultation
- 
+
     meeting_link = models.URLField(max_length=500, null=True, blank=True)  # Store video call link
-    guest_name = models.CharField(max_length=255, null=True, blank=True)  # Store guest name
-   
+
     created_at = models.DateTimeField(auto_now_add=True)  # When request was made
     updated_at = models.DateTimeField(auto_now=True)  # Track last update
 
-    # def __str__(self):
-    #     # return f"Emergency by {self.patient.name} - {self.status}"
-    #     f"Emergency request with {self.doctor.name} by {self.patient.name if self.patient else self.guest_name}"
-
     def __str__(self):
         doctor_name = self.doctor.name if self.doctor else "Unknown Doctor"
-        patient_name = self.patient.name if self.patient else (self.guest_name if self.guest_name else "Unknown Patient")
+        patient_name = self.patient.name if self.patient else "Unknown Patient"
         
         return f"Emergency request with {doctor_name} by {patient_name}"  # Always returns a string
+
 
 
 class Medicine(models.Model):

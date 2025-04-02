@@ -139,6 +139,8 @@ class PaymentForm(forms.ModelForm):
 
 
 
+
+
 class HealthRecordForm(forms.ModelForm):
     class Meta:
         model = HealthRecord
@@ -147,12 +149,12 @@ class HealthRecordForm(forms.ModelForm):
             'steps_walked', 'sleep_hours'
         ]
         widgets = {
-            'bp_systolic': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Systolic BP (e.g., 120 mmHg)',  'required': 'required'}),
-            'bp_diastolic': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Diastolic BP(e.g., 80 mmHg)',  'required': 'required'}),
-            'heart_rate': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Heart Rate(e.g., 75 BPM)',  'required': 'required'}),
-            'sugar_level': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Sugar Level(e.g., 90 mg/dL)',  'required': 'required'}),
-            'steps_walked': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Steps Walked(e.g., 8000 steps)',  'required': 'required'}),
-            'sleep_hours': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Sleep Hours(e.g., 8 hours)' ,  'required': 'required'}),
+            'bp_systolic': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Systolic BP (e.g., 120 mmHg)'}),
+            'bp_diastolic': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Diastolic BP(e.g., 80 mmHg)'}),
+            'heart_rate': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Heart Rate(e.g., 75 BPM)'}),
+            'sugar_level': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Sugar Level(e.g., 90 mg/dL)'}),
+            'steps_walked': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Steps Walked(e.g., 8000 steps)'}),
+            'sleep_hours': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Sleep Hours(e.g., 8 hours)'}),
         }
 
 # prescription form

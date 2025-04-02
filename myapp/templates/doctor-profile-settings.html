@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
   <!-- CSS Files -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}">
   <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}">
@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
 
   <!-- FontAwesome JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 
   <!-- jquery-confirm CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
@@ -421,43 +421,29 @@
                         <div class="form-group">
                           <label class="form-label fw-semibold mb-2">About Me</label>
                           <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-rupee-sign"></i></span>
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
                             <input type="text" id="about_me" name="about_me" class="form-control"
                               value="{{ doctor.about_me }}">
                           </div>
                         </div>
                       </div>
 
-                      {% comment %} <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                          <label class="form-label fw-semibold mb-2">Availability Status</label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-check-circle"></i></span>
-                            <select id="is_available" name="is_available" class="form-select form-control">
-                              {% comment %} <option value="">Select</option>  <!-- Default option --> {% endcomment %}
-                              {% comment %} <option value="True" {% if doctor.is_available == "True" %}selected{% endif %}>Available</option>
-                              <option value="False" {% if doctor.is_available == "False" %}selected{% endif %}>Not Available</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div> {% endcomment %}
+                      
                       <div class="col-md-6 mb-3">
                         <div class="form-group">
-                          <label class="form-label fw-semibold mb-2">Availability Status</label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-check-circle"></i></span>
-                            <select id="is_available" name="is_available" class="form-select form-control">
-                              <option value="">Select</option>  <!-- Default option -->
-                              <option value="True" {% if doctor.is_available == True %}selected{% endif %}>Available</option>
-                              <option value="False" {% if doctor.is_available == False %}selected{% endif %}>Not Available</option>
-                            </select>
-                          </div>
+                            <label class="form-label fw-semibold mb-2">Availability Status</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-check-circle"></i></span>
+                                <select id="is_available" name="is_available" class="form-select form-control">
+                                    <option value="">Select</option>  <!-- Default option -->
+                                    <option value="Available" {% if doctor.is_available == "Available" %}selected{% endif %}>Available</option>
+                                    <option value="Not Available" {% if doctor.is_available == "Not Available" %}selected{% endif %}>Not Available</option>
+                                    
+                                </select>
+                            </div>
                         </div>
-                      </div>
-                                            
                     </div>
-                  </div>
-                </div>
+                    
 
                 <!-- Clinic Information Card -->
                 <div class="card mb-4 shadow-sm">

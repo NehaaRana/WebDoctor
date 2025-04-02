@@ -1763,6 +1763,7 @@ def doctor_register(request):
         print("POST request received")  # Confirming the request method
 
         email = request.POST.get('email')
+        phno = request.POST.get('phno')  
         print(f"Email entered: {email}")
 
         try:
@@ -1776,6 +1777,12 @@ def doctor_register(request):
         if doctorRegister.objects.filter(email=email).exists():
             print("Email already exists in the database!")
             messages.error(request, "Email is already registered. Try logging in.")
+            return redirect('doctor_register')
+
+         # Check if phone number already exists
+        if doctorRegister.objects.filter(phno=phno).exists():
+            print("Phone number already registered!")
+            messages.error(request, "Phone number is already registered. Try logging in.")
             return redirect('doctor_register')
 
         if not validate_email_existence(email):
@@ -1867,6 +1874,7 @@ def verify_otp(request, email):
 def patient_register(request):
     if request.method == "POST":
         email = request.POST.get('email')
+        phno = request.POST.get('phno') 
 
         try:
             validate_email(email)  # Check if email format is correct
@@ -1877,6 +1885,12 @@ def patient_register(request):
         if patientRegister.objects.filter(email=email).exists():
             messages.error(request, "Email is already registered. Try logging in.")
             return redirect('patient_register')
+
+           # ✅ Check if Phone Number Already Exists
+        if patientRegister.objects.filter(phno=phno).exists():
+            messages.error(request, "Phone number is already registered. Try logging in.")
+            return redirect('patient_register')
+
 
                     # ✅ Validate if the email actually exists
         if not validate_email_existence(email):
@@ -1986,9 +2000,6 @@ def add_health_record(request):
     return render(request, 'add-health-record.html', {'form': HealthRecordForm(), 'patient': patient})
 
 
-
-
-
 def health_dashboard(request):
     patient_id = request.session.get('patient_id')  # Get logged-in patient ID
     if not patient_id:
@@ -2048,9 +2059,6 @@ def health_dashboard(request):
         'form': form,
         'alert_messages': alert_messages
     })
-
-
-
 
 # with RAPIDAPI 
 import requests
@@ -2242,7 +2250,25 @@ def send_prescription_email(request, prescription_id):
 
 
 def blog_details(request):
-    return render(request, 'blog-details.html')
+    user_type = None
+    profile = None
+
+    # Check if a patient is logged in
+    if request.session.get('patient_id'):
+        try:
+            profile = patientRegister.objects.get(id=request.session['patient_id'])
+            user_type = "patient"
+        except patientRegister.DoesNotExist:
+            request.session.flush()  # Clear session if user not found
+
+    # Check if a doctor is logged in
+    elif request.session.get('doctor_id'):
+        try:
+            profile = doctorRegister.objects.get(id=request.session['doctor_id'])
+            user_type = "doctor"
+        except doctorRegister.DoesNotExist:
+            request.session.flush()  # Clear session if user not found
+    return render(request, 'blog-details.html',{"profile": profile,"user_type": user_type })
 
 
 # search doctor at home page
@@ -2271,76 +2297,73 @@ from django.conf import settings
 import uuid
 from .models import EmergencyRequest, patientRegister, doctorRegister
 
-
 @csrf_exempt
 def start_emergency_consultation(request):
     if request.method == "POST":
-        doctor_id = request.POST.get("doctor_id")  # Get selected doctor
-        patient_id = request.POST.get("patient_id")
-        guest_name = request.POST.get("guest_name", "Guest")
+        # Get the doctor_id from the POST data
+        doctor_id = request.POST.get("doctor_id")
+        
+        # Get the patient_id from the session
+        patient_id = request.session.get("patient_id")  # Fetching patient_id from session
 
-        print(f"Received patient_id: {patient_id}, guest_name: {guest_name}, doctor_id: {doctor_id}")
+        # Check if patient_id exists in the session (i.e., user is logged in)
+        if not patient_id:
+            return JsonResponse({"status": "error", "message": "Please log in to start a consultation."})
 
-        # Find the selected doctor
+        # Try to fetch the doctor based on the doctor_id
         try:
-            doctor = doctorRegister.objects.get(id=doctor_id, is_approved=True, is_available=True)
-            print(f"Doctor assigned: {doctor.name}")
+            doctor = doctorRegister.objects.get(id=doctor_id, is_approved=True, is_available="Available")
         except doctorRegister.DoesNotExist:
             return JsonResponse({"status": "error", "message": "Doctor not found or unavailable."})
 
-        # Get patient object or set guest name
-        patient_obj = None
-        if patient_id and patient_id != "guest":
-            try:
-                patient_obj = patientRegister.objects.get(id=patient_id)
-                print(f"Patient found: {patient_obj}")
-            except patientRegister.DoesNotExist:
-                return JsonResponse({"status": "error", "message": "Patient not found."})
+        # Try to fetch the patient using the patient_id stored in session
+        try:
+            patient = patientRegister.objects.get(id=patient_id)
+        except patientRegister.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "Patient record not found."})
 
-        # Generate a unique meeting link
+        # Generate a unique meeting link for the Jitsi emergency consultation
         unique_room_name = f"Emergency-{uuid.uuid4().hex[:6]}"
         meeting_link = f"https://meet.jit.si/{unique_room_name}"
 
-        # Save emergency request
+        # Create a record of the emergency request
         EmergencyRequest.objects.create(
             doctor=doctor,
-            patient=patient_obj,  # None if guest
-            guest_name=guest_name if patient_obj is None else None,
-            meeting_link=meeting_link
+            patient=patient,
+            meeting_link=meeting_link  # No need for guest_name as it's only for logged-in users
         )
 
-        # Send email to doctor
-        try:
-            send_mail(
-                "Emergency Consultation Request",
-                f"Dear Dr. {doctor.name},\n\nYou have an emergency consultation request.\nMeeting Link: {meeting_link}",
-                settings.EMAIL_HOST_USER,
-                [doctor.email],
-                fail_silently=False,
-            )
-            print("Email sent successfully")
-        except Exception as e:
-            print(f"Email error: {e}")
+        # Send an email to the doctor with the meeting link
+        send_mail(
+            subject="Emergency Consultation Request",
+            message=f"{patient.name} has requested an emergency consultation. \nJoin the meeting here: {meeting_link}",
+            from_email="your_email@example.com",
+            recipient_list=[doctor.email],
+            fail_silently=False,
+        )
 
+        # Return the meeting link for the user to join
         return JsonResponse({"status": "success", "redirect_url": meeting_link})
 
+    # If the request method is not POST, return an error
     return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
 
-@csrf_exempt
+
 def emergency_consultation_page(request):
     """Render the emergency consultation page for any user (No login required)."""
     
-    available_doctors = doctorRegister.objects.filter(is_approved=True, is_available=True)
+    available_doctors = doctorRegister.objects.filter(is_approved=True, is_available="Available")
 
     profile = None
     user_type = None
 
-    
     # Check if a patient is logged in via session
+    is_authenticated = False
     if request.session.get("patient_id"):
         try:
             profile = patientRegister.objects.get(id=request.session["patient_id"])
             user_type = "patient"
+            is_authenticated = True
         except patientRegister.DoesNotExist:
             request.session.flush()  # Clear session if patient not found
 
@@ -2351,10 +2374,12 @@ def emergency_consultation_page(request):
             user_type = "doctor"
         except doctorRegister.DoesNotExist:
             request.session.flush()  # Clear session if doctor not found
+    
     return render(request, "emergency.html", {
         "doctors": available_doctors,
         "profile": profile,  # Pass profile for user data
-        "user_type": user_type  # Identify if user is a patient or doctor
+        "user_type": user_type,  # Identify if user is a patient or doctor
+        "is_authenticated": is_authenticated,  # Pass this value to frontend to check if logged in
     })
 
 
@@ -2552,7 +2577,26 @@ def reject_doctor(request, doctor_id):
     return redirect('admin_dashboard')
 
 def blogs(request):
-         return render(request, 'blogs.html')
+    user_type = None
+    profile = None
+
+    # Check if a patient is logged in
+    if request.session.get('patient_id'):
+        try:
+            profile = patientRegister.objects.get(id=request.session['patient_id'])
+            user_type = "patient"
+        except patientRegister.DoesNotExist:
+            request.session.flush()  # Clear session if user not found
+
+    # Check if a doctor is logged in
+    elif request.session.get('doctor_id'):
+        try:
+            profile = doctorRegister.objects.get(id=request.session['doctor_id'])
+            user_type = "doctor"
+        except doctorRegister.DoesNotExist:
+            request.session.flush()  # Clear session if user not found
+         # Ensure that render is always called
+    return render(request, 'blogs.html', {"profile": profile, "user_type": user_type})
 
 def diseases(request):
     user_type = None
@@ -2617,31 +2661,6 @@ def diets_comparison(request):
         except doctorRegister.DoesNotExist:
             request.session.flush()  # Clear session if user not found
     return render(request, 'diets-comparison.html',{"profile": profile,"user_type": user_type })
-
-
-#############################
-# from django.http import JsonResponse
-# from django.views.decorators.csrf import csrf_exempt
-
-# @csrf_exempt
-# def process_payment(request):
-#     if request.method == "POST":
-#         transaction_id = request.POST.get("transaction_id")
-#         medicine_id = request.POST.get("medicine_id")
-#         amount = request.POST.get("amount")
-#         payer_email = request.POST.get("payer_email")
-
-#         if not all([transaction_id, medicine_id, amount, payer_email]):
-#             return JsonResponse({"error": "Missing payment details"}, status=400)
-
-#         # 🛠️ Debugging: Print request data
-#         print("Received PayPal Payment:", request.POST)
-
-#         # TODO: Save payment to database
-
-#         return JsonResponse({"message": "Payment processed successfully"})
-    
-#     return JsonResponse({"error": "Invalid request"}, status=400)
 
 
 

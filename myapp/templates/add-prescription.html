@@ -32,13 +32,3 @@
 
 
 
-{% comment %} {% block content %}
-<h1>Add Prescription</h1>
-<form method="post" id="prescriptionForm">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Generate Prescription</button>
-</form>
-
-{% endblock %} {% endcomment %}
-

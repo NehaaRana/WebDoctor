@@ -18,7 +18,6 @@
     <!-- Custom Styles -->
     <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
 
-
     <!-- jquery-confirm CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
 
@@ -228,7 +227,7 @@
                             <div class="col-md-6 mb-3">
                                 <label>Phone Number</label>
                                 <input type="text" name="phno" class="form-control" id="phno"
-                                    placeholder="Enter Phone Number" />
+                                    placeholder="Enter Phone Number" maxlength="10"/>
                             </div>
                             {% comment %} <div class="col-md-12 mb-3">
                                 <label>Create Password</label>
@@ -248,7 +247,9 @@
                         </div>
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" id="terms" />
-                            <label class="form-check-label" for="terms">I agree to the Terms of Service</label>
+                            <label class="form-check-label" for="terms">I agree to the
+                                <a href="/terms_condition/?next=doctor_register" class="terms-link">Terms and Conditions</a>
+
                         </div>
                         <button type="submit" class="btn_register">
                             Sign Up &nbsp;&nbsp;<i class="fa-solid fa-user-plus"></i>
@@ -286,6 +287,155 @@
     <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+    {% comment %} <script>
+        $(document).ready(function () {
+            // Function to show an alert with an animated icon
+            function showAlert(icon, message) {
+                $.alert({
+                    title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+                    content: `<span style="font-size: 15px;">${message}</span>`,
+                    type: "blue",
+                    theme: "modern",
+                    buttons: {
+                        ok: {
+                            text: "OK",
+                            btnClass: "btn-blue",
+                        },
+                    },
+                });
+            }
+
+            //backend error
+            let delay = 500; // Start with a small delay
+            {% for message in messages %}
+            setTimeout(function () {
+                showAlert(
+                    "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
+                    "{{ message|escape }}",
+                    "{{ message.tags }}"
+                );
+            }, delay);
+            delay += 1000; // Increase delay for next message
+            {% endfor %}
+
+            // Validate email field
+            function validateEmail() {
+                let email = $("#email").val().trim();
+                let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    showAlert("fa-envelope", "Please enter a valid email address.");
+                    return false;
+                }
+                return true;
+            }
+
+            // Validate user type field
+
+            // Validate password field
+            function validatePassword() {
+                let password = $("#password").val().trim();
+                if (password.length < 6) {
+                    showAlert(
+                        "fa-lock",
+                        "Password must be at least 6 characters long."
+                    );
+                    return false;
+                }
+                return true;
+            }
+
+            // On form submission, validate each field one at a time
+            $("#signup-form").submit(function (e) {
+                e.preventDefault(); // Prevent the default form submission
+
+                let password = $("#password").val().trim();
+                let name = $("#name").val().trim();
+                let gender = $("#gender").val().trim();
+                let qualification = $("#qualification").val().trim();
+                let specialization = $("#specialization").val().trim();
+                let phno = $("#phno").val().trim();
+                let terms = $("#terms").is(":checked");
+                let email = $("#email").val().trim();
+
+                let namePattern = /^[A-Za-z\s]+$/; 
+                let qualificationPattern = /^[A-Za-z\s]+$/; 
+                let specializationPattern = /^[A-Za-z\s]+$/; 
+                let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+                let phonePattern = /^[0-9]{10}$/;
+
+                if (name === "") {
+                    showAlert("fa-user", "Please Enter your name!!");
+                    return;
+                }
+                if (!namePattern.test(name)) {
+                    showAlert("fa-exclamation-circle", "Full Name must contain only letters and spaces.");
+                    return;
+                }
+                /*if (!qualificationPattern.test(qualification)) {
+                    showAlert("fa-graduation-cap", "Qualification must contain only letters and spaces.");
+                    return;
+                }
+                if (!specializationPattern.test(specialization)) {
+                    showAlert("fa-graduation-cap", "Specialization must contain only letters and spaces.");
+                    return;
+                }*/
+                if (gender === "") {
+                    showAlert("fa-restroom", "Please Select your gender!!");
+                    return;
+                }
+                if (qualification === "") {
+                    showAlert("fa-graduation-cap", "Please Enter your qualification!!");
+                    return;
+                }
+                if (specialization === "") {
+                    showAlert("fa-award", "Please Enter your specialization!!");
+                    return;
+                }
+
+                if (email === "") {
+                    showAlert("fa-envelope", "Please Enter your email!!");
+                    return;
+                }
+                if (!emailPattern.test(email)) {
+                    showAlert("fa-envelope", "Please Enter valid email!!");
+                    return;
+                }
+                if (phno === "") {
+                    showAlert("fa-phone", "Please Enter your Phone No!!");
+                    return;
+                }
+                if (!phonePattern.test(phno)) {
+                    showAlert("fa-phone", "Enter a valid 10-digit phone number");
+                    return;
+                }
+                if (password === "") {
+                    showAlert("fa-lock", "Please Enter your password!!");
+                    return;
+                }
+
+                if (password.length < 6) {
+                    showAlert("fa-lock", "Password must be at least 6 characters long");
+                    return;
+                }
+                if (!terms) {
+                    showAlert("fa-file-contract", "You must agree to the Terms of Service");
+                    return;
+                }
+
+
+                if (!validateEmail()) {
+                    return; // Stop if email is invalid
+                }
+                if (!validatePassword()) {
+                    return; // Stop if password is invalid
+                }
+
+                // If all validations pass, submit the form
+                e.target.submit();
+            });
+        });
+    </script> {% endcomment %}
+
     <script>
         $(document).ready(function () {
             // Function to show an alert with an animated icon
@@ -344,7 +494,7 @@
             }
 
             // On form submission, validate each field one at a time
-            $("form").submit(function (e) {
+            $("#signup-form").submit(function (e) {
                 e.preventDefault(); // Prevent the default form submission
 
                 let password = $("#password").val().trim();
@@ -355,24 +505,40 @@
                 let phno = $("#phno").val().trim();
                 let terms = $("#terms").is(":checked");
                 let email = $("#email").val().trim();
-                let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+                let namePattern = /^[A-Za-z\s]+$/; 
+                let qualificationPattern = /^[A-Za-z\s!@#$%^&*(),.?":{}|<>-]+$/; 
+                let specializationPattern = /^[A-Za-z\s!@#$%^&*(),.?":{}|<>-]+$/;
+                let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
                 let phonePattern = /^[0-9]{10}$/;
 
                 if (name === "") {
                     showAlert("fa-user", "Please Enter your name!!");
                     return;
                 }
+                if (!namePattern.test(name)) {
+                    showAlert("fa-exclamation-circle", "Full Name must contain only letters and spaces.");
+                    return;
+                }
                 if (gender === "") {
                     showAlert("fa-restroom", "Please Select your gender!!");
                     return;
                 }
+                
                 if (qualification === "") {
                     showAlert("fa-graduation-cap", "Please Enter your qualification!!");
                     return;
                 }
+                if (!qualificationPattern.test(qualification)) {
+                    showAlert("fa-graduation-cap", "Qualification must contain only letters and spaces.");
+                    return;
+                }
                 if (specialization === "") {
                     showAlert("fa-award", "Please Enter your specialization!!");
+                    return;
+                }
+                if (!specializationPattern.test(specialization)) {
+                    showAlert("fa-graduation-cap", "Specialization must contain only letters and spaces.");
                     return;
                 }
 
@@ -392,8 +558,6 @@
                     showAlert("fa-phone", "Enter a valid 10-digit phone number");
                     return;
                 }
-
-
                 if (password === "") {
                     showAlert("fa-lock", "Please Enter your password!!");
                     return;

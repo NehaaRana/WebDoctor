@@ -1,165 +1,288 @@
-{% load static %}
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title> {% block title %}
-        WebDoctor
-        {% endblock %}</title>
-    <!-- jQuery (Required for Toastr & Bootstrap Modal) -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}WebDoctor{% endblock %}</title>
+    
+    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- Toastr.js (For Notifications) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
-
-    <!-- Bootstrap (For Modal) -->
+    
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
-
     
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- jQuery Confirm -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --primary-color: #4285F4;
+            --secondary-color: #f8f9fa;
+            --accent-color: #34a853;
+            --text-color: #202124;
+        }
+        
+        .modal-content {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            border-bottom: none;
+            padding: 20px 25px;
+        }
+        
+        .modal-body {
+            padding: 30px 25px;
+        }
+        
+        .modal-title {
+            font-weight: 600;
+        }
+        
+        .btn-close {
+            color: white;
+            opacity: 1;
+            filter: brightness(0) invert(1);
+        }
+        
+        .email-highlight {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .otp-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 25px 0;
+        }
+        
+        .otp-input {
+            width: 50px;
+            height: 60px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .otp-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.25);
+            outline: none;
+        }
+        
+        .verify-btn {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 30px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .verify-btn:hover {
+            background-color: #3367d6;
+            transform: translateY(-2px);
+        }
+        
+        .resend-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        .otp-icon {
+            font-size: 48px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .timer {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            margin-top: 8px;
+        }
+    </style>
 </head>
 <body>
-
-{% block content %}
-<div class="container">
-    
-    
-    <!-- Bootstrap Modal for OTP Verification -->
-    <div class="modal fade" id="otpModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="otpModalLabel">Verify Your Email</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p class="text-center">An OTP has been sent to <b>{{ email }}</b>. Please enter it below to verify.</p>
-                    <form method="POST">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label>Enter OTP</label>
-                            <input type="text" name="otp" class="form-control" required />
+    {% block content %}
+    <div class="container">
+        <!-- Enhanced Bootstrap Modal for OTP Verification -->
+        <div class="modal fade" id="otpModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="otpModalLabel">
+                            <i class="fas fa-shield-alt me-2"></i>Email Verification
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <div class="otp-icon">
+                            <i class="fas fa-envelope-circle-check"></i>
                         </div>
-                        <button type="submit" class="btn btn-primary">Verify OTP</button>
-                    </form>
+                        
+                        <h4 class="mb-3">Verify Your Email</h4>
+                        <p>We've sent a verification code to <span class="email-highlight">{{ email }}</span></p>
+                        
+                        <form method="POST" id="otpForm">
+                            {% csrf_token %}
+                            <div class="otp-container">
+                                <input type="text" class="form-control otp-input" maxlength="1" autofocus data-index="1">
+                                <input type="text" class="form-control otp-input" maxlength="1" data-index="2">
+                                <input type="text" class="form-control otp-input" maxlength="1" data-index="3">
+                                <input type="text" class="form-control otp-input" maxlength="1" data-index="4">
+                                <input type="text" class="form-control otp-input" maxlength="1" data-index="5">
+                                <input type="text" class="form-control otp-input" maxlength="1" data-index="6">
+                            </div>
+                            
+                            <!-- Hidden input to store combined OTP value -->
+                            <input type="hidden" name="otp" id="otpValue">
+                            
+                            <div class="timer">
+                                Code expires in <span id="countdown">02:00</span>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary verify-btn">
+                                <i class="fas fa-check-circle me-2"></i>Verify Now
+                            </button>
+                        </form>
+                        
+                        <a href="#" class="resend-link mt-3" id="resendBtn">Didn't receive the code? Resend</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    {% endblock %}
 
-</div>
-{% endblock %}
-<!-- alert for otp sending -->
-<script>
-    $(document).ready(function () {
-  function showAlert(icon, message) {
-       $.alert({
-         title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
-         content: `<span style="font-size: 15px;">${message}</span>`,
-         type: "blue",
-         theme: "modern",
-         buttons: {
-           ok: {
-             text: "OK",
-             btnClass: "btn-blue",
-           },
-         },
-       });
-     }
-     let delay = 500; // Start with a small delay
-     {% for message in messages %}
-     setTimeout(function () {
-       showAlert(
-         "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
-         "{{ message|escape }}",
-         "{{ message.tags }}"
-       );
-     }, delay);
-     delay += 1000; // Increase delay for next message
-     {% endfor %}
-     $("#otpModal").modal("show");
-    })
-    
-</script>
-
+    <!-- Custom Scripts -->
+    <script>
+        $(document).ready(function() {
+            // Auto focus on next input for OTP
+            $('.otp-input').on('input', function() {
+                const currentIndex = parseInt($(this).data('index'));
+                if ($(this).val() && currentIndex < 6) {
+                    $(`.otp-input[data-index="${currentIndex + 1}"]`).focus();
+                }
+            });
+            
+            // Handle backspace to go to previous input
+            $('.otp-input').on('keydown', function(e) {
+                const currentIndex = parseInt($(this).data('index'));
+                if (e.key === 'Backspace' && !$(this).val() && currentIndex > 1) {
+                    $(`.otp-input[data-index="${currentIndex - 1}"]`).focus();
+                }
+            });
+            
+            // Form submission - combine OTP digits
+            $('#otpForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                // Combine all the OTP input values
+                let otpValue = '';
+                $('.otp-input').each(function() {
+                    otpValue += $(this).val();
+                });
+                
+                // Set the combined value to the hidden input
+                $('#otpValue').val(otpValue);
+                
+                // If OTP is complete, submit the form
+                if (otpValue.length === 6) {
+                    this.submit();
+                } else {
+                    // Show error if incomplete
+                    showAlert('fa-circle-xmark', 'Please enter the complete 6-digit verification code.');
+                }
+            });
+            
+            // Countdown timer
+            let timeLeft = 120; // 2 minutes in seconds
+            const countdownEl = $('#countdown');
+            
+            const countdownTimer = setInterval(function() {
+                const minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                seconds = seconds < 10 ? '0' + seconds : seconds;
+                
+                countdownEl.text(`${minutes}:${seconds}`);
+                
+                if (--timeLeft < 0) {
+                    clearInterval(countdownTimer);
+                    countdownEl.text('00:00');
+                    $('#resendBtn').addClass('text-danger').text('Code expired. Resend code');
+                }
+            }, 1000);
+            
+            // Resend OTP handler
+            $('#resendBtn').on('click', function(e) {
+                e.preventDefault();
+                
+                // Reset inputs
+                $('.otp-input').val('');
+                $('.otp-input[data-index="1"]').focus();
+                
+                // Reset timer
+                timeLeft = 120;
+                $('#resendBtn').removeClass('text-danger').text("Didn't receive the code? Resend");
+                
+                // Show success message
+                showAlert('fa-check-circle', 'A new verification code has been sent to your email.');
+            });
+            
+            // Show alert function
+            function showAlert(icon, message) {
+                $.alert({
+                    title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+                    content: `<span style="font-size: 15px;">${message}</span>`,
+                    type: "blue",
+                    theme: "modern",
+                    buttons: {
+                        ok: {
+                            text: "OK",
+                            btnClass: "btn-blue",
+                        },
+                    },
+                });
+            }
+            
+            // Show any Django messages
+            let delay = 500;
+            {% for message in messages %}
+            setTimeout(function() {
+                showAlert(
+                    "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
+                    "{{ message|escape }}"
+                );
+            }, delay);
+            delay += 1000;
+            {% endfor %}
+            
+            // Show the modal
+            $("#otpModal").modal("show");
+        });
+    </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{% comment %} <html>
-<head>
-    {% comment %} alerts {% endcomment %}
-
-    <!-- jQuery (Required for Toastr) -->
-{% comment %} <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<!-- Toastr CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
-
-<style>
-    .toast-success { background-color:rgba(84, 162, 102, 0.89) !important; color:black !important; border:2px solid green !important}
-      .toast-error { background-color:rgba(210, 93, 105, 0.88) !important; color:black !important; border:2px solid red !important }
-      .toast-warning { background-color:rgb(241, 216, 141)  !important; color:black !important; border:2px solid yellow !important}
-      .toast-info { background-color:black !important; color:  #17a2b8 !important; }
-</style> {% endcomment %}
-{% comment %} </head>
-<body>
-{% block content %}
-<div class="container">
-
-    <script>
-        $(document).ready(function () {
-            {% if messages %}
-                {% for message in messages %}
-                    toastr.options = {
-                        closeButton: true,
-                        progressBar: true,
-                        timeOut: 5000,  // 5 seconds
-                    };
-                    toastr["{{ message.tags }}"]("{{ message }}");
-                {% endfor %}
-            {% endif %}
-        });
-      </script>
-      
-    <h2 class="text-center">Verify Your Email</h2>
-    <p class="text-center">An OTP has been sent to {{ email }}. Please enter it below to verify.</p>
-
-    <form method="POST">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label>Enter OTP</label>
-            <input type="text" name="otp" class="form-control" required />
-        </div>
-        <button type="submit" class="btn btn-primary">Verify OTP</button>
-    </form>
-
-  
-</div>
-{% endblock %}
-</body>
-</html> {% endcomment %} 

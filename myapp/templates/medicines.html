@@ -7,19 +7,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
   <!-- Social icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 
   <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-
   <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}" />
-
   <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}" />
-
   <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}" />
-
   <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
 
   <script src="https://www.paypal.com/sdk/js?client-id=AaSbATIpi0Pcu7L95cb8DC-XBGfOqny62iGXLH5kYiPeRJYfYyAnw102tjF6x2A506rrzsUtX2OUeiXP&currency=USD"></script>
@@ -27,11 +21,9 @@
   <!-- jquery-confirm CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
 
-
   <style type="text/css">
-    @font-face {
-      font-family: Roboto;
-      src: url("{% static 'assets/fonts/Roboto-Regular.ttf' %}") format("truetype");
+     body{
+      font-family: Poppins !important;
     }
 
     body {
@@ -41,7 +33,7 @@
 
     /* Enhanced Card Styling */
     .card {
-      border-radius: 15px;
+      border-radius: 16px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
       transition: all 0.4s ease-in-out;
       overflow: hidden;
@@ -52,17 +44,19 @@
       position: relative;
     }
 
-
+    .card:hover {
+      box-shadow: 0 15px 30px rgba(14, 130, 253, 0.1);
+    }
 
     /* Improved image container for better aspect ratio handling */
     .card-img-container {
       position: relative;
       width: 100%;
       height: 0;
-      padding-bottom: 80%;
-      /* 4:3 aspect ratio container */
+      padding-bottom: 75%;
       overflow: hidden;
       background-color: #f5f5f5;
+      border-radius: 16px 16px 0 0;
     }
 
     .card-img-top {
@@ -73,7 +67,6 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      /* Cover will ensure the image fills the container */
       transition: transform 0.6s ease, filter 0.4s ease;
     }
 
@@ -106,7 +99,6 @@
       flex-direction: column;
       padding: 1.5rem;
       height: calc(100% - 0px);
-      /* Dynamic height based on content */
       position: relative;
       z-index: 2;
     }
@@ -128,57 +120,47 @@
       margin-bottom: 0.5rem;
     }
 
+    /* Section Title Enhancement */
     .section-title {
       font-weight: 700;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
       color: #333;
       position: relative;
       display: inline-block;
       padding-bottom: 10px;
     }
 
-    .section-title:after {
-      content: '';
-      position: absolute;
-      width: 50%;
-      height: 3px;
-      background-color: #0E82FD;
-      bottom: 0;
-      left: 25%;
+    .section-header-one {
+      position: relative;
+      margin-bottom: 3rem;
     }
 
     /* Enhanced Button Styling */
-    .btn_dr {
+    .btn {
       position: relative;
       transition: all 0.3s ease-in-out;
-      box-shadow: 0px 5px 15px rgba(14, 130, 253, 0.25);
-      padding: 0.7rem 1.5rem;
-      background-color: #0E82FD;
       border-radius: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: #fff;
+      padding: 0.7rem 1.5rem;
       font-weight: 600;
       border: none;
       outline: none;
       overflow: hidden;
-      font-size: 15px;
-      width: 85%;
-      margin: 1rem auto 0;
-      text-decoration: none;
+      font-size: 0.9rem;
     }
 
-    .btn_dr:hover {
-      transform: scale(1.05);
-      background-color: #0967cc !important;
-      box-shadow: 0px 8px 20px rgba(14, 130, 253, 0.35);
+    .btn-primary {
+      background-color: #0E82FD;
       color: #fff;
-      text-decoration: none;
+      box-shadow: 0 5px 15px rgba(14, 130, 253, 0.25);
     }
 
-    .btn_dr::before {
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      background-color: #0967cc !important;
+      box-shadow: 0 8px 20px rgba(14, 130, 253, 0.35);
+    }
+
+    .btn-primary::before {
       content: "";
       position: absolute;
       width: 100px;
@@ -192,31 +174,35 @@
       opacity: 0.6;
     }
 
-    .btn_dr:hover::before {
+    .btn-primary:hover::before {
       animation: shine 1.5s ease-out infinite;
     }
 
     @keyframes shine {
-      0% {
-        left: -100px;
-      }
-
-      60% {
-        left: 100%;
-      }
-
-      to {
-        left: 100%;
-      }
+      0% { left: -100px; }
+      60% { left: 100%; }
+      100% { left: 100%; }
     }
 
-    /* Additional icon effect */
-    .btn_dr .fas {
-      transition: transform 0.3s ease;
+    /* Medicine status badges */
+    .badge {
+      padding: 0.4rem 0.8rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+      display: inline-block;
     }
 
-    .btn_dr:hover .fas {
-      transform: translateX(4px);
+    .badge-active {
+      background-color: #e8f7ee;
+      color: #28a745;
+    }
+
+    .badge-inactive {
+      background-color: #feeeee;
+      color: #dc3545;
     }
 
     /* Enhanced Search Bar */
@@ -224,94 +210,37 @@
       position: relative;
       margin-bottom: 2rem;
       width: 60%;
-      margin: 0 auto 2rem;
+      margin: 0 auto 2.5rem;
     }
 
-    .search-container input {
+    .search-input {
       border-radius: 50px;
-      padding: 12px 20px;
+      padding: 12px 20px 12px 50px;
       border: 2px solid #e0e0e0;
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
       transition: all 0.3s ease;
       font-size: 1rem;
+      width: 100%;
     }
 
-
-
-    #voice-search-btn {
-      border-radius: 50%;
-      width: 45px;
-      height: 45px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #0E82FD;
-      border: none;
-      transition: all 0.3s ease;
+    .search-input:focus {
+      border-color: #0E82FD;
+      box-shadow: 0 5px 20px rgba(14, 130, 253, 0.15);
+      outline: none;
     }
 
-    #voice-search-btn:hover {
-      background-color: #0967cc;
-      transform: scale(1.05);
+    .search-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #0E82FD;
     }
 
-    /* Enhanced Doctor Info Badge */
-    .doctor-info-wrapper {
-      display: flex;
-      align-items: center;
-      margin-bottom: 5px;
+    /* Section Styling */
+    section {
+      padding: 5rem 0;
     }
-
-    /* Doctor qualification styling */
-    .qualification {
-      font-size: 0.85rem;
-      color: #777;
-      margin-bottom: 15px;
-      line-height: 1.4;
-    }
-
-    /* No results message */
-    #no-results {
-      background-color: rgba(255, 0, 0, 0.1);
-      color: #dc3545;
-      padding: 15px;
-      border-radius: 10px;
-      font-weight: 600;
-      width: 80%;
-      margin: 2rem auto;
-      text-align: center;
-      transform: translateY(20px);
-      transition: all 0.3s ease;
-    }
-    /* Modal styling */
-  .modal {
-    z-index: 1060; /* Above everything */
-  }
-  
-  .modal-backdrop {
-    z-index: 1050; /* Below modal but above page content */
-  }
-  
-  /* model*/
-
-  .modal {
-    opacity: 1 !important;
-    display: block !important;
-    background: rgba(0, 0, 0, 0.5); /* Optional: Ensure proper background overlay */
-}
-
-  /* Payment method forms */
-  [id$="Form"] {
-    transition: all 0.3s ease;
-  }
-  
-  /* Order summary styling */
-  #payment-summary {
-    padding: 15px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    margin-bottom: 20px;
-  }
 
     /* Mobile Responsiveness */
     @media (max-width: 992px) {
@@ -326,8 +255,11 @@
       }
 
       .card-img-container {
-        padding-bottom: 85%;
-        /* Taller container on mobile */
+        padding-bottom: 70%;
+      }
+      
+      section {
+        padding: 3rem 0;
       }
     }
 
@@ -341,12 +273,45 @@
       }
 
       .card-img-container {
-        padding-bottom: 75%;
+        padding-bottom: 65%;
+      }
+      
+      section {
+        padding: 2rem 0;
       }
     }
+
+    /* Animations */
+    .fade-in {
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* PayPal button container */
+    .paypal-container {
+      margin-top: 10px;
+      transition: all 0.3s ease;
+    }
+
+    /* Loading indicator */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
   </style>
-  
-<!-- Replace YOUR_SANDBOX_CLIENT_ID with your actual sandbox ID -->
 </head>
 <body>
   {% block content %}
@@ -379,8 +344,7 @@
               <li><a
                   href="{% if user_type == 'patient' or user_type == 'doctor' %}{% url 'index' %}{% else %}{% url 'home' %}{% endif %}">Home</a>
               </li>
-              <li><a href="{% url 'doctor_list' %}">Doctors</a></li>
-              {% comment %} <li><a href="{% url 'about' %}">About Us</a></li> {% endcomment %}
+              <li class="active"><a href="{% url 'doctor_list' %}">Doctors</a></li>
               <li>
                 {% if request.session.patient_id or request.session.doctor_id %}
                 <a href="{% url 'about_us' %}">About Us</a>
@@ -395,9 +359,7 @@
                 <a href="{% url 'contact' %}">Contact Us</a>
                 {% endif %}
               </li>
-              {% comment %} <li><a href="{% url 'contact' %}">Contact Us</a></li> {% endcomment %}
               <ul class="nav header-navbar-rht pt-3">
-
                 {% if request.session.patient_id or request.session.doctor_id %}
                 <li class="nav-item dropdown has-arrow logged-item">
                   <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -434,11 +396,7 @@
                     <a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a>
                   </div>
                 </li>
-
-
                 {% else %}
-
-
                 <li class="register-btn mb-3 mx-2">
                   <a href="{% url 'register' %}" class="btn reg-btn btn-primary">
                     <i class="feather-user"></i>Register
@@ -449,7 +407,6 @@
                     <i class="feather-lock"></i>Login
                   </a>
                 </li>
-
                 {% endif %}
               </ul>
             </ul>
@@ -458,22 +415,31 @@
       </div>
     </header>
 
-
     <!-- Medicines listing Section -->
     <section id="medicines" class="team section py-5" style="padding-top:120px !important">
       <div class="container">
         <div class="row">
-          <div class="col-md-12 aos" data-aos="fade-up">
+          <div class="col-md-12 fade-in">
             <div class="section-header-one text-center">
               <h2 class="section-title">Our Quality Medicines</h2>
               <p class="text-muted mb-4">Find the right medicine for your health needs</p>
             </div>
           </div>
         </div>
+
+        <!-- Search Bar -->
+        <div class="row mb-4">
+          <div class="col-md-12">
+            <div class="search-container fade-in">
+              
+              <input type="text" id="medicine-search" class="search-input" placeholder="Search medicines by name or manufacturer...">
+            </div>
+          </div>
+        </div>
     
-        <div class="row g-4">
+        <div class="row g-4" id="medicine-container">
           {% for medicine in medicines %}
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3 aos g-4 medicine-card" 
+          <div class="col-md-12 col-sm-6 col-md-4 col-lg-3 fade-in medicine-card" 
                data-name="{{ medicine.name|lower }}" 
                data-manufacturer="{{ medicine.manufacturer|lower }}">
             <div class="card h-100">
@@ -491,41 +457,40 @@
                   {{ medicine.status }}
                 </span>
     
-                <div class="doctor-info-wrapper mt-2">
-                  <i class="fas fa-industry me-2"></i>
+                <div class="doctor-info-wrapper mt-3">
+                  <i class="fas fa-industry me-2 text-primary"></i>
                   <span class="card-text">{{ medicine.manufacturer }}</span>
                 </div>
                 
-                <div class="doctor-info-wrapper">
-                  <i class="fas fa-tag me-2"></i>
+                <div class="doctor-info-wrapper mt-2">
+                  <i class="fas fa-tag me-2 text-primary"></i>
                   <span class="card-text medicinePrice" data-price="{{ medicine.price|floatformat:2 }}">
                     ${{ medicine.price }}
                   </span>
                 </div>
     
-                <div class="doctor-info-wrapper">
-                  <i class="fas fa-cubes me-2"></i>
+                <div class="doctor-info-wrapper mt-2">
+                  <i class="fas fa-cubes me-2 text-primary"></i>
                   <span class="card-text">{{ medicine.quantity }} in stock</span>
                 </div>
     
-                <div class="doctor-info-wrapper">
-                  <i class="fas fa-calendar-alt me-2"></i>
+                <div class="doctor-info-wrapper mt-2">
+                  <i class="fas fa-calendar-alt me-2 text-primary"></i>
                   <span class="card-text">Expires: {{ medicine.expiry_date|date:"M Y" }}</span>
                 </div>
     
                 {% if medicine.description %}
-                <p class="qualification mt-2">{{ medicine.description|truncatechars:100 }}</p>
+                <p class="mt-3" style="color: #6c757d; font-size: 0.9rem;">{{ medicine.description|truncatechars:100 }}</p>
                 {% endif %}
     
-                <div class="d-flex flex-column gap-2 mt-3">
+                <div class="mt-auto pt-3">
                   {% if medicine.status == 'Active' %}
-                  <button class="btn btn-primary purchase-now" data-medicine-id="{{ medicine.id }}">
+                  <button class="btn btn-primary w-100 purchase-now" data-medicine-id="{{ medicine.id }}">
                     <i class="fas fa-bolt me-2"></i> Purchase Now
                   </button>
-                  {% comment %} <div id="paypal-button-container-{{ medicine.id }}" style="display: none;"></div> {% endcomment %}
                   <div id="paypal-button-container-{{ medicine.id }}" class="paypal-container" style="display: none;"></div>
                   {% else %}
-                  <button class="btn" disabled style="background-color: #ccc;">
+                  <button class="btn w-100" disabled style="background-color: #e9ecef; color: #6c757d;">
                     <i class="fas fa-ban me-2"></i> Not Available
                   </button>
                   {% endif %}
@@ -535,456 +500,167 @@
           </div>
           {% endfor %}
         </div>
+
+        <!-- No results message -->
+        <div id="no-results" class="text-center py-4 fade-in" style="display: none;">
+          <i class="fas fa-search-minus fa-3x mb-3 text-muted"></i>
+          <h5>No medicines found matching your search</h5>
+          <p class="text-muted">Try different keywords or browse all medicines</p>
+          <button id="reset-search" class="btn btn-outline-primary mt-2">
+            <i class="fas fa-redo me-2"></i>Show All Medicines
+          </button>
+        </div>
       </div>
     </section>
   </div>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    {% comment %} <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> {% endcomment %}
-    {% comment %} <script>
-      $(document).ready(function () {
-          $(".purchase-now").on("click", function() {
-              const medicineId = $(this).data("medicine-id");
-              const card = $(this).closest(".medicine-card");
-              const medicineName = card.find(".card-title").data("medicine");
-              const medicinePrice = parseFloat(card.find(".medicinePrice").text().replace('$', ''));
-              const paypalContainer = $("#paypal-button-container-" + medicineId);
-    
-              // Show PayPal button container
-              paypalContainer.show();
-    
-              // Prevent duplicate button creation
-              if (paypalContainer.children().length === 0) {
-                  paypal.Buttons({
-                      createOrder: function(data, actions) {
-                          return actions.order.create({
-                              purchase_units: [{
-                                  description: medicineName,
-                                  amount: {
-                                      value: medicinePrice.toFixed(2), // Ensure correct decimal format
-                                      currency_code: "USD"
-                                  }
-                              }]
-                          });
-                      },
-                      onApprove: function(data, actions) {
-                          return actions.order.capture().then(function(details) {
-                            console.log("Payment details:", details); // ✅ Debugging step
-                            console.log("Extracted price:", medicinePrice);
 
-                              // Send payment data to Django backend
-                              /*$.ajax({
-                                  url: '/process-payment/',
-                                  method: 'POST',
-                                  data: {
-                                      medicine_id: medicineId,
-                                      transaction_id: details.id,
-                                      amount: medicinePrice,
-                                      payer_email: details.payer.email_address,
-                                      csrfmiddlewaretoken: '{{ csrf_token }}'
-                                  },
-                                  success: function(response) {
-                                      Swal.fire({
-                                          title: 'Payment Successful!',
-                                          text: 'Your order has been placed.',
-                                          icon: 'success'
-                                      });
-                                  },
-                                  error: function(xhr) {
-                                    console.error("Capture Error:", err); // ✅ Debugging step
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>   
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
 
-                                      Swal.fire({
-                                          title: 'Error',
-                                          text: 'Failed to process order.',
-                                          icon: 'error'
-                                      });
-                                  }
-                              });*/
-                              $.ajax({
-                                url: '/process-payment/',
-                                method: 'POST',
-                                contentType: 'application/json',  // Specify JSON data
-                                data: JSON.stringify({
-                                    medicine_id: medicineId,
-                                    transaction_id: details.id,
-                                    amount: medicinePrice,
-                                    payer_email: details.payer.email_address
-                                }),
-                                success: function(response) {
-                                    Swal.fire({
-                                        title: 'Payment Successful!',
-                                        text: 'Your order has been placed.',
-                                        icon: 'success'
-                                    });
-                                },
-                                error: function(xhr, status, error) {
-                                    console.error("Capture Error:", xhr.responseText);
-                                    Swal.fire({
-                                        title: 'Error',
-                                        text: 'Failed to process order.',
-                                        icon: 'error'
-                                    });
-                                }
-                            });
-                            
-                          });
-                      },
-                      onError: function(err) {
-                          console.error("PayPal Error:", err);
-                          Swal.fire({
-                              title: 'Payment Failed',
-                              text: 'An error occurred. Please try again.',
-                              icon: 'error'
-                          });
-                      }
-                  }).render("#paypal-button-container-" + medicineId);
-              }
-          });
+  <script>
+    $(document).ready(function () {
+      // Add staggered animations to medicine cards
+      $('.medicine-card').each(function(index) {
+        $(this).css('animation-delay', (index * 0.1) + 's');
       });
-    </script> {% endcomment %}
 
-
-    {% comment %} paypal script {% endcomment %}
-    {% comment %} <script>
-      $(document).ready(function () {
-        $(".purchase-now").on("click", function() {
-            const medicineId = $(this).data("medicine-id");
-            const card = $(this).closest(".medicine-card");
-            const medicineName = card.find(".card-title").data("medicine");
-            const medicinePrice = parseFloat(card.find(".medicinePrice").text().replace('$', ''));
-    
-            const paypalContainer = $("#paypal-button-container-" + medicineId);
-            paypalContainer.show();
-    
-            if (!paypalContainer.data("paypal-initialized")) {
-                console.log("Initializing PayPal for medicine:", medicineName, "Price:", medicinePrice);
-    
-                paypal.Buttons({
-                    createOrder: function(data, actions) {
-                        console.log("Creating Order...");
-                        return actions.order.create({
-                            purchase_units: [{
-                                description: medicineName,
-                                amount: {
-                                    value: medicinePrice.toFixed(2),
-                                    currency_code: "USD"
-                                }
-                            }]
-                        }).catch(function(err) {
-                            console.error("Create Order Error:", err);
-                            Swal.fire({
-                                title: 'Order Creation Failed',
-                                text: 'Please try again.',
-                                icon: 'error'
-                            });
-                        });
-                    },
-                    onApprove: function(data, actions) {
-                        console.log("Payment Approved. Capturing payment...");
-    
-                        return actions.order.capture().then(function(details) {
-                            console.log("Payment Captured Successfully:", details);
-    
-                            $.ajax({
-                                url: '/process-payment/',
-                                method: 'POST',
-                                contentType: 'application/json',
-                                headers: {
-                                    "X-CSRFToken": getCSRFToken()  // Ensure CSRF Token is included
-                                },
-                                data: JSON.stringify({
-                                    medicine_id: medicineId,
-                                    transaction_id: details.id,
-                                    amount: medicinePrice,
-                                    payer_email: details.payer.email_address
-                                }),
-                                success: function(response) {
-                                    console.log("Payment Processed:", response);
-                                    Swal.fire({
-                                        title: 'Payment Successful!',
-                                        text: 'Your order has been placed.',
-                                        icon: 'success'
-                                    });
-                                },
-                                error: function(xhr) {
-                                    console.error("Payment Processing Error:", xhr.responseText);
-                                    Swal.fire({
-                                        title: 'Error',
-                                        text: 'Failed to process order.',
-                                        icon: 'error'
-                                    });
-                                }
-                            });
-                        }).catch(function(err) {
-                            console.error("Payment Capture Error:", err);
-                            Swal.fire({
-                                title: 'Payment Capture Failed',
-                                text: 'Your payment could not be completed.',
-                                icon: 'error'
-                            });
-                        });
-                    },
-                    onError: function(err) {
-                        console.error("PayPal Error:", err);
-                        Swal.fire({
-                            title: 'Payment Failed',
-                            text: 'An error occurred. Please try again.',
-                            icon: 'error'
-                        });
-                    }
-                }).render("#paypal-button-container-" + medicineId);
-    
-                paypalContainer.data("paypal-initialized", true);
-            }
-        });
-    
-        function getCSRFToken() {
-            return document.cookie.split('; ')
-                .find(row => row.startsWith('csrftoken'))
-                ?.split('=')[1] || "";
-        }
-    });
-    
-    </script> {% endcomment %}
-
-    {% comment %} <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script> {% endcomment %}
-    {% comment %} <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> {% endcomment %}
-
-   
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
-
-    <script>
-      $(document).ready(function () {
-        function showAlert(icon, message) {
-            $.alert({
-                title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
-                content: `<span style="font-size: 15px;">${message}</span>`,
-                type: "blue",
-                theme: "modern",
-                buttons: {
-                    ok: { text: "OK", btnClass: "btn-blue" },
-                },
-            });
-        }
-    
-        // Use event delegation for dynamically loaded buttons
-        $(document).on("click", ".purchase-now", function () {
-            const medicineId = $(this).data("medicine-id");
-            const card = $(this).closest(".medicine-card");
-            
-            // Extract medicine details
-            const medicineName = card.data("name") || "Unknown Medicine";
-            let medicinePrice = parseFloat(card.find(".medicinePrice").attr("data-price") || 0);
-    
-            if (isNaN(medicinePrice) || medicinePrice <= 0) {
-                showAlert("fa-circle-xmark", "Error: Invalid price detected.");
-                return;
-            }
-    
-            console.log("Initializing PayPal for:", medicineName, "Price:", medicinePrice);
-    
-            // Show and clean PayPal container
-            const paypalContainer = $("#paypal-button-container-" + medicineId);
-            paypalContainer.show().html("");
-    
-            paypal.Buttons({
-              createOrder: function (data, actions) {
-                return actions.order.create({
-                    purchase_units: [{
-                        description: medicineName,
-                        amount: {
-                            currency_code: "USD",
-                            value: medicinePrice.toFixed(2),
-                        }
-                    }]
-                }).catch(function (err) {
-                    console.error("Create Order Error:", err);
-                    showAlert("fa-circle-xmark", "Order Creation Failed. Please try again.");
-                });
-            },
-                onApprove: function (data, actions) {
-                    return actions.order.capture().then(function (details) {
-                        if (!details || !details.id) {
-                            throw new Error("Invalid payment details received");
-                        }
-                        processPayment(medicineId, details, medicinePrice);
-                    }).catch(function (err) {
-                        console.error("Payment Capture Error:", err);
-                        showAlert("fa-circle-xmark", "Payment Capture Failed.");
-                    });
-                },
-                onError: function (err) {
-                    console.error("PayPal Error:", err);
-                    showAlert("fa-circle-xmark", "Payment Failed.");
-                }
-            }).render("#paypal-button-container-" + medicineId);
-        });
-    
-        function getCSRFToken() {
-            const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]");
-            return csrfToken ? csrfToken.value : "";
-        }
-    
-        function processPayment(medicineId, details, medicinePrice) {
-            $.ajax({
-                url: '/process-payment/',
-                method: 'POST',
-                contentType: 'application/json',
-                headers: { "X-CSRFToken": getCSRFToken() },  
-                data: JSON.stringify({
-                    medicine_id: medicineId,
-                    transaction_id: details.id,
-                    amount: medicinePrice,
-                    payer_email: details.payer.email_address
-                }),
-                success: function (response) {
-                    showAlert("fa-circle-check", "Payment Successful!");
-                },
-                error: function (xhr) {
-                    console.error("Payment Processing Error:", xhr.responseText);
-                    showAlert("fa-circle-xmark", "Error: Failed to process order.");
-                }
-            });
-        }
-    });
-    
-    </script>
-{% comment %}    
-    <script>
-      $(document).ready(function () {
-          function showAlert(icon, message) {
-              $.alert({
-                  title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
-                  content: `<span style="font-size: 15px;">${message}</span>`,
-                  type: "blue",
-                  theme: "modern",
-                  buttons: {
-                      ok: {
-                          text: "OK",
-                          btnClass: "btn-blue",
-                      },
-                  },
-              });
-          }
-      
-          $(".purchase-now").on("click", function () {
-              const medicineId = $(this).data("medicine-id");
-              const card = $(this).closest(".medicine-card");
-      
-              
-              // Extract medicine details
-              const medicineName = card.data("name") || "Unknown Medicine";
-              //const medicinePrice = parseFloat(card.data("price"));
-              let medicinePrice = parseFloat(card.find(".medicinePrice").attr("data-price") || 0);
-              console.log("Extracted Price:", medicinePrice); // Debugging
-
-      
-              if (isNaN(medicinePrice) || medicinePrice <= 0) {
-                  console.error("Invalid price detected for medicine:", medicineName);
-                  showAlert("fa-circle-xmark", "Error: Invalid price detected. Please try again.");
-                  return;
-              }
-      
-              console.log("Medicine Selected:", medicineName, "Price:", medicinePrice);
-      
-              // Show PayPal container
-              const paypalContainer = $("#paypal-button-container-" + medicineId);
-              paypalContainer.show().html(""); // Ensure clean initialization
-      
-              console.log("Initializing PayPal for:", medicineName);
-      
-              paypal.Buttons({
-                  /*createOrder: function (data, actions) {
-                      console.log("Creating PayPal Order...");
-                      return actions.order.create({
-                          purchase_units: [{
-                              description: medicineName,
-                              amount: {
-                                  value: medicinePrice.toFixed(2),
-                                  currency_code: "USD"
-                              }
-                          }]
-                      }).catch(function (err) {
-                          console.error("Create Order Error:", err);
-                          showAlert("fa-circle-xmark", "Order Creation Failed. Please try again.");
-                      });
-                  },*/
-                  createOrder: function (data, actions) {
-                    return actions.order.create({
-                        purchase_units: [{
-                            description: medicineName,
-                            amount: {
-                                currency_code: "USD",
-                                value: medicinePrice.toFixed(2) // Ensure two decimal places
-                            }
-                        }]
-                    }).catch(function (err) {
-                        console.error("Create Order Error:", err);
-                        showAlert("fa-circle-xmark", "Order Creation Failed.");
-                    });
-                }
-                
-                  onApprove: function (data, actions) {
-                      console.log("Payment Approved! Capturing payment...");
-      
-                      return actions.order.capture().then(function (details) {
-                          if (!details || !details.id) {
-                              throw new Error("Invalid payment details received");
-                          }
-                          console.log("Payment Captured:", details);
-                          processPayment(medicineId, details, medicinePrice);
-                      }).catch(function (err) {
-                          console.error("Payment Capture Error:", err);
-                          showAlert("fa-circle-xmark", "Payment Capture Failed. Your payment could not be completed.");
-                      });
-                  },
-                  onError: function (err) {
-                      console.error("PayPal Error:", err);
-                      showAlert("fa-circle-xmark", "Payment Failed. An error occurred. Please try again.");
-                  }
-              }).render("#paypal-button-container-" + medicineId);
-          });
-      
-          /*function getCSRFToken() {
-              const csrf = document.cookie.split('; ').find(row => row.startsWith('csrftoken'));
-              return csrf ? csrf.split('=')[1] : "";
-          }*/
-          function getCSRFToken() {
-            const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]");
-            return csrfToken ? csrfToken.value : "";
-        }
+      // Search functionality
+      $('#medicine-search').on('input', function() {
+        const searchTerm = $(this).val().toLowerCase().trim();
+        let matchFound = false;
         
-      
-          function processPayment(medicineId, details, medicinePrice) {
-              $.ajax({
-                  url: '/process-payment/',
-                  method: 'POST',
-                  contentType: 'application/json',
-                  headers: { "X-CSRFToken": getCSRFToken() },  // Include CSRF token
-                  data: JSON.stringify({
-                      medicine_id: medicineId,
-                      transaction_id: details.id,
-                      amount: medicinePrice,
-                      payer_email: details.payer.email_address
-                  }),
-                  success: function (response) {
-                      console.log("Payment Processed Successfully:", response);
-                      showAlert("fa-circle-check", "Payment Successful! Your order has been placed.");
-                  },
-                  error: function (xhr) {
-                      console.error("Payment Processing Error:", xhr.responseText);
-                      showAlert("fa-circle-xmark", "Error: Failed to process order.");
-                  }
-              });
+        $('.medicine-card').each(function() {
+          const medicineName = $(this).data('name');
+          const manufacturer = $(this).data('manufacturer');
+          
+          if (medicineName.includes(searchTerm) || manufacturer.includes(searchTerm) || searchTerm === '') {
+            $(this).show();
+            matchFound = true;
+          } else {
+            $(this).hide();
           }
+        });
+        
+        // Toggle no results message
+        if (matchFound || searchTerm === '') {
+          $('#no-results').hide();
+        } else {
+          $('#no-results').show();
+        }
       });
-      </script>   {% endcomment %}
+      
+      // Reset search
+      $('#reset-search').on('click', function() {
+        $('#medicine-search').val('');
+        $('.medicine-card').show();
+        $('#no-results').hide();
+      });
 
-  {% endblock %}
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+      function showAlert(icon, message) {
+        $.alert({
+          title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+          content: `<span style="font-size: 15px;">${message}</span>`,
+          type: "blue",
+          theme: "modern",
+          buttons: {
+            ok: { text: "OK", btnClass: "btn-blue" },
+          },
+        });
+      }
   
+      // Use event delegation for dynamically loaded buttons
+      $(document).on("click", ".purchase-now", function () {
+        const medicineId = $(this).data("medicine-id");
+        const card = $(this).closest(".medicine-card");
+        
+        // Extract medicine details
+        const medicineName = card.data("name") || "Unknown Medicine";
+        let medicinePrice = parseFloat(card.find(".medicinePrice").attr("data-price") || 0);
+  
+        if (isNaN(medicinePrice) || medicinePrice <= 0) {
+          showAlert("fa-circle-xmark", "Error: Invalid price detected.");
+          return;
+        }
+  
+        console.log("Initializing PayPal for:", medicineName, "Price:", medicinePrice);
+  
+        // Show and clean PayPal container
+        const paypalContainer = $("#paypal-button-container-" + medicineId);
+        paypalContainer.show().html("");
+  
+        // Show loading indicator inside button
+        $(this).html('<span class="loading me-2"></span> Processing...');
+  
+        paypal.Buttons({
+          createOrder: function (data, actions) {
+            return actions.order.create({
+              purchase_units: [{
+                description: medicineName,
+                amount: {
+                  currency_code: "USD",
+                  value: medicinePrice.toFixed(2),
+                }
+              }]
+            }).catch(function (err) {
+              console.error("Create Order Error:", err);
+              showAlert("fa-circle-xmark", "Order Creation Failed. Please try again.");
+            });
+          },
+          onApprove: function (data, actions) {
+            return actions.order.capture().then(function (details) {
+              if (!details || !details.id) {
+                throw new Error("Invalid payment details received");
+              }
+              processPayment(medicineId, details, medicinePrice);
+            }).catch(function (err) {
+              console.error("Payment Capture Error:", err);
+              showAlert("fa-circle-xmark", "Payment Capture Failed.");
+            });
+          },
+          onError: function (err) {
+            console.error("PayPal Error:", err);
+            showAlert("fa-circle-xmark", "Payment Failed.");
+            // Reset button
+            $(".purchase-now[data-medicine-id='" + medicineId + "']").html('<i class="fas fa-bolt me-2"></i> Purchase Now');
+          }
+        }).render("#paypal-button-container-" + medicineId);
+        
+        // Reset button after PayPal loads
+        setTimeout(function() {
+          $(".purchase-now[data-medicine-id='" + medicineId + "']").html('<i class="fas fa-bolt me-2"></i> Purchase Now');
+        }, 1500);
+      });
+  
+      function getCSRFToken() {
+        const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]");
+        return csrfToken ? csrfToken.value : "";
+      }
+  
+      function processPayment(medicineId, details, medicinePrice) {
+        $.ajax({
+          url: '/process-payment/',
+          method: 'POST',
+          contentType: 'application/json',
+          headers: { "X-CSRFToken": getCSRFToken() },  
+          data: JSON.stringify({
+            medicine_id: medicineId,
+            transaction_id: details.id,
+            amount: medicinePrice,
+            payer_email: details.payer.email_address
+          }),
+          success: function (response) {
+            showAlert("fa-circle-check", "Payment Successful!");
+          },
+          error: function (xhr) {
+            console.error("Payment Processing Error:", xhr.responseText);
+            showAlert("fa-circle-xmark", "Error: Failed to process order.");
+          }
+        });
+      }
+    });
+  </script>
+  {% endblock %}  
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

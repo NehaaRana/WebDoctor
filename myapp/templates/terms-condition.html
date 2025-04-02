@@ -8,9 +8,9 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon">
 
-    <!-- -------------------- Social Icons ----------------------- -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <!-- Social Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
@@ -25,6 +25,101 @@
 
     <!-- Custom Styles -->
     <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+    
+    <!-- Additional Custom Styles for Terms Page -->
+    <style>
+        .terms-section {
+            padding: 70px 0;
+            background-color: #f8f9fa;
+        }
+        
+        .terms-content {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .terms-title {
+            color: #20c0f3;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .terms-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: #20c0f3;
+        }
+        
+        .terms-text strong {
+            color: #272b41;
+            font-size: 18px;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .terms-text p {
+            color: #757575;
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+        
+        .term-item {
+            border-left: 3px solid #20c0f3;
+            padding: 15px 25px;
+            background-color: #f8f9fa;
+            margin-bottom: 30px;
+            border-radius: 0 5px 5px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .term-item:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .terms-btn {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .btn-primary.prime-btn {
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary.prime-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(32, 192, 243, 0.3);
+        }
+        
+        .breadcrumb-bar-two {
+            background-color: #15558d;
+            background-image: linear-gradient(to right, #15558d, #20c0f3);
+            padding: 40px 0;
+        }
+        
+        .breadcrumb-title {
+            color: #000;
+            margin-bottom: 15px;
+        }
+        
+        .page-breadcrumb .breadcrumb-item a {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .page-breadcrumb .breadcrumb-item.active {
+            color: #fff;
+        }
+    </style>
 </head>
 
 <body class="login-body">
@@ -32,20 +127,59 @@
 <div class="main-wrapper">
 
     <!-- Header Section -->
-    {% include "header.html" %}
+    <header class="header header-fixed header-one">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg header-nav">
+                <div class="navbar-header">
+                    <a id="mobile_btn" href="javascript:void(0);">
+                        <span class="bar-icon">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                    </a>
+                    <a href="/" class="navbar-brand logo">
+                        <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+                    </a>
+                </div>
+                <div class="main-menu-wrapper">
+                    <div class="menu-header">
+                        <a href="/index" class="menu-logo">
+                            <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+                        </a>
+                        <a id="menu_close" class="menu-close" href="javascript:void(0);">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    </div>
+                    <ul class="main-nav">
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li>
+                            <a href="{% url 'doctor_list' %}">Doctors</a>
+                          </li>
+                        <li><a href="{% url 'about' %}">About Us</a></li>
+                        <li><a href="{% url 'contact' %}">Contact Us</a></li>
+    
+                        <li class="register-btn"><a href="{% url 'register' %}" class="btn reg-btn"><i class="feather-user"></i>Register</a></li>
+                        <li class="register-btn"><a href="{% url 'login' %}" class="btn btn-primary log-btn"><i class="feather-lock"></i>Login</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
 
     <div class="breadcrumb-bar-two">
         <div class="container">
             <div class="row align-items-center inner-banner">
                 <div class="col-md-12 col-12 text-center">
-                    <h2 class="breadcrumb-title">Terms &amp; Condition</h2>
+                    <h2 class="breadcrumb-title">Terms &amp; Conditions</h2>
                     <nav aria-label="breadcrumb" class="page-breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
                                 <a href="{% url 'home' %}">Home</a>
                             </li>
+                            
                             <li class="breadcrumb-item active" aria-current="page">
-                                Terms &amp; Condition
+                                Terms &amp; Conditions
                             </li>
                         </ol>
                     </nav>
@@ -59,69 +193,108 @@
           <div class="row">
               <div class="col-md-12">
                   <div class="terms-content">
+                      <h3 class="terms-title">Our Terms &amp; Conditions</h3>
+                      <p class="mb-4">Please read these terms and conditions carefully before using webDocter services. By accessing or using our platform, you agree to be bound by these terms.</p>
+                      
                       <div class="terms-text">
-                          <p>
-                              <strong>Acceptance of Terms:</strong> 
-                              By accessing and using webDocter, you acknowledge and agree to be bound by these Terms &amp; Conditions. 
-                              If you do not agree with these terms, please refrain from using the services.
-                          </p>
-                          <p>
-                              <strong>User Agreement:</strong> 
-                              webDocter is an online platform that provides general healthcare information, educational content, and tools for health management. 
+                          <div class="term-item">
+                              <strong>Acceptance of Terms</strong> 
+                              <p>By accessing and using webDocter, you acknowledge and agree to be bound by these Terms &amp; Conditions. 
+                              If you do not agree with these terms, please refrain from using the services.</p>
+                          </div>
+                          
+                          <div class="term-item">
+                              <strong>User Agreement</strong> 
+                              <p>webDocter is an online platform that provides general healthcare information, educational content, and tools for health management. 
                               While we strive to provide accurate and up-to-date information, it should not be considered a substitute for professional medical advice, 
-                              diagnosis, or treatment. Always consult with qualified healthcare professionals for personalized advice.
-                          </p>
-                          <p>
-                              <strong>User Responsibility:</strong> 
-                              You are solely responsible for the accuracy and completeness of the information you provide on webDocter. 
+                              diagnosis, or treatment. Always consult with qualified healthcare professionals for personalized advice.</p>
+                          </div>
+                          
+                          <div class="term-item">
+                              <strong>User Responsibility</strong> 
+                              <p>You are solely responsible for the accuracy and completeness of the information you provide on webDocter. 
                               Any reliance on the content and information provided on webDocter is at your own risk. 
-                              webDocter does not guarantee the accuracy, reliability, or completeness of the information and disclaims any liability for any errors or omissions.
-                          </p>
-                          <p>
-                              <strong>Limitations of webDocter:</strong> 
-                              webDocter may have limitations, including but not limited to the availability of certain features, services, or information. 
-                              We reserve the right to modify or discontinue any part of webDocter without prior notice.
-                          </p>
-                          <p>
-                              <strong>Intellectual Property Rights:</strong> 
-                              The content, design, graphics, and other materials on webDocter are protected by intellectual property rights and are owned or licensed by PMS. 
-                              You may not reproduce, distribute, modify, or create derivative works without prior written permission from webDocter.
-                          </p>
-                          <p>
-                              <strong>Third-Party Websites:</strong> 
-                              webDocter may contain links to third-party websites or resources that are not controlled or operated by webDocter. 
+                              webDocter does not guarantee the accuracy, reliability, or completeness of the information and disclaims any liability for any errors or omissions.</p>
+                          </div>
+                          
+                          <div class="term-item">
+                              <strong>Limitations of webDocter</strong> 
+                              <p>webDocter may have limitations, including but not limited to the availability of certain features, services, or information. 
+                              We reserve the right to modify or discontinue any part of webDocter without prior notice.</p>
+                          </div>
+                          
+                          <div class="term-item">
+                              <strong>Intellectual Property Rights</strong> 
+                              <p>The content, design, graphics, and other materials on webDocter are protected by intellectual property rights and are owned or licensed by PMS. 
+                              You may not reproduce, distribute, modify, or create derivative works without prior written permission from webDocter.</p>
+                          </div>
+                          
+                          <div class="term-item">
+                              <strong>Third-Party Websites</strong> 
+                              <p>webDocter may contain links to third-party websites or resources that are not controlled or operated by webDocter. 
                               We are not responsible for the availability, content, or accuracy of those websites. 
-                              Accessing and using third-party websites are at your own risk.
-                          </p>
-                          <p>
-                              <strong>Modifications:</strong> 
-                              webDocter reserves the right to modify these Terms &amp; Conditions at any time without prior notice. 
+                              Accessing and using third-party websites are at your own risk.</p>
+                          </div>
+                          
+                          <div class="term-item">
+                              <strong>Modifications</strong> 
+                              <p>webDocter reserves the right to modify these Terms &amp; Conditions at any time without prior notice. 
                               It is your responsibility to review the most current version of the Terms &amp; Conditions regularly. 
-                              Your continued use of webDocter after any modifications constitutes your acceptance of the revised terms.
-                          </p>
-                          <p>
-                              <strong>Privacy Policy:</strong> 
-                              webDocter collects, uses, and protects your personal information in accordance with our Privacy Policy. 
-                              By using webDocter, you consent to the collection and use of your information as described in the Privacy Policy.
-                          </p>
-                          <p>
-                              Please carefully review these Terms &amp; Conditions before using Pranik Medical Services. 
-                              If you have any questions or concerns, please contact us for clarification.
-                          </p>
+                              Your continued use of webDocter after any modifications constitutes your acceptance of the revised terms.</p>
+                          </div>
+                          
+                          <div class="term-item">
+                              <strong>Privacy Policy</strong> 
+                              <p>webDocter collects, uses, and protects your personal information in accordance with our Privacy Policy. 
+                              By using webDocter, you consent to the collection and use of your information as described in the Privacy Policy.</p>
+                          </div>
+                      </div>
+                      
+                      <div class="alert alert-info mt-4">
+                          <i class="fas fa-info-circle mr-2"></i>
+                          Please carefully review these Terms &amp; Conditions before using webDocter. 
+                          If you have any questions or concerns, please <a href="{% url 'contact' %}">contact us</a> for clarification.
                       </div>
                   </div>
                   <div class="terms-btn">
-                      <a href="javascript:void(0);" class="btn btn-right-now">Not right now...</a>
-                      <a href="javascript:void(0);" class="btn btn-primary prime-btn">I agree with terms</a>
+                      <a href="javascript:void(0);" class="btn btn-secondary prime-btn" onclick="window.history.back();">
+                          <i class="fas fa-arrow-left me-2"></i> Go Back
+                      </a>
+                      <a href="javascript:void(0);" class="btn btn-secondary prime-btn " id="agreeButton" data-redirect="">
+                          <i class="fas fa-check-circle me-2"></i> I Agree with Terms
+                      </a>
                   </div>
               </div>
           </div>
       </div>
   </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var agreeButton = document.getElementById('agreeButton');
+      var params = new URLSearchParams(window.location.search);
+      var nextPage = params.get('next');
+  
+      // Determine the appropriate redirect URL based on the 'next' parameter
+      var redirectUrl = '/';
+      if (nextPage === 'doctor_register') {
+        redirectUrl = '/doctor_register/';
+      } else if (nextPage === 'patient_register') { 
+        redirectUrl = '/patient_register/';
+      } else {
+        console.error('Invalid or missing next parameter.');
+      }
+  
+      // Add click event listener to handle the redirection
+      agreeButton.addEventListener('click', function() {
+        window.location.href = redirectUrl;
+      });
+    });
+  </script>
+  
     
     {% include "footer.html" %}
     {% endblock %}
 
   </body>
   </html>
-  

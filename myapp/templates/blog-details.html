@@ -3,33 +3,35 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Webdoctor | News & Health Insights</title>
+    <title>Webdoctor</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Stay informed with the latest medical news, health tips, and wellness insights from WebDoctor's professional healthcare community.">
     <meta name="Version" content="v1.4.0" />
     <!-- favicon -->
     <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}">
 
+   
     <!-- Css -->
-    <link href="{% static 'assets/libs/tiny-slider/tiny-slider.css' %}" rel="stylesheet">
+    {% comment %} <link href="{% static 'assets/libs/tiny-slider/tiny-slider.css' %}" rel="stylesheet"> {% endcomment %}
     <!-- Bootstrap Css -->
     <link href="{% static 'assets/libs/bootstrap.min.css' %}" class="theme-opt" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
-    <link href="{% static 'assets/libs/icons.min.css' %}" rel="stylesheet" type="text/css" />
-    <link href="{% static 'assets/libs/remixicon/fonts/remixicon.css' %}" rel="stylesheet" type="text/css" />
-    <link href="{% static 'assets/libs/%40iconscout/unicons/css/line.css' %}" type="text/css" rel="stylesheet" />
+    {% comment %} <link href="{% static 'assets/libs/icons.min.css' %}" rel="stylesheet" type="text/css" /> {% endcomment %}
+    {% comment %} <link href="{% static 'assets/libs/remixicon/fonts/remixicon.css' %}" rel="stylesheet" type="text/css" /> {% endcomment %}
+    {% comment %} <link href="{% static 'assets/libs/%40iconscout/unicons/css/line.css' %}" type="text/css" rel="stylesheet" /> {% endcomment %}
     <!-- Style Css-->
     <link href="{% static 'assets/libs/style.min.css' %}" class="theme-opt" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+  
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
 
     <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}" />
 
-    <link rel="stylesheet" href="{% static 'assets/css/feather.css' %}" />
-    <link rel="stylesheet" href="{% static 'assets/css/bootstrap-datetimepicker.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'assets/css/owl.carousel.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+   
+    
+    {% comment %} <link rel="stylesheet" href="{% static 'assets/css/owl.carousel.min.css' %}" /> {% endcomment %}
     <link rel="stylesheet" href="{% static 'assets/css/aos.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
 
@@ -325,8 +327,8 @@
                 </div>
               </nav>
             </div>
-          </header>
-
+        </header>
+      
         <!-- Blog Hero Section -->
         <section class="blog-hero bg-half-150 d-table w-100">
             <div class="container">
@@ -624,5 +626,6 @@
         </script>
         {%include "footer.html" %}
        {% endblock %}
+       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
    </body>
    </html>

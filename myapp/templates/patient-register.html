@@ -296,7 +296,7 @@
             <div class="form-group mb-3">
               <label for="password">Password</label>
               <div class="input-group">
-                  <input type="password" id="password" class="form-control" name="password" placeholder="*************" required />
+                  <input type="password" id="password" class="form-control" name="password" placeholder="*************"  />
                       <span class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
                           <i id="toggleIcon" class="fa fa-eye"></i>
                       </span>
@@ -306,7 +306,8 @@
             <div class="mb-3 form-check">
               <input type="checkbox" class="form-check-input" id="terms" name="Terms" />
               <label class="form-check-label" for="terms">I agree to the
-                <a href="{% url 'terms_condition' %}">Terms of Service</a></label>
+                <a href="/terms_condition/?next=patient_register" class="terms-link">Terms and Conditions</a>
+
             </div>
 
             <div class="d-grid">
