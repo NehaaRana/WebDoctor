@@ -224,33 +224,7 @@
 
 </div>
 
-<!-- Razorpay Integration -->
-{% comment %} <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script>
-    var options = {
-        "key": "{{ api_key }}",
-        "name": "webDoctor",
-        "description": "Appointment Payment",
-        "image": "{% static 'assets/img/logo.png' %}",
-        "order_id": "{{ order_id }}",
-        "callback_url": "{% url 'payment_success' %}",
-        "prefill": {
-            "name": "{{ patient.name }}",
-            "email": "{{ patient.user.email }}",
-            "contact": "{{ patient.phone_number }}"
-        },
-        "theme": {"color": "#4B49AC"},
-        "handler": function(response) {
-            window.location.href = "{% url 'payment_success_page' appointment.id doctor.id %}";
-        }
-    };
 
-    var rzp1 = new Razorpay(options);
-    document.getElementById('rzp-button1').onclick = function(e) {
-        rzp1.open();
-        e.preventDefault();
-    }
-</script> {% endcomment %}
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>

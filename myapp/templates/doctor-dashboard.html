@@ -973,34 +973,6 @@
     tooltipTriggerList.map(function(tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
-
-    // Alert Function
-    /*function showAlert(icon, message) {
-        $.alert({
-            title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
-            content: `<span style="font-size: 15px;">${message}</span>`,
-            type: "blue",
-            theme: "modern",
-            buttons: {
-                ok: {
-                    text: "OK",
-                    btnClass: "btn-blue",
-                },
-            },
-        });
-    }
-
-    // Display Django messages
-    let delay = 500;
-    {% for message in messages %}
-    setTimeout(function() {
-        showAlert(
-            "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
-            "{{ message|escape }}"
-        );
-    }, delay);
-    delay += 1000;
-    {% endfor %}*/
 });
 
 </script>

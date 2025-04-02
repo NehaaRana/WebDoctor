@@ -58,7 +58,7 @@
                     href="{% if user_type == 'patient' or user_type == 'doctor' %}{% url 'index' %}{% else %}{% url 'home' %}{% endif %}">Home</a>
                 </li>
                 <li class="active"><a href="{% url 'doctor_list' %}">Doctors</a></li>
-                {% comment %} <li><a href="{% url 'about' %}">About Us</a></li> {% endcomment %}
+               
                 <li>
                   {% if request.session.patient_id or request.session.doctor_id %}
                   <a href="{% url 'about_us' %}">About Us</a>
@@ -73,7 +73,7 @@
                   <a href="{% url 'contact' %}">Contact Us</a>
                   {% endif %}
                 </li>
-                {% comment %} <li><a href="{% url 'contact' %}">Contact Us</a></li> {% endcomment %}
+                
                 <ul class="nav header-navbar-rht pt-3">
   
                   {% if request.session.patient_id or request.session.doctor_id %}
