@@ -78,7 +78,7 @@ def home(request):
 #     return render(request, 'about-us.html')
 
 def about_us(request):
-    print("🚀 about_us view is being executed!")
+    print(" about_us view is being executed!")
 
     profile = None
     user_type = None
@@ -87,8 +87,8 @@ def about_us(request):
     patient_id = request.session.get("patient_id")
     doctor_id = request.session.get("doctor_id")
 
-    print("🔍 Patient ID from session:", patient_id)
-    print("🔍 Doctor ID from session:", doctor_id)
+    print(" Patient ID from session:", patient_id)
+    print(" Doctor ID from session:", doctor_id)
 
     try:
         if patient_id:
@@ -99,9 +99,9 @@ def about_us(request):
             user_type = "doctor"
 
         if profile:
-            print("✅ Profile Found:", profile.name)
+            print(" Profile Found:", profile.name)
     except Exception as e:
-        print("❌ Error fetching user profile:", e)
+        print(" Error fetching user profile:", e)
 
     return render(request, "about-us.html", {"profile": profile, "user_type": user_type})
 
@@ -116,11 +116,10 @@ def about(request):
 def contact(request):
          return render(request, 'contact.html')
 
-# def contact_us(request):
-#          return render(request, 'contact-us.html')
+
 
 def contact_us(request):
-    print("🚀 contact_us view is being executed!")
+    print(" contact_us view is being executed!")
 
     profile = None
     user_type = None
@@ -129,8 +128,8 @@ def contact_us(request):
     patient_id = request.session.get("patient_id")
     doctor_id = request.session.get("doctor_id")
 
-    print("🔍 Patient ID from session:", patient_id)
-    print("🔍 Doctor ID from session:", doctor_id)
+    print(" Patient ID from session:", patient_id)
+    print(" Doctor ID from session:", doctor_id)
 
     try:
         if patient_id:
@@ -141,9 +140,9 @@ def contact_us(request):
             user_type = "doctor"
 
         if profile:
-            print("✅ Profile Found:", profile.name)
+            print(" Profile Found:", profile.name)
     except Exception as e:
-        print("❌ Error fetching user profile:", e)
+        print(" Error fetching user profile:", e)
 
     return render(request, "contact-us.html", {"profile": profile, "user_type": user_type})
 
@@ -168,13 +167,11 @@ def login(request):
 
                 # Check if the doctor is approved
                 if not user.is_approved:
-                    # return render(request, "login.html", {"error": "Your account is pending approval. Please wait for admin approval."})
                     messages.warning(request, "Your account is pending approval. Please wait for admin approval.")
                     return redirect("login")
 
                 # Compare hashed password securely
                 if not check_password(password, user.password):
-                    # return render(request, "login.html", {"error": "Invalid email or password"})
                     messages.error(request, "Invalid email or password.")
                     return redirect("login")
 
@@ -201,7 +198,6 @@ def login(request):
 
                 # Compare hashed password securely
                 if not check_password(password, user.password):
-                    # return render(request, "login.html", {"error": "Invalid email or password"})
                     messages.error(request, "Invalid email or password.")
                     return redirect("login")
                 # Store patient ID in session
@@ -210,12 +206,10 @@ def login(request):
                 return redirect("patient_dashboard")  # Redirect patient to dashboard
 
             except patientRegister.DoesNotExist:
-                # return render(request, "login.html", {"error": "Patient does not exist"})
                 messages.error(request, "Patient does not exist.")
                 return redirect("login")
 
         else:
-            # return render(request, "login.html", {"error": "Invalid user type"})
             messages.error(request, "Invalid user type.")
             return redirect("login")
 
@@ -239,8 +233,7 @@ def patient_dashboard(request):
     except patientRegister.DoesNotExist:
         return redirect("login")
     
-    patient = get_object_or_404(patientRegister, id=patient_id)  # ✅ Fetch the patient
-    # reports = ConsultationReport.objects.filter(patient=patient)  # ✅ Fetch reports
+    patient = get_object_or_404(patientRegister, id=patient_id)  #  Fetch the patient
     appointment_data_list = appointment.objects.filter(patient_id=patient).select_related('doctor_id')
     return render(request, "patient-dashboard.html",{"patient": patient,"appointment_data_list":appointment_data_list})
 
@@ -254,8 +247,7 @@ def doctor_dashboard(request):
     except doctorRegister.DoesNotExist:
         return redirect("login")  # Redirect if doctor not found
     
-      # Fetch consultation reports for the doctor
-    # reports = ConsultationReport.objects.filter(doctor=doctor)
+   
     
     today = timezone.now().date()
     today_patients = appointment.objects.filter(
@@ -276,7 +268,6 @@ def doctor_dashboard(request):
 
     today_progress = (total_today_patients / total_reference) * 100
     upcoming_progress = (total_upcoming_patients / total_reference) * 100
-    # upcoming_patients = appointment.objects.filter(doctor_id=doctor).select_related('patient_id')
     return render(request, "doctor-dashboard.html", {"doctor": doctor,"upcoming_patients":upcoming_patients, "today_patients": today_patients ,"total_patients": total_patients,
         "total_today_patients": total_today_patients,
         "total_upcoming_patients": total_upcoming_patients,
@@ -313,7 +304,7 @@ def index(request):
             user_type = "doctor"
 
         if profile:
-            print("✅ Profile Found:", profile.name)
+            print(" Profile Found:", profile.name)
     except Exception as e:
         print("❌ Error fetching user profile:", e)
 
@@ -345,10 +336,6 @@ def patient_profile(request):
     return render(request, 'patient-profile.html')
 
 
-# def <a href="{% if user_type == 'patient' or user_type == 'doctor' %}{% url 'index' %}{% else %}{% url 'home' %}{% endif %}">Home</a>t(request):
-#     doctors = doctorRegister.objects.all()  # Fetch all doctors
-#     print(f"User: {request.user}, Authenticated: {request.user.is_authenticated}")
-#     return render(request, "doctor-list.html",{"doctors": doctors})
 
 def doctor_list(request):
     doctors = doctorRegister.objects.filter(is_approved=True) # Fetch only approved doctors
@@ -390,25 +377,6 @@ def doctor_list(request):
         "user_type": user_type  # Pass user type for navbar logic
     })
 
-# def doctor_profile(request, doctor_id):
-#     doctor = get_object_or_404(doctorRegister, id=doctor_id)  # Fetch doctor by ID
-#     reviews = review.objects.filter(doctor_id=doctor.id)
-
-#     # Check if the logged-in user is a doctor or patient
-#      # Determine if the logged-in user is a doctor or patient
-#     user_data = None
-#     user_role = None
-
-#     if request.user.is_authenticated:
-#         # Check if the user is a doctor
-#         if doctorRegister.objects.filter(user=request.user).exists():
-#             user_data = doctorRegister.objects.get(user=request.user)
-#             user_role = "doctor"
-#         # Check if the user is a patient
-#         elif patientRegister.objects.filter(user=request.user).exists():
-#             user_data = patientRegister.objects.get(user=request.user)
-#             user_role = "patient"
-#     return render(request, 'doctor-profile.html', {'doctor': doctor,  'reviews': reviews, 'user_data': user_data,   'user_role': user_role, })
 
 def doctor_profile(request, doctor_id):
     doctor = get_object_or_404(doctorRegister, id=doctor_id)  # Fetch doctor by ID
@@ -446,10 +414,6 @@ def doctor_profile_cancel_appointment(request, doctor_id):
     return render(request, 'doctor-profile-cancel-appointment.html', {'doctor': doctor})
 
 
-
-
-
-
 # profile completion
 def doctor_profile_settings(request):
     doctor_id = request.session.get('doctor_id')  
@@ -466,8 +430,6 @@ def doctor_profile_settings(request):
     required_fields = ["name", "email", "phno", "specialization", "experience", "address", "profile_img","qualification","gender","fee","mci_no","state","city","clinic_name","clinic_address","about_me","is_available"]
     
     # Count completed fields
-    # filled_fields = sum(1 for field in required_fields if getattr(doctor, field, None))
-    
     filled_fields = sum(1 for field in required_fields if getattr(doctor, field, "") not in [None, ""])
 
     # Calculate profile completion percentage
@@ -547,23 +509,6 @@ def book_appointment(request, doctor_id, appointment_id=None):
         "appointment_data_list": appointment_obj
     })
 
-
-# for clear message
-# from django.contrib.messages import get_messages
-# from django.http import JsonResponse
-
-# def clear_messages(request):
-#     request.session.pop('toastr_message', None)
-#     request.session.pop('toastr_tag', None)
-#     return JsonResponse({"status": "success"})
-# def clear_messages(request):
-#     storage = get_messages(request)
-#     list(storage)  # This clears the messages
-#     return JsonResponse({"status": "success"})
-
-
-#for cancel appointment
-
 def cancel_appointment(request, appointment_id):
     appointment_obj = get_object_or_404(appointment, id=appointment_id)
 
@@ -601,62 +546,6 @@ def update_appointment_status(request, appointment_id, status):
     appointment_obj.save()
     return redirect('doctor_dashboard')  # Redirect to doctor's dashboard
 
-# def payment_page(request, appointment_id, doctor_id):
-#     # Get appointment and doctor objects or return 404
-#     appointment_obj = get_object_or_404(appointment, id=appointment_id)
-#     doctor_obj = get_object_or_404(doctorRegister, id=doctor_id)
-
-#     # Convert doctor's fee to float, handling None values
-#     # doctor_fee = float(doctor_obj.fee) if doctor_obj.fee is not None else 0.0
-#     try:
-#         doctor_fee = float(doctor_obj.fee)  # Convert to float
-#     except ValueError:
-#         doctor_fee = 0.0  # Default to 0 if conversion fails
-#     GST = 0.18
-#     tax_amount = doctor_fee * GST
-#     total_amount = doctor_fee + tax_amount
-
-#     # Get or create a payment object
-#     payment_obj, created = Payment.objects.get_or_create(
-#         appointment_id=appointment_obj,  # Use the correct model field name
-#         doctor_id=doctor_obj,
-#         patient_id=appointment_obj.patient_id,  # Assuming a ForeignKey relationship
-#         defaults={
-#             'amount': total_amount,
-#             'payment_status': 'PENDING',
-#             'payment_method': '',
-#             'payment_date': now()
-#         }
-#     )
-
-#     if request.method == "POST":
-#         payment_method = request.POST.get("payment_method", "")
-
-#         # if payment_method:
-#         #     payment_obj.payment_method = payment_method
-#         #     payment_obj.payment_status = "COMPLETED"
-#         #     payment_obj.save()
-#         valid_methods = dict(Payment.METHOD_CHOICES).keys()
-#         if payment_method in valid_methods:
-#             payment_obj.payment_method = payment_method
-#             payment_obj.payment_status = "COMPLETED"
-#             payment_obj.save()
-
-#             return redirect("payment_details", appointment_id, doctor_id)
-
-#     return render(
-#         request,
-#         "payment.html",
-#         {
-#             "appointment": appointment_obj,  # Updated variable name
-#             "doctor": doctor_obj,
-#             "doctor_fee": doctor_fee,
-#             "tax_amount": tax_amount,
-#             "total_amount": total_amount,
-#             "payment_obj": payment_obj
-#         }
-#     )
-
 
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import default_storage
@@ -667,10 +556,6 @@ from .models import appointment,Payment
 import razorpay
 from django.conf import settings
 from django.shortcuts import render
-
-
-
-
 import random
 from django.core.cache import cache
 from django.http import JsonResponse
@@ -886,45 +771,10 @@ def doctor_change_password(request):
             print("New Password:", form.cleaned_data.get("new_password"))
     
             return redirect("doctor_dashboard")      
-            
-            # messages.error(request, "Error updating password. Please try again.")
     else:
         form = passwordChangeForm(user=doctor)
 
     return render(request, "doctor-change-password.html", {"doctor": doctor ,"form": form})
-
-
-
-
-# def patient_change_password(request):
-#     patient_id = request.session.get('patient_id')  # Get logged-in patient ID
-#     patient_id = request.session.get('patient_id')  # Get logged-in patient ID
-#     if not patient_id:
-#         return redirect("login")  # Redirect if not logged in
-       
-    
-#     try:
-#         patient = patientRegister.objects.get(id=patient_id)
-#         patient = patientRegister.objects.get(id=patient_id)
-#     except patientRegister.DoesNotExist:
-#         return redirect("login")  # Redirect if patient not found
-
-#     if request.method == 'POST':
-#         form = passwordChangeForm(request.POST, user=patient)
-#         if form.is_valid():
-#             new_password = form.cleaned_data['new_password']
-#             patient.password = make_password(new_password)  # Hash new password
-#             patient.save()
-            
-#             messages.success(request, "Password changed successfully.")
-#             return redirect("patient_dashboard")  # Redirect after successful change
-#         else:
-#             messages.error(request, "Error updating password. Please try again.")
-#     else:
-#         form = passwordChangeForm(user=patient)
-
-#     return render(request, "patient-change-password.html",{"patient":patient,"form":form})
-
 
 
 def patient_change_password(request):
@@ -961,51 +811,6 @@ def password_change_successful(request):
 
 def verify(request):
     return render(request, 'verify.html')
-
-# def patient_profile_settings(request):
-#     patient_id = request.session.get('patient_id')  # Get patient ID from session
-
-#     if not patient_id:
-#         messages.error(request, "You need to log in first.")  # Alert for unauthenticated users
-#         return redirect("login")  # Redirect to login if not authenticated
-
-#     try:
-#         patient = patientRegister.objects.get(id=patient_id)  # Fetch patient data
-#     except patientRegister.DoesNotExist:
-#         messages.error(request, "Patient not found. Please log in again.")  # Alert for invalid patient
-#         return redirect("login")
-
-#     if request.method == "POST":
-#         data = request.POST
-#         print(" Received Data:", data)  # Debugging
-
-#         # Check if POST data is actually being sent
-#         if not data:
-#             print(" No data received in POST request!")
-
-#         # Update fields only if values are provided
-#         patient.phno = data.get("phone", patient.phno)
-#         patient.address = data.get("address", patient.address)
-#         patient.city = data.get("city", patient.city)
-#         patient.state = data.get("state", patient.state)
-#         patient.blood_group = data.get("blood_group", patient.blood_group)
-#         patient.age = data.get("age", patient.age)
-#         patient.height = data.get("height", patient.height)
-#         patient.weight = data.get("weight", patient.weight)
-#         patient.dob = data.get("dob", patient.dob)
-
-#         print(" Before Saving:", patient.__dict__)  # Debugging
-
-#         patient.save()  # Save data to database
-
-#         print("Data Saved Successfully!")  # Confirmation
-
-#         messages.success(request, "Profile details added successfully!")
-#         return redirect("patient_profile_settings")  # Reload page with updated details
-
-#     return render(request, 'patient-profile-settings.html', {"patient": patient})
-    
-
 
 def patient_profile_settings(request):
     patient_id = request.session.get('patient_id')  # Get patient ID from session
@@ -1411,34 +1216,12 @@ def admin_change_password(request):
     
             return redirect("admin_dashboard")  # Redirect to admin dashboard
             
-            # messages.error(request, "Error updating password. Please try again.")
+            
     else:
         form = passwordChangeForm(user=admin)
 
     return render(request, "admin-change-password.html", {"admin": admin, "form": form})
 
-
-
-
-# def admin_login(request):
-#     if request.method == 'POST':
-#         email = request.POST.get('email')
-#         password = request.POST.get('password')
-
-#         try:
-#             admin = adminLogin.objects.get(email=email)
-
-#             # Check if the entered password matches the stored hashed password
-#             if check_password(password, admin.password):
-#                 request.session['admin_id'] = admin.id  # Store admin session
-#                 return redirect('admin_dashboard')  # Ensure this matches your routes
-#             else:
-#                 messages.error(request, "Invalid password.")
-        
-#         except adminLogin.DoesNotExist:
-#             messages.error(request,"Invalid email or username.")  
-
-#     return render(request, 'admin_login.html')  # Return the login page with error messages if any
 
 def admin_login(request):
     if request.method == 'POST':
@@ -1464,23 +1247,10 @@ def admin_login(request):
 
 
 from django.core.mail import send_mail, BadHeaderError
-
-# def is_admin_logged_in(request):
-#     return 'admin_id' in request.session
-
-# @login_required
-# def admin_dashboard(request):
-#         if 'admin_id' not in request.session:
-#                 return redirect('admin_login')  # Redirect if not logged in
-
-#         # Get all unapproved doctors
-#         pending_doctors = doctorRegister.objects.filter(is_approved=False)
-#         approved_doctors = doctorRegister.objects.filter(is_approved=True)
-#         return render(request, 'admin-dashboard.html',{'pending_doctors': pending_doctors, 'approved_doctors': approved_doctors})
-
 from django.db.models.functions import TruncMonth
 from django.db.models import Sum
 from django.db.models import Count, Sum
+
 def admin_dashboard(request):
     if 'admin_id' not in request.session:
         return redirect('admin_login')  # Redirect if not logged in
@@ -1529,10 +1299,6 @@ def admin_dashboard(request):
     }
     return render(request, 'admin-dashboard.html', context)
 
-
-
-
-
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from .models import doctorRegister  # Use the correct model name
@@ -1550,17 +1316,10 @@ def delete_doctor(request, doctor_id):
         messages.success(request, f"Doctor '{doctor_name}' deleted successfully.")
         return redirect("admin_manage_doctors")
 
-
-
-
 from django.http import FileResponse
 import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, inch
-
-
-
-
 from django.http import FileResponse, HttpResponse
 import io
 from reportlab.pdfgen import canvas
@@ -1653,7 +1412,7 @@ def payment_pdf(request, payment_id):
     invoice_table.wrapOn(c, width, height)
     invoice_table.drawOn(c, table_x, invoice_table_y - (len(invoice_details) * 20))
 
-    # ✅ **Draw Appointment Table Below Invoice Table**
+    #  **Draw Appointment Table Below Invoice Table**
     appointment_table.wrapOn(c, width, height)
     appointment_table.drawOn(c, table_x, appointment_table_y - (len(invoice_details) * 20))
 
@@ -1686,8 +1445,6 @@ def delete_review(request, review_id):
 
     # Redirect back to the review management page
     return redirect('admin_manage_review')  # Ensure this matches your URL pattern
-
-
 
 def delete_patient(request, patient_id):
     if request.method == 'POST':
@@ -1860,13 +1617,13 @@ def patient_register(request):
             messages.error(request, "Email is already registered. Try logging in.")
             return redirect('patient_register')
 
-           # ✅ Check if Phone Number Already Exists
+           #  Check if Phone Number Already Exists
         if patientRegister.objects.filter(phno=phno).exists():
             messages.error(request, "Phone number is already registered. Try logging in.")
             return redirect('patient_register')
 
 
-                    # ✅ Validate if the email actually exists
+                    #  Validate if the email actually exists
         if not validate_email_existence(email):
             messages.error(request, "Email address does not exist. Please enter a valid email.")
             return redirect('patient_register')
@@ -1886,7 +1643,7 @@ def patient_register(request):
 
                         # Generate OTP for email verification
             otp = random.randint(100000, 999999)
-            print(f"Generated OTP: {otp}")  # ✅ Print OTP in terminal
+            print(f"Generated OTP: {otp}")  #  Print OTP in terminal
 
             request.session['otp'] = otp  # Store OTP in session
             request.session['email'] = email  # Store email in session
@@ -1998,32 +1755,32 @@ def health_dashboard(request):
     latest_record = records.first() if records.exists() else None
     alert_messages = []  # Store multiple alerts
 
-    # ✅ Prevent 'NoneType > int' Errors
+    #  Prevent 'NoneType > int' Errors
     if latest_record:
         if latest_record.bp_systolic is not None and latest_record.bp_systolic > 140:
-            alert_messages.append("⚠️ High Blood Pressure! Your systolic BP is too high.")
+            alert_messages.append(" High Blood Pressure! Your systolic BP is too high.")
         elif latest_record.bp_systolic is not None and latest_record.bp_systolic < 90:
-            alert_messages.append("⚠️ Low Blood Pressure! Your systolic BP is too low.")
+            alert_messages.append(" Low Blood Pressure! Your systolic BP is too low.")
 
         if latest_record.bp_diastolic is not None and latest_record.bp_diastolic > 90:
-            alert_messages.append("⚠️ High Blood Pressure! Your diastolic BP is too high.")
+            alert_messages.append(" High Blood Pressure! Your diastolic BP is too high.")
         elif latest_record.bp_diastolic is not None and latest_record.bp_diastolic < 60:
-            alert_messages.append("⚠️ Low Blood Pressure! Your diastolic BP is too low.")
+            alert_messages.append(" Low Blood Pressure! Your diastolic BP is too low.")
 
         if latest_record.heart_rate is not None and latest_record.heart_rate > 100:
-            alert_messages.append("⚠️ High Heart Rate! Your pulse is too high.")
+            alert_messages.append(" High Heart Rate! Your pulse is too high.")
         elif latest_record.heart_rate is not None and latest_record.heart_rate < 60:
-            alert_messages.append("⚠️ Low Heart Rate! Your pulse is too low.")
+            alert_messages.append(" Low Heart Rate! Your pulse is too low.")
 
         if latest_record.sugar_level is not None and latest_record.sugar_level > 180:
-            alert_messages.append("⚠️ High Blood Sugar! Please monitor your glucose levels.")
+            alert_messages.append(" High Blood Sugar! Please monitor your glucose levels.")
         elif latest_record.sugar_level is not None and latest_record.sugar_level < 70:
-            alert_messages.append("⚠️ Low Blood Sugar! You may be at risk of hypoglycemia.")
+            alert_messages.append(" Low Blood Sugar! You may be at risk of hypoglycemia.")
 
         if latest_record.sleep_hours is not None and latest_record.sleep_hours < 5:
-            alert_messages.append("⚠️ Lack of Sleep! You need more rest for good health.")
+            alert_messages.append(" Lack of Sleep! You need more rest for good health.")
         elif latest_record.sleep_hours is not None and latest_record.sleep_hours > 10:
-            alert_messages.append("⚠️ Excessive Sleep! Too much sleep can affect your health.")
+            alert_messages.append(" Excessive Sleep! Too much sleep can affect your health.")
 
         
 
@@ -2056,8 +1813,8 @@ def get_symptom_info(query):
 
     try:
         response = requests.get(url, headers=headers, params=params)
-        print("✅ Status Code:", response.status_code)  # Print status code
-        print("✅ Response Text:", response.text)  # Print full response in terminal
+        print(" Status Code:", response.status_code)  # Print status code
+        print(" Response Text:", response.text)  # Print full response in terminal
 
         if response.status_code == 200:
             data = response.json()
@@ -2071,7 +1828,7 @@ def get_symptom_info(query):
             return f"Error fetching data, status code: {response.status_code}"
 
     except Exception as e:
-        print("❌ Error:", e)  # Print error in terminal
+        print(" Error:", e)  # Print error in terminal
         return "An error occurred while fetching data."
 
 
@@ -2084,14 +1841,8 @@ def chatbot_response(request):
     response_text = get_symptom_info(query)
     return JsonResponse({"response": response_text})
 
-
-
-
 def chatbot_page(request):
     return render(request, "chatbot.html")  # Render the chatbot UI
-
-
-
 
 # video consultion
 def video_consultation(request, appointment_id):
@@ -2103,8 +1854,6 @@ def video_consultation(request, appointment_id):
     
     return render(request, 'video-call.html', context)
 
-
-    
 # send mail for video in patient mail
 def send_meeting_link(request, appointment_id):
     appointment_obj = get_object_or_404(appointment, id=appointment_id)
@@ -2152,7 +1901,7 @@ def add_prescription(request, doctor_id, patient_id):
             prescription.patient = patient
             prescription.save()
             
-              # ✅ Correctly generate the PDF URL
+              #  Correctly generate the PDF URL
             pdf_url = f"/generate-prescription-pdf/{prescription.id}/"
 
             return JsonResponse({"success": True, "prescription_id": prescription.id, "pdf_url": pdf_url})
@@ -2167,7 +1916,7 @@ def generate_prescription_pdf(request, prescription_id):
     """
     Generates and returns a PDF file as an HTTP response.
     """
-    prescription = get_object_or_404(Prescription, id=prescription_id)  # ✅ Fetch prescription
+    prescription = get_object_or_404(Prescription, id=prescription_id)  #  Fetch prescription
 
     template_path = "prescription-pdf.html"
     context = {"prescription": prescription}
@@ -2189,7 +1938,7 @@ def send_prescription_email(request, prescription_id):
     Sends an email with the prescription PDF as an attachment.
     """
     prescription = get_object_or_404(Prescription, id=prescription_id)
-    patient_email = prescription.patient.email  # ✅ Ensure email field exists
+    patient_email = prescription.patient.email  #  Ensure email field exists
 
     if not patient_email:
         return JsonResponse({"success": False, "error": "No patient email found"})
@@ -2311,7 +2060,7 @@ def start_emergency_consultation(request):
         send_mail(
             subject="Emergency Consultation Request",
             message=f"{patient.name} has requested an emergency consultation. \nJoin the meeting here: {meeting_link}",
-            from_email="your_email@example.com",
+            from_email="wedoctors123@example.com",
             recipient_list=[doctor.email],
             fail_silently=False,
         )
@@ -2666,8 +2415,6 @@ def process_payment(request):
             except Medicine.DoesNotExist:
                 return JsonResponse({"error": "Medicine not found"}, status=404)
 
-            # # Assuming the logged-in patient is making the purchase
-            # patient = patientRegister.objects.first()  # Update logic to get the correct patient
             patient_id = request.session.get("patient_id")
 
             if not patient_id:

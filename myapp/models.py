@@ -3,6 +3,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.utils.timezone import now
 from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
+
 class patientRegister(models.Model):
       BLOOD_GROUP_CHOICES = [
         ('A+', 'A+'), ('A-', 'A-'), ('B+', 'B+'), ('B-', 'B-'),
