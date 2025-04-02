@@ -818,38 +818,12 @@ def payment_success(request):
 
     return JsonResponse({"status": "error", "message": "Invalid request method"}, status=400)
 
-# def payment_success_page(request, appointment_id, doctor_id):
-#     doctor = get_object_or_404(doctorRegister, id=doctor_id)
-#     appointment_obj = get_object_or_404(appointment, id=appointment_id)
-
-#     if request.method == "POST":
-#         rating = request.POST.get("rating")
-#         review_text = request.POST.get("review_text")
-
-#         if rating and review_text:
-#             review_obj = review.objects.create(
-#                 patient_id=appointment_obj.patient_id,
-#                 doctor_id=doctor,
-#                 appointment_id=appointment_obj,
-#                 rating=rating,
-#                 review_text=review_text,
-#                 review_date=timezone.now(),
-#             )
-#             return redirect(f"/doctor_profile/{doctor_id}/")  # Redirect after review submission
-
-#     # return render(request, "reviews.html", {"doctor": doctor, "appointment": appointment_obj})
-
-#     return render(request, "payment-success-page.html", {"doctor": doctor, "appointment": appointment_obj})  # Load success page template
-
 def payment_success_page(request, appointment_id, doctor_id):
     doctor = get_object_or_404(doctorRegister, id=doctor_id)
     appointment_obj = get_object_or_404(appointment, id=appointment_id)
     patient = appointment_obj.patient_id
 
-    # try:
-    #     payment = Payment.objects.get(appointment=appointment_obj)
-    # except Payment.DoesNotExist:
-    #     payment = None
+   
 
      # Fetch the payment record
     payment = Payment.objects.filter(appointment_id=appointment_id).first()
@@ -868,9 +842,9 @@ def payment_success_page(request, appointment_id, doctor_id):
                 review_text=review_text,
                 review_date=timezone.now(),
             )
-            return redirect(f"/")  # Redirect after review submission
+            return redirect(f"/index/")  # Redirect after review submission
 
-    # return render(request, "reviews.html", {"doctor": doctor, "appointment": appointment_obj})
+    
 
     return render(request, "payment-success-page.html", {"doctor": doctor, "appointment": appointment_obj,"payment": payment,"patient":patient})  # Load success page template
     
