@@ -2031,7 +2031,7 @@ def start_emergency_consultation(request):
 
         # Check if patient_id exists in the session (i.e., user is logged in)
         if not patient_id:
-            return JsonResponse({"status": "error", "message": "Please log in to start a consultation."})
+            return JsonResponse({"status": "error", "message": "Please log in as Patient  to start a consultation."})
 
         # Try to fetch the doctor based on the doctor_id
         try:

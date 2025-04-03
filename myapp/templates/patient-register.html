@@ -331,7 +331,7 @@
   <!-- jQuery and Validation Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
-  <script>
+  {% comment %} <script>
     $(document).ready(function () {
       $("#signup-form").submit(function (e) {
         e.preventDefault();
@@ -401,6 +401,81 @@
         this.submit();
       });
     });
+  </script> {% endcomment %}
+
+  <script>
+    $(document).ready(function () {
+      $("#signup-form").submit(function (e) {
+        e.preventDefault();
+        let name = $("#name").val().trim();
+        let email = $("#email").val().trim();
+        let phno = $("#phno").val().trim();
+        let password = $("#password").val().trim();
+        let terms = $("#terms").is(":checked");
+
+        let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        let phonePattern = /^[0-9]{10}$/;
+
+        // Function to show alerts
+        function showAlert(icon, message) {
+          $.alert({
+              title: `<i class="fa-solid ${icon} fa-2x animated-icon fa-beat-fade"></i>`,
+              content: `<span style="font-size: 15px;">${message}</span>`,
+              type: "blue",
+              theme: "modern",
+              animation: "news",
+              buttons: {
+                  ok: {
+                      text: "OK",
+                      btnClass: "btn-blue",
+                  },
+              },
+          });
+      }
+
+     
+         //backend error
+         {% if messages %}
+         let delay = 500;
+         {% for message in messages %}
+             setTimeout(function () {
+                 showAlert(
+                     "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
+                     "{{ message|escapejs }}",
+                 );
+             }, delay);
+             delay += 1000; // Increase delay for the next message
+         {% endfor %}
+     {% endif %}
+
+
+        if (name === "") {
+          showAlert("fa-exclamation-circle", "Full Name is required");
+          return;
+        }
+        if (email === "" || !emailPattern.test(email)) {
+          showAlert("fa-envelope", "Enter a valid email address");
+          return;
+        }
+        if (phno === "" || !phonePattern.test(phno)) {
+          showAlert("fa-phone", "Enter a valid 10-digit phone number");
+          return;
+        }
+        if (password.length < 6) {
+          showAlert("fa-key", "Password must be at least 6 characters long");
+          return;
+        }
+        if (!terms) {
+          showAlert(
+            "fa-file-contract",
+            "You must agree to the Terms of Service"
+          );
+          return;
+        }
+
+        this.submit();
+      });
+    });
   </script>
 
   <!-- JavaScript for Toggling Password Visibility -->
@@ -420,6 +495,24 @@
         }
     }
 </script>
+
+  <!-- JavaScript for Toggling Password Visibility -->
+  {% comment %} <script>
+    function togglePassword() {
+        var passwordInput = document.getElementById("password");
+        var toggleIcon = document.getElementById("toggleIcon");
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            toggleIcon.classList.remove("fa-eye");
+            toggleIcon.classList.add("fa-eye-slash");
+        } else {
+            passwordInput.type = "password";
+            toggleIcon.classList.remove("fa-eye-slash");
+            toggleIcon.classList.add("fa-eye");
+        }
+    }
+</script> {% endcomment %}
 </body>
 
 </html>

@@ -55,7 +55,7 @@
       {% block content %}
       <div class="main-wrapper" style="transform: none;">
 
-        <header class="header header-fixed header-one header-space">
+        <header class="header header-fixed header-one">
           <div class="container">
             <nav class="navbar navbar-expand-lg header-nav">
               <div class="navbar-header">
@@ -493,7 +493,7 @@
         <div id="responseMessage"></div>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script>
+<script>
           $(document).ready(function () {
             let doctorId = $("#doctor_id").val();
             let completionPercentage = parseInt("{{ completion_percentage }}"); // Get the value from the template
@@ -502,6 +502,7 @@
             // Function to update progress bar dynamically
             function updateProgressBar(percentage) {
               $(".progress-bar").css("width", percentage + "%").attr("aria-valuenow", percentage);
+              
               let profileStatusText = percentage < 100
               ? "<p class='text-danger mt-2'>Your profile is incomplete! Please update it.</p>"
               : "<p class='text-warning mt-2'>Your profile is complete!</p>";
@@ -668,7 +669,203 @@
 
             loadDoctorDetails(); // Load doctor details on page load
           });
-        </script>
+  </script>   
+
+  
+ 
+
+      {% comment %} <script>
+        $(document).ready(function () {
+          let doctorId = $("#doctor_id").val();
+          let completionPercentage = parseInt("{{ completion_percentage }}") || 0;
+          updateProgressBar(completionPercentage);
+        
+          /** Function to update progress bar dynamically */
+          function updateProgressBar(percentage) {
+            $(".progress-bar")
+              .css("width", percentage + "%")
+              .attr("aria-valuenow", percentage)
+              .text(percentage + "%"); // Show percentage on the bar
+        
+            let profileStatusText = percentage < 100
+              ? "<p class='text-danger mt-2'>Your profile is incomplete! Please update it.</p>"
+              : "<p class='text-success mt-2'>Your profile is complete!</p>";
+        
+            $("#profile-status").html(profileStatusText); // Update profile status message in UI
+          }
+        
+          /** Function to show alerts */
+          function showAlert(icon, message) {
+            $.alert({
+              title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+              content: `<span style="font-size: 15px;">${message}</span>`,
+              type: "blue",
+              theme: "modern",
+              buttons: {
+                ok: {
+                  text: "OK",
+                  btnClass: "btn-blue",
+                },
+              },
+            });
+          }
+        
+          /** Load Doctor Details */
+          function loadDoctorDetails() {
+            $.ajax({
+              url: `/get-doctor/${doctorId}/`,
+              type: "GET",
+              success: function (data) {
+                $("#name").val(data.name);
+                $("#email").val(data.email);
+                $("#phno").val(data.phno);
+                $("#qualification").val(data.qualification);
+                $("#specialization").val(data.specialization);
+                $("#experience").val(data.experience);
+                $("#address").val(data.address);
+                $("#city").val(data.city);
+                $("#state").val(data.state);
+                $("#clinic_name").val(data.clinic_name);
+                $("#clinic_address").val(data.clinic_address);
+                $("#gender").val(data.gender);
+                $("#mci_no").val(data.mci_no);
+                $("#fee").val(data.fee);
+                $("#about_me").val(data.about_me);
+                $("#is_available").val(data.is_available);
+        
+                // Update progress bar immediately
+                updateProgressBar(data.completion_percentage || 0);
+        
+                // Display profile image
+                let profileImage = data.photo || "/static/assets/img/default_profile.png";
+                $(".profile-img img").attr("src", profileImage);
+              },
+              error: function () {
+                showAlert("fa-circle-xmark", "Failed to load doctor details.");
+              }
+            });
+          }
+        
+          /** Handle Profile Image Upload */
+          $("#photo").change(function (event) {
+            var file = event.target.files[0];
+            if (!file) return;
+        
+            var reader = new FileReader();
+            reader.onload = function () {
+              $(".profile-img img").attr("src", reader.result);
+            };
+            reader.readAsDataURL(file);
+        
+            var formData = new FormData();
+            formData.append("photo", file);
+            formData.append("doctor_id", doctorId);
+        
+            $.ajax({
+              type: "POST",
+              url: "/upload-doctor-profile/",
+              data: formData,
+              contentType: false,
+              processData: false,
+              headers: {
+                "X-CSRFToken": "{{ csrf_token }}"
+              },
+              success: function (response) {
+                if (response.status === "success") {
+                  showAlert("fa-circle-check", "Profile image updated successfully!");
+                  
+                  // Update progress bar immediately
+                  updateProgressBar(response.completion_percentage || 70);
+        
+                  // Force update the image to prevent caching
+                  let newImageUrl = response.photo_url + "?t=" + new Date().getTime();
+                  $(".profile-img img, .booking-doc-img img, .user-img img, .avatar-sm img")
+                    .attr("src", newImageUrl)
+                    .on("load", function () {
+                      console.log("Image updated successfully!");
+                    })
+                    .on("error", function () {
+                      console.log("Failed to load new image.");
+                    });
+        
+                  $("#photo").val("");
+                } else {
+                  showAlert("fa-circle-xmark", "Error: " + response.message);
+                }
+              },
+              error: function () {
+                showAlert("fa-circle-xmark", "Failed to upload image.");
+              }
+            });
+          });
+        
+          /** Submit Form via AJAX */
+          $("#updateDoctorForm").submit(function (e) {
+            e.preventDefault();
+        
+            let formData = {
+              doctor_id: doctorId,
+              name: $("#name").val(),
+              email: $("#email").val(),
+              phno: $("#phno").val(),
+              qualification: $("#qualification").val(),
+              specialization: $("#specialization").val(),
+              experience: $("#experience").val(),
+              address: $("#address").val(),
+              city: $("#city").val(),
+              state: $("#state").val(),
+              clinic_name: $("#clinic_name").val(),
+              clinic_address: $("#clinic_address").val(),
+              gender: $("#gender").val(),
+              mci_no: $("#mci_no").val(),
+              fee: $("#fee").val(),
+              about_me: $("#about_me").val(),
+              is_available: $("#is_available").val(),
+            };
+        
+            $.ajax({
+              type: "POST",
+              url: "/update-doctor/",
+              data: JSON.stringify(formData),
+              contentType: "application/json",
+              headers: {
+                "X-CSRFToken": "{{ csrf_token }}"
+              },
+              success: function (response) {
+                if (response.status === "success") {
+                  showAlert("fa-circle-check", "Profile details updated successfully!");
+        
+                  // Update progress bar immediately
+                  updateProgressBar(response.completion_percentage || 100);
+        
+                  if (response.photo_url) {
+                    let newImageUrl = response.photo_url + "?t=" + new Date().getTime();
+                    $(".profile-img img, .booking-doc-img img, .user-img img, .avatar-sm img")
+                      .attr("src", newImageUrl)
+                      .on("load", function () {
+                        console.log("Image updated successfully!");
+                      })
+                      .on("error", function () {
+                        console.log("Failed to load new image.");
+                      });
+                  }
+        
+                  $("#photo").val("");
+                } else {
+                  showAlert("fa-circle-xmark", "Error: " + response.message);
+                }
+              },
+              error: function () {
+                showAlert("fa-circle-xmark", "An error occurred while updating the profile.");
+              }
+            });
+          });
+        
+          // Load doctor details on page load
+          loadDoctorDetails();
+        });
+        
+      </script> {% endcomment %}
 
         {% include "footer.html" %}
         {% endblock %}

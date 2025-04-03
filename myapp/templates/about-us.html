@@ -32,7 +32,7 @@
     <div class="main-wrapper">
         <!-- Header -->
         {% block content %}
-        <header class="header header-fixed header-one header-space">
+        <header class="header header-fixed header-one">
             <div class="container">
             <nav class="navbar navbar-expand-lg header-nav">
             <div class="navbar-header">
@@ -133,10 +133,21 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        {% comment %} <div class="col-md-6">
                             <div class="about-inner-img">
                                 <div class="about-box">
                                     <h4>Founder &amp; CEO Nikhil Yadav</h4>
+                                </div>
+                                <div class="about-img">
+                                    <img src="{% static 'assets/img/about-img3.jpg' %}" class="img-fluid" alt="">
+                                </div>
+                            </div>
+                        </div> {% endcomment %}
+                        <div class="col-md-6">
+                            <div class="about-inner-img">
+                                
+                                <div class="about-img">
+                                    <img src="{% static 'assets/img/about-img4.jpg' %}" class="img-fluid" alt="">
                                 </div>
                                 <div class="about-img">
                                     <img src="{% static 'assets/img/about-img3.jpg' %}" class="img-fluid" alt="">
