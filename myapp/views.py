@@ -415,9 +415,35 @@ def doctor_profile_cancel_appointment(request, doctor_id):
 
 
 # profile completion
+# def doctor_profile_settings(request):
+#     doctor_id = request.session.get('doctor_id')  
+
+#     if not doctor_id:
+#         return redirect("login")  
+
+#     try:
+#         doctor = doctorRegister.objects.get(id=doctor_id)  
+#     except doctorRegister.DoesNotExist:
+#         return redirect("login")  
+
+#     # Define fields to check
+#     required_fields = ["name", "email", "phno", "specialization", "experience", "address", "profile_img","qualification","gender","fee","mci_no","state","city","clinic_name","clinic_address","about_me","is_available"]
+    
+#     # Count completed fields
+#     filled_fields = sum(1 for field in required_fields if getattr(doctor, field, "") not in [None, ""])
+
+#     # Calculate profile completion percentage
+#     total_fields = len(required_fields)
+#     completion_percentage = (filled_fields / total_fields) * 100 if total_fields > 0 else 0
+
+#     return render(request, "doctor-profile-settings.html", {
+#         "doctor": doctor,
+#         "completion_percentage": int(completion_percentage)  # Convert to integer for better display
+#     })
+
+
 def doctor_profile_settings(request):
     doctor_id = request.session.get('doctor_id')  
-
     if not doctor_id:
         return redirect("login")  
 
@@ -426,21 +452,12 @@ def doctor_profile_settings(request):
     except doctorRegister.DoesNotExist:
         return redirect("login")  
 
-    # Define fields to check
-    required_fields = ["name", "email", "phno", "specialization", "experience", "address", "profile_img","qualification","gender","fee","mci_no","state","city","clinic_name","clinic_address","about_me","is_available"]
-    
-    # Count completed fields
-    filled_fields = sum(1 for field in required_fields if getattr(doctor, field, "") not in [None, ""])
-
-    # Calculate profile completion percentage
-    total_fields = len(required_fields)
-    completion_percentage = (filled_fields / total_fields) * 100 if total_fields > 0 else 0
+    completion_percentage = calculate_completion(doctor)
 
     return render(request, "doctor-profile-settings.html", {
         "doctor": doctor,
-        "completion_percentage": int(completion_percentage)  # Convert to integer for better display
+        "completion_percentage": completion_percentage
     })
-
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.timezone import now
@@ -887,6 +904,77 @@ from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.middleware.csrf import get_token
 
 
+# @csrf_exempt
+# def update_doctor(request):
+#     if request.method == "POST":
+#         try:
+#             if request.FILES.get("photo"):
+#                 doctor_id = request.POST.get("doctor_id")
+#                 if not doctor_id:
+#                     return JsonResponse({"status": "error", "message": "patient ID is required"})
+
+#                 doctor = get_object_or_404(patientRegister, id=doctor_id)
+
+#                 # Save Image
+#                 photo = request.FILES["photo"]
+#                 photo_path = f"profile_pics/{doctor_id}_{photo.name}"
+#                 doctor.photo = default_storage.save(photo_path, ContentFile(photo.read()))
+
+
+#                 doctor.save()
+#                 return JsonResponse({"status": "success", "message": "Image updated successfully!", "photo_url": doctor.photo.url})
+            
+#             else:
+#                 # Process JSON Data
+#                 data = json.loads(request.body.decode('utf-8'))  
+
+#                 # data = json.loads(request.body.decode('utf-8'))  # Ensure JSON decoding
+
+#             # Use session ID as fallback
+#                 doctor_id = data.get("doctor_id", request.session.get('doctor_id'))
+#                 if not doctor_id:
+#                     return JsonResponse({"status": "error", "message": "patient ID is required"})
+
+#                 doctor = get_object_or_404(doctorRegister, id=doctor_id)
+#             # Update fields
+#                 doctor.name = data.get("name", doctor.name)
+#                 doctor.email = data.get("email", doctor.email)
+#                 doctor.phno = data.get("phno", doctor.phno)
+#                 doctor.qualification = data.get("qualification", doctor.qualification)
+#                 doctor.specialization = data.get("specialization", doctor.specialization)
+#                 doctor.experience = data.get("experience", doctor.experience)
+#                 doctor.address = data.get("address", doctor.address)
+#                 doctor.city = data.get("city", doctor.city)
+#                 doctor.state = data.get("state", doctor.state)
+#                 doctor.clinic_name = data.get("clinic_name", doctor.clinic_name)
+#                 doctor.clinic_address = data.get("clinic_address", doctor.clinic_address)
+#                 doctor.gender = data.get("gender", doctor.gender)
+#                 doctor.mci_no = data.get("mci_no", doctor.mci_no)
+#                 doctor.fee = data.get("fee", doctor.fee)
+#                 doctor.about_me = data.get("about_me", doctor.about_me)
+#                 doctor.is_available = data.get("is_available", doctor.is_available)
+
+#                 doctor.save()  # Save changes
+#                 # Calculate new completion percentage
+#                 total_fields = 12  # Adjust this based on required fields
+#                 filled_fields = sum([1 for field in [
+#                     doctor.name, doctor.email, doctor.phno, doctor.qualification,
+#                     doctor.specialization, doctor.experience, doctor.address,
+#                     doctor.city, doctor.state, doctor.clinic_name, doctor.clinic_address,
+#                     doctor.mci_no,doctor.about_me,doctor.is_available
+#                 ] if field])
+#                 completion_percentage = (filled_fields / total_fields) * 100
+
+#                 return JsonResponse({"status": "success", "completion_percentage": completion_percentage,"message": "patient details updated successfully!"})
+
+#             # return JsonResponse({"status": "success", "message": "patient details updated successfully!"})
+#         except json.JSONDecodeError:
+#             return JsonResponse({"status": "error", "message": "Invalid JSON format"})
+#         except Exception as e:
+#             return JsonResponse({"status": "error", "message": str(e)})
+
+#     return JsonResponse({"status": "error", "message": "Invalid request method"})
+
 @csrf_exempt
 def update_doctor(request):
     if request.method == "POST":
@@ -894,63 +982,53 @@ def update_doctor(request):
             if request.FILES.get("photo"):
                 doctor_id = request.POST.get("doctor_id")
                 if not doctor_id:
-                    return JsonResponse({"status": "error", "message": "patient ID is required"})
+                    return JsonResponse({"status": "error", "message": "Doctor ID is required"})
 
-                doctor = get_object_or_404(patientRegister, id=doctor_id)
-
+                doctor = get_object_or_404(doctorRegister, id=doctor_id)
+                
                 # Save Image
                 photo = request.FILES["photo"]
                 photo_path = f"profile_pics/{doctor_id}_{photo.name}"
-                doctor.photo = default_storage.save(photo_path, ContentFile(photo.read()))
-
-
+                doctor.profile_img = default_storage.save(photo_path, ContentFile(photo.read()))
                 doctor.save()
-                return JsonResponse({"status": "success", "message": "Image updated successfully!", "photo_url": doctor.photo.url})
+                
+                completion_percentage = calculate_completion(doctor)
+                return JsonResponse({
+                    "status": "success", 
+                    "message": "Image updated successfully!", 
+                    "photo_url": doctor.profile_img.url,
+                    "completion_percentage": completion_percentage
+                })
             
             else:
-                # Process JSON Data
-                data = json.loads(request.body.decode('utf-8'))  
-
-                # data = json.loads(request.body.decode('utf-8'))  # Ensure JSON decoding
-
-            # Use session ID as fallback
+                data = json.loads(request.body.decode('utf-8'))
                 doctor_id = data.get("doctor_id", request.session.get('doctor_id'))
                 if not doctor_id:
-                    return JsonResponse({"status": "error", "message": "patient ID is required"})
+                    return JsonResponse({"status": "error", "message": "Doctor ID is required"})
 
                 doctor = get_object_or_404(doctorRegister, id=doctor_id)
-            # Update fields
-                doctor.name = data.get("name", doctor.name)
-                doctor.email = data.get("email", doctor.email)
-                doctor.phno = data.get("phno", doctor.phno)
-                doctor.qualification = data.get("qualification", doctor.qualification)
-                doctor.specialization = data.get("specialization", doctor.specialization)
-                doctor.experience = data.get("experience", doctor.experience)
-                doctor.address = data.get("address", doctor.address)
-                doctor.city = data.get("city", doctor.city)
-                doctor.state = data.get("state", doctor.state)
-                doctor.clinic_name = data.get("clinic_name", doctor.clinic_name)
-                doctor.clinic_address = data.get("clinic_address", doctor.clinic_address)
-                doctor.gender = data.get("gender", doctor.gender)
-                doctor.mci_no = data.get("mci_no", doctor.mci_no)
-                doctor.fee = data.get("fee", doctor.fee)
-                doctor.about_me = data.get("about_me", doctor.about_me)
-                doctor.is_available = data.get("is_available", doctor.is_available)
+                
+                # Update fields
+                fields_to_update = [
+                    "name", "email", "phno", "qualification", "specialization",
+                    "experience", "address", "city", "state", "clinic_name",
+                    "clinic_address", "gender", "mci_no", "fee", "about_me",
+                    "is_available"
+                ]
+                
+                for field in fields_to_update:
+                    if field in data:
+                        setattr(doctor, field, data[field])
+                
+                doctor.save()
+                completion_percentage = calculate_completion(doctor)
+                
+                return JsonResponse({
+                    "status": "success",
+                    "message": "Doctor details updated successfully!",
+                    "completion_percentage": completion_percentage
+                })
 
-                doctor.save()  # Save changes
-                # Calculate new completion percentage
-                total_fields = 12  # Adjust this based on required fields
-                filled_fields = sum([1 for field in [
-                    doctor.name, doctor.email, doctor.phno, doctor.qualification,
-                    doctor.specialization, doctor.experience, doctor.address,
-                    doctor.city, doctor.state, doctor.clinic_name, doctor.clinic_address,
-                    doctor.mci_no,doctor.about_me,doctor.is_available
-                ] if field])
-                completion_percentage = (filled_fields / total_fields) * 100
-
-                return JsonResponse({"status": "success", "completion_percentage": completion_percentage,"message": "patient details updated successfully!"})
-
-            # return JsonResponse({"status": "success", "message": "patient details updated successfully!"})
         except json.JSONDecodeError:
             return JsonResponse({"status": "error", "message": "Invalid JSON format"})
         except Exception as e:
@@ -992,9 +1070,38 @@ def upload_doctor_profile_image(request):
     return JsonResponse({"status": "error", "message": "Invalid request"})
 
 
+# @ensure_csrf_cookie  # Ensures CSRF token is sent as a cookie
+# def get_doctor(request, doctor_id):
+#     doctor = get_object_or_404(doctorRegister, id=doctor_id)
+#     photo_url = request.build_absolute_uri(settings.MEDIA_URL + doctor.profile_img.name) if doctor.profile_img else None
+#     return JsonResponse({
+#         "id": doctor.id,
+#         "name": doctor.name,
+#         "email": doctor.email,
+#         "phno": doctor.phno,
+#         "qualification":doctor.qualification,
+#         "specialization": doctor.specialization,
+#         "experience": doctor.experience,
+#         "address": doctor.address,
+#         "city": doctor.city,
+#         "state": doctor.state,
+#         "clinic_name": doctor.clinic_name,
+#         "clinic_address": doctor.clinic_address,
+#         "gender": doctor.gender,
+#         "mci_no": doctor.mci_no,
+#         "fee": doctor.fee,
+#         "photo": photo_url,  
+#         "about_me":doctor.about_me,
+#         "is_available":doctor.is_available,
+#         "csrfToken": get_token(request)  # Send CSRF token in response
+#     })
+
+
 @ensure_csrf_cookie  # Ensures CSRF token is sent as a cookie
 def get_doctor(request, doctor_id):
     doctor = get_object_or_404(doctorRegister, id=doctor_id)
+    completion_percentage = calculate_completion(doctor)  # Ensure this never returns None/0 unless valid
+
     photo_url = request.build_absolute_uri(settings.MEDIA_URL + doctor.profile_img.name) if doctor.profile_img else None
     return JsonResponse({
         "id": doctor.id,
@@ -1015,10 +1122,21 @@ def get_doctor(request, doctor_id):
         "photo": photo_url,  
         "about_me":doctor.about_me,
         "is_available":doctor.is_available,
-        "csrfToken": get_token(request)  # Send CSRF token in response
+        "csrfToken": get_token(request),
+        "completion_percentage": completion_percentage,  # Must always be included
     })
 
 
+def calculate_completion(doctor):
+    required_fields = [
+        "name", "email", "phno", "specialization", "experience", 
+        "address", "profile_img", "qualification", "gender", "fee",
+        "mci_no", "state", "city", "clinic_name", "clinic_address",
+        "about_me", "is_available"
+    ]
+    filled_fields = sum(1 for field in required_fields if getattr(doctor, field, None) not in [None, ""])
+    total_fields = len(required_fields)
+    return int((filled_fields / total_fields) * 100) if total_fields > 0 else 0
 ####################################update patient
 
 @csrf_exempt

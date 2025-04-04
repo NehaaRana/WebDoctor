@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>{% block title %} webDoctor {% endblock %}</title>
+  <title>{% block title %} webDocter {% endblock %}</title>
   <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
@@ -25,11 +25,7 @@
   <!-- jQuery (Required for Toastr) -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-
-
   <script>
-
-
     function handleImageUpload(event) {
       var file = event.target.files[0]; // Get selected file
       if (!file) return; // Exit if no file is chosen
@@ -41,87 +37,186 @@
       reader.readAsDataURL(file);
     }
   </script>
-
-
 </head>
 
 <body class="login-body">
   <div class="main-wrapper">
 
     <!-- Header Section -->
-    {% include "header.html" %}
-
-    <body style="transform: none;">
-      {% block content %}
-      <div class="main-wrapper" style="transform: none;">
-
-        <header class="header header-fixed header-one">
-          <div class="container">
-            <nav class="navbar navbar-expand-lg header-nav">
-              <div class="navbar-header">
-                <a id="mobile_btn" href="javascript:void(0);">
-                  <span class="bar-icon">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </span>
-                </a>
-                <a href="{% url 'index' %}" class="navbar-brand logo">
-                  <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
-                </a>
-                </a>
-              </div>
-              <div class="main-menu-wrapper">
-                <div class="menu-header">
-                  <a href="{% url 'index' %}" class="menu-logo">
-                    <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+    <header class="header header-fixed header-one header-space">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg header-nav">
+          <div class="navbar-header">
+            <a id="mobile_btn" href="javascript:void(0);">
+              <span class="bar-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </a>
+            <a href="{% url 'index' %}" class="navbar-brand logo">
+              <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+            </a>
+          </div>
+          <div class="main-menu-wrapper">
+            <div class="menu-header">
+              <a href="{% url 'index' %}" class="menu-logo">
+                <img src="{% static 'assets/img/logo.png' %}" class="img-fluid" alt="Logo">
+              </a>
+              <a id="menu_close" class="menu-close" href="javascript:void(0);">
+                <svg class="svg-inline--fa fa-times fa-w-11" aria-hidden="true" focusable="false" data-prefix="fas"
+                  data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"
+                  data-fa-i2svg="">
+                  <path fill="currentColor"
+                    d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z">
+                  </path>
+                </svg>
+              </a>
+            </div>
+            <ul class="main-nav">
+              <li>
+                <a href="{% url 'index' %}">Home</a>
+              </li>
+              <li>
+                <a href="{% url 'doctor_list' %}">Doctors</a>
+              </li>
+              <li>
+                <a href="{% url 'about_us' %}">About Us</a>
+              </li>
+              <li>
+                <a href="{% url 'contact_us' %}">Contact Us</a>
+              </li>
+              <ul class="nav header-navbar-rht" style="padding-top: 20px;">
+                <li class="nav-item dropdown has-arrow logged-item">
+                  <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="user-img">
+                      {% if doctor.profile_img %}
+                      <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
+                      {% else %}
+                      <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
+                        alt="default profile" />
+                      {% endif %}
+                    </span>
                   </a>
-                  <a id="menu_close" class="menu-close" href="javascript:void(0);">
-                    <svg class="svg-inline--fa fa-times fa-w-11" aria-hidden="true" focusable="false" data-prefix="fas"
-                      data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"
-                      data-fa-i2svg="">
-                      <path fill="currentColor"
-                        d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z">
-                      </path>
-                    </svg>
-                  </a>
+                  <div class="dropdown-menu dropdown-menu-end">
+                    <div class="user-header">
+                      <div class="avatar avatar-sm">
+                        {% if doctor.profile_img %}
+                        <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
+                        {% else %}
+                        <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
+                          alt="default profile" />
+                        {% endif %}
+                      </div>
+                      <div class="user-text">
+                        <h6>{{doctor.name}}</h6>
+                        <p class="text-muted mb-0">{{doctor.user}}</p>
+                      </div>
+                    </div>
+                    <a class="dropdown-item" href="{% url 'doctor_dashboard' %}">Dashboard</a>
+                    <a class="dropdown-item" href="{% url 'doctor_profile_settings' %}">Profile Settings</a>
+                    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                  </div>
+                </li>
+              </ul>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <div class="content" style="transform: none; min-height: 385.906px">
+      <div class="container-fluid" style="transform: none; padding-top:50px">
+        <div class="row" style="transform: none;">
+
+          <!-- Sidebar Section -->
+          <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
+            <div class="theiaStickySidebar">
+              <div class="profile-sidebar">
+                <div class="widget-profile pro-widget-content">
+                  <div class="profile-info-widget">
+                    <a href="#" class="booking-doc-img">
+                      {% if doctor.profile_img %}
+                      <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="100" alt="profile" />
+                      {% else %}
+                      <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="100"
+                        alt="default profile" />
+                      {% endif %}
+                    </a>
+                    <div class="profile-det-info">
+                      <h3>Dr. {{ doctor.name }}</h3>
+                      <div class="patient-details">
+                        <h5 class="mb-0">{{ doctor.qualification }} &amp; {{ doctor.specialization }}</h5>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <ul class="main-nav">
-                  <li>
-                    <a href="{% url 'index' %}">Home</a>
-                  </li>
 
+                <div class="dashboard-widget">
+                  <nav class="dashboard-menu">
+                    <ul>
+                      <li>
+                        <a href="{% url 'doctor_dashboard' %}">
+                          <i class="fas fa-columns"></i>
+                          <span>Dashboard</span>
+                        </a>
+                      </li>
 
-                  <li>
-                    <a href="{% url 'doctor_list' %}">Doctors</a>
+                      <li class="active">
+                        <a href="{% url 'doctor_profile_settings' %}">
+                          <i class="fas fa-user-cog"></i>
+                          <span>Profile Settings</span>
+                        </a>
+                      </li>
 
-                  </li>
+                      <li>
+                        <a href="{% url 'doctor_change_password' %}">
+                          <i class="fas fa-lock"></i>
+                          <span>Change Password</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="{% url 'logout' %}">
+                          <i class="fas fa-sign-out-alt"></i>
+                          <span>Logout</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+            <!-- Profile Completion Progress Bar -->
+            <div class="profile-status mt-4">
+              <label>Profile Completion: <strong>{{ completion_percentage }}%</strong></label>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: {{ completion_percentage }}%;"
+                  aria-valuenow="{{ completion_percentage }}" aria-valuemin="0" aria-valuemax="100">
+                </div>
+              </div>
+              <p class="{% if completion_percentage < 100 %}text-danger{% else %}text-success{% endif %} mt-2">
+                {% if completion_percentage < 100 %}Your profile is incomplete! Please update it.{% else %}Your profile
+                  is complete!{% endif %} </p>
+            </div>
+          </div>
 
-                  <li>
-                    <a href="{% url 'about_us' %}">About Us</a>
-                  </li>
+          <!-- Main Content Area -->
+          <div class="col-md-7 col-lg-8 col-xl-9">
 
-                  <li>
-                    <a href="{% url 'contact_us' %}">Contact Us</a>
-                  </li>
-
-
-                  <ul class="nav header-navbar-rht" style="padding-top: 20px;">
-
-                    <li class="nav-item dropdown has-arrow logged-item">
-                      <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="user-img">
-                          {% if doctor.profile_img %}
-                          <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
-                          {% else %}
-                          <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
-                            alt="default profile" />
-                          {% endif %}
-                        </span>
-                      </a>
-                      <div class="dropdown-menu dropdown-menu-end">
-                        <div class="user-header">
-                          <div class="avatar avatar-sm">
+            <!-- Profile Photo Card -->
+            <div class="card shadow-sm">
+              <div class="card-header bg-light">
+                <h4 class="mb-0"><i class="fas fa-user-circle me-2"></i>Profile Photo</h4>
+              </div>
+              <div class="card-body">
+                <form method="POST" action="{% url 'doctor_profile_settings' %}" id="updateDoctorForm"
+                  enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <div class="change-avatar d-flex align-items-center">
+                          <div class="profile-img me-3">
                             {% if doctor.profile_img %}
                             <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31" alt="profile" />
                             {% else %}
@@ -129,783 +224,470 @@
                               alt="default profile" />
                             {% endif %}
                           </div>
-                          <div class="user-text">
-                            <h6>{{doctor.name}}</h6>
-                            <p class="text-muted mb-0">{{doctor.user}}</p>
-                          </div>
-                        </div>
-                        <a class="dropdown-item" href="{% url 'doctor_dashboard' %}">Dashboard</a>
-                        <a class="dropdown-item" href="{% url 'doctor_profile_settings' %}">Profile Settings</a>
-                        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-                      </div>
-                    </li>
-                  </ul>
-                </ul>
-              </div>
-            </nav>
-          </div>
-        </header>
 
-        <div class="content" style="transform: none; min-height: 385.906px">
-          <div class="container-fluid" style="transform: none; padding-top:50px">
-            <div class="row" style="transform: none;">
+                          <div class="upload-img">
+                            <div class="change-photo-btn">
+                              <span>
+                                <i class="fa fa-upload"></i>
+                                Upload Photo
+                              </span>
 
-              <!-- Sidebar Section -->
-              <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
-                <div class="theiaStickySidebar">
-                  <div class="profile-sidebar">
-                    <div class="widget-profile pro-widget-content">
-                      <div class="profile-info-widget">
-                        <a href="#" class="booking-doc-img">
-                          {% if doctor.profile_img %}
-                          <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="100" alt="profile" />
-                          {% else %}
-                          <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="100"
-                            alt="default profile" />
-                          {% endif %}
-                        </a>
-                        <div class="profile-det-info">
-                          <h3>Dr. {{ doctor.name }}</h3>
-                          <div class="patient-details">
-                            <h5 class="mb-0">{{ doctor.qualification }} &amp; {{ doctor.specialization }}</h5>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="dashboard-widget">
-                      <nav class="dashboard-menu">
-                        <ul>
-                          <li>
-                            <a href="{% url 'doctor_dashboard' %}">
-                              <i class="fas fa-columns"></i>
-                              <span>Dashboard</span>
-                            </a>
-                          </li>
-
-                          <li class="active">
-                            <a href="{% url 'doctor_profile_settings' %}">
-                              <i class="fas fa-user-cog"></i>
-                              <span>Profile Settings</span>
-                            </a>
-                          </li>
-
-                          <li>
-                            <a href="{% url 'doctor_change_password' %}">
-                              <i class="fas fa-lock"></i>
-                              <span>Change Password</span>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="{% url 'logout' %}">
-                              <i class="fas fa-sign-out-alt"></i>
-                              <span>Logout</span>
-                            </a>
-                          </li>
-                        </ul>
-                      </nav>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Profile Completion Progress Bar -->
-                <div class="profile-status mt-4">
-                  <label>Profile Completion: {{ completion_percentage }}%</label>
-                  <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: {{ completion_percentage }}%;"
-                      aria-valuenow="{{ completion_percentage }}" aria-valuemin="0" aria-valuemax="100">
-                    </div>
-                  </div>
-                  <p class="{% if completion_percentage < 100 %}text-danger{% else %}text-success{% endif %} mt-2">
-                    {% if completion_percentage < 100 %}Your profile is incomplete!!!! Please update it.{% else %}Your
-                      profile is complete!{% endif %} </p>
-                </div>
-              </div>
-
-              <!-- Main Content Area -->
-              <div class="col-md-7 col-lg-8 col-xl-9">
-
-                <!-- Profile Photo Card -->
-                <div class="card shadow-sm">
-                  <div class="card-header bg-light">
-                    <h4 class="mb-0"><i class="fas fa-user-circle me-2"></i>Profile Photo</h4>
-                  </div>
-                  <div class="card-body">
-                    <form method="POST" action="{% url 'doctor_profile_settings' %}" id="updateDoctorForm"
-                      enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <div class="row">
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <div class="change-avatar d-flex align-items-center">
-                              <div class="profile-img me-3">
-                                {% if doctor.profile_img %}
-                                <img class="rounded-circle" src="{{ doctor.profile_img.url }}" width="31"
-                                  alt="profile" />
-                                {% else %}
-                                <img class="rounded-circle" src="/static/assets/img/default_profile.png" width="31"
-                                  alt="default profile" />
-                                {% endif %}
-                              </div>
-
-                              
-                              <div class="upload-img">
-                                <div class="change-photo-btn">
-                                  <span>
-                                    <i class="fa fa-upload"></i>
-                                    Upload Photo
-                                  </span>
-
-                                  <input type="file" id="photo" name="photo" accept="image/*" class="upload"
-                                    onchange="handleImageUpload(event)">
-
-                                </div>
-                                <small class="form-text text-muted">Allowed JPG or PNG. Max size of 2MB</small>
-                              </div>
+                              <input type="file" id="photo" name="photo" accept="image/*" class="upload"
+                                onchange="handleImageUpload(event)">
                             </div>
+                            <small class="form-text text-muted">Allowed JPG or PNG. Max size of 2MB</small>
                           </div>
-                        </div>
-                      </div>
-                  </div>
-                </div>
-                <!-- Basic Information Card -->
-                <div class="card mb-4 shadow-sm">
-                  <div class="card-header bg-light">
-                    <h4 class="mb-0"><i class="fas fa-info-circle me-2"></i>Basic Information</h4>
-                  </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                          <label class="form-label fw-semibold mb-2">Doctor ID <span
-                              class="text-danger">*</span></label>
-                              <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
-                          <input type="text" class="form-control" value="{{ doctor.id }}" readonly id="doctor_id">
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                          <label class="form-label fw-semibold mb-2">Email <span class="text-danger">*</span></label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                            <input type="email" id="email" name="email" class="form-control" value="{{ doctor.email }}"
-                              readonly>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                          <label class="form-label fw-semibold mb-2">Name <span class="text-danger">*</span></label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-user-md"></i></span>
-                            <input type="text" id="name" name="name" class="form-control" value="{{ doctor.name }}">
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                          <label class="form-label fw-semibold mb-2">Phone Number</label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                            <input type="text" id="phone" name="phone" class="form-control" value="{{ doctor.phno }}">
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                          <label class="form-label fw-semibold mb-2">Qualification</label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-graduation-cap"></i></span>
-                            <input type="text" id="qualification" name="qualification" class="form-control"
-                              value="{{ doctor.qualification }}">
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                          <label class="form-label fw-semibold mb-2">Specialization</label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-stethoscope"></i></span>
-                            <input type="text" id="specialization" name="specialization" class="form-control"
-                              value="{{ doctor.specialization }}">
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                          <label class="form-label fw-semibold mb-2">Gender</label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-venus-mars"></i></span>
-                            <select id="gender" name="gender" class="form-select form-control">
-                              <option value="M" {% if doctor.gender == "M" %}selected{% endif %}>Male</option>
-                              <option value="F" {% if doctor.gender == "F" %}selected{% endif %}>Female</option>
-                              <option value="O" {% if doctor.gender == "O" %}selected{% endif %}>Other</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                          <label class="form-label fw-semibold mb-2">MCI Registration Number</label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-id-card"></i></span>
-                            <input type="text" id="mci_no" name="mci_no" class="form-control"
-                              value="{{ doctor.mci_no }}">
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                          <label class="form-label fw-semibold mb-2">City</label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-city"></i></span>
-                            <input type="text" id="city" name="city" class="form-control" value="{{ doctor.city }}">
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                          <label class="form-label fw-semibold mb-2">State</label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-city"></i></span>
-                            <input type="text" id="state" name="state" class="form-control" value="{{ doctor.state }}">
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                          <label class="form-label fw-semibold mb-2">Address</label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
-                            <input type="text" id="address" name="address" class="form-control"
-                              value="{{ doctor.address }}">
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                          <label class="form-label fw-semibold mb-2">Experience</label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
-                            <input type="text" id="experience" name="experience" class="form-control"
-                              value="{{ doctor.experience }}">
-                          </div>
-                        </div>
-                      </div>
-
-
-
-                      <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                          <label class="form-label fw-semibold mb-2">Consultation Fee</label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-rupee-sign"></i></span>
-                            <input type="text" id="fee" name="fee" class="form-control" value="{{ doctor.fee }}">
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                          <label class="form-label fw-semibold mb-2">About Me</label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                            <input type="text" id="about_me" name="about_me" class="form-control"
-                              value="{{ doctor.about_me }}">
-                          </div>
-                        </div>
-                      </div>
-
-                      
-                      <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                            <label class="form-label fw-semibold mb-2">Availability Status</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-check-circle"></i></span>
-                                <select id="is_available" name="is_available" class="form-select form-control">
-                                    <option value="">Select</option>  <!-- Default option -->
-                                    <option value="Available" {% if doctor.is_available == "Available" %}selected{% endif %}>Available</option>
-                                    <option value="Not Available" {% if doctor.is_available == "Not Available" %}selected{% endif %}>Not Available</option>
-                                    
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    
-
-                <!-- Clinic Information Card -->
-                <div class="card mb-4 shadow-sm">
-                  <div class="card-header bg-light">
-                    <h4 class="mb-0"><i class="fas fa-clinic-medical me-2"></i>Clinic Information</h4>
-                  </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                          <label class="form-label fw-semibold mb-2">Clinic Name</label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-hospital"></i></span>
-                            <input type="text" id="clinic_name" name="clinic_name" class="form-control"
-                              value="{{ doctor.clinic_name }}">
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                          <label class="form-label fw-semibold mb-2">Clinic Address</label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
-                            <input type="text" id="clinic_address" name="clinic_address" class="form-control"
-                              value="{{ doctor.clinic_address }}">
-                          </div>
-
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-
-                <!-- Save Changes Button -->
-                <div class="submit-section submit-btn-bottom text-center mb-5">
-                  <button type="submit" class="btn btn-primary prime-btn">
-                    <i class="fas fa-save me-2"></i>Save Changes
-                  </button>
-                </div>
-                </form>
               </div>
             </div>
+            <!-- Basic Information Card -->
+            <div class="card mb-4 shadow-sm">
+              <div class="card-header bg-light">
+                <h4 class="mb-0"><i class="fas fa-info-circle me-2"></i>Basic Information</h4>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label class="form-label fw-semibold mb-2">Doctor ID <span class="text-danger">*</span></label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                        <input type="text" class="form-control" value="{{ doctor.id }}" readonly id="doctor_id">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label class="form-label fw-semibold mb-2">Email <span class="text-danger">*</span></label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        <input type="email" id="email" name="email" class="form-control" value="{{ doctor.email }}"
+                          readonly>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label class="form-label fw-semibold mb-2">Name <span class="text-danger">*</span></label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user-md"></i></span>
+                        <input type="text" id="name" name="name" class="form-control" value="{{ doctor.name }}">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label class="form-label fw-semibold mb-2">Phone Number</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                        <input type="text" id="phno" name="phno" class="form-control" value="{{ doctor.phno }}">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label class="form-label fw-semibold mb-2">Qualification</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-graduation-cap"></i></span>
+                        <input type="text" id="qualification" name="qualification" class="form-control"
+                          value="{{ doctor.qualification }}">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label class="form-label fw-semibold mb-2">Specialization</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-stethoscope"></i></span>
+                        <input type="text" id="specialization" name="specialization" class="form-control"
+                          value="{{ doctor.specialization }}">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label class="form-label fw-semibold mb-2">Gender</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-venus-mars"></i></span>
+                        <select id="gender" name="gender" class="form-select form-control">
+                          <option value="M" {% if doctor.gender == "M" %}selected{% endif %}>Male</option>
+                          <option value="F" {% if doctor.gender == "F" %}selected{% endif %}>Female</option>
+                          <option value="O" {% if doctor.gender == "O" %}selected{% endif %}>Other</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label class="form-label fw-semibold mb-2">MCI Registration Number</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                        <input type="text" id="mci_no" name="mci_no" class="form-control" value="{{ doctor.mci_no }}">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label class="form-label fw-semibold mb-2">City</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-city"></i></span>
+                        <input type="text" id="city" name="city" class="form-control" value="{{ doctor.city }}">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label class="form-label fw-semibold mb-2">State</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-city"></i></span>
+                        <input type="text" id="state" name="state" class="form-control" value="{{ doctor.state }}">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label class="form-label fw-semibold mb-2">Address</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                        <input type="text" id="address" name="address" class="form-control"
+                          value="{{ doctor.address }}">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label class="form-label fw-semibold mb-2">Experience</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
+                        <input type="text" id="experience" name="experience" class="form-control"
+                          value="{{ doctor.experience }}">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label class="form-label fw-semibold mb-2">Consultation Fee</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-rupee-sign"></i></span>
+                        <input type="text" id="fee" name="fee" class="form-control" value="{{ doctor.fee }}">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label class="form-label fw-semibold mb-2">About Me</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-rupee-sign"></i></span>
+                        <input type="text" id="about_me" name="about_me" class="form-control"
+                          value="{{ doctor.about_me }}">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label class="form-label fw-semibold mb-2">Availability Status</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-check-circle"></i></span>
+                        <select id="is_available" name="is_available" class="form-select form-control">
+                          <option value="">Select</option> <!-- Default option -->
+                          <option value="Available" {% if doctor.is_available == "Available" %}selected{% endif %}>
+                            Available</option>
+                          <option value="Not Available" {% if doctor.is_available == "Not Available" %}selected{% endif %}>Not Available</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Clinic Information Card -->
+            <div class="card mb-4 shadow-sm">
+              <div class="card-header bg-light">
+                <h4 class="mb-0"><i class="fas fa-clinic-medical me-2"></i>Clinic Information</h4>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label class="form-label fw-semibold mb-2">Clinic Name</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-hospital"></i></span>
+                        <input type="text" id="clinic_name" name="clinic_name" class="form-control"
+                          value="{{ doctor.clinic_name }}">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label class="form-label fw-semibold mb-2">Clinic Address</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                        <input type="text" id="clinic_address" name="clinic_address" class="form-control"
+                          value="{{ doctor.clinic_address }}">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Save Changes Button -->
+            <div class="submit-section submit-btn-bottom text-center mb-5">
+              <button type="submit" class="btn btn-primary prime-btn">
+                <i class="fas fa-save me-2"></i>Save Changes
+              </button>
+            </div>
+            </form>
           </div>
         </div>
+      </div>
+    </div>
 
-        <div id="responseMessage"></div>
+    <div id="responseMessage"></div>
 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-          $(document).ready(function () {
-            let doctorId = $("#doctor_id").val();
-            let completionPercentage = parseInt("{{ completion_percentage }}"); // Get the value from the template
-            updateProgressBar(completionPercentage);
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        let doctorId = $("#doctor_id").val();
+        let completionPercentage = parseInt("{{ completion_percentage }}") || 0;
+        updateProgressBar(completionPercentage);
 
-            // Function to update progress bar dynamically
-            function updateProgressBar(percentage) {
-              $(".progress-bar").css("width", percentage + "%").attr("aria-valuenow", percentage);
-              
-              let profileStatusText = percentage < 100
-              ? "<p class='text-danger mt-2'>Your profile is incomplete! Please update it.</p>"
-              : "<p class='text-warning mt-2'>Your profile is complete!</p>";
-            }
+        // Function to update progress bar dynamically
+        function updateProgressBar(percentage) {
+          // Ensure percentage is a valid number between 0 and 100
+          percentage = Math.min(100, Math.max(0, parseInt(percentage) || 0));
 
-            // Function to Show jQuery Alert Messages
-            function showAlert(icon, message) {
-              $.alert({
-                title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
-                content: `<span style="font-size: 15px;">${message}</span>`,
-                type: "blue",
-                theme: "modern",
-                buttons: {
-                  ok: {
-                    text: "OK",
-                    btnClass: "btn-blue",
-                  },
-                },
-              });
-            }
+          // Only update if the value changes significantly (avoid flickering)
+          const currentPercentage = parseInt($(".progress-bar").attr("aria-valuenow") || 0);
+          if (Math.abs(currentPercentage - percentage) > 5 || percentage === 100) {
+            console.log("Updating progress to:", percentage + "%");
+            $(".progress-bar").css("width", percentage + "%").attr("aria-valuenow", percentage);
+            $(".profile-status label").html(`Profile Completion: <strong>${percentage}%</strong>`);
 
-            // Load Doctor Details
-            function loadDoctorDetails() {
-              $.ajax({
-                url: `/get-doctor/${doctorId}/`,
-                type: "GET",
-                success: function (data) {
-                  $("#name").val(data.name);
-                  $("#email").val(data.email);
-                  $("#phno").val(data.phno);
-                  $("#qualification").val(data.qualification);
-                  $("#specialization").val(data.specialization);
-                  $("#experience").val(data.experience);
-                  $("#address").val(data.address);
-                  $("#city").val(data.city);
-                  $("#state").val(data.state);
-                  $("#clinic_name").val(data.clinic_name);
-                  $("#clinic_address").val(data.clinic_address);
-                  $("#gender").val(data.gender);
-                  $("#mci_no").val(data.mci_no);
-                  $("#fee").val(data.fee);
-                  $("#about_me").val(data.about_me);
-                  $("#is_available").val(data.is_available);
-                  // Update profile completion progress
-                  updateProgressBar(data.completion_percentage);
-
-                  // Display profile image
-                  if (data.photo) {
-                    $(".profile-img img").attr("src", data.photo);
-                  } else {
-                    $(".profile-img img").attr("src", "/static/assets/img/default_profile.png");
-                  }
-                },
-                error: function () {
-                  showAlert("fa-circle-xmark", "Failed to load doctor details.");
-                }
-              });
-            }
-
-            // Handle Profile Image Upload
-            $("#photo").change(function (event) {
-              var file = event.target.files[0];
-              if (!file) return;
-
-              var reader = new FileReader();
-              reader.onload = function () {
-                $(".profile-img img").attr("src", reader.result);
-              };
-              reader.readAsDataURL(file);
-
-              var formData = new FormData();
-              formData.append("photo", file);
-              formData.append("doctor_id", doctorId);
-
-              $.ajax({
-                type: "POST",
-                url: "/upload-doctor-profile/",
-                data: formData,
-                contentType: false,
-                processData: false,
-                headers: {
-                  "X-CSRFToken": "{{ csrf_token }}"
-                },
-                success: function (response) {
-                  if (response.status === "success") {
-                    showAlert("fa-circle-check", "Profile image updated successfully!");
-                    // Immediately update progress bar without reloading
-                    updateProgressBar(response.completion_percentage);
-                    let newImageUrl = response.photo_url + "?t=" + new Date().getTime();
-                    $(".profile-img img, .booking-doc-img img, .user-img img, .avatar-sm img").attr("src", newImageUrl);
-                    $("#photo").val("");
-                    loadDoctorDetails();
-                  } else {
-                    showAlert("fa-circle-xmark", "Error: " + response.message);
-                  }
-                },
-                error: function () {
-                  showAlert("fa-circle-xmark", "Failed to upload image.");
-                }
-              });
-            });
-
-            // Submit Form via AJAX
-            $("#updateDoctorForm").submit(function (e) {
-              e.preventDefault();
-
-              let formData = {
-                doctor_id: doctorId,
-                name: $("#name").val(),
-                email: $("#email").val(),
-                phno: $("#phno").val(),
-                qualification: $("#qualification").val(),
-                specialization: $("#specialization").val(),
-                experience: $("#experience").val(),
-                address: $("#address").val(),
-                city: $("#city").val(),
-                state: $("#state").val(),
-                clinic_name: $("#clinic_name").val(),
-                clinic_address: $("#clinic_address").val(),
-                gender: $("#gender").val(),
-                mci_no: $("#mci_no").val(),
-                fee: $("#fee").val(),
-                about_me: $("#about_me").val(),
-                is_available: $("#is_available").val(),
-              };
-
-              $.ajax({
-                type: "POST",
-                url: "/update-doctor/",
-                data: JSON.stringify(formData),
-                contentType: "application/json",
-                headers: {
-                  "X-CSRFToken": "{{ csrf_token }}"
-                },
-                success: function (response) {
-                  if (response.status === "success") {
-                    showAlert("fa-circle-check", "Profile details updated successfully!");
-                    // Update the progress bar with the new completion percentage
-                    updateProgressBar(response.completion_percentage);
-                    // let newImageUrl = response.photo_url + "?t=" + new Date().getTime();
-                    // $(".profile-img img, .booking-doc-img img, .user-img img, .avatar-sm img").attr("src", newImageUrl);
-                    if (response.photo_url) {
-                      let newImageUrl = response.photo_url + "?t=" + new Date().getTime();
-                      $(".profile-img img, .booking-doc-img img, .user-img img, .avatar-sm img").each(function () {
-                        $(this).attr("src", newImageUrl);
-                        $(this).on("load", function () {
-                          console.log("Image updated successfully!");
-                        }).on("error", function () {
-                          console.log("Failed to load new image.");
-                        });
-                      });
-                    }
-                    $("#photo").val("");
-                    loadDoctorDetails();
-                  } else {
-                    showAlert("fa-circle-xmark", "Error: " + response.message);
-                  }
-                },
-                error: function () {
-                  showAlert("fa-circle-xmark", "An error occurred while updating the profile.");
-                }
-              });
-            });
-
-            loadDoctorDetails(); // Load doctor details on page load
+            // Update status message
+            const statusElement = $(".profile-status p");
+            statusElement.removeClass("text-danger text-success")
+              .addClass(percentage < 100 ? "text-danger" : "text-success")
+              .text(percentage < 100 ? "Your profile is incomplete! Please update it." : "Your profile is complete!");
+          }
+        }
+        function showAlert(icon, message) {
+          $.alert({
+            title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+            content: `<span style="font-size: 15px;">${message}</span>`,
+            type: "blue",
+            theme: "modern",
+            buttons: {
+              ok: {
+                text: "OK",
+                btnClass: "btn-blue",
+              },
+            },
           });
-  </script>   
+        }
 
-  
- 
+        // Load Doctor Details
+        function loadDoctorDetails() {
+          $.ajax({
+            url: `/get-doctor/${doctorId}/`,
+            type: "GET",
+            success: function (data) {
+              $("#name").val(data.name);
+              $("#email").val(data.email);
+              $("#phno").val(data.phno);
+              $("#qualification").val(data.qualification);
+              $("#specialization").val(data.specialization);
+              $("#experience").val(data.experience);
+              $("#address").val(data.address);
+              $("#city").val(data.city);
+              $("#state").val(data.state);
+              $("#clinic_name").val(data.clinic_name);
+              $("#clinic_address").val(data.clinic_address);
+              $("#gender").val(data.gender);
+              $("#mci_no").val(data.mci_no);
+              $("#fee").val(data.fee);
+              $("#about_me").val(data.about_me);
+              $("#is_available").val(data.is_available);
+              // Update profile completion progress
+              updateProgressBar(data.completion_percentage);
 
-      {% comment %} <script>
-        $(document).ready(function () {
-          let doctorId = $("#doctor_id").val();
-          let completionPercentage = parseInt("{{ completion_percentage }}") || 0;
-          updateProgressBar(completionPercentage);
-        
-          /** Function to update progress bar dynamically */
-          function updateProgressBar(percentage) {
-            $(".progress-bar")
-              .css("width", percentage + "%")
-              .attr("aria-valuenow", percentage)
-              .text(percentage + "%"); // Show percentage on the bar
-        
-            let profileStatusText = percentage < 100
-              ? "<p class='text-danger mt-2'>Your profile is incomplete! Please update it.</p>"
-              : "<p class='text-success mt-2'>Your profile is complete!</p>";
-        
-            $("#profile-status").html(profileStatusText); // Update profile status message in UI
-          }
-        
-          /** Function to show alerts */
-          function showAlert(icon, message) {
-            $.alert({
-              title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
-              content: `<span style="font-size: 15px;">${message}</span>`,
-              type: "blue",
-              theme: "modern",
-              buttons: {
-                ok: {
-                  text: "OK",
-                  btnClass: "btn-blue",
-                },
-              },
-            });
-          }
-        
-          /** Load Doctor Details */
-          function loadDoctorDetails() {
-            $.ajax({
-              url: `/get-doctor/${doctorId}/`,
-              type: "GET",
-              success: function (data) {
-                $("#name").val(data.name);
-                $("#email").val(data.email);
-                $("#phno").val(data.phno);
-                $("#qualification").val(data.qualification);
-                $("#specialization").val(data.specialization);
-                $("#experience").val(data.experience);
-                $("#address").val(data.address);
-                $("#city").val(data.city);
-                $("#state").val(data.state);
-                $("#clinic_name").val(data.clinic_name);
-                $("#clinic_address").val(data.clinic_address);
-                $("#gender").val(data.gender);
-                $("#mci_no").val(data.mci_no);
-                $("#fee").val(data.fee);
-                $("#about_me").val(data.about_me);
-                $("#is_available").val(data.is_available);
-        
-                // Update progress bar immediately
-                updateProgressBar(data.completion_percentage || 0);
-        
-                // Display profile image
-                let profileImage = data.photo || "/static/assets/img/default_profile.png";
-                $(".profile-img img").attr("src", profileImage);
-              },
-              error: function () {
-                showAlert("fa-circle-xmark", "Failed to load doctor details.");
+              // Display profile image
+              if (data.photo) {
+                $(".profile-img img").attr("src", data.photo);
+              } else {
+                $(".profile-img img").attr("src", "/static/assets/img/default_profile.png");
               }
-            });
-          }
-        
-          /** Handle Profile Image Upload */
-          $("#photo").change(function (event) {
-            var file = event.target.files[0];
-            if (!file) return;
-        
-            var reader = new FileReader();
-            reader.onload = function () {
-              $(".profile-img img").attr("src", reader.result);
-            };
-            reader.readAsDataURL(file);
-        
-            var formData = new FormData();
-            formData.append("photo", file);
-            formData.append("doctor_id", doctorId);
-        
-            $.ajax({
-              type: "POST",
-              url: "/upload-doctor-profile/",
-              data: formData,
-              contentType: false,
-              processData: false,
-              headers: {
-                "X-CSRFToken": "{{ csrf_token }}"
-              },
-              success: function (response) {
-                if (response.status === "success") {
-                  showAlert("fa-circle-check", "Profile image updated successfully!");
-                  
-                  // Update progress bar immediately
-                  updateProgressBar(response.completion_percentage || 70);
-        
-                  // Force update the image to prevent caching
+            },
+            error: function () {
+              showAlert("fa-circle-xmark", "Failed to load doctor details.");
+            }
+          });
+        }
+
+        // Handle Profile Image Upload
+        $("#photo").change(function (event) {
+          var file = event.target.files[0];
+          if (!file) return;
+
+          var reader = new FileReader();
+          reader.onload = function () {
+            $(".profile-img img").attr("src", reader.result);
+          };
+          reader.readAsDataURL(file);
+
+          var formData = new FormData();
+          formData.append("photo", file);
+          formData.append("doctor_id", doctorId);
+
+          $.ajax({
+            type: "POST",
+            url: "/upload-doctor-profile/",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+              "X-CSRFToken": "{{ csrf_token }}"
+            },
+            success: function (response) {
+              console.log("Upload response:", response); // Debug log
+              if (response.status === "success") {
+                showAlert("fa-circle-check", "Profile image updated successfully!");
+                // Immediately update progress bar without reloading
+                updateProgressBar(response.completion_percentage);
+                let newImageUrl = response.photo_url + "?t=" + new Date().getTime();
+                $(".profile-img img, .booking-doc-img img, .user-img img, .avatar-sm img").attr("src", newImageUrl);
+                $("#photo").val("");
+                loadDoctorDetails();
+              } else {
+                showAlert("fa-circle-xmark", "Error: " + response.message);
+              }
+            },
+            error: function () {
+              showAlert("fa-circle-xmark", "Failed to upload image.");
+            }
+          });
+        });
+
+        // Submit Form via AJAX
+        $("#updateDoctorForm").submit(function (e) {
+          e.preventDefault();
+
+          let formData = {
+            doctor_id: doctorId,
+            name: $("#name").val(),
+            email: $("#email").val(),
+            phno: $("#phno").val(),
+            qualification: $("#qualification").val(),
+            specialization: $("#specialization").val(),
+            experience: $("#experience").val(),
+            address: $("#address").val(),
+            city: $("#city").val(),
+            state: $("#state").val(),
+            clinic_name: $("#clinic_name").val(),
+            clinic_address: $("#clinic_address").val(),
+            gender: $("#gender").val(),
+            mci_no: $("#mci_no").val(),
+            fee: $("#fee").val(),
+            about_me: $("#about_me").val(),
+            is_available: $("#is_available").val(),  // Changed from availability_status to is_available
+          };
+
+          $.ajax({
+            type: "POST",
+            url: "/update-doctor/",
+            data: JSON.stringify(formData),
+            contentType: "application/json",
+            headers: {
+              "X-CSRFToken": "{{ csrf_token }}"
+            },
+            success: function (response) {
+              console.log("Update response:", response); // Debug log
+              if (response.status === "success") {
+                showAlert("fa-circle-check", "Profile details updated successfully!");
+                // Update the progress bar with the new completion percentage
+                updateProgressBar(response.completion_percentage);
+                if (response.photo_url) {
                   let newImageUrl = response.photo_url + "?t=" + new Date().getTime();
-                  $(".profile-img img, .booking-doc-img img, .user-img img, .avatar-sm img")
-                    .attr("src", newImageUrl)
-                    .on("load", function () {
+                  $(".profile-img img, .booking-doc-img img, .user-img img, .avatar-sm img").each(function () {
+                    $(this).attr("src", newImageUrl);
+                    $(this).on("load", function () {
                       console.log("Image updated successfully!");
-                    })
-                    .on("error", function () {
+                    }).on("error", function () {
                       console.log("Failed to load new image.");
                     });
-        
-                  $("#photo").val("");
-                } else {
-                  showAlert("fa-circle-xmark", "Error: " + response.message);
+                  });
                 }
-              },
-              error: function () {
-                showAlert("fa-circle-xmark", "Failed to upload image.");
+                $("#photo").val("");
+                loadDoctorDetails();
+              } else {
+                showAlert("fa-circle-xmark", "Error: " + response.message);
               }
-            });
-          });
-        
-          /** Submit Form via AJAX */
-          $("#updateDoctorForm").submit(function (e) {
-            e.preventDefault();
-        
-            let formData = {
-              doctor_id: doctorId,
-              name: $("#name").val(),
-              email: $("#email").val(),
-              phno: $("#phno").val(),
-              qualification: $("#qualification").val(),
-              specialization: $("#specialization").val(),
-              experience: $("#experience").val(),
-              address: $("#address").val(),
-              city: $("#city").val(),
-              state: $("#state").val(),
-              clinic_name: $("#clinic_name").val(),
-              clinic_address: $("#clinic_address").val(),
-              gender: $("#gender").val(),
-              mci_no: $("#mci_no").val(),
-              fee: $("#fee").val(),
-              about_me: $("#about_me").val(),
-              is_available: $("#is_available").val(),
-            };
-        
-            $.ajax({
-              type: "POST",
-              url: "/update-doctor/",
-              data: JSON.stringify(formData),
-              contentType: "application/json",
-              headers: {
-                "X-CSRFToken": "{{ csrf_token }}"
-              },
-              success: function (response) {
-                if (response.status === "success") {
-                  showAlert("fa-circle-check", "Profile details updated successfully!");
-        
-                  // Update progress bar immediately
-                  updateProgressBar(response.completion_percentage || 100);
-        
-                  if (response.photo_url) {
-                    let newImageUrl = response.photo_url + "?t=" + new Date().getTime();
-                    $(".profile-img img, .booking-doc-img img, .user-img img, .avatar-sm img")
-                      .attr("src", newImageUrl)
-                      .on("load", function () {
-                        console.log("Image updated successfully!");
-                      })
-                      .on("error", function () {
-                        console.log("Failed to load new image.");
-                      });
-                  }
-        
-                  $("#photo").val("");
-                } else {
-                  showAlert("fa-circle-xmark", "Error: " + response.message);
-                }
-              },
-              error: function () {
-                showAlert("fa-circle-xmark", "An error occurred while updating the profile.");
-              }
-            });
-          });
-        
-          // Load doctor details on page load
-          loadDoctorDetails();
-        });
-        
-      </script> {% endcomment %}
-
-        {% include "footer.html" %}
-        {% endblock %}
-        <!-- jQuery library (required for jquery-confirm) -->
-        <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
-
-        <script>
-          $(document).ready(function () {
-            function showAlert(icon, message) {
-              $.alert({
-                title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
-                content: `<span style="font-size: 15px;">${message}</span>`,
-                type: "blue",
-                theme: "modern",
-                buttons: {
-                  ok: {
-                    text: "OK",
-                    btnClass: "btn-blue",
-                  },
-                },
-              });
+            },
+            error: function () {
+              showAlert("fa-circle-xmark", "An error occurred while updating the profile.");
             }
-            let delay = 500; // Start with a small delay
-            {% for message in messages %}
-            setTimeout(function () {
-              showAlert(
-                "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
-                "{{ message|escape }}",
-                "{{ message.tags }}"
-              );
-            }, delay);
-            delay += 1000; // Increase delay for next message
-            {% endfor %}
-          })
+          });
+        });
 
-        </script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        loadDoctorDetails(); // Load doctor details on page load
+      });
+    </script>
 
-    </body>
+    {% include "footer.html" %}
+
+    <!-- jQuery library (required for jquery-confirm) -->
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        function showAlert(icon, message) {
+          $.alert({
+            title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+            content: `<span style="font-size: 15px;">${message}</span>`,
+            type: "blue",
+            theme: "modern",
+            buttons: {
+              ok: {
+                text: "OK",
+                btnClass: "btn-blue",
+              },
+            },
+          });
+        }
+        let delay = 500; // Start with a small delay
+        {% for message in messages %}
+        setTimeout(function () {
+          showAlert(
+            "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
+            "{{ message|escape }}",
+            "{{ message.tags }}"
+          );
+        }, delay);
+        delay += 1000; // Increase delay for next message
+        {% endfor %}
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </div>
+</body>
 
 </html>

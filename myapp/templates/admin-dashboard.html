@@ -21,8 +21,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.0/css/boxicons.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js" integrity="sha512-b+nQTCdtTBIRIbraqNEwsjB6UvL3UEMkXnhzd8awtCYh0Kcsjl9uEgwVFVbhoj3uu1DO1ZMacNvLoyJJiNfcvg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  
+
     <!-- jquery-confirm CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
+
     <!-- App Css-->
     <link href="{%static 'assets/admin_css/app.min.css' %}" id="app-style" rel="stylesheet" type="text/css" />
     <style>
@@ -634,37 +639,39 @@
 
     <!-- jQuery library (required for jquery-confirm) -->
     <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {% comment %} <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> {% endcomment %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
 
     <script>
         $(document).ready(function () {
+            // Function to show an alert with an animated icon
             function showAlert(icon, message) {
-                $.alert({
-                    title: <i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>,
-                    content: <span style="font-size: 15px;">${message}</span>,
-                    type: "blue",
-                    theme: "modern",
-                    buttons: {
-                        ok: {
-                            text: "OK",
-                            btnClass: "btn-blue",
-                        },
-                    },
-                });
+              $.alert({
+                title: `<i class="fa-solid ${icon} fa-2x fa-beat-fade"></i>`,
+                content: `<span style="font-size: 15px;">${message}</span>`,
+                type: "blue",
+                theme: "modern",
+                buttons: {
+                  ok: {
+                    text: "OK",
+                    btnClass: "btn-blue",
+                  },
+                },
+              });
             }
-        }
+            //backend error
             let delay = 500; // Start with a small delay
             {% for message in messages %}
             setTimeout(function () {
-                showAlert(
-                    "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
-                    "{{ message|escape }}",
-                    "{{ message.tags }}"
-                );
+              showAlert(
+                "{% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-circle-xmark{% else %}fa-info-circle{% endif %}",
+                "{{ message|escape }}",
+                "{{ message.tags }}"
+              );
             }, delay);
             delay += 1000; // Increase delay for next message
             {% endfor %}
+        
         })
 
     </script>
