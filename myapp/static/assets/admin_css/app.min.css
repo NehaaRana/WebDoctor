@@ -68,7 +68,8 @@ body:not([data-sidebar-size=sm]) .app-search {
 }
 
 .logo .logo-sm {
-    display: none
+    display: none;
+    margin-left: -10px !important;
 }
 
 .logo-dark {

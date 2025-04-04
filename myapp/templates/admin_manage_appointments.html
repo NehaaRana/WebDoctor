@@ -15,10 +15,11 @@
     <link href="{%static 'assets/admin_libs/jsvectormap/css/jsvectormap.min.css'%}" rel="stylesheet" type="text/css" />
 
     <!-- Bootstrap Css -->
-    <link href="{%static 'assets/admin_css/bootstrap.min.css' %}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <link href="{%static 'assets/admin_css/bootstrap.min.css' %}" id="bootstrap-style" rel="stylesheet"
+        type="text/css" />
 
-     <!-- App Css-->
-     <link href="{%static 'assets/admin_css/app.min.css' %}" id="app-style" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="{%static 'assets/admin_css/app.min.css' %}" id="app-style" rel="stylesheet" type="text/css" />
 
     <!-- Icons Css -->
     <link href="{%static 'assets/admin_css/icons.min.css' %}" rel="stylesheet" type="text/css" />
@@ -29,75 +30,75 @@
 
     <!-- DataTables CSS & JS -->
     <!-- Replace existing DataTables CSS with these -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"/>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" />
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.13.6/r-2.5.0/datatables.min.js"></script>
 
     <!-- jQuery Confirm JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<!-- Add Font Awesome CDN in head section -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <!-- Add Font Awesome CDN in head section -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-    
         @import url("{% static 'assets/vendor/datatables/css/jquery.dataTables.min.css' %}");
         @import url("{% static 'assets/vendor/datatables/css/buttons.dataTables.min.css' %}");
         @import url("{% static 'assets/vendor/datatables/responsive/responsive.css' %}");
-    
+
         * {
             font-family: poppins !important;
         }
-    
+
         #appointmentTable th {
             font-weight: 600;
         }
-    
+
         .dataTables_wrapper .row {
             align-items: center;
             margin: 1rem 0;
         }
-    
+
         .dataTables_filter label {
             width: 100%;
         }
-    
+
         .table-responsive {
             border-radius: 8px;
             overflow: hidden;
         }
-    
+
         .dataTables_wrapper .row {
             align-items: center;
             margin: 1rem 0;
         }
-    
+
         .table-responsive {
             border-radius: 8px;
             overflow: hidden;
         }
-    
+
         /* Fix DataTables elements alignment */
         .dataTables_wrapper .row {
             margin: 0;
             align-items: center;
         }
-    
+
         .dataTables_filter label {
             margin-bottom: 0;
         }
-    
-        .dataTables_length, .dataTables_filter {
+
+        .dataTables_length,
+        .dataTables_filter {
             padding: 15px 0;
         }
-    
+
         /* Pagination styling */
         .page-item.active .page-link {
             background-color: #0e82fd;
             border-color: #0e82fd;
         }
-    
+
         /* Search input styling */
         .dataTables_filter input {
             border: 1px solid #dee2e6;
@@ -105,24 +106,24 @@
             padding: 5px 10px;
             margin-left: 10px;
         }
-    
+
         /* Responsive breakpoints */
         @media (max-width: 768px) {
             .table-responsive {
                 border: none;
             }
-    
+
             #appointmentTable td:nth-child(16),
             #appointmentTable th:nth-child(16) {
                 min-width: 120px;
             }
         }
-    
+
         div.dataTables_wrapper div.dataTables_length select {
             width: 50px;
             display: inline-block;
         }
-    
+
         /* Remove custom pagination styles */
         .paginate_button.first,
         .paginate_button.last,
@@ -134,30 +135,29 @@
             border-radius: 4px !important;
             background: none !important;
         }
-    
+
         .paginate_button:hover {
             background: #e9ecef !important;
         }
-    
+
         .paginate_button.current {
             background: #0d6efd !important;
             border-color: #0d6efd !important;
             color: white !important;
         }
-    
+
         /* Restore default DataTables wrapper spacing */
         .dataTables_wrapper .row {
             margin: 0.5rem 0;
             align-items: center;
         }
-    
+
         /* Optional: Adjust search input width */
         .dataTables_filter input {
             width: auto !important;
             margin-left: 0.5rem;
         }
-    
-        </style>
+    </style>
 </head>
 
 <body>
@@ -172,8 +172,8 @@
                     <!-- LOGO -->
                     <div class="navbar-brand-box">
                         <a href="{% url 'admin_dashboard' %}" class="logo logo-dark">
-                            <span class="logo-sm">
-                                <img src="{%  static 'assets/admin_images/logo-dark-sm.png' %}" alt="" height="26">
+                            <span class="logo-sm mt-2">
+                                <img src="{%  static 'assets/admin_images/logo-dark-sm.png' %}" height="50" width="50">
                             </span>
                         </a>
                     </div>
@@ -199,7 +199,7 @@
             <div class="navbar-brand-box mt-3">
                 <a href="{% url 'admin_dashboard' %}" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="{%  static 'assets/admin_images/logo-dark-sm.png' %}" alt="" height="26">
+                        <img src="{%  static 'assets/admin_images/logo-dark-sm.png' %}" height="40" width="40">
                     </span>
                     <span class="logo-lg">
                         <img src="{%  static 'assets/admin_images/logo-dark.png' %}" alt="" height="45" width="140">
