@@ -1707,7 +1707,7 @@ def verify_otp(request, email):
                 del request.session['doctor_data']
                 del request.session['doctor_password']
 
-                messages.success(request, "Registration successful! You can now log in.")
+                messages.success(request, "Registration successful!")
                 return redirect('login')
             else:
                 messages.error(request, "Session expired. Please register again.")
@@ -1992,7 +1992,7 @@ def send_meeting_link(request, appointment_id):
 
     # Send email
     send_mail(subject, message, "webdoctors123@gmail.com", recipient_list, fail_silently=False)
-
+    messages.success(request, "Meeting link sent to patient email successfully!!!")
     return redirect('doctor_dashboard')  # Redirect after sending email
 
 

@@ -470,7 +470,7 @@
           <!-- Card Start -->
           {% for doctor in doctors %}
           <div class="col-12 col-sm-6 col-md-4 col-lg-3 aos g-4 doctor-card1" data-name="{{ doctor.name|lower }}"
-            data-specialization="{{ doctor.specialization|lower }}" data-aos="fade-up">
+            data-specialization="{{ doctor.specialization|lower }}" >
             <div class="card h-100">
 
               <div class="card-img-container h-75">
@@ -508,7 +508,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script>
+ <script>
       $(document).ready(function () {
         // Function to filter doctors based on search input
         function filterDoctors(searchText) {
@@ -602,6 +602,8 @@
       });
 
     </script>
+
+   
 
     {% include "footer.html" %}
     {% endblock %}

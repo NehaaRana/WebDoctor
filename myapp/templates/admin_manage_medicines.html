@@ -414,7 +414,7 @@
                                         </div>
                                         
                                         <div class="row mb-4">
-                                            <label for="price" class="col-sm-3 col-form-label fw-semibold">Price ($)*</label>
+                                            <label for="price" class="col-sm-3 col-form-label fw-semibold">Price (₹)*</label>
                                             <div class="col-sm-9">
                                                 <input type="number" step="0.01" class="form-control" id="price" name="price" 
                                                        value="{% if is_edit_mode %}{{ medicine_to_edit.price }}{% endif %}" 
@@ -515,7 +515,7 @@
                                                     <td class="text-center">{{ medicine.id }}</td>
                                                     <td>{{ medicine.name }}</td>
                                                     <td>{{ medicine.manufacturer }}</td>
-                                                    <td class="text-end">${{ medicine.price }}</td>
+                                                    <td class="text-end">₹{{ medicine.price }}</td>
                                                     <td class="text-center">{{ medicine.quantity }}</td>
                                                     <td class="text-center">{{ medicine.expiry_date|date:"Y-m-d" }}</td>
                                                     <td class="text-center">
