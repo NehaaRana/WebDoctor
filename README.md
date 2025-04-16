@@ -43,14 +43,20 @@ By leveraging technology, WebDoctor simplifies the management of healthcare faci
 
 ---
 
-## Screenshots
+## 🖼️ Screenshots
 
-### Home Page
-![Home Page](myapp/static/assets/img/HomePage.png)
+### 🏠 Home Page  
+![Home Page](static/assets/img/HomePage.png)
 
-![Reviews Page](myapp/static/assets/img/reviews.png)
-![Patient-Dashboard Page](myapp/static/assets/img/patient-dashboard.png)
-![Doctor-Dashboard Page](myapp/static/assets/img/doctor-dashboard.png)
+### 🌟 Reviews Page  
+![Reviews Page](static/assets/img/reviews.png)
+
+### 🧑‍⚕️ Patient Dashboard  
+![Patient Dashboard](static/assets/img/patient-dashboard.png)
+
+### 👨‍⚕️ Doctor Dashboard  
+![Doctor Dashboard](static/assets/img/doctor-dashboard.png)
+
 
 ---
 
