@@ -50,6 +50,7 @@ By leveraging technology, WebDoctor simplifies the management of healthcare faci
 
 ![Reviews Page](myapp/static/assets/img/reviews.png)
 ![Patient-Dashboard Page](myapp/static/assets/img/patient-dashboard.png)
+![Doctor-Dashboard Page](myapp/static/assets/img/doctor-dashboard.png)
 
 ---
 
