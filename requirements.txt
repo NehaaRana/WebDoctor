@@ -3,3 +3,4 @@ gunicorn
 django-paypal
 razorpay
 twilio
+reportlab
