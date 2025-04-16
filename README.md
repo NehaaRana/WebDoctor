@@ -6,13 +6,13 @@
 
 ## 📚 **Table of Contents**
 
-- [📖 Introduction] 
-- [✨ Features] 
-- [🖼️ Screenshots]
-- [🛠️ Installation]
-- [🚀 Usage]
-- [🤝 Contributing]
-- [📄 License]
+- 📖 Introduction 
+- ✨ Features
+- 🖼️ Screenshots
+- 🛠️ Installation
+- 🚀 Usage
+- 🤝 Contributing
+- 📄 License
 
 ---
 
