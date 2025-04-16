@@ -4,3 +4,4 @@ django-paypal
 razorpay
 twilio
 reportlab
+xhtml2pdf
