@@ -2,14 +2,14 @@
 
 ![WebDoctor Logo](static/assets/img/logo.png)
 
-## Table of Contents
-- [Introduction](#introduction)
-- [Features](#features)
-- [Screenshots]
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+📚 Table of Contents
+📖 Introduction(#introduction)
+✨ Features
+🖼️ Screenshots
+🛠️ Installation
+🚀 Usage
+🤝 Contributing
+📄 License
 
 ## Introduction
 WebDoctor is a comprehensive web-based application designed to streamline healthcare facilities and enhance patient management. This project aims to provide a centralized platform that allows doctors, patients, and clinic administrators to efficiently manage medical records, appointments, and communication.
