@@ -1,6 +1,6 @@
 # WebDoctor-The Future Of Healthcare One Click Away
 
-![Project Logo](./static/assets/img/logo.png)
+![Project Logo](./myapp/static/assets/img)
 
 ## Table of Contents
 - [Introduction](#introduction)
