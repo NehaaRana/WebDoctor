@@ -3,7 +3,8 @@
 ![WebDoctor Logo](static/assets/img/logo.png)
 
 📚 Table of Contents
-📖 Introduction(#introduction)
+
+-[📖 Introduction](#introduction)
 ✨ Features
 🖼️ Screenshots
 🛠️ Installation
