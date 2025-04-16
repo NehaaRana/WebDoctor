@@ -5,7 +5,7 @@
 ## Table of Contents
 - [Introduction](#introduction)
 - [Features](#features)
-- [Screenshots](#screenshots)
+- [Screenshots]
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
