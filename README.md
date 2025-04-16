@@ -84,7 +84,7 @@ We welcome contributions from the community to help improve **WebDoctor**! Wheth
 2. **Clone your forked repository**:  
    Clone your fork to your local machine using the following command:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/WebDoctor-The-Future-of-Healthcare-One-Click-Away.git
+   git clone https://github.com/NiravWeb/WebDoctor-The-Future-of-Healthcare-One-Click-Away.git
    
 3. **Create a new branch:**:
    ```bash
