@@ -27,6 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['webdoctor-l8kt.onrender.com', 'localhost', '127.0.0.1']
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://webdoctor-l8kt.onrender.com"
+]
+
 
 # Application definition
 
