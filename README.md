@@ -46,7 +46,7 @@ By leveraging technology, WebDoctor simplifies the management of healthcare faci
 ## Screenshots
 
 ### Home Page
-![Home Page](./static/assets/img/home.jpeg)
+![Home Page](myapp/static/assets/img/HomePage.png)
 
 ![Screenshot 2](path_to_screenshot_2.png)
 ![Screenshot 3](path_to_screenshot_3.png)
