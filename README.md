@@ -43,23 +43,6 @@ By leveraging technology, WebDoctor simplifies the management of healthcare faci
 
 ---
 
-## 🖼️ Screenshots
-
-### 🏠 Home Page  
-![Home Page](myapp/static/assets/img/HomePage.png)
-
-### 🌟 Reviews Page  
-![Reviews Page](myapp/static/assets/img/reviews.png)
-
-### 🧑‍⚕️ Patient Dashboard  
-![Patient Dashboard](myapp/static/assets/img/patient-dashboard.png)
-
-### 👨‍⚕️ Doctor Dashboard  
-![Doctor Dashboard](myapp/static/assets/img/doctor-dashboard.png)
-
-
----
-
 ## 🛠️ Installation
 
 1. 📥 Clone the repository:
@@ -120,4 +103,22 @@ Feel free to open an issue or contact us directly with your suggestions. Your co
 Explore and use the **WebDoctor** platform at [WebDoctor Live](https://pranikmedicalservices.pythonanywhere.com/).
 
 Thank you for your time and support in making **WebDoctor** a better tool for everyone. We appreciate your contribution! 🙏💙
+---
+## 🖼️ Screenshots
+
+### 🏠 Home Page  
+![Home Page](myapp/static/assets/img/HomePage.png)
+
+### 🌟 Reviews Page  
+![Reviews Page](myapp/static/assets/img/reviews.png)
+
+### 🧑‍⚕️ Patient Dashboard  
+![Patient Dashboard](myapp/static/assets/img/patient-dashboard.png)
+
+### 👨‍⚕️ Doctor Dashboard  
+![Doctor Dashboard](myapp/static/assets/img/doctor-dashboard.png)
+
+
+---
+
 
