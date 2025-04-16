@@ -97,10 +97,8 @@ We highly value your feedback and suggestions to help us improve **WebDoctor**! 
 
 Feel free to open an issue or contact us directly with your suggestions. Your contribution is important to us!
 
----
-
 ### Check out the Patient Management System:
-Explore and use the **WebDoctor** platform at [WebDoctor Live](https://pranikmedicalservices.pythonanywhere.com/).
+Explore and use the **WebDoctor** platform at [WebDoctor Live](https://webdoctor-l8kt.onrender.com/).
 
 Thank you for your time and support in making **WebDoctor** a better tool for everyone. We appreciate your contribution! 🙏💙
 ---
