@@ -12,7 +12,7 @@
 - [License](#license)
 
 ## Introduction
-Patient Management System (PMS) is a comprehensive web-based application designed to streamline healthcare facilities and enhance patient management. This project aims to provide a centralized platform that allows doctors, patients, and clinic administrators to efficiently manage medical records, appointments, and communication.
+WebDoctor is a comprehensive web-based application designed to streamline healthcare facilities and enhance patient management. This project aims to provide a centralized platform that allows doctors, patients, and clinic administrators to efficiently manage medical records, appointments, and communication.
 
 The primary objective of the Patient Management System is to improve the patient experience, optimize healthcare provider efficiency, and maintain accurate and secure medical records. By leveraging technology, the system simplifies the management of healthcare facilities and enhances the overall quality of care provided.
 
@@ -36,12 +36,12 @@ The primary objective of the Patient Management System is to improve the patient
 ![Screenshot 3](path_to_screenshot_3.png)
 
 ## Installation
-1. Clone the repository: `git clone https://github.com/yadavnikhilrao/Patient-Management-System-Or-Pranik-Medical-Services-PMS.git`
+1. Clone the repository: `git clone https://github.com/NiravWeb/WebDoctor-The-Future-of-Healthcare-One-Click-Away..git`
 2. Install the required dependencies: `pip install -r requirements.txt`
 
 ## Usage
-1. Run the application: `python app.py`
-2. Access the application in your web browser at: `http://localhost:5000`
+1. Run the application: `python manage.py runserver`
+2. Access the application in your web browser at: `http://127.0.0.1:8000/`
 3. Live Demo: [https://pranikmedicalservices.pythonanywhere.com/](https://pranikmedicalservices.pythonanywhere.com/)
 
 ## Contributing
@@ -51,7 +51,7 @@ We welcome contributions from the community to enhance the Patient Management Sy
 This project is currently not licensed. All rights reserved.
 
 ## Feedback and Suggestions
-We value your feedback and suggestions to improve the Patient Management System. Please feel free to share your thoughts and ideas through our [Contact Us](https://pranikmedicalservices.pythonanywhere.com/contact) form. We appreciate your input in making this platform even better and more user-friendly.
+We value your feedback and suggestions to improve the Patient Management System.We appreciate your input in making this platform even better and more user-friendly.
 
 Check out the Patient Management System [here](https://pranikmedicalservices.pythonanywhere.com/)!
 
