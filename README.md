@@ -1,4 +1,4 @@
-# Pranik Medical Services (PMS)
+# WebDoctor-The Future Of Healthcare One Click Away
 
 ![Project Logo](./static/assets/img/logo.png)
 
