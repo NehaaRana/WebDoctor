@@ -116,6 +116,9 @@ Thank you for your time and support in making **WebDoctor** a better tool for ev
 ### 👨‍⚕️ Doctor Dashboard  
 ![Doctor Dashboard](myapp/static/assets/img/doctor-dashboard.png)
 
+### 👨‍⚕️ Admin Dashboard  
+![Doctor Dashboard](myapp/static/assets/img/admin_dashboard.png)
+
 
 ---
 
