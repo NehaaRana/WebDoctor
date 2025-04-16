@@ -53,9 +53,12 @@ By leveraging technology, WebDoctor simplifies the management of healthcare faci
 ![Screenshot 2](path_to_screenshot_2.png)
 ![Screenshot 3](path_to_screenshot_3.png)
 
-## Installation
-1. Clone the repository: `git clone https://github.com/NiravWeb/WebDoctor-The-Future-of-Healthcare-One-Click-Away..git`
-2. Install the required dependencies: `pip install -r requirements.txt`
+## 🛠️ Installation
+
+1. 📥 Clone the repository:
+   ```bash
+   git clone https://github.com/NiravWeb/WebDoctor-The-Future-of-Healthcare-One-Click-Away.git
+2.📦 Install the required dependencies: `pip install -r requirements.txt`
 
 ## Usage
 1. Run the application: `python manage.py runserver`
