@@ -1,6 +1,6 @@
 # 🩺 **WebDoctor – The Future of Healthcare, One Click Away**
 
-![WebDoctor Logo](static/assets/img/logo.png)
+![WebDoctor Logo](myapp/static/assets/img/logo.png)
 
 ---
 
