@@ -56,6 +56,10 @@ By leveraging technology, WebDoctor simplifies the management of healthcare faci
 2. 🌐 Open your browser and go to: `http://127.0.0.1:8000/`
 3. 🔗 Try the live demo: [https://webdoctor-l8kt.onrender.com/](https://webdoctor-l8kt.onrender.com/)
 
+## Login Credentials for Demo:
+
+-Role | Username | Password
+
 ---
 
 ## 🤝 Contributing
