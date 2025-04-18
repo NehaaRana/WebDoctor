@@ -1,4 +1,4 @@
-# 🩺 **WebDoctor – The Future of Healthcare, One Click Away**
+# 🩺 **WebDoctor – Health Meets Tech**
 
 ## 📚 **Table of Contents**
 
