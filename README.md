@@ -1,7 +1,5 @@
 # 🩺 **WebDoctor – The Future of Healthcare, One Click Away**
 
----
-
 ## 📚 **Table of Contents**
 
 - 📖 Introduction 
