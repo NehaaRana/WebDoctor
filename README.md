@@ -58,11 +58,11 @@ By leveraging technology, WebDoctor simplifies the management of healthcare faci
 
 ## 🔐 Login Credentials for Demo
 
-| Role   | Username            | Password   |
-|--------|---------------------|------------|
-| Admin  | admin@demo.com      | admin123   |
-| Doctor | doctor@demo.com     | doctor123  |
-| Patient| patient@demo.com    | patient123 |
+| Role   | Username                                            | Password        |
+|--------|-----------------------------------------------------|-----------------|
+| Admin  |  webdoctor123@gmail.com                             | webdoctor@123   |
+| Doctor |  rahulgandhi12236666@gmail.com                      | Tejas@123       |
+| Patient|  niravrana077@gmail.com                             | Amit@123        |
 
 ---
 
