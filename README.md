@@ -58,7 +58,7 @@ By leveraging technology, WebDoctor simplifies the management of healthcare faci
 ## 🚀 Usage
 1. ▶️ Run the application: `python manage.py runserver`
 2. 🌐 Open your browser and go to: `http://127.0.0.1:8000/`
-3. 🔗 Try the live demo: [https://pranikmedicalservices.pythonanywhere.com/](https://pranikmedicalservices.pythonanywhere.com/)
+3. 🔗 Try the live demo: [https://webdoctor-l8kt.onrender.com/](https://webdoctor-l8kt.onrender.com/)
 
 ---
 
