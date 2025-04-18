@@ -1,7 +1,5 @@
 # 🩺 **WebDoctor – The Future of Healthcare, One Click Away**
 
-![WebDoctor Logo](myapp/static/assets/img/logo.png)
-
 ---
 
 ## 📚 **Table of Contents**
