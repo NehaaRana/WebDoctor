@@ -43,7 +43,7 @@ By leveraging technology, WebDoctor simplifies the management of healthcare faci
 
 1. 📥 Clone the repository:
    ```bash
-   git clone https://github.com/NiravWeb/WebDoctor-The-Future-of-Healthcare-One-Click-Away.git
+   git clone https://github.com/NehaaRana/WebDoctor.git
    
 2. 📦 Install the required dependencies: 
    ```bash
@@ -54,7 +54,6 @@ By leveraging technology, WebDoctor simplifies the management of healthcare faci
 ## 🚀 Usage
 1. ▶️ Run the application: `python manage.py runserver`
 2. 🌐 Open your browser and go to: `http://127.0.0.1:8000/`
-3. 🔗 Try the live demo: [https://webdoctor-l8kt.onrender.com/](https://webdoctor-l8kt.onrender.com/)
 
 ## 🔐 Login Credentials for Demo
 
@@ -77,7 +76,7 @@ We welcome contributions from the community to help improve **WebDoctor**! Wheth
 2. **Clone your forked repository**:  
    Clone your fork to your local machine using the following command:
    ```bash
-   git clone https://github.com/NiravWeb/WebDoctor-The-Future-of-Healthcare-One-Click-Away.git
+   git clone https://github.com/NehaaRana/WebDocto.git
    
 3. **Create a new branch:**:
    ```bash
